@@ -17,6 +17,7 @@ struct HomeView: View {
   @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
   @State private var viewModel = HomeViewModel()
   @State private var showingRecordingScreen = false
+  @State private var recordingViewModel: RecordingViewModel?
 
   // MARK: - Body
 
@@ -29,12 +30,18 @@ struct HomeView: View {
           viewModel.update(with: newRoutes)
         }
         .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
+          if isRecording {
+            recordingViewModel = RecordingViewModel(routeService: routeService)
+          } else {
+            recordingViewModel = nil
+          }
           showingRecordingScreen = isRecording
         }
     }
     .fullScreenCover(isPresented: $showingRecordingScreen) {
-      RecordingView()
-        .environment(routeService)
+      if let recordingViewModel {
+        RecordingView(viewModel: recordingViewModel)
+      }
     }
   }
 

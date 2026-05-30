@@ -12,7 +12,7 @@ struct RecordingView: View {
 
   // MARK: - Properties
 
-  @Environment(RouteService.self) private var routeService
+  var viewModel: RecordingViewModel
   @Environment(\.dismiss) private var dismiss
 
   // MARK: - Body
@@ -64,20 +64,18 @@ struct RecordingView: View {
   }
 
   private var recordingBadge: some View {
-    let accentColor: Color = routeService.isPaused ? .orange : .red
-
-    return HStack(spacing: 8) {
-      if routeService.isPaused {
+    HStack(spacing: 8) {
+      if viewModel.isPaused {
         RoundedRectangle(cornerRadius: 2)
-          .fill(accentColor)
+          .fill(viewModel.accentColour)
           .frame(width: 9, height: 9)
       } else {
-        PulsingDot(color: accentColor)
+        PulsingDot(color: viewModel.accentColour)
       }
-      let statusKey: LocalizedStringKey = routeService.isPaused ? "PAUSED" : "RECORDING"
+      let statusKey: LocalizedStringKey = viewModel.isPaused ? "PAUSED" : "RECORDING"
       Text(statusKey)
         .font(.system(size: 13, weight: .bold))
-        .foregroundStyle(accentColor)
+        .foregroundStyle(viewModel.accentColour)
         .tracking(1.4)
     }
     .padding(.vertical, 7)
@@ -87,11 +85,7 @@ struct RecordingView: View {
   }
 
   private var heroSection: some View {
-    let route = routeService.route
-    let elapsedSeconds = Int(route?.activeDurationSeconds ?? 0)
-    let accentColor: Color = routeService.isPaused ? .orange : .red
-
-    return VStack(spacing: 0) {
+    VStack(spacing: 0) {
       Text("Elapsed")
         .font(.system(size: 14, weight: .semibold))
         .foregroundStyle(Color(.secondaryLabel))
@@ -99,40 +93,36 @@ struct RecordingView: View {
         .textCase(.uppercase)
         .padding(.bottom, 6)
 
-      Text(TimeInterval(elapsedSeconds).elapsedTimeString())
+      Text(TimeInterval(viewModel.elapsedSeconds).elapsedTimeString())
         .font(.system(size: 74, weight: .semibold))
         .monospacedDigit()
         .foregroundStyle(Color(.label))
-        .opacity(routeService.isPaused ? 0.5 : 1)
-        .animation(.easeInOut(duration: 0.3), value: routeService.isPaused)
+        .opacity(viewModel.isPaused ? 0.5 : 1)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isPaused)
 
       HStack(alignment: .lastTextBaseline, spacing: 6) {
-        let distanceMetres = route?.distanceMetres ?? 0.0
-        Text(distanceMetres.localizedDistanceValueString())
+        Text(viewModel.distanceMetres.localizedDistanceValueString())
           .font(.system(size: 52, weight: .semibold))
           .monospacedDigit()
-          .foregroundStyle(accentColor)
-        Text(distanceMetres.localizedDistanceUnitSymbol())
+          .foregroundStyle(viewModel.accentColour)
+        Text(viewModel.distanceMetres.localizedDistanceUnitSymbol())
           .font(.system(size: 22, weight: .medium))
           .foregroundStyle(Color(.secondaryLabel))
       }
       .padding(.top, 22)
 
-      secondaryStats(route: route)
+      secondaryStats
         .padding(.top, 30)
     }
   }
 
-  private func secondaryStats(route: Route?) -> some View {
-    let speedValue = routeService.isPaused ? "—" : routeService.currentSpeedMs?.localizedSpeedValueString() ?? "—"
-    let speedUnit = (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol()
-
-    return HStack(spacing: 0) {
-      StatColumn(value: speedValue, label: LocalizedStringKey(speedUnit))
+  private var secondaryStats: some View {
+    HStack(spacing: 0) {
+      StatColumn(value: viewModel.speedValue, label: LocalizedStringKey(viewModel.speedUnit))
       Divider().frame(height: 36)
-      StatColumn(value: route.map { "\($0.positions.count)" } ?? "0", label: "logged")
+      StatColumn(value: "\(viewModel.positionCount)", label: "logged")
       Divider().frame(height: 36)
-      StatColumn(value: route?.startedAt.formatted(date: .omitted, time: .shortened) ?? "—", label: "Started")
+      StatColumn(value: viewModel.startedAt, label: "Started")
     }
     .frame(width: 280)
   }
@@ -157,14 +147,11 @@ struct RecordingView: View {
   }
 
   private var triggerLine: some View {
-    let trigger = routeService.route?.trigger
-    let iconName = trigger == .bluetooth ? "bluetooth" : "hand.tap"
-
-    return HStack(spacing: 6) {
-      Image(systemName: iconName)
+    HStack(spacing: 6) {
+      Image(systemName: viewModel.triggerIconName)
         .font(.system(size: 14))
         .foregroundStyle(Color(.tertiaryLabel))
-      Text(trigger?.displayName ?? "")
+      Text(viewModel.triggerDisplayName)
         .font(.system(size: 13))
         .foregroundStyle(Color(.tertiaryLabel))
     }
@@ -175,17 +162,13 @@ struct RecordingView: View {
     HStack(spacing: 60) {
       VStack(spacing: 9) {
         Button {
-          if routeService.isPaused {
-            routeService.resumeRoute()
-          } else {
-            routeService.pauseRoute()
-          }
+          viewModel.pauseOrResume()
         } label: {
           ZStack {
             Circle()
               .fill(Color(.systemFill))
               .overlay(Circle().stroke(Color(.separator), lineWidth: 2))
-            Image(systemName: routeService.isPaused ? "play.fill" : "pause.fill")
+            Image(systemName: viewModel.pauseResumeIconName)
               .font(.system(size: 28))
               .foregroundStyle(Color(.label))
           }
@@ -193,14 +176,14 @@ struct RecordingView: View {
         }
         .buttonStyle(.plain)
 
-        Text(routeService.isPaused ? "Resume" : "Pause")
+        Text(viewModel.pauseResumeLabel)
           .font(.system(size: 13))
           .foregroundStyle(Color(.secondaryLabel))
       }
 
       VStack(spacing: 9) {
         Button {
-          routeService.endRoute()
+          viewModel.endRoute()
         } label: {
           ZStack {
             Circle()
@@ -290,7 +273,7 @@ private struct StatColumn: View {
     locationDataRecorder: locationDataRecorder,
     initialRoute: route
   )
-  RecordingView()
-    .environment(routeService)
+  let viewModel = RecordingViewModel(routeService: routeService)
+  RecordingView(viewModel: viewModel)
     .modelContainer(container)
 }
