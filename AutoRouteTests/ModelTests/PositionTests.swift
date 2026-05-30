@@ -15,7 +15,8 @@ struct PositionTests {
 
   // MARK: - Initialisation
 
-  @Test func initialisesWithProvidedValues() throws {
+  @Test
+  func initialisesWithProvidedValues() throws {
     let timestamp = Date(timeIntervalSinceReferenceDate: 0)
     let position = Position(
       timestamp: timestamp,
@@ -43,7 +44,8 @@ struct PositionTests {
     #expect(position.route == nil)
   }
 
-  @Test func acceptsNegativeValuesForUnavailableFields() throws {
+  @Test
+  func acceptsNegativeValuesForUnavailableFields() throws {
     let position = Position(
       latitude: 0,
       longitude: 0,
@@ -65,7 +67,8 @@ struct PositionTests {
 
   // MARK: - Persistence
 
-  @Test @MainActor func persistsAndFetchesPosition() throws {
+  @Test @MainActor
+  func persistsAndFetchesPosition() throws {
     let context = ModelContext(try makeTestContainer())
 
     let position = Position(
@@ -88,7 +91,8 @@ struct PositionTests {
     #expect(fetched[0].longitude == -6.2603)
   }
 
-  @Test @MainActor func associatesWithRoute() throws {
+  @Test @MainActor
+  func associatesWithRoute() throws {
     let context = ModelContext(try makeTestContainer())
 
     let route = Route(name: "Evening Drive", trigger: .bluetooth)
@@ -114,7 +118,8 @@ struct PositionTests {
     #expect(fetchedRoute.positions.first?.latitude == 51.5)
   }
 
-  @Test @MainActor func multiplePositionsAssociateWithOneRoute() throws {
+  @Test @MainActor
+  func multiplePositionsAssociateWithOneRoute() throws {
     let context = ModelContext(try makeTestContainer())
 
     let route = Route(name: "Long Drive", trigger: .manual)

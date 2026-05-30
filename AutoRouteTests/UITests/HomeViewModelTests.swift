@@ -15,7 +15,8 @@ struct HomeViewModelTests {
 
   // MARK: - Empty State
 
-  @Test func emptyRoutesProducesNoSections() {
+  @Test
+  func emptyRoutesProducesNoSections() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [])
     #expect(viewModel.sections.isEmpty)
@@ -23,21 +24,24 @@ struct HomeViewModelTests {
 
   // MARK: - Section Titles
 
-  @Test func todayRouteCreatesTodaySection() {
+  @Test
+  func todayRouteCreatesTodaySection() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
     #expect(viewModel.sections[0].title == "Today")
   }
 
-  @Test func yesterdayRouteCreatesYesterdaySection() {
+  @Test
+  func yesterdayRouteCreatesYesterdaySection() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 1)])
     #expect(viewModel.sections.count == 1)
     #expect(viewModel.sections[0].title == "Yesterday")
   }
 
-  @Test func routeTwoDaysAgoCreatesDayNameSection() {
+  @Test
+  func routeTwoDaysAgoCreatesDayNameSection() {
     let viewModel = HomeViewModel()
     let route = makeRoute(daysAgo: 2)
     viewModel.update(with: [route])
@@ -46,7 +50,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections[0].title == expected)
   }
 
-  @Test func routeSixDaysAgoStillCreatesDayNameSection() {
+  @Test
+  func routeSixDaysAgoStillCreatesDayNameSection() {
     let viewModel = HomeViewModel()
     let route = makeRoute(daysAgo: 6)
     viewModel.update(with: [route])
@@ -55,7 +60,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections[0].title == expected)
   }
 
-  @Test func routeSevenDaysAgoCreatesMonthYearSection() {
+  @Test
+  func routeSevenDaysAgoCreatesMonthYearSection() {
     let viewModel = HomeViewModel()
     let route = makeRoute(daysAgo: 7)
     viewModel.update(with: [route])
@@ -64,7 +70,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections[0].title == expected)
   }
 
-  @Test func routeThirtyDaysAgoCreatesMonthYearSection() {
+  @Test
+  func routeThirtyDaysAgoCreatesMonthYearSection() {
     let viewModel = HomeViewModel()
     let route = makeRoute(daysAgo: 30)
     viewModel.update(with: [route])
@@ -75,7 +82,8 @@ struct HomeViewModelTests {
 
   // MARK: - Grouping
 
-  @Test func routesOnSameDayAreGroupedIntoOneSection() {
+  @Test
+  func routesOnSameDayAreGroupedIntoOneSection() {
     let viewModel = HomeViewModel()
     let morning = makeRoute(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeRoute(name: "Afternoon", daysAgo: 0, hour: 14)
@@ -84,7 +92,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections[0].routes.count == 2)
   }
 
-  @Test func routesOnDifferentDaysProduceSeparateSections() {
+  @Test
+  func routesOnDifferentDaysProduceSeparateSections() {
     let viewModel = HomeViewModel()
     let today = makeRoute(name: "Today", daysAgo: 0)
     let yesterday = makeRoute(name: "Yesterday", daysAgo: 1)
@@ -93,7 +102,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections.count == 3)
   }
 
-  @Test func routesFromSameOlderMonthAreGroupedIntoOneSection() {
+  @Test
+  func routesFromSameOlderMonthAreGroupedIntoOneSection() {
     let viewModel = HomeViewModel()
     let a = makeRoute(name: "Route A", daysAgo: 30, hour: 8)
     let b = makeRoute(name: "Route B", daysAgo: 30, hour: 14)
@@ -110,7 +120,8 @@ struct HomeViewModelTests {
 
   // MARK: - Ordering
 
-  @Test func sectionsAreOrderedNewestFirst() {
+  @Test
+  func sectionsAreOrderedNewestFirst() {
     let viewModel = HomeViewModel()
     let today = makeRoute(name: "Today", daysAgo: 0)
     let yesterday = makeRoute(name: "Yesterday", daysAgo: 1)
@@ -120,7 +131,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections[1].title == "Yesterday")
   }
 
-  @Test func routesWithinSectionAreOrderedNewestFirst() {
+  @Test
+  func routesWithinSectionAreOrderedNewestFirst() {
     let viewModel = HomeViewModel()
     let morning = makeRoute(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeRoute(name: "Afternoon", daysAgo: 0, hour: 14)
@@ -131,19 +143,22 @@ struct HomeViewModelTests {
 
   // MARK: - Summary Line
 
-  @Test func summaryLineIsNilWhenNoRoutes() {
+  @Test
+  func summaryLineIsNilWhenNoRoutes() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [])
     #expect(viewModel.summaryLine == nil)
   }
 
-  @Test func summaryLineIsNilWhenAllRoutesOlderThan30Days() {
+  @Test
+  func summaryLineIsNilWhenAllRoutesOlderThan30Days() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 31), makeRoute(daysAgo: 60)])
     #expect(viewModel.summaryLine == nil)
   }
 
-  @Test func summaryLineIncludesCountOfRoutesInWindow() {
+  @Test
+  func summaryLineIncludesCountOfRoutesInWindow() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [
       makeRoute(daysAgo: 0),
@@ -154,21 +169,24 @@ struct HomeViewModelTests {
     #expect(summary.hasPrefix("2 routes"))
   }
 
-  @Test func summaryLineUsesSingularForOneRoute() {
+  @Test
+  func summaryLineUsesSingularForOneRoute() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
     #expect(summary.hasPrefix("1 route ·"))
   }
 
-  @Test func summaryLineContainsKmSuffix() {
+  @Test
+  func summaryLineContainsKmSuffix() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
     #expect(summary.contains("km in the last 30 days"))
   }
 
-  @Test func summaryLineIsNilAfterUpdateWithNoRecentRoutes() {
+  @Test
+  func summaryLineIsNilAfterUpdateWithNoRecentRoutes() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     #expect(viewModel.summaryLine != nil)
@@ -178,7 +196,8 @@ struct HomeViewModelTests {
 
   // MARK: - Update
 
-  @Test func callingUpdateReplacesPreviousSections() {
+  @Test
+  func callingUpdateReplacesPreviousSections() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
@@ -186,7 +205,8 @@ struct HomeViewModelTests {
     #expect(viewModel.sections.isEmpty)
   }
 
-  @Test func sectionsReflectLatestRouteSet() {
+  @Test
+  func sectionsReflectLatestRouteSet() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(name: "A", daysAgo: 0)])
     viewModel.update(with: [makeRoute(name: "B", daysAgo: 0), makeRoute(name: "C", daysAgo: 1)])

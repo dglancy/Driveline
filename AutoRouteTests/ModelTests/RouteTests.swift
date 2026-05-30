@@ -15,7 +15,8 @@ struct RouteTests {
 
   // MARK: - Initialisation
 
-  @Test func initialisesWithCorrectDefaults() throws {
+  @Test
+  func initialisesWithCorrectDefaults() throws {
     let route = Route(name: "Morning Commute")
 
     #expect(route.name == "Morning Commute")
@@ -30,12 +31,14 @@ struct RouteTests {
     #expect(route.positions.isEmpty)
   }
 
-  @Test func initialisesWithBluetoothTrigger() throws {
+  @Test
+  func initialisesWithBluetoothTrigger() throws {
     let route = Route(name: "School Run", trigger: .bluetooth)
     #expect(route.trigger == .bluetooth)
   }
 
-  @Test func eachRouteHasUniqueID() throws {
+  @Test
+  func eachRouteHasUniqueID() throws {
     let a = Route(name: "Route A", trigger: .bluetooth)
     let b = Route(name: "Route B", trigger: .bluetooth)
     #expect(a.id != b.id)
@@ -43,14 +46,16 @@ struct RouteTests {
 
   // MARK: - durationSeconds
 
-  @Test func durationWhenRecordingAndNotPaused() throws {
+  @Test
+  func durationWhenRecordingAndNotPaused() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     // startDate is .now; endDate is nil — duration should be near zero immediately after init
     #expect(route.durationSeconds >= 0)
     #expect(route.durationSeconds < 2)
   }
 
-  @Test func durationUsesEndDateWhenFinished() throws {
+  @Test
+  func durationUsesEndDateWhenFinished() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isRecording = false
     route.endedAt = route.startedAt.addingTimeInterval(600)
@@ -58,7 +63,8 @@ struct RouteTests {
     #expect(route.durationSeconds == 600)
   }
 
-  @Test func durationSubtractsPausedTime() throws {
+  @Test
+  func durationSubtractsPausedTime() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isRecording = false
     route.endedAt = route.startedAt.addingTimeInterval(600)
@@ -67,7 +73,8 @@ struct RouteTests {
     #expect(route.durationSeconds == 540)
   }
 
-  @Test func durationSubtractsActivePausePeriod() throws {
+  @Test
+  func durationSubtractsActivePausePeriod() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isPaused = true
     route.pauseStartedAt = Date.now.addingTimeInterval(-30)
@@ -78,7 +85,8 @@ struct RouteTests {
     #expect(route.durationSeconds >= 0)
   }
 
-  @Test func durationIsNeverNegative() throws {
+  @Test
+  func durationIsNeverNegative() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.pausedDurationSeconds = 99999
     #expect(route.durationSeconds == 0)
@@ -86,7 +94,8 @@ struct RouteTests {
 
   // MARK: - Persistence
 
-  @Test @MainActor func persistsAndFetchesRoute() throws {
+  @Test @MainActor
+  func persistsAndFetchesRoute() throws {
     let context = ModelContext(try makeTestContainer())
 
     let route = Route(name: "Coastal Drive", trigger: .bluetooth)
@@ -100,12 +109,14 @@ struct RouteTests {
 
   // MARK: - distanceMetres
 
-  @Test @MainActor func distanceMetresIsZeroWithNoPositions() throws {
+  @Test @MainActor
+  func distanceMetresIsZeroWithNoPositions() throws {
     let route = Route(name: "Test")
     #expect(route.distanceMetres == 0)
   }
 
-  @Test @MainActor func distanceMetresIsZeroForSinglePosition() throws {
+  @Test @MainActor
+  func distanceMetresIsZeroForSinglePosition() throws {
     let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
     context.insert(route)
@@ -115,7 +126,8 @@ struct RouteTests {
     #expect(route.distanceMetres == 0)
   }
 
-  @Test @MainActor func distanceMetresCalculatesBetweenTwoPoints() throws {
+  @Test @MainActor
+  func distanceMetresCalculatesBetweenTwoPoints() throws {
     let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
     context.insert(route)
@@ -130,7 +142,8 @@ struct RouteTests {
     #expect(route.distanceMetres < 11_500)
   }
 
-  @Test @MainActor func distanceMetresSortsPositionsByTimestamp() throws {
+  @Test @MainActor
+  func distanceMetresSortsPositionsByTimestamp() throws {
     let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
     context.insert(route)
@@ -146,7 +159,8 @@ struct RouteTests {
     #expect(route.distanceMetres < 11_500)
   }
 
-  @Test @MainActor func distanceKilometresIsMetresDividedByThousand() throws {
+  @Test @MainActor
+  func distanceKilometresIsMetresDividedByThousand() throws {
     let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
     context.insert(route)
@@ -161,7 +175,8 @@ struct RouteTests {
 
   // MARK: - Persistence
 
-  @Test @MainActor func deletingRouteCascadesToPositions() throws {
+  @Test @MainActor
+  func deletingRouteCascadesToPositions() throws {
     let context = ModelContext(try makeTestContainer())
 
     let route = Route(name: "Test", trigger: .manual)
