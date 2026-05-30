@@ -87,7 +87,7 @@ struct RecordingView: View {
 
   private var heroSection: some View {
     let route = routeService.route
-    let elapsedSeconds = Int(route?.durationSeconds ?? 0)
+    let elapsedSeconds = Int(route?.activeDurationSeconds ?? 0)
     let accentColor: Color = routeService.isPaused ? .orange : .red
 
     return VStack(spacing: 0) {
