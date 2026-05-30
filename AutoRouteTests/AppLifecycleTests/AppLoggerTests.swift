@@ -13,31 +13,37 @@ struct AppLoggerTests {
 
   // MARK: - Initialisation
 
-  @MainActor @Test func initialisesWithDefaultSubsystem() {
+  @Test @MainActor
+  func initialisesWithDefaultSubsystem() {
     _ = AppLogger(category: "Test")
   }
 
-  @MainActor @Test func initialisesWithCustomSubsystem() {
+  @Test @MainActor
+  func initialisesWithCustomSubsystem() {
     _ = AppLogger(subsystem: "com.test.app", category: "Test")
   }
 
   // MARK: - Logging
 
-  @MainActor @Test func infoDoesNotCrash() {
+  @Test @MainActor
+  func infoDoesNotCrash() {
     AppLogger(category: "Test").info("test info message")
   }
 
-  @MainActor @Test func debugDoesNotCrash() {
+  @Test @MainActor
+  func debugDoesNotCrash() {
     AppLogger(category: "Test").debug("test debug message")
   }
 
-  @MainActor @Test func errorDoesNotCrash() {
+  @Test @MainActor
+  func errorDoesNotCrash() {
     AppLogger(category: "Test").error("test error message")
   }
 
   // MARK: - Log Enum
 
-  @MainActor @Test func logEnumCategoriesAreAccessible() {
+  @Test @MainActor
+  func logEnumCategoriesAreAccessible() {
     _ = Log.lifecycle
     _ = Log.ui
     _ = Log.location

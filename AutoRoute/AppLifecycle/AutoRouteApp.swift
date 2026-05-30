@@ -13,6 +13,8 @@ struct AutoRouteApp: App {
 
   // MARK: - Properties
 
+  @StateObject private var locationService: LocationService
+
   private let modelContainer: ModelContainer
 
   // MARK: - Lifecycle
@@ -22,6 +24,9 @@ struct AutoRouteApp: App {
     let isUITesting = Self.isUITesting()
 
     modelContainer = Self.createModelContainer(isUITesting: isUITesting)
+
+    let locationService = Self.createLocationService()
+    _locationService = StateObject(wrappedValue: locationService)
 
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
@@ -54,6 +59,11 @@ struct AutoRouteApp: App {
     } catch {
       fatalError("Could not create ModelContainer: \(error)")
     }
+  }
+
+  private static func createLocationService() -> LocationService {
+    Log.lifecycle.info("Setting up location services")
+    return LocationService()
   }
 
   // MARK: - Private functions
