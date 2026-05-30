@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6D47A5202FCAD20800E6C7B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -31,6 +35,7 @@
 		6D47A54F2FCAE68700E6C7B7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6D47A5502FCAE68700E6C7B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6D47A58C2FCB0FCF00E6C7B7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -48,12 +53,20 @@
 			);
 			target = 6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */;
 		};
+		6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRoute" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6D47A5122FCAD20600E6C7B7 /* AutoRoute */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRoute" target */,
 				6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */,
 				6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteUITests" target */,
 			);
@@ -77,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +121,7 @@
 				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
 				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
 				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,
+				6D47A59F2FCB2B1400E6C7B7 /* Frameworks */,
 				6D47A5112FCAD20600E6C7B7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -119,6 +134,14 @@
 				6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6D47A59F2FCB2B1400E6C7B7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -439,6 +462,7 @@
 				DEVELOPMENT_TEAM = 4U6275HKV3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AutoRoute/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -476,6 +500,7 @@
 				DEVELOPMENT_TEAM = 4U6275HKV3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AutoRoute/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

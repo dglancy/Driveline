@@ -129,6 +129,53 @@ struct HomeViewModelTests {
     #expect(viewModel.sections[0].routes[1].name == "Morning")
   }
 
+  // MARK: - Summary Line
+
+  @Test func summaryLineIsNilWhenNoRoutes() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [])
+    #expect(viewModel.summaryLine == nil)
+  }
+
+  @Test func summaryLineIsNilWhenAllRoutesOlderThan30Days() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeRoute(daysAgo: 31), makeRoute(daysAgo: 60)])
+    #expect(viewModel.summaryLine == nil)
+  }
+
+  @Test func summaryLineIncludesCountOfRoutesInWindow() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [
+      makeRoute(daysAgo: 0),
+      makeRoute(daysAgo: 5),
+      makeRoute(daysAgo: 31)
+    ])
+    let summary = try! #require(viewModel.summaryLine)
+    #expect(summary.hasPrefix("2 routes"))
+  }
+
+  @Test func summaryLineUsesSingularForOneRoute() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeRoute(daysAgo: 0)])
+    let summary = try! #require(viewModel.summaryLine)
+    #expect(summary.hasPrefix("1 route ·"))
+  }
+
+  @Test func summaryLineContainsKmSuffix() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeRoute(daysAgo: 0)])
+    let summary = try! #require(viewModel.summaryLine)
+    #expect(summary.contains("km in the last 30 days"))
+  }
+
+  @Test func summaryLineIsNilAfterUpdateWithNoRecentRoutes() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeRoute(daysAgo: 0)])
+    #expect(viewModel.summaryLine != nil)
+    viewModel.update(with: [makeRoute(daysAgo: 60)])
+    #expect(viewModel.summaryLine == nil)
+  }
+
   // MARK: - Update
 
   @Test func callingUpdateReplacesPreviousSections() {

@@ -22,11 +22,13 @@ final class HomeViewModel {
   // MARK: - Properties
 
   private(set) var sections: [RouteSection] = []
+  private(set) var summaryLine: String?
 
   // MARK: - Methods
 
   func update(with routes: [Route]) {
     sections = buildSections(from: routes)
+    summaryLine = buildSummaryLine(from: routes)
   }
 
   // MARK: - Private
@@ -47,6 +49,16 @@ final class HomeViewModel {
     }
 
     return groupMap.map { RouteSection(title: $0.key, routes: $0.routes) }
+  }
+
+  private func buildSummaryLine(from routes: [Route]) -> String? {
+    let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now)!
+    let recent = routes.filter { $0.startedAt >= cutoff }
+    guard !recent.isEmpty else { return nil }
+    let totalKm = recent.reduce(0.0) { $0 + $1.distanceKilometres }
+    let count = recent.count
+    let kmString = totalKm.formatted(.number.precision(.fractionLength(1)))
+    return "\(count) \(count == 1 ? "route" : "routes") · \(kmString) km in the last 30 days"
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {
