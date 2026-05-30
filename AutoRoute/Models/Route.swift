@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+import CoreLocation
 import Foundation
 import SwiftData
 
@@ -32,6 +33,20 @@ final class Route {
   var positions: [Position]
 
   // MARK: - Computed Properties
+
+  var distanceMetres: Double {
+    let sorted = positions.sorted { $0.timestamp < $1.timestamp }
+    guard sorted.count > 1 else { return 0 }
+    var total = 0.0
+    for i in 1..<sorted.count {
+      let from = CLLocation(latitude: sorted[i - 1].latitude, longitude: sorted[i - 1].longitude)
+      let to = CLLocation(latitude: sorted[i].latitude, longitude: sorted[i].longitude)
+      total += from.distance(from: to)
+    }
+    return total
+  }
+
+  var distanceKilometres: Double { distanceMetres / 1_000 }
 
   var durationSeconds: Double {
     let reference = endedAt ?? .now

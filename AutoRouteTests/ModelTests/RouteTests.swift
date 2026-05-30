@@ -98,6 +98,69 @@ struct RouteTests {
     #expect(fetched[0].name == "Coastal Drive")
   }
 
+  // MARK: - distanceMetres
+
+  @Test @MainActor func distanceMetresIsZeroWithNoPositions() throws {
+    let route = Route(name: "Test")
+    #expect(route.distanceMetres == 0)
+  }
+
+  @Test @MainActor func distanceMetresIsZeroForSinglePosition() throws {
+    let context = ModelContext(try makeTestContainer())
+    let route = Route(name: "Test")
+    context.insert(route)
+    let p = makePosition(latitude: 51.5, longitude: -0.1)
+    context.insert(p)
+    route.positions.append(p)
+    #expect(route.distanceMetres == 0)
+  }
+
+  @Test @MainActor func distanceMetresCalculatesBetweenTwoPoints() throws {
+    let context = ModelContext(try makeTestContainer())
+    let route = Route(name: "Test")
+    context.insert(route)
+    // 0.1 degree latitude ≈ 11,132m
+    let p1 = makePosition(latitude: 0.0, longitude: 0.0)
+    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
+    context.insert(p1)
+    context.insert(p2)
+    route.positions.append(p1)
+    route.positions.append(p2)
+    #expect(route.distanceMetres > 11_000)
+    #expect(route.distanceMetres < 11_500)
+  }
+
+  @Test @MainActor func distanceMetresSortsPositionsByTimestamp() throws {
+    let context = ModelContext(try makeTestContainer())
+    let route = Route(name: "Test")
+    context.insert(route)
+    let t1 = Date.now
+    let t2 = t1.addingTimeInterval(60)
+    let p1 = makePosition(latitude: 0.0, longitude: 0.0, timestamp: t1)
+    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: t2)
+    context.insert(p1)
+    context.insert(p2)
+    route.positions.append(p2)
+    route.positions.append(p1)
+    #expect(route.distanceMetres > 11_000)
+    #expect(route.distanceMetres < 11_500)
+  }
+
+  @Test @MainActor func distanceKilometresIsMetresDividedByThousand() throws {
+    let context = ModelContext(try makeTestContainer())
+    let route = Route(name: "Test")
+    context.insert(route)
+    let p1 = makePosition(latitude: 0.0, longitude: 0.0)
+    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
+    context.insert(p1)
+    context.insert(p2)
+    route.positions.append(p1)
+    route.positions.append(p2)
+    #expect(route.distanceKilometres == route.distanceMetres / 1_000)
+  }
+
+  // MARK: - Persistence
+
   @Test @MainActor func deletingRouteCascadesToPositions() throws {
     let context = ModelContext(try makeTestContainer())
 
