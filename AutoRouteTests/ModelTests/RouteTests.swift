@@ -5,13 +5,13 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+@testable import AutoRoute
 import Testing
 import Foundation
 import SwiftData
-@testable import AutoRoute
 
 @Suite("Route")
-struct RouteTests {
+final class RouteTests: SwiftDataBaseTestCase {
 
   // MARK: - Initialisation
 
@@ -44,6 +44,31 @@ struct RouteTests {
     #expect(a.id != b.id)
   }
 
+  // MARK: - Positions
+  
+  @Test
+  func positions() async {
+    let route = Route(name: "School Run")
+
+    let p1 = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
+                      course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
+    let p2 = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
+                      course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
+    route.positions.append(p1)
+    route.positions.append(p2)
+
+    let p3 = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
+                      course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
+    route.positions.append(p3)
+
+    let positions = route.orderedPositions
+    #expect(positions.count == 3)
+    #expect(positions[0] === p1)
+    #expect(positions[1] === p2)
+    #expect(positions[2] === p3)
+  }
+
+  
   // MARK: - durationSeconds
 
   @Test
@@ -95,14 +120,21 @@ struct RouteTests {
   // MARK: - Persistence
 
   @Test @MainActor
+  func freshContainer() async throws {
+    let count = try count(where: #Predicate<Position> { _ in
+      true
+    })
+    #expect(count == 0)
+  }
+
+  
+  @Test @MainActor
   func persistsAndFetchesRoute() throws {
-    let context = ModelContext(try makeTestContainer())
-
     let route = Route(name: "Coastal Drive", trigger: .bluetooth)
-    context.insert(route)
-    try context.save()
+    context!.insert(route)
+    try context!.save()
 
-    let fetched = try context.fetch(FetchDescriptor<Route>())
+    let fetched = try context!.fetch(FetchDescriptor<Route>())
     #expect(fetched.count == 1)
     #expect(fetched[0].name == "Coastal Drive")
   }
@@ -117,25 +149,23 @@ struct RouteTests {
 
   @Test @MainActor
   func distanceMetresIsZeroForSinglePosition() throws {
-    let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
-    context.insert(route)
+    context!.insert(route)
     let p = makePosition(latitude: 51.5, longitude: -0.1)
-    context.insert(p)
+    context!.insert(p)
     route.positions.append(p)
     #expect(route.distanceMetres == 0)
   }
 
   @Test @MainActor
   func distanceMetresCalculatesBetweenTwoPoints() throws {
-    let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
-    context.insert(route)
+    context!.insert(route)
     // 0.1 degree latitude ≈ 11,132m
     let p1 = makePosition(latitude: 0.0, longitude: 0.0)
     let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
-    context.insert(p1)
-    context.insert(p2)
+    context!.insert(p1)
+    context!.insert(p2)
     route.positions.append(p1)
     route.positions.append(p2)
     #expect(route.distanceMetres > 11_000)
@@ -144,15 +174,14 @@ struct RouteTests {
 
   @Test @MainActor
   func distanceMetresSortsPositionsByTimestamp() throws {
-    let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
-    context.insert(route)
+    context!.insert(route)
     let t1 = Date.now
     let t2 = t1.addingTimeInterval(60)
     let p1 = makePosition(latitude: 0.0, longitude: 0.0, timestamp: t1)
     let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: t2)
-    context.insert(p1)
-    context.insert(p2)
+    context!.insert(p1)
+    context!.insert(p2)
     route.positions.append(p2)
     route.positions.append(p1)
     #expect(route.distanceMetres > 11_000)
@@ -161,13 +190,12 @@ struct RouteTests {
 
   @Test @MainActor
   func distanceKilometresIsMetresDividedByThousand() throws {
-    let context = ModelContext(try makeTestContainer())
     let route = Route(name: "Test")
-    context.insert(route)
+    context!.insert(route)
     let p1 = makePosition(latitude: 0.0, longitude: 0.0)
     let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
-    context.insert(p1)
-    context.insert(p2)
+    context!.insert(p1)
+    context!.insert(p2)
     route.positions.append(p1)
     route.positions.append(p2)
     #expect(route.distanceKilometres == route.distanceMetres / 1_000)
@@ -177,10 +205,8 @@ struct RouteTests {
 
   @Test @MainActor
   func deletingRouteCascadesToPositions() throws {
-    let context = ModelContext(try makeTestContainer())
-
     let route = Route(name: "Test", trigger: .manual)
-    context.insert(route)
+    context!.insert(route)
 
     let position = Position(
       latitude: 51.5,
@@ -193,14 +219,14 @@ struct RouteTests {
       speed: 14,
       speedAccuracy: 1
     )
-    context.insert(position)
+    context!.insert(position)
     route.positions.append(position)
-    try context.save()
+    try context!.save()
 
-    context.delete(route)
-    try context.save()
+    context!.delete(route)
+    try context!.save()
 
-    #expect(try context.fetch(FetchDescriptor<Route>()).isEmpty)
-    #expect(try context.fetch(FetchDescriptor<Position>()).isEmpty)
+    #expect(try context!.fetch(FetchDescriptor<Route>()).isEmpty)
+    #expect(try context!.fetch(FetchDescriptor<Position>()).isEmpty)
   }
 }

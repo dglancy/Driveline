@@ -5,15 +5,9 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+@testable import AutoRoute
 import Foundation
 import SwiftData
-@testable import AutoRoute
-
-func makeTestContainer() throws -> ModelContainer {
-  let schema = Schema([Route.self, Position.self])
-  let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-  return try ModelContainer(for: schema, configurations: [config])
-}
 
 func makePosition(latitude: Double, longitude: Double, timestamp: Date = .now) -> Position {
   Position(
