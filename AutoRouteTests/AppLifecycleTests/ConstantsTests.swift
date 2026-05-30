@@ -14,11 +14,11 @@ struct ConstantsTests {
   // MARK: - App
 
   @Test func appBundleIdHasCorrectPrefix() {
-    #expect(kAppBundleId.hasPrefix("com.targatrips."))
+    #expect(kAppBundleId.hasPrefix("com.targatrips.AutoRoute"))
   }
 
   @Test func gpxCreatorHasCorrectSuffix() {
-    #expect(kGPXCreator.hasSuffix("for iOS"))
+    #expect(kGPXCreator.hasSuffix("AutoRoute for iOS"))
   }
 
   @Test func automotiveNavigationSpeedThresholdIsEight() {

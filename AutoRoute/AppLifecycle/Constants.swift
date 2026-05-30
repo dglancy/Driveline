@@ -10,7 +10,7 @@ import os.log
 
 // MARK: - App
 
-let kAppName = Bundle.main.appName
+let kAppName = "AutoRoute"
 let kAppBundleId = "com.targatrips.\(kAppName)"
 let kGPXCreator = "\(kAppName) for iOS"
 

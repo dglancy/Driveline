@@ -41,12 +41,20 @@
 			);
 			target = 6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */;
 		};
+		6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppLifecycle/Constants.swift,
+			);
+			target = 6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6D47A5122FCAD20600E6C7B7 /* AutoRoute */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */,
 				6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteUITests" target */,
 			);
 			path = AutoRoute;
