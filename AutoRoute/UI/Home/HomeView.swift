@@ -72,12 +72,9 @@ struct HomeView: View {
           Text(summary)
             .font(.system(size: 15))
             .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 4, trailing: 20))
+            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .listSectionSeparator(.hidden)
         .listSectionSpacing(0)
       }
 
