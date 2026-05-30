@@ -61,7 +61,7 @@ struct RouteRowView: View {
 
   private var formattedDuration: String? {
     guard route.endedAt != nil else { return nil }
-    let duration = route.durationSeconds
+    let duration = route.activeDurationSeconds
     let formatter = DateComponentsFormatter()
     formatter.unitsStyle = .abbreviated
     formatter.allowedUnits = duration >= 3600 ? [.hour, .minute] : [.minute, .second]

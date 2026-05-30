@@ -11,6 +11,7 @@ import Foundation
 import SwiftData
 
 @Suite("Route")
+@MainActor
 final class RouteTests: SwiftDataBaseTestCase {
 
   // MARK: - Initialisation
@@ -69,57 +70,103 @@ final class RouteTests: SwiftDataBaseTestCase {
   }
 
   
-  // MARK: - durationSeconds
+  // MARK: - activeDurationSeconds
 
   @Test
-  func durationWhenRecordingAndNotPaused() throws {
+  func activeDurationWhenRecordingAndNotPaused() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
-    // startDate is .now; endDate is nil — duration should be near zero immediately after init
-    #expect(route.durationSeconds >= 0)
-    #expect(route.durationSeconds < 2)
+    #expect(route.activeDurationSeconds >= 0)
+    #expect(route.activeDurationSeconds < 2)
   }
 
   @Test
-  func durationUsesEndDateWhenFinished() throws {
+  func activeDurationUsesEndDateWhenFinished() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isRecording = false
     route.endedAt = route.startedAt.addingTimeInterval(600)
 
-    #expect(route.durationSeconds == 600)
+    #expect(route.activeDurationSeconds == 600)
   }
 
   @Test
-  func durationSubtractsPausedTime() throws {
+  func activeDurationSubtractsPausedTime() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isRecording = false
     route.endedAt = route.startedAt.addingTimeInterval(600)
     route.pausedDurationSeconds = 60
 
-    #expect(route.durationSeconds == 540)
+    #expect(route.activeDurationSeconds == 540)
   }
 
   @Test
-  func durationSubtractsActivePausePeriod() throws {
+  func activeDurationSubtractsActivePausePeriod() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isPaused = true
     route.pauseStartedAt = Date.now.addingTimeInterval(-30)
     route.endedAt = route.startedAt.addingTimeInterval(600)
 
-    // active pause of ~30s on top of no accumulated pause
-    #expect(route.durationSeconds < 575)
-    #expect(route.durationSeconds >= 0)
+    #expect(route.activeDurationSeconds < 575)
+    #expect(route.activeDurationSeconds >= 0)
   }
 
   @Test
-  func durationIsNeverNegative() throws {
+  func activeDurationIsNeverNegative() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.pausedDurationSeconds = 99999
-    #expect(route.durationSeconds == 0)
+    #expect(route.activeDurationSeconds == 0)
+  }
+
+  // MARK: - totalElapsedSeconds
+
+  @Test
+  func totalElapsedSecondsWhenRecordingAndNotPaused() throws {
+    let route = Route(name: "Test", trigger: .bluetooth)
+    #expect(route.totalElapsedSeconds >= 0)
+    #expect(route.totalElapsedSeconds < 2)
+  }
+
+  @Test
+  func totalElapsedSecondsUsesEndDateWhenFinished() throws {
+    let route = Route(name: "Test", trigger: .bluetooth)
+    route.isRecording = false
+    route.endedAt = route.startedAt.addingTimeInterval(600)
+
+    #expect(route.totalElapsedSeconds == 600)
+  }
+
+  @Test
+  func totalElapsedSecondsIncludesPausedTime() throws {
+    let route = Route(name: "Test", trigger: .bluetooth)
+    route.isRecording = false
+    route.endedAt = route.startedAt.addingTimeInterval(600)
+    route.pausedDurationSeconds = 60
+
+    #expect(route.totalElapsedSeconds == 600)
+  }
+
+  @Test
+  func totalElapsedSecondsIncludesActivePausePeriod() throws {
+    let route = Route(name: "Test", trigger: .bluetooth)
+    route.isPaused = true
+    route.pauseStartedAt = Date.now.addingTimeInterval(-30)
+    route.endedAt = route.startedAt.addingTimeInterval(600)
+
+    #expect(route.totalElapsedSeconds == 600)
+  }
+
+  @Test
+  func totalElapsedSecondsIsGreaterThanOrEqualToActiveDuration() throws {
+    let route = Route(name: "Test", trigger: .bluetooth)
+    route.isRecording = false
+    route.endedAt = route.startedAt.addingTimeInterval(600)
+    route.pausedDurationSeconds = 120
+
+    #expect(route.totalElapsedSeconds >= route.activeDurationSeconds)
   }
 
   // MARK: - Persistence
 
-  @Test @MainActor
+  @Test
   func freshContainer() async throws {
     let count = try count(where: #Predicate<Position> { _ in
       true
@@ -128,7 +175,7 @@ final class RouteTests: SwiftDataBaseTestCase {
   }
 
   
-  @Test @MainActor
+  @Test
   func persistsAndFetchesRoute() throws {
     let route = Route(name: "Coastal Drive", trigger: .bluetooth)
     context!.insert(route)
@@ -141,13 +188,13 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   // MARK: - distanceMetres
 
-  @Test @MainActor
+  @Test
   func distanceMetresIsZeroWithNoPositions() throws {
     let route = Route(name: "Test")
     #expect(route.distanceMetres == 0)
   }
 
-  @Test @MainActor
+  @Test
   func distanceMetresIsZeroForSinglePosition() throws {
     let route = Route(name: "Test")
     context!.insert(route)
@@ -157,7 +204,7 @@ final class RouteTests: SwiftDataBaseTestCase {
     #expect(route.distanceMetres == 0)
   }
 
-  @Test @MainActor
+  @Test
   func distanceMetresCalculatesBetweenTwoPoints() throws {
     let route = Route(name: "Test")
     context!.insert(route)
@@ -172,7 +219,7 @@ final class RouteTests: SwiftDataBaseTestCase {
     #expect(route.distanceMetres < 11_500)
   }
 
-  @Test @MainActor
+  @Test
   func distanceMetresSortsPositionsByTimestamp() throws {
     let route = Route(name: "Test")
     context!.insert(route)
@@ -188,7 +235,7 @@ final class RouteTests: SwiftDataBaseTestCase {
     #expect(route.distanceMetres < 11_500)
   }
 
-  @Test @MainActor
+  @Test
   func distanceKilometresIsMetresDividedByThousand() throws {
     let route = Route(name: "Test")
     context!.insert(route)
@@ -203,7 +250,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   // MARK: - Persistence
 
-  @Test @MainActor
+  @Test
   func deletingRouteCascadesToPositions() throws {
     let route = Route(name: "Test", trigger: .manual)
     context!.insert(route)
