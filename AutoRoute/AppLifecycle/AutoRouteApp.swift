@@ -13,10 +13,10 @@ struct AutoRouteApp: App {
 
   // MARK: - Properties
 
-  @State private var locationService: LocationService
-  @State private var locationDataRecorder: LocationDataRecorderService
   @State private var routeService: RouteService
 
+  private let locationService: LocationService
+  private let locationDataRecorderService: LocationDataRecorderService
   private let modelContainer: ModelContainer
 
   // MARK: - Lifecycle
@@ -26,15 +26,11 @@ struct AutoRouteApp: App {
     let isUITesting = Self.isUITesting()
 
     modelContainer = Self.createModelContainer(isUITesting: isUITesting)
-
-    let locationService = Self.setupLocationService()
-    _locationService = State(initialValue: locationService)
-
-    let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService, modelContext: modelContainer.mainContext)
-    _locationDataRecorder = State(initialValue: locationDataRecorder)
+    locationService = Self.setupLocationService()
+    locationDataRecorderService = Self.setupLocationDataRecorderService(locationService: locationService, modelContext: modelContainer.mainContext)
 
     let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext, locationService: locationService,
-                                             locationDataRecorder: locationDataRecorder)
+                                             locationDataRecorder: locationDataRecorderService)
     _routeService = State(initialValue: routeService)
 
     if isUITesting {
