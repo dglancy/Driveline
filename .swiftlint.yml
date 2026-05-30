@@ -4,8 +4,8 @@ included:
   - AutoRouteUITests
 
 line_length:
-  warning: 120
-  error: 150
+  warning: 150
+  error: 180
 
 identifier_name:
   min_length: 2

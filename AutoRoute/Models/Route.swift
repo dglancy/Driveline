@@ -34,6 +34,11 @@ final class Route {
 
   // MARK: - Computed Properties
 
+  var orderedPositions: [Position] {
+    return positions
+      .sorted(by: { $0.timestamp < $1.timestamp})
+  }
+
   var distanceMetres: Double {
     let sorted = positions.sorted { $0.timestamp < $1.timestamp }
     guard sorted.count > 1 else { return 0 }

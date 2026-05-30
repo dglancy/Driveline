@@ -5,8 +5,8 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
-import Testing
 @testable import AutoRoute
+import Testing
 
 @Suite("Constants")
 struct ConstantsTests {

@@ -5,13 +5,13 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+@testable import AutoRoute
 import Testing
 import Foundation
 import SwiftData
-@testable import AutoRoute
 
 @Suite("Position")
-struct PositionTests {
+final class PositionTests: SwiftDataBaseTestCase {
 
   // MARK: - Initialisation
 
@@ -69,8 +69,6 @@ struct PositionTests {
 
   @Test @MainActor
   func persistsAndFetchesPosition() throws {
-    let context = ModelContext(try makeTestContainer())
-
     let position = Position(
       latitude: 53.3498,
       longitude: -6.2603,
@@ -82,10 +80,10 @@ struct PositionTests {
       speed: 8.3,
       speedAccuracy: 1.0
     )
-    context.insert(position)
-    try context.save()
+    context!.insert(position)
+    try context!.save()
 
-    let fetched = try context.fetch(FetchDescriptor<Position>())
+    let fetched = try context!.fetch(FetchDescriptor<Position>())
     #expect(fetched.count == 1)
     #expect(fetched[0].latitude == 53.3498)
     #expect(fetched[0].longitude == -6.2603)
@@ -93,10 +91,8 @@ struct PositionTests {
 
   @Test @MainActor
   func associatesWithRoute() throws {
-    let context = ModelContext(try makeTestContainer())
-
     let route = Route(name: "Evening Drive", trigger: .bluetooth)
-    context.insert(route)
+    context!.insert(route)
 
     let position = Position(
       latitude: 51.5,
@@ -109,21 +105,19 @@ struct PositionTests {
       speed: 10,
       speedAccuracy: 1
     )
-    context.insert(position)
+    context!.insert(position)
     route.positions.append(position)
-    try context.save()
+    try context!.save()
 
-    let fetchedRoute = try context.fetch(FetchDescriptor<Route>()).first!
+    let fetchedRoute = try context!.fetch(FetchDescriptor<Route>()).first!
     #expect(fetchedRoute.positions.count == 1)
     #expect(fetchedRoute.positions.first?.latitude == 51.5)
   }
 
   @Test @MainActor
   func multiplePositionsAssociateWithOneRoute() throws {
-    let context = ModelContext(try makeTestContainer())
-
     let route = Route(name: "Long Drive", trigger: .manual)
-    context.insert(route)
+    context!.insert(route)
 
     for i in 0..<5 {
       let position = Position(
@@ -138,12 +132,12 @@ struct PositionTests {
         speed: 10,
         speedAccuracy: 1
       )
-      context.insert(position)
+      context!.insert(position)
       route.positions.append(position)
     }
-    try context.save()
+    try context!.save()
 
-    let fetchedRoute = try context.fetch(FetchDescriptor<Route>()).first!
+    let fetchedRoute = try context!.fetch(FetchDescriptor<Route>()).first!
     #expect(fetchedRoute.positions.count == 5)
   }
 }
