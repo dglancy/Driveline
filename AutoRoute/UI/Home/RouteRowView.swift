@@ -16,36 +16,48 @@ struct RouteRowView: View {
   // MARK: - Body
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 4) {
-      Text(route.name)
-        .font(.body)
-        .fontWeight(.medium)
+    HStack(spacing: 13) {
+      iconBadge
 
-      HStack(spacing: 6) {
-        Text(route.startedAt, style: .time)
-          .font(.subheadline)
+      VStack(alignment: .leading, spacing: 1) {
+        Text(route.name)
+          .font(.system(size: 17, weight: .semibold))
+          .lineLimit(1)
+        Text(dateTimeLabel)
+          .font(.system(size: 14))
           .foregroundStyle(.secondary)
-
-        if let duration = formattedDuration {
-          Text("·")
-            .foregroundStyle(.secondary)
-          Text(duration)
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-        }
-      }
-
-      if let placeName = route.startPlaceName {
-        Text(placeName)
-          .font(.caption)
-          .foregroundStyle(.tertiary)
           .lineLimit(1)
       }
+      .frame(maxWidth: .infinity, alignment: .leading)
+
+      if let duration = formattedDuration {
+        Text(duration)
+          .font(.system(size: 13))
+          .foregroundStyle(.tertiary)
+      }
     }
-    .padding(.vertical, 2)
+  }
+
+  // MARK: - Private Views
+
+  private var iconBadge: some View {
+    ZStack {
+      RoundedRectangle(cornerRadius: 11)
+        .fill(.tint.opacity(0.14))
+        .frame(width: 38, height: 38)
+      Image(systemName: "car.fill")
+        .font(.system(size: 21))
+        .foregroundStyle(.tint)
+    }
   }
 
   // MARK: - Computed Properties
+
+  private var dateTimeLabel: String {
+    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
+    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
+    return "\(datePart) · \(timePart)"
+  }
 
   private var formattedDuration: String? {
     guard route.endedAt != nil else { return nil }
