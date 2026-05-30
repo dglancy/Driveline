@@ -28,6 +28,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
   @ObservationIgnored let locationPublisher = PassthroughSubject<CLLocation, Never>()
   @ObservationIgnored private let manager = CLLocationManager()
+  @ObservationIgnored private var alwaysAuthorizationRequested = false
 
   // MARK: - Computed properties
 
@@ -102,11 +103,12 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   // MARK: - CLLocationManagerDelegate callback functions
 
   nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    let status = manager.authorizationStatus
     Task { @MainActor in
-      Log.location.info("Did accept location - asking for background permissions")
-      if self.manager.authorizationStatus == .authorizedWhenInUse {
-        self.manager.requestAlwaysAuthorization()
-      }
+      Log.location.info("Location authorisation changed to \(status.rawValue)")
+      guard status == .authorizedWhenInUse, !self.alwaysAuthorizationRequested else { return }
+      self.alwaysAuthorizationRequested = true
+      self.manager.requestAlwaysAuthorization()
     }
   }
 

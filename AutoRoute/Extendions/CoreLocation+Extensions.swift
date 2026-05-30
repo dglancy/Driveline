@@ -40,7 +40,7 @@ extension CLActivityType {
 
   init(fromSettings value: String) {
     switch value {
-    case "automotive": self = .automotiveNavigation
+    case "automatic", "automotive": self = .automotiveNavigation
     case "fitness": self = .fitness
     case "other": self = .other
     case "flight": self = .airborne

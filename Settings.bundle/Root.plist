@@ -26,8 +26,8 @@
 				<string>automatic</string>
 				<string>automotive</string>
 				<string>fitness</string>
-				<string>flight</string>
 				<string>other</string>
+				<string>flight</string>
 			</array>
 			<key>DefaultValue</key>
 			<string>automotive</string>
