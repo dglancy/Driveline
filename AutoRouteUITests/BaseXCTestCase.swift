@@ -7,6 +7,7 @@
 
 import XCTest
 
+@MainActor
 class BaseXCTestCase: XCTestCase {
 
   // MARK: - Properties
@@ -15,15 +16,15 @@ class BaseXCTestCase: XCTestCase {
 
   // MARK: - Lifecycle
 
-  override func setUpWithError() throws {
-    try super.setUpWithError()
+  override func setUp() async throws {
+    try await super.setUp()
     continueAfterFailure = false
     app = XCUIApplication()
-    app.launchArguments += ["-ui-testing"]
+    app.launchArguments += [kUITestingFlag]
   }
 
-  override func tearDownWithError() throws {
+  override func tearDown() async throws {
     app = nil
-    try super.tearDownWithError()
+    try await super.tearDown()
   }
 }
