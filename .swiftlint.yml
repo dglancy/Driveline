@@ -17,8 +17,8 @@ identifier_name:
     - id
 
 large_tuple:
-  warning: 3
-  error: 4
+  warning: 10
+  error: 30
 
 disabled_rules:
   - trailing_comma

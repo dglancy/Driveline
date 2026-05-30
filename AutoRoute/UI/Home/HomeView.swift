@@ -67,7 +67,7 @@ struct HomeView: View {
 
 #Preview {
   let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config)
+  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
   let context = container.mainContext
   let calendar = Calendar.current
   let now = Date.now
@@ -78,14 +78,14 @@ struct HomeView: View {
   }
 
   let samples: [(name: String, daysAgo: Int, hour: Int, minute: Int, duration: TimeInterval?, place: String?)] = [
-    ("Morning Commute",    0,  8,  12, 1_740, "Home"),
-    ("School Run",         0, 15,  30, nil,   nil),
-    ("Evening Errand",     1, 18,  45, 1_200, "Tesco Extra"),
-    ("Lunch Drive",        3,  12, 20, 2_100, nil),
-    ("School Run",         3,   8, 10,   840, "School"),
-    ("Weekend Road Trip",  6,  10,  0, 14_400, "Brighton"),
-    ("City Centre Visit", 32,  11, 30,  2_700, "Manchester"),
-    ("Mountain Drive",    68,   9,  0, 10_800, "Snowdonia"),
+    ("Morning Commute", 0, 8, 12, 1_740, "Home"),
+    ("School Run", 0, 15, 30, nil, nil),
+    ("Evening Errand", 1, 18, 45, 1_200, "Tesco Extra"),
+    ("Lunch Drive", 3, 12, 20, 2_100, nil),
+    ("School Run", 3, 8, 10, 840, "School"),
+    ("Weekend Road Trip", 6, 10, 0, 14_400, "Brighton"),
+    ("City Centre Visit", 32, 11, 30, 2_700, "Manchester"),
+    ("Mountain Drive", 68, 9, 0, 10_800, "Snowdonia")
   ]
 
   for (name, daysAgo, hour, minute, duration, place) in samples {
