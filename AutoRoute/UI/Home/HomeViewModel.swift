@@ -55,10 +55,9 @@ final class HomeViewModel {
     let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now)!
     let recent = routes.filter { $0.startedAt >= cutoff }
     guard !recent.isEmpty else { return nil }
-    let totalKm = recent.reduce(0.0) { $0 + $1.distanceKilometres }
+    let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
     let count = recent.count
-    let kmString = totalKm.formatted(.number.precision(.fractionLength(1)))
-    return "\(count) \(count == 1 ? "route" : "routes") · \(kmString) km in the last 30 days"
+    return "\(count) \(count == 1 ? "route" : "routes") · \(totalMetres.localizedDistanceString()) in the last 30 days"
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {
