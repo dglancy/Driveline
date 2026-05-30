@@ -11,7 +11,7 @@ import os.log
 // MARK: - Intent Dependency Resolver
 
 enum IntentDependencyResolver {
-  static var provider: (() -> (routeService: RouteService, locationService: LocationService)?)?
+  static var provider: (() -> RouteService?)?
 }
 
 // MARK: - App Intent Shortcuts
@@ -60,18 +60,16 @@ struct StartOrResumeRouteIntent: AppIntent {
   func perform() async throws -> some IntentResult {
     await Log.intent.info("Running perform on StartOrResumeRoute intent")
 
-    let (routeService, locationService) = try await resolveIntentServices()
+    let routeService = try await resolveRouteService()
+    let isPaused = await routeService.isPaused
+    let isRecording = await routeService.isRecording
 
-    switch await locationService.status {
-    case .paused:
+    if isPaused {
       await routeService.resumeRoute()
-      return .result()
-    case .stopped:
+    } else if !isRecording {
       await routeService.startRoute()
-      return .result()
-    case .started:
-      return .result()
     }
+    return .result()
   }
 }
 
@@ -89,15 +87,14 @@ struct PauseRouteIntent: AppIntent {
   func perform() async throws -> some IntentResult {
     await Log.intent.info("Running perform on PauseRouteIntent intent")
 
-    let (routeService, locationService) = try await resolveIntentServices()
+    let routeService = try await resolveRouteService()
+    let isRecording = await routeService.isRecording
+    let isPaused = await routeService.isPaused
 
-    switch await locationService.status {
-    case .started:
+    if isRecording, !isPaused {
       await routeService.pauseRoute()
-      return .result()
-    default:
-      return .result()
     }
+    return .result()
   }
 }
 
@@ -116,9 +113,9 @@ enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
 
 // MARK: - Private helpers
 
-private func resolveIntentServices() async throws -> (routeService: RouteService, locationService: LocationService) {
-  guard let dependencies = await MainActor.run(body: { IntentDependencyResolver.provider?() }) else {
+private func resolveRouteService() async throws -> RouteService {
+  guard let routeService = await MainActor.run(body: { IntentDependencyResolver.provider?() }) else {
     throw AppIntentDependencyError.notReady
   }
-  return (dependencies.routeService, dependencies.locationService)
+  return routeService
 }
