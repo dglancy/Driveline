@@ -14,6 +14,8 @@ struct AutoRouteApp: App {
   // MARK: - Properties
 
   @StateObject private var locationService: LocationService
+  @StateObject private var locationDataRecorder: LocationDataRecorderService
+  @StateObject private var routeService: RouteService
 
   private let modelContainer: ModelContainer
 
@@ -25,8 +27,15 @@ struct AutoRouteApp: App {
 
     modelContainer = Self.createModelContainer(isUITesting: isUITesting)
 
-    let locationService = Self.createLocationService()
+    let locationService = Self.setupLocationService()
     _locationService = StateObject(wrappedValue: locationService)
+
+    let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService, modelContext: modelContainer.mainContext)
+    _locationDataRecorder = StateObject(wrappedValue: locationDataRecorder)
+
+    let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext, locationService: locationService,
+                                             locationDataRecorder: locationDataRecorder)
+    _routeService = StateObject(wrappedValue: routeService)
 
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
@@ -61,9 +70,26 @@ struct AutoRouteApp: App {
     }
   }
 
-  private static func createLocationService() -> LocationService {
+  private static func setupLocationService() -> LocationService {
     Log.lifecycle.info("Setting up location services")
     return LocationService()
+  }
+
+  private static func setupLocationDataRecorderService(
+    locationService: LocationService,
+    modelContext: ModelContext
+  ) -> LocationDataRecorderService {
+    Log.lifecycle.info("Setting up location data recorder")
+    return LocationDataRecorderService(locationService: locationService, modelContext: modelContext)
+  }
+
+  private static func setupRouteService(
+    modelContext: ModelContext,
+    locationService: LocationService,
+    locationDataRecorder: LocationDataRecorderService
+  ) -> RouteService {
+    Log.lifecycle.info("Setting up route service")
+    return RouteService(modelContext: modelContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
   }
 
   // MARK: - Private functions

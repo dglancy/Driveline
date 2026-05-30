@@ -5,11 +5,11 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+@testable import AutoRoute
 import Testing
 import Foundation
 import CoreLocation
 import Combine
-@testable import AutoRoute
 
 @Suite("LocationService")
 struct LocationServiceTests {
