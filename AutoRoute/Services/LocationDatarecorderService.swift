@@ -41,7 +41,7 @@ final class LocationDataRecorderService {
     }
     Log.data.info("Starting recording locations")
     self.route = route
-    route.isRecording = true
+    route.status = .recording
     modelContext.insert(route)
 
     do {
@@ -65,7 +65,7 @@ final class LocationDataRecorderService {
 
     guard let route else { return }
 
-    route.isRecording = false
+    route.status = .finished
 
     do {
       try modelContext.save()

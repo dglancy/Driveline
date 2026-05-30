@@ -23,9 +23,8 @@ final class Route {
   var endPlaceName: String?
 
   var trigger: RecordingTrigger
+  var status: RouteStatus
 
-  var isRecording: Bool
-  var isPaused: Bool
   var pausedDurationSeconds: Double
   var pauseStartedAt: Date?
 
@@ -33,6 +32,9 @@ final class Route {
   var positions: [Position]
 
   // MARK: - Computed Properties
+
+  var isRecording: Bool { status != .finished }
+  var isPaused: Bool { status == .paused }
 
   var orderedPositions: [Position] {
     return positions
@@ -73,12 +75,17 @@ final class Route {
     self.startPlaceName = nil
     self.endPlaceName = nil
     self.trigger = trigger
-    self.isRecording = true
-    self.isPaused = false
+    self.status = .recording
     self.pausedDurationSeconds = 0
     self.pauseStartedAt = nil
     self.positions = []
   }
+}
+
+enum RouteStatus: String, Codable {
+  case recording
+  case paused
+  case finished
 }
 
 enum RecordingTrigger: String, Codable {

@@ -231,7 +231,7 @@ private struct RecordingDot: View {
     route.startPlaceName = place
     if let duration {
       route.endedAt = route.startedAt.addingTimeInterval(duration)
-      route.isRecording = false
+      route.status = .finished
     }
     context.insert(route)
     route.positions.append(pos(lat: home.lat, lon: home.lon, at: route.startedAt))

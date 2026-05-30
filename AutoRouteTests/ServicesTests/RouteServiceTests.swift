@@ -331,7 +331,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
-    route.isRecording = true
+    route.status = .recording
     let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
 
     #expect(service.isRecording == true)
@@ -342,7 +342,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
-    route.isRecording = false
+    route.status = .finished
     let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
 
     #expect(service.isRecording == false)
@@ -353,7 +353,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
-    route.isPaused = true
+    route.status = .paused
     let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
 
     #expect(service.isPaused == true)
@@ -364,7 +364,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
-    route.isPaused = false
+    route.status = .recording
     let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
 
     #expect(service.isPaused == false)

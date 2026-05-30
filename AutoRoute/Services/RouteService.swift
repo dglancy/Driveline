@@ -60,8 +60,7 @@ final class RouteService {
 
     if let route {
       route.endedAt = Date()
-      route.isRecording = false
-      route.isPaused = false
+      route.status = .finished
       locationDataRecorder.stopRecording()
       saveModelContext()
     }
@@ -72,7 +71,7 @@ final class RouteService {
 
   func pauseRoute() {
     locationService.pause()
-    route?.isPaused = true
+    route?.status = .paused
     route?.pauseStartedAt = Date()
   }
 
@@ -81,7 +80,7 @@ final class RouteService {
       route.pausedDurationSeconds += Date().timeIntervalSince(pauseStart)
       route.pauseStartedAt = nil
     }
-    route?.isPaused = false
+    route?.status = .recording
     locationService.resume()
   }
 
