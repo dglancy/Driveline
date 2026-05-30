@@ -13,8 +13,10 @@ struct HomeView: View {
   // MARK: - Properties
 
   @Environment(\.modelContext) private var modelContext
+  @EnvironmentObject private var routeService: RouteService
   @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
   @State private var viewModel = HomeViewModel()
+  @State private var showingRecordingScreen = false
 
   // MARK: - Body
 
@@ -22,9 +24,21 @@ struct HomeView: View {
     NavigationStack {
       content
         .navigationTitle("Routes")
+        .toolbar { recordButton }
         .onChange(of: routes, initial: true) { _, newRoutes in
           viewModel.update(with: newRoutes)
         }
+        .onChange(of: routeService.isRecording) { _, isRecording in
+          if isRecording {
+            showingRecordingScreen = true
+          } else {
+            showingRecordingScreen = false
+          }
+        }
+    }
+    .fullScreenCover(isPresented: $showingRecordingScreen) {
+      RecordingView()
+        .environmentObject(routeService)
     }
   }
 
@@ -32,7 +46,7 @@ struct HomeView: View {
 
   @ViewBuilder
   private var content: some View {
-    if viewModel.sections.isEmpty {
+    if viewModel.sections.isEmpty && !routeService.isRecording {
       emptyState
     } else {
       routeList
@@ -49,6 +63,10 @@ struct HomeView: View {
 
   private var routeList: some View {
     List {
+      if routeService.isRecording {
+        recordingBanner
+      }
+
       if let summary = viewModel.summaryLine {
         Section {
           Text(summary)
@@ -68,7 +86,9 @@ struct HomeView: View {
           ForEach(section.routes) { route in
             NavigationLink(value: route) {
               RouteRowView(route: route)
+                .opacity(routeService.isRecording ? 0.4 : 1)
             }
+            .disabled(routeService.isRecording)
           }
         }
       }
@@ -78,7 +98,94 @@ struct HomeView: View {
       RouteDetailView(route: route)
     }
   }
+
+  @ViewBuilder
+  private var recordingBanner: some View {
+    Section {
+      Button {
+        showingRecordingScreen = true
+      } label: {
+        HStack(spacing: 12) {
+          RecordingDot()
+          VStack(alignment: .leading, spacing: 1) {
+            Text("Recording drive…")
+              .font(.system(size: 16, weight: .semibold))
+              .foregroundStyle(Color(.label))
+            Text("\(routeService.route?.trigger.rawValue ?? "") · Tap to view")
+              .font(.system(size: 13.5))
+              .foregroundStyle(Color(.secondaryLabel))
+          }
+          Spacer()
+          Image(systemName: "chevron.right")
+            .font(.system(size: 12, weight: .semibold))
+            .foregroundStyle(Color(.tertiaryLabel))
+        }
+        .padding(.vertical, 4)
+      }
+      .buttonStyle(.plain)
+      .listRowBackground(Color.red.opacity(0.08))
+    }
+    .listSectionSeparator(.hidden)
+  }
+
+  @ToolbarContentBuilder
+  private var recordButton: some ToolbarContent {
+    ToolbarItem(placement: .topBarTrailing) {
+      Button {
+        if routeService.isRecording {
+          showingRecordingScreen = true
+        } else {
+          routeService.startRoute()
+        }
+      } label: {
+        ZStack {
+          Circle().fill(Color(.systemFill))
+          if routeService.isRecording {
+            RoundedRectangle(cornerRadius: 3)
+              .fill(.red)
+              .frame(width: 11, height: 11)
+          } else {
+            Image(systemName: "circle.inset.filled")
+              .font(.system(size: 22))
+              .foregroundStyle(.red)
+          }
+        }
+        .frame(width: 36, height: 36)
+      }
+      .buttonStyle(.plain)
+    }
+  }
 }
+
+// MARK: - Subviews
+
+private struct RecordingDot: View {
+
+  // MARK: - Properties
+
+  @State private var animating = false
+
+  // MARK: - Body
+
+  var body: some View {
+    ZStack {
+      Circle()
+        .fill(Color.red)
+        .scaleEffect(animating ? 2.0 : 1.0)
+        .opacity(animating ? 0 : 0.4)
+      Circle()
+        .fill(Color.red)
+    }
+    .frame(width: 10, height: 10)
+    .onAppear {
+      withAnimation(.easeOut(duration: 1.6).repeatForever(autoreverses: false)) {
+        animating = true
+      }
+    }
+  }
+}
+
+// MARK: - Preview
 
 #Preview {
   let config = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -134,6 +241,11 @@ struct HomeView: View {
     }
   }
 
+  let locationService = LocationService()
+  let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: context)
+  let routeService = RouteService(modelContext: context, locationService: locationService, locationDataRecorder: locationDataRecorder)
+
   return HomeView()
     .modelContainer(container)
+    .environmentObject(routeService)
 }

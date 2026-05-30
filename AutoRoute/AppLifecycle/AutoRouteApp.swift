@@ -48,6 +48,7 @@ struct AutoRouteApp: App {
   var body: some Scene {
     WindowGroup {
       HomeView()
+        .environmentObject(routeService)
     }
     .modelContainer(modelContainer)
   }
