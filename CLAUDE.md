@@ -27,6 +27,17 @@
 - Avoid `public` unless strictly necessary
 - Avoid force unwraps and `try!` in production code, encourage their use in tests
 - Use UK English spelling over US English
+- Do not write comments in generated code unless it is absolutely necessary to aid understanding
+- Use `// MARK: -` sections to organise Swift types (e.g. `// MARK: - Properties`, `// MARK: - Computed Properties`, `// MARK: - Lifecycle`)
+- Begin every new Swift file with the standard Xcode boilerplate header, using the current date and "Damien Glancy" as the author:
+  ```
+  //
+  //  FileName.swift
+  //  AutoRoute
+  //
+  //  Created by Damien Glancy on DD/MM/YYYY.
+  //
+  ```
 
 ### SwiftUI Patterns
 - Extract views when they exceed 100 lines
