@@ -10,9 +10,9 @@ import SwiftData
 
 @Model
 final class Route {
-  
+
   // MARK: - Properties
-  
+
   @Attribute(.unique) var id: UUID
   var name: String
   var startedAt: Date
@@ -32,7 +32,7 @@ final class Route {
   var positions: [Position]
 
   // MARK: - Computed Properties
-  
+
   var durationSeconds: Double {
     let reference = endedAt ?? .now
     let currentPause = isPaused ? Date.now.timeIntervalSince(pauseStartedAt ?? .now) : 0
@@ -40,7 +40,7 @@ final class Route {
   }
 
   // MARK: - Lifecycle
-  
+
   init(name: String, trigger: RecordingTrigger = .manual) {
     self.id = UUID()
     self.name = name
