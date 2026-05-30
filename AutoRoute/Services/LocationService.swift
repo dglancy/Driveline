@@ -39,7 +39,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     super.init()
     manager.delegate = self
     manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-    manager.activityType = .automotiveNavigation
+    manager.activityType = activityTypeFromSettings()
     manager.pausesLocationUpdatesAutomatically = false
     manager.allowsBackgroundLocationUpdates = true
   }
@@ -117,5 +117,14 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         locationPublisher.send(location)
       }
     }
+  }
+
+  // MARK: - Private functions
+
+  private func activityTypeFromSettings() -> CLActivityType {
+    let rawValue = UserDefaults.standard.string(forKey: "ActivityType") ?? "automotive"
+    let type = CLActivityType(fromSettings: rawValue)
+    Log.location.info("Location activity type set to \"\(rawValue)\" from user settings")
+    return type
   }
 }
