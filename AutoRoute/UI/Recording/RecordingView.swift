@@ -74,7 +74,8 @@ struct RecordingView: View {
       } else {
         PulsingDot(color: accentColor)
       }
-      Text(routeService.isPaused ? "PAUSED" : "RECORDING")
+      let statusKey: LocalizedStringKey = routeService.isPaused ? "PAUSED" : "RECORDING"
+      Text(statusKey)
         .font(.system(size: 13, weight: .bold))
         .foregroundStyle(accentColor)
         .tracking(1.4)
@@ -127,7 +128,7 @@ struct RecordingView: View {
     let speedUnit = (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol()
 
     return HStack(spacing: 0) {
-      StatColumn(value: speedValue, label: speedUnit)
+      StatColumn(value: speedValue, label: LocalizedStringKey(speedUnit))
       Divider().frame(height: 36)
       StatColumn(value: route.map { "\($0.positions.count)" } ?? "0", label: "logged")
       Divider().frame(height: 36)
@@ -163,7 +164,7 @@ struct RecordingView: View {
       Image(systemName: iconName)
         .font(.system(size: 14))
         .foregroundStyle(Color(.tertiaryLabel))
-      Text(trigger?.rawValue ?? "")
+      Text(trigger?.displayName ?? "")
         .font(.system(size: 13))
         .foregroundStyle(Color(.tertiaryLabel))
     }
@@ -257,7 +258,7 @@ private struct StatColumn: View {
   // MARK: - Properties
 
   let value: String
-  let label: String
+  let label: LocalizedStringKey
 
   // MARK: - Body
 

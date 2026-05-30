@@ -84,4 +84,13 @@ final class Route {
 enum RecordingTrigger: String, Codable {
   case bluetooth = "Bluetooth"
   case manual = "Started manually"
+
+  var displayName: String {
+    switch self {
+    case .bluetooth:
+      String(localized: "Bluetooth", comment: "Recording trigger: started via Bluetooth")
+    case .manual:
+      String(localized: "Started manually", comment: "Recording trigger: started manually by the user")
+    }
+  }
 }
