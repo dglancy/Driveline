@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 
+@MainActor
 class SwiftDataBaseTestCase {
 
   // MARK: - Properties
@@ -22,10 +23,6 @@ class SwiftDataBaseTestCase {
     let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: [configuration])
     context = ModelContext(container)
-  }
-
-  deinit {
-    context = nil
   }
 
   // MARK: - Common functions

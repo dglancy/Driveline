@@ -23,11 +23,6 @@ struct ConstantsTests {
     #expect(kGPXCreator.hasSuffix("AutoRoute for iOS"))
   }
 
-  @Test
-  func automotiveNavigationSpeedThresholdIsEight() {
-    #expect(kAutomotiveNavigationSpeedRecordingThreshold == 8)
-  }
-
   // MARK: - Testing
 
   @Test

@@ -13,13 +13,14 @@ import os.log
 
 // MARK: - Location Data Recorder Service
 
+@MainActor
 final class LocationDataRecorderService: ObservableObject {
 
   // MARK: - Properties
 
   private let locationService: LocationService
   private let modelContext: ModelContext
-  private var cancellables = Set<AnyCancellable>()
+  private var locationCancellable: AnyCancellable?
   private(set) var route: Route?
 
   // MARK: - Lifecycle
@@ -27,7 +28,6 @@ final class LocationDataRecorderService: ObservableObject {
   init(locationService: LocationService, modelContext: ModelContext) {
     self.locationService = locationService
     self.modelContext = modelContext
-    subscribeToLocations()
   }
 
   // MARK: - Actions
@@ -44,11 +44,19 @@ final class LocationDataRecorderService: ObservableObject {
     } catch {
       Log.data.error("Failed to save starting recording locations: \(error)")
     }
+
+    locationCancellable = locationService.locationPublisher
+      .sink { [weak self] location in
+        self?.persist(location)
+      }
+
     Log.data.info("Started recording locations")
   }
 
   func stopRecording() {
     Log.data.info("Stopping recording locations")
+    locationCancellable = nil
+
     guard let route else { return }
 
     route.isRecording = false
@@ -65,15 +73,6 @@ final class LocationDataRecorderService: ObservableObject {
   }
 
   // MARK: - Private functions
-
-  private func subscribeToLocations() {
-    locationService.locationPublisher
-      .sink { [weak self] location in
-        guard let self else { return }
-        self.persist(location)
-      }
-      .store(in: &cancellables)
-  }
 
   private func persist(_ location: CLLocation) {
     Log.data.info("Saving a new location: \(location.coordinate.latitude), \(location.coordinate.longitude)")

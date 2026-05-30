@@ -22,9 +22,9 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let route = Route(name: "Test route")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    
+
     recorder.startRecording(with: route)
-    
+
     #expect(recorder.route != nil)
   }
 
@@ -47,26 +47,20 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let persistedPositions = try! count(where: #Predicate<Position> { _ in true })
     #expect(persistedPositions == 1)
   }
-  
-//  @Test
-//  func persistingLocationsAppendsPositionsWhenBelowAutomotiveNavigationSpeedRecordingThreshold() async throws {
-//    let route = Route(name: "Test route")
-//    let locationService = LocationService()
-//    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-//
-//    recorder.startRecording(with: route)
-//
-//    let location = CLLocation(
-//      coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
-//      course: 0, courseAccuracy: 1, speed: 1.5, speedAccuracy: 0.5, timestamp: Date())
-//    locationService.locationPublisher.send(location)
-//
-//    let routePositions = recorder.route!.orderedPositions.count
-//    #expect(routePositions == 0)
-//
-//    let persistedPositions = try! count(where: #Predicate<Position> { _ in true })
-//    #expect(persistedPositions == 0)
-//  }
+
+  @Test
+  func doesNotPersistLocationsBeforeRecordingStarts() async throws {
+    let locationService = LocationService()
+    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date())
+    locationService.locationPublisher.send(location)
+
+    let persistedPositions = try! count(where: #Predicate<Position> { _ in true })
+    #expect(persistedPositions == 0)
+  }
 
   @Test
   func stopEndsRecordingRoute() async throws {
@@ -81,5 +75,23 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
 
     #expect(recorder.route == nil)
     #expect(startedRoute!.isRecording == false)
+  }
+
+  @Test
+  func doesNotPersistLocationsAfterRecordingStops() async throws {
+    let route = Route(name: "Test route")
+    let locationService = LocationService()
+    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+
+    recorder.startRecording(with: route)
+    recorder.stopRecording()
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date())
+    locationService.locationPublisher.send(location)
+
+    let persistedPositions = try! count(where: #Predicate<Position> { _ in true })
+    #expect(persistedPositions == 0)
   }
 }

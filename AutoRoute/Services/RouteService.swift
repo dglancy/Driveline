@@ -11,14 +11,16 @@ import SwiftData
 import Combine
 import os.log
 
+@MainActor
 final class RouteService: ObservableObject {
 
   // MARK: - Properties
 
   @Published private(set) var route: Route?
-  @Published private(set) var isRecording: Bool = false
-  @Published private(set) var isPaused: Bool = false
-  @Published private(set) var currentSpeedMs: Double = -1
+  @Published private(set) var currentSpeedMs: Double?
+
+  var isRecording: Bool { route?.isRecording ?? false }
+  var isPaused: Bool { route?.isPaused ?? false }
 
   private let modelContext: ModelContext
   private let locationService: LocationService
@@ -32,8 +34,6 @@ final class RouteService: ObservableObject {
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
     self.route = initialRoute
-    self.isRecording = initialRoute?.isRecording ?? false
-    self.isPaused = initialRoute?.isPaused ?? false
   }
 
   // MARK: - Actions
@@ -41,16 +41,14 @@ final class RouteService: ObservableObject {
   func startRoute() {
     let route = Route(name: routeNameForCurrentTime())
     self.route = route
-    isRecording = true
-    isPaused = false
-    currentSpeedMs = -1
+    currentSpeedMs = nil
 
     locationDataRecorder.startRecording(with: route)
     locationService.start()
 
     speedCancellable = locationService.locationPublisher
       .sink { [weak self] location in
-        self?.currentSpeedMs = location.speed
+        self?.currentSpeedMs = location.speed >= 0 ? location.speed : nil
       }
   }
 
@@ -66,16 +64,13 @@ final class RouteService: ObservableObject {
       saveModelContext()
     }
 
-    isRecording = false
-    isPaused = false
-    currentSpeedMs = -1
+    currentSpeedMs = nil
   }
 
   func pauseRoute() {
     locationService.pause()
     route?.isPaused = true
     route?.pauseStartedAt = Date()
-    isPaused = true
   }
 
   func resumeRoute() {
@@ -84,7 +79,6 @@ final class RouteService: ObservableObject {
       route.pauseStartedAt = nil
     }
     route?.isPaused = false
-    isPaused = false
     locationService.resume()
   }
 

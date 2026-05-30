@@ -17,12 +17,12 @@ enum LocationServiceStatus {
 
 // MARK: - Location Service
 
+@MainActor
 final class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate {
 
   // MARK: - Properties
 
   @Published var status: LocationServiceStatus = .stopped
-  @Published private(set) var latestLocation: CLLocation?
 
   let locationPublisher = PassthroughSubject<CLLocation, Never>()
   private let manager = CLLocationManager()
@@ -97,28 +97,23 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
     Log.location.info("Resumed monitoring locations")
   }
 
-  func refreshActivityTypeFromSettings() {
-    Log.location.info("Refreshing activity type from user settings")
-    manager.activityType = .automotiveNavigation
-    Log.location.info("Refreshed activity type from user settings")
-  }
-
   // MARK: - CLLocationManagerDelegate callback functions
 
-  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    Log.location.info("Did accept location - asking for background permissions")
-
-    if manager.authorizationStatus == .authorizedWhenInUse {
-      manager.requestAlwaysAuthorization()
+  nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    Task { @MainActor in
+      Log.location.info("Did accept location - asking for background permissions")
+      if self.manager.authorizationStatus == .authorizedWhenInUse {
+        self.manager.requestAlwaysAuthorization()
+      }
     }
   }
 
-  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    Log.location.info("\(locations.count) new location(s) received")
-
-    for location in locations {
-      latestLocation = location
-      locationPublisher.send(location)
+  nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    Task { @MainActor in
+      Log.location.info("\(locations.count) new location(s) received")
+      for location in locations {
+        locationPublisher.send(location)
+      }
     }
   }
 }

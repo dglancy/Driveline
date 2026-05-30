@@ -11,6 +11,7 @@ import Foundation
 import SwiftData
 
 @Suite("Position")
+@MainActor
 final class PositionTests: SwiftDataBaseTestCase {
 
   // MARK: - Initialisation
@@ -67,7 +68,7 @@ final class PositionTests: SwiftDataBaseTestCase {
 
   // MARK: - Persistence
 
-  @Test @MainActor
+  @Test
   func persistsAndFetchesPosition() throws {
     let position = Position(
       latitude: 53.3498,
@@ -89,7 +90,7 @@ final class PositionTests: SwiftDataBaseTestCase {
     #expect(fetched[0].longitude == -6.2603)
   }
 
-  @Test @MainActor
+  @Test
   func associatesWithRoute() throws {
     let route = Route(name: "Evening Drive", trigger: .bluetooth)
     context!.insert(route)
@@ -114,7 +115,7 @@ final class PositionTests: SwiftDataBaseTestCase {
     #expect(fetchedRoute.positions.first?.latitude == 51.5)
   }
 
-  @Test @MainActor
+  @Test
   func multiplePositionsAssociateWithOneRoute() throws {
     let route = Route(name: "Long Drive", trigger: .manual)
     context!.insert(route)

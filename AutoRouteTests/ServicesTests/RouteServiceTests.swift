@@ -53,7 +53,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
 
     service.startRoute()
 
-    #expect(service.currentSpeedMs < 0)
+    #expect(service.currentSpeedMs == nil)
   }
 
   @Test
@@ -131,7 +131,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     locationService.locationPublisher.send(location)
     service.endRoute()
 
-    #expect(service.currentSpeedMs < 0)
+    #expect(service.currentSpeedMs == nil)
   }
 
   @Test
@@ -245,10 +245,10 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   // MARK: - currentSpeedMs
 
   @Test
-  func currentSpeedMsIsNegativeInitially() async throws {
+  func currentSpeedMsIsNilInitially() async throws {
     let (service, _, _) = makeServices()
 
-    #expect(service.currentSpeedMs < 0)
+    #expect(service.currentSpeedMs == nil)
   }
 
   @Test
@@ -268,7 +268,23 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func currentSpeedMsIsNegativeAfterEndRoute() async throws {
+  func currentSpeedMsIsNilForInvalidLocationSpeed() async throws {
+    let (service, locationService, _) = makeServices()
+
+    service.startRoute()
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: -1, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    #expect(service.currentSpeedMs == nil)
+  }
+
+  @Test
+  func currentSpeedMsIsNilAfterEndRoute() async throws {
     let (service, locationService, _) = makeServices()
 
     service.startRoute()
@@ -280,7 +296,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     locationService.locationPublisher.send(location)
     service.endRoute()
 
-    #expect(service.currentSpeedMs < 0)
+    #expect(service.currentSpeedMs == nil)
   }
 
   // MARK: - loadRoute

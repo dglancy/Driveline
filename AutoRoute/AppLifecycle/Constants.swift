@@ -15,8 +15,6 @@ let kAppBundleId = "com.targatrips.\(kAppName)"
 let kGPXCreator = "\(kAppName) for iOS"
 let kBlankString = ""
 
-let kAutomotiveNavigationSpeedRecordingThreshold: Double = 8
-
 // MARK: – Testing
 
 let kUITestingFlag = "-ui-testing"

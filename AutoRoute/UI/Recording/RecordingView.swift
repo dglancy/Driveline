@@ -122,10 +122,7 @@ struct RecordingView: View {
   }
 
   private func secondaryStats(route: Route?) -> some View {
-    let speedText: String = {
-      guard !routeService.isPaused, routeService.currentSpeedMs >= 0 else { return "—" }
-      return "\(Int(routeService.currentSpeedMs * 3.6))"
-    }()
+    let speedText = routeService.isPaused ? "—" : routeService.currentSpeedMs.map { "\(Int($0 * 3.6))" } ?? "—"
 
     return HStack(spacing: 0) {
       StatColumn(value: speedText, label: "km/h")
