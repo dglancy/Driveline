@@ -17,18 +17,16 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
   // MARK: - Properties
 
   private var routeService: RouteService!
-  private var locationService: LocationService!
 
   // MARK: - Lifecycle
 
   override init() async throws {
     try await super.init()
-    locationService = LocationService()
+    let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     routeService = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder)
     IntentDependencyResolver.provider = { [weak self] in
-      guard let self else { return nil }
-      return (routeService: routeService, locationService: locationService)
+      self?.routeService
     }
   }
 
@@ -58,7 +56,8 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
   func startOrResumeIntentStartsRouteWhenStopped() async throws {
     _ = try await StartOrResumeRouteIntent().perform()
 
-    #expect(locationService.status == .started)
+    #expect(routeService.isRecording)
+    #expect(!routeService.isPaused)
   }
 
   @Test
@@ -68,7 +67,8 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
     _ = try await StartOrResumeRouteIntent().perform()
 
-    #expect(locationService.status == .started)
+    #expect(routeService.isRecording)
+    #expect(!routeService.isPaused)
   }
 
   @Test
@@ -77,7 +77,8 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
     _ = try await StartOrResumeRouteIntent().perform()
 
-    #expect(locationService.status == .started)
+    #expect(routeService.isRecording)
+    #expect(!routeService.isPaused)
   }
 
   // MARK: - PauseRouteIntent
@@ -88,7 +89,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
     _ = try await PauseRouteIntent().perform()
 
-    #expect(locationService.status == .paused)
+    #expect(routeService.isPaused)
   }
 
   @Test
@@ -98,13 +99,14 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
     _ = try await PauseRouteIntent().perform()
 
-    #expect(locationService.status == .paused)
+    #expect(routeService.isPaused)
   }
 
   @Test
   func pauseIntentIsNoOpWhenStopped() async throws {
     _ = try await PauseRouteIntent().perform()
 
-    #expect(locationService.status == .stopped)
+    #expect(!routeService.isRecording)
+    #expect(!routeService.isPaused)
   }
 }
