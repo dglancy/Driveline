@@ -15,8 +15,6 @@ struct AutoRouteApp: App {
 
   @State private var routeService: RouteService
 
-  private let locationService: LocationService
-  private let locationDataRecorderService: LocationDataRecorderService
   private let modelContainer: ModelContainer
 
   // MARK: - Lifecycle
@@ -25,12 +23,15 @@ struct AutoRouteApp: App {
     Log.lifecycle.info("App starting")
     let isUITesting = Self.isUITesting()
 
-    modelContainer = Self.createModelContainer(isUITesting: isUITesting)
-    locationService = Self.setupLocationService()
-    locationDataRecorderService = Self.setupLocationDataRecorderService(locationService: locationService, modelContext: modelContainer.mainContext)
+    let modelContainer = Self.createModelContainer(isUITesting: isUITesting)
+    let locationService = Self.setupLocationService()
+    let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService,
+                                                                     modelContext: modelContainer.mainContext)
+    let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext,
+                                              locationService: locationService,
+                                              locationDataRecorder: locationDataRecorder)
 
-    let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext, locationService: locationService,
-                                             locationDataRecorder: locationDataRecorderService)
+    self.modelContainer = modelContainer
     _routeService = State(initialValue: routeService)
 
     if isUITesting {
