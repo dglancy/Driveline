@@ -13,6 +13,7 @@ import os.log
 let kAppName = "AutoRoute"
 let kAppBundleId = "com.targatrips.\(kAppName)"
 let kGPXCreator = "\(kAppName) for iOS"
+let kBlankString = ""
 
 let kAutomotiveNavigationSpeedRecordingThreshold: Double = 8
 
