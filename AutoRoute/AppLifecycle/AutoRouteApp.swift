@@ -33,7 +33,7 @@ struct AutoRouteApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      HomeView()
     }
     .modelContainer(modelContainer)
   }
