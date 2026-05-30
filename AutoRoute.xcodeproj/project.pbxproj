@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */; };
+		6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		6D47A5502FCAE68700E6C7B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6D47A58C2FCB0FCF00E6C7B7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -121,6 +123,7 @@
 				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
 				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
 				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,
+				6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */,
 				6D47A59F2FCB2B1400E6C7B7 /* Frameworks */,
 				6D47A5112FCAD20600E6C7B7 /* Products */,
 			);
@@ -268,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
