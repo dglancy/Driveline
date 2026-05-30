@@ -36,7 +36,7 @@ struct LocationServiceTests {
   }
 
   @Test @MainActor
-  func publishesLocationThroughPublisher() throws {
+  func publishesLocationThroughPublisher() async throws {
     let service = LocationService()
     var receivedLocations = [CLLocation]()
     let cancellable = service.locationPublisher.sink { location in
@@ -45,6 +45,8 @@ struct LocationServiceTests {
 
     let sampleLocation = CLLocation(latitude: 51.0, longitude: -0.1)
     service.locationManager(CLLocationManager(), didUpdateLocations: [sampleLocation])
+
+    await Task.yield()
 
     #expect(receivedLocations == [sampleLocation])
 
