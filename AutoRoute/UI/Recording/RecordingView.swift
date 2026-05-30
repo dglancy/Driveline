@@ -98,7 +98,7 @@ struct RecordingView: View {
         .textCase(.uppercase)
         .padding(.bottom, 6)
 
-      Text(formattedElapsed(seconds: elapsedSeconds))
+      Text(TimeInterval(elapsedSeconds).elapsedTimeString())
         .font(.system(size: 74, weight: .semibold))
         .monospacedDigit()
         .foregroundStyle(Color(.label))
@@ -106,11 +106,12 @@ struct RecordingView: View {
         .animation(.easeInOut(duration: 0.3), value: routeService.isPaused)
 
       HStack(alignment: .lastTextBaseline, spacing: 6) {
-        Text(String(format: "%.1f", route?.distanceKilometres ?? 0.0))
+        let distanceMetres = route?.distanceMetres ?? 0.0
+        Text(distanceMetres.localizedDistanceValueString())
           .font(.system(size: 52, weight: .semibold))
           .monospacedDigit()
           .foregroundStyle(accentColor)
-        Text("km")
+        Text(distanceMetres.localizedDistanceUnitSymbol())
           .font(.system(size: 22, weight: .medium))
           .foregroundStyle(Color(.secondaryLabel))
       }
@@ -122,10 +123,11 @@ struct RecordingView: View {
   }
 
   private func secondaryStats(route: Route?) -> some View {
-    let speedText = routeService.isPaused ? "—" : routeService.currentSpeedMs.map { "\(Int($0 * 3.6))" } ?? "—"
+    let speedValue = routeService.isPaused ? "—" : routeService.currentSpeedMs?.localizedSpeedValueString() ?? "—"
+    let speedUnit = (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol()
 
     return HStack(spacing: 0) {
-      StatColumn(value: speedText, label: "km/h")
+      StatColumn(value: speedValue, label: speedUnit)
       Divider().frame(height: 36)
       StatColumn(value: route.map { "\($0.positions.count)" } ?? "0", label: "logged")
       Divider().frame(height: 36)
@@ -219,18 +221,6 @@ struct RecordingView: View {
     .padding(.bottom, 42)
   }
 
-  // MARK: - Private Helpers
-
-  private func formattedElapsed(seconds: Int) -> String {
-    let hours = seconds / 3600
-    let minutes = (seconds % 3600) / 60
-    let secs = seconds % 60
-    if hours > 0 {
-      return String(format: "%d:%02d:%02d", hours, minutes, secs)
-    } else {
-      return String(format: "%02d:%02d", minutes, secs)
-    }
-  }
 }
 
 // MARK: - Subviews
