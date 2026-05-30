@@ -6,3 +6,16 @@
 //
 
 import Foundation
+import os.log
+
+// MARK: - App
+
+let kAppName = Bundle.main.appName
+let kAppBundleId = "com.targatrips.\(kAppName)"
+let kGPXCreator = "\(kAppName) for iOS"
+
+let kAutomotiveNavigationSpeedRecordingThreshold: Double = 8
+
+// MARK: – Testing
+
+let kUITestingFlag = "-ui-testing"
