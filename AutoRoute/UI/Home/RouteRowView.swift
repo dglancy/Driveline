@@ -45,7 +45,7 @@ struct RouteRowView: View {
       RoundedRectangle(cornerRadius: 11)
         .fill(.tint.opacity(0.14))
         .frame(width: 38, height: 38)
-      Image(systemName: "car.fill")
+      Image(systemName: "point.bottomleft.forward.to.point.topright.scurvepath")
         .font(.system(size: 21))
         .foregroundStyle(.tint)
     }
