@@ -95,10 +95,10 @@ final class RouteService {
   private func routeNameForCurrentTime() -> String {
     let hour = Calendar.current.component(.hour, from: Date())
     switch hour {
-    case 5..<12: return "Morning Drive"
-    case 12..<17: return "Afternoon Drive"
-    case 17..<21: return "Evening Drive"
-    default: return "Night Drive"
+    case 5..<12: return String(localized: "Morning Drive", comment: "Default route name for routes started between 05:00 and 11:59")
+    case 12..<17: return String(localized: "Afternoon Drive", comment: "Default route name for routes started between 12:00 and 16:59")
+    case 17..<21: return String(localized: "Evening Drive", comment: "Default route name for routes started between 17:00 and 20:59")
+    default: return String(localized: "Night Drive", comment: "Default route name for routes started between 21:00 and 04:59")
     }
   }
 
