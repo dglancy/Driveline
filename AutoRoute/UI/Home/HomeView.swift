@@ -90,6 +90,9 @@ struct HomeView: View {
             }
             .disabled(routeService.isRecording)
           }
+          .onDelete { indexSet in
+            deleteRoutes(at: indexSet, in: section)
+          }
         }
       }
     }
@@ -126,6 +129,14 @@ struct HomeView: View {
       .listRowBackground(Color.red.opacity(0.08))
     }
     .listSectionSeparator(.hidden)
+  }
+
+  // MARK: - Private Methods
+
+  private func deleteRoutes(at indexSet: IndexSet, in section: HomeViewModel.RouteSection) {
+    for index in indexSet {
+      modelContext.delete(section.routes[index])
+    }
   }
 
   @ToolbarContentBuilder
