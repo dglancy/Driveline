@@ -20,14 +20,14 @@ struct RouteTests {
 
     #expect(route.name == "Morning Commute")
     #expect(route.trigger == .manual)
-    #expect(route.endDate == nil)
+    #expect(route.endedAt == nil)
     #expect(route.startPlaceName == nil)
     #expect(route.endPlaceName == nil)
     #expect(route.isRecording == true)
     #expect(route.isPaused == false)
     #expect(route.pausedDurationSeconds == 0)
     #expect(route.pauseStartedAt == nil)
-    #expect(route.trackPoints.isEmpty)
+    #expect(route.positions.isEmpty)
   }
 
   @Test func initialisesWithBluetoothTrigger() throws {
@@ -53,7 +53,7 @@ struct RouteTests {
   @Test func durationUsesEndDateWhenFinished() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isRecording = false
-    route.endDate = route.startDate.addingTimeInterval(600)
+    route.endedAt = route.startedAt.addingTimeInterval(600)
 
     #expect(route.durationSeconds == 600)
   }
@@ -61,7 +61,7 @@ struct RouteTests {
   @Test func durationSubtractsPausedTime() throws {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isRecording = false
-    route.endDate = route.startDate.addingTimeInterval(600)
+    route.endedAt = route.startedAt.addingTimeInterval(600)
     route.pausedDurationSeconds = 60
 
     #expect(route.durationSeconds == 540)
@@ -71,7 +71,7 @@ struct RouteTests {
     let route = Route(name: "Test", trigger: .bluetooth)
     route.isPaused = true
     route.pauseStartedAt = Date.now.addingTimeInterval(-30)
-    route.endDate = route.startDate.addingTimeInterval(600)
+    route.endedAt = route.startedAt.addingTimeInterval(600)
 
     // active pause of ~30s on top of no accumulated pause
     #expect(route.durationSeconds < 575)
@@ -87,7 +87,7 @@ struct RouteTests {
   // MARK: - Persistence
 
   @Test @MainActor func persistsAndFetchesRoute() throws {
-    let context = try makeTestContainer().mainContext
+    let context = ModelContext(try makeTestContainer())
 
     let route = Route(name: "Coastal Drive", trigger: .bluetooth)
     context.insert(route)
@@ -98,21 +98,31 @@ struct RouteTests {
     #expect(fetched[0].name == "Coastal Drive")
   }
 
-  @Test @MainActor func deletingRouteCascadesToTrackPoints() throws {
-    let context = try makeTestContainer().mainContext
+  @Test @MainActor func deletingRouteCascadesToPositions() throws {
+    let context = ModelContext(try makeTestContainer())
 
     let route = Route(name: "Test", trigger: .manual)
     context.insert(route)
 
-    let point = TrackPoint(timestamp: .now, latitude: 51.5, longitude: -0.1, altitude: 10, speed: 14, horizontalAccuracy: 5)
-    context.insert(point)
-    route.trackPoints.append(point)
+    let position = Position(
+      latitude: 51.5,
+      longitude: -0.1,
+      altitude: 10,
+      horizontalAccuracy: 5,
+      verticalAccuracy: 3,
+      course: 0,
+      courseAccuracy: 5,
+      speed: 14,
+      speedAccuracy: 1
+    )
+    context.insert(position)
+    route.positions.append(position)
     try context.save()
 
     context.delete(route)
     try context.save()
 
     #expect(try context.fetch(FetchDescriptor<Route>()).isEmpty)
-    #expect(try context.fetch(FetchDescriptor<TrackPoint>()).isEmpty)
+    #expect(try context.fetch(FetchDescriptor<Position>()).isEmpty)
   }
 }

@@ -15,8 +15,8 @@ final class Route {
   
   @Attribute(.unique) var id: UUID
   var name: String
-  var startDate: Date
-  var endDate: Date?
+  var startedAt: Date
+  var endedAt: Date?
 
   var startPlaceName: String?
   var endPlaceName: String?
@@ -28,15 +28,15 @@ final class Route {
   var pausedDurationSeconds: Double
   var pauseStartedAt: Date?
 
-  @Relationship(deleteRule: .cascade, inverse: \TrackPoint.route)
-  var trackPoints: [TrackPoint]
+  @Relationship(deleteRule: .cascade, inverse: \Position.route)
+  var positions: [Position]
 
   // MARK: - Computed Properties
   
   var durationSeconds: Double {
-    let reference = endDate ?? .now
+    let reference = endedAt ?? .now
     let currentPause = isPaused ? Date.now.timeIntervalSince(pauseStartedAt ?? .now) : 0
-    return max(0, reference.timeIntervalSince(startDate) - pausedDurationSeconds - currentPause)
+    return max(0, reference.timeIntervalSince(startedAt) - pausedDurationSeconds - currentPause)
   }
 
   // MARK: - Lifecycle
@@ -44,8 +44,8 @@ final class Route {
   init(name: String, trigger: RecordingTrigger = .manual) {
     self.id = UUID()
     self.name = name
-    self.startDate = .now
-    self.endDate = nil
+    self.startedAt = .now
+    self.endedAt = nil
     self.startPlaceName = nil
     self.endPlaceName = nil
     self.trigger = trigger
@@ -53,7 +53,7 @@ final class Route {
     self.isPaused = false
     self.pausedDurationSeconds = 0
     self.pauseStartedAt = nil
-    self.trackPoints = []
+    self.positions = []
   }
 }
 
