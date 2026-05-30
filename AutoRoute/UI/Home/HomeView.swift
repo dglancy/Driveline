@@ -28,12 +28,8 @@ struct HomeView: View {
         .onChange(of: routes, initial: true) { _, newRoutes in
           viewModel.update(with: newRoutes)
         }
-        .onChange(of: routeService.isRecording) { _, isRecording in
-          if isRecording {
-            showingRecordingScreen = true
-          } else {
-            showingRecordingScreen = false
-          }
+        .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
+          showingRecordingScreen = isRecording
         }
     }
     .fullScreenCover(isPresented: $showingRecordingScreen) {

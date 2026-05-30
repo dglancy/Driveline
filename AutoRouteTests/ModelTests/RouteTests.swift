@@ -50,16 +50,18 @@ final class RouteTests: SwiftDataBaseTestCase {
   @Test
   func positions() async {
     let route = Route(name: "School Run")
+    let base = Date(timeIntervalSinceReferenceDate: 0)
 
-    let p1 = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
-                      course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
-    let p2 = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
-                      course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
+    let p1 = Position(timestamp: base, latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0,
+                      verticalAccuracy: 1.0, course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
+    let p2 = Position(timestamp: base.addingTimeInterval(1), latitude: 1.0, longitude: 1.0, altitude: 1.0,
+                      horizontalAccuracy: 1.0, verticalAccuracy: 1.0, course: 1.0, courseAccuracy: 1.0,
+                      speed: 1.0, speedAccuracy: 1.0)
+    let p3 = Position(timestamp: base.addingTimeInterval(2), latitude: 1.0, longitude: 1.0, altitude: 1.0,
+                      horizontalAccuracy: 1.0, verticalAccuracy: 1.0, course: 1.0, courseAccuracy: 1.0,
+                      speed: 1.0, speedAccuracy: 1.0)
     route.positions.append(p1)
     route.positions.append(p2)
-
-    let p3 = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
-                      course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
     route.positions.append(p3)
 
     let positions = route.orderedPositions

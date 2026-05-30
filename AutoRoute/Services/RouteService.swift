@@ -67,6 +67,7 @@ final class RouteService {
     }
 
     currentSpeedMs = nil
+    self.route = nil
   }
 
   func pauseRoute() {

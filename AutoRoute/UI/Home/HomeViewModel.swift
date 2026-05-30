@@ -76,9 +76,10 @@ final class HomeViewModel {
     let daysDiff = calendar.dateComponents([.day], from: routeDay, to: today).day ?? 0
 
     switch daysDiff {
-    case 0, 1:
-      let title = date.formatted(.relative(presentation: .named))
-      return title.prefix(1).localizedCapitalized + title.dropFirst()
+    case 0:
+      return String(localized: "Today")
+    case 1:
+      return String(localized: "Yesterday")
     case 2...6:
       return date.formatted(.dateTime.weekday(.wide))
     default:

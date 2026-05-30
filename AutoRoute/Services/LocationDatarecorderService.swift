@@ -35,6 +35,10 @@ final class LocationDataRecorderService {
   // MARK: - Actions
 
   func startRecording(with route: Route) {
+    guard self.route == nil else {
+      Log.data.error("startRecording called while already recording; ignoring.")
+      return
+    }
     Log.data.info("Starting recording locations")
     self.route = route
     route.isRecording = true
