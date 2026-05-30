@@ -27,9 +27,12 @@ struct HomeViewModelTests {
   @Test
   func todayRouteCreatesTodaySection() {
     let viewModel = HomeViewModel()
-    viewModel.update(with: [makeRoute(daysAgo: 0)])
+    let route = makeRoute(daysAgo: 0)
+    viewModel.update(with: [route])
+    let relative = route.startedAt.formatted(.relative(presentation: .named))
+    let expected = relative.prefix(1).localizedCapitalized + relative.dropFirst()
     #expect(viewModel.sections.count == 1)
-    #expect(viewModel.sections[0].title == "10 hours ago")
+    #expect(viewModel.sections[0].title == expected)
   }
 
   @Test
@@ -127,7 +130,9 @@ struct HomeViewModelTests {
     let yesterday = makeRoute(name: "Yesterday", daysAgo: 1)
     let lastWeek = makeRoute(name: "Last Week", daysAgo: 5)
     viewModel.update(with: [lastWeek, yesterday, today])
-    #expect(viewModel.sections[0].title == "10 hours ago")
+    let relative = today.startedAt.formatted(.relative(presentation: .named))
+    let expected = relative.prefix(1).localizedCapitalized + relative.dropFirst()
+    #expect(viewModel.sections[0].title == expected)
     #expect(viewModel.sections[1].title == "Yesterday")
   }
 
@@ -178,11 +183,12 @@ struct HomeViewModelTests {
   }
 
   @Test
-  func summaryLineContainsKmSuffix() {
+  func summaryLineContainsLocalisedDistance() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
-    #expect(summary.contains("km in the last 30 days"))
+    let expectedUnit = 0.0.localizedDistanceUnitSymbol()
+    #expect(summary.contains("\(expectedUnit) in the last 30 days"))
   }
 
   @Test
