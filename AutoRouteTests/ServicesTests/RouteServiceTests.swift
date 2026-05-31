@@ -395,7 +395,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = makeServices()
     service.startRoute()
     service.pauseRoute()
-    service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
+    service.route!.pauseStartedAt = Date().addingTimeInterval(-(kPauseTimeoutInterval + 1))
 
     service.checkAndAutoFinishIfTimedOut()
 
@@ -408,7 +408,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = makeServices()
     service.startRoute()
     service.pauseRoute()
-    service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
+    service.route!.pauseStartedAt = Date().addingTimeInterval(-(kPauseTimeoutInterval + 1))
 
     service.checkAndAutoFinishIfTimedOut()
 

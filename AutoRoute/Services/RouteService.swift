@@ -19,7 +19,6 @@ final class RouteService {
 
   // MARK: - Properties
 
-  static let pauseTimeoutInterval: TimeInterval = 3 * 3600
   static let pauseTimeoutTaskIdentifier = "com.targatrips.AutoRoute.pause-timeout"
 
   private(set) var route: Route?
@@ -132,21 +131,23 @@ final class RouteService {
 
   func checkAndAutoFinishIfTimedOut() {
     guard isPaused,
-          let pauseStartedAt = route?.pauseStartedAt,
-          Date().timeIntervalSince(pauseStartedAt) >= Self.pauseTimeoutInterval else { return }
+          let route = route,
+          let pauseStartedAt = route.pauseStartedAt,
+          Date().timeIntervalSince(pauseStartedAt) >= kPauseTimeoutInterval else { return }
     endRoute()
   }
 
   func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
     guard networkMonitorService.isConnected else { return }
-    let cutoff = Date().addingTimeInterval(-86400)
+    let cutoff = Date().addingTimeInterval(kRouteAgeCutoff)
+    let finishedStatus = Route.RouteStatus.finished
     let descriptor = FetchDescriptor<Route>(
-      predicate: #Predicate<Route> { $0.startedAt >= cutoff }
+      predicate: #Predicate<Route> { route in
+        route.startedAt >= cutoff && route.status == finishedStatus
+      }
     )
     guard let candidates = try? modelContext.fetch(descriptor) else { return }
-    let needsRetry = candidates.filter {
-      $0.status == .finished && ($0.startPlaceName == nil || $0.endPlaceName == nil)
-    }
+    let needsRetry = candidates.filter { $0.startPlaceName == nil || $0.endPlaceName == nil }
     guard !needsRetry.isEmpty else { return }
     for finishedRoute in needsRetry {
       if finishedRoute.startPlaceName == nil, let first = finishedRoute.orderedPositions.first {
@@ -175,7 +176,7 @@ final class RouteService {
 
   private func schedulePauseTimeout() {
     let request = BGAppRefreshTaskRequest(identifier: Self.pauseTimeoutTaskIdentifier)
-    request.earliestBeginDate = Date().addingTimeInterval(Self.pauseTimeoutInterval)
+    request.earliestBeginDate = Date().addingTimeInterval(kPauseTimeoutInterval)
     try? BGTaskScheduler.shared.submit(request)
   }
 
