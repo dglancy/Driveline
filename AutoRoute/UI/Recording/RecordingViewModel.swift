@@ -25,15 +25,22 @@ final class RecordingViewModel {
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
 
   var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
-  var distanceValue: String { distanceMetres.localizedDistanceValueString() }
-  var distanceUnit: String { distanceMetres.localizedDistanceUnitSymbol() }
+  var distanceValue: String {
+    Measurement(value: distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
+  }
+  var distanceUnit: String {
+    Measurement(value: distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
+  }
 
   var speedValue: String {
     guard !routeService.isPaused else { return kDashString }
-    return routeService.currentSpeedMs?.localizedSpeedValueString() ?? kDashString
+    guard let ms = routeService.currentSpeedMs else { return kDashString }
+    return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
 
-  var speedUnit: String { (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol() }
+  var speedUnit: String {
+    Measurement(value: routeService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+  }
   var positionCount: Int { routeService.route?.positions.count ?? 0 }
 
   var formattedPositionCount: String {

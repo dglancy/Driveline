@@ -21,11 +21,19 @@ struct RouteStatsPresenter {
 
   // MARK: - Computed Properties
 
-  var distanceValue: String { route.distanceMetres.localizedDistanceValueString() }
-  var distanceUnit: String { route.distanceMetres.localizedDistanceUnitSymbol() }
+  var distanceValue: String {
+    Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
+  }
+  var distanceUnit: String {
+    Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
+  }
   var durationValue: String { route.activeDurationSeconds.localizedHoursMinutesString() }
-  var avgSpeedValue: String { route.avgSpeedMetresPerSecond.localizedSpeedValueString() }
-  var avgSpeedUnit: String { route.avgSpeedMetresPerSecond.localizedSpeedUnitSymbol() }
+  var avgSpeedValue: String {
+    Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
+  }
+  var avgSpeedUnit: String {
+    Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+  }
 
   var startTimeLabel: String {
     let datePart = route.startedAt.abbreviatedMonthAndDay()

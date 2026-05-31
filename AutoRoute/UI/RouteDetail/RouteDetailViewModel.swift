@@ -56,7 +56,7 @@ final class RouteDetailViewModel {
   var departureTime: String { route.startedAt.clockTime() }
   var arrivalTime: String? { route.endedAt?.clockTime() }
 
-  var topSpeed: String { route.maxSpeedMetresPerSecond.localizedSpeedString() }
+  var topSpeed: String { Measurement(value: route.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
   var trackPoints: String { route.positions.count.formatted() }
   var triggerDisplayName: String { route.trigger.displayName }
 

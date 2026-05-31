@@ -163,10 +163,11 @@ final class HomeViewModel {
 
   private func makeDisplay(for route: Route) -> RouteRowDisplay {
     let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
+    let distance = Measurement(value: route.distanceMetres, unit: UnitLength.meters)
     return RouteRowDisplay(
       name: route.name,
       dateTimeLabel: RouteStatsPresenter(route: route).startTimeLabel,
-      formattedDistance: "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())",
+      formattedDistance: "\(distance.localizedDistanceValueString()) \(distance.localizedDistanceUnitSymbol())",
       formattedDuration: duration
     )
   }
@@ -177,7 +178,7 @@ final class HomeViewModel {
     guard !recent.isEmpty else { return nil }
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
     let count = recent.count
-    let distance = totalMetres.localizedDistanceString()
+    let distance = Measurement(value: totalMetres, unit: UnitLength.meters).localizedDistanceString()
     if count == 1 {
       return String(
         localized: "\(count) route · \(distance) in the last 30 days",
