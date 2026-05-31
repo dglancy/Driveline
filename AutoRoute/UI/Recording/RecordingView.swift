@@ -266,7 +266,7 @@ private struct StatColumn: View {
   let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
-  let route = Route(name: "Morning Drive")
+  let route = Route(name: "Morning Drive", trigger: .automatic)
   let routeService = RouteService(
     modelContext: container.mainContext,
     locationService: locationService,
