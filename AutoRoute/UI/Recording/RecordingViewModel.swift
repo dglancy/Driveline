@@ -58,14 +58,10 @@ final class RecordingViewModel {
   }()
 
   static func formattedCount(_ count: Int) -> String {
-    switch count {
-    case ..<100_000:
+    if count < 100_000 {
       return positionCountFormatter.string(from: NSNumber(value: count)) ?? "\(count)"
-    case ..<1_000_000:
-      return String(format: "%.1fk", Double(count) / 1_000)
-    default:
-      return String(format: "%.1fM", Double(count) / 1_000_000)
     }
+    return count.formatted(.number.notation(.compactName))
   }
 
   // MARK: - Lifecycle

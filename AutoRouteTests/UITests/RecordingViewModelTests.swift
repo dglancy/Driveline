@@ -133,16 +133,16 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func formattedCountAtHundredThousandUsesKSuffix() {
-    #expect(RecordingViewModel.formattedCount(100_000) == "100.0k")
-    #expect(RecordingViewModel.formattedCount(101_500) == "101.5k")
-    #expect(RecordingViewModel.formattedCount(500_100) == "500.1k")
+    #expect(RecordingViewModel.formattedCount(100_000) == "100K")
+    #expect(RecordingViewModel.formattedCount(101_500) == "102K")
+    #expect(RecordingViewModel.formattedCount(500_100) == "500K")
   }
 
   @Test
   func formattedCountAtMillionUsesMSuffix() {
-    #expect(RecordingViewModel.formattedCount(1_000_000) == "1.0M")
+    #expect(RecordingViewModel.formattedCount(1_000_000) == "1M")
     #expect(RecordingViewModel.formattedCount(1_500_000) == "1.5M")
-    #expect(RecordingViewModel.formattedCount(10_000_000) == "10.0M")
+    #expect(RecordingViewModel.formattedCount(10_000_000) == "10M")
   }
 
   // MARK: - startedAt
