@@ -213,6 +213,6 @@ final class RouteService {
   }
 
   private func saveModelContext() {
-    modelContext.safeSave { Log.ui.error("Failed to save model context: \($0.localizedDescription)") }
+    modelContext.safeSave(onFailure: { Log.ui.error("Failed to save model context: \($0.localizedDescription)") })
   }
 }

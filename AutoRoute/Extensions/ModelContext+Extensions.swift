@@ -9,12 +9,12 @@ import SwiftData
 
 extension ModelContext {
 
-  func safeSave(onSuccess: (() -> Void)? = nil, onFailure: (Error) -> Void) {
+  func safeSave(onSuccess: (() -> Void)? = nil, onFailure: ((Error) -> Void)? = nil) {
     do {
       try save()
       onSuccess?()
     } catch {
-      onFailure(error)
+      onFailure?(error)
     }
   }
 }
