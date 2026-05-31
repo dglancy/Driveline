@@ -129,7 +129,7 @@ struct MergeRoutesView: View {
         )
         Divider().frame(height: 38)
         statColumn(
-          value: viewModel.totalPositionCount.formatted(),
+          value: viewModel.formattedTotalPositionCount,
           label: String(localized: "Track points", comment: "Merge stat: combined GPS track point count")
         )
       }

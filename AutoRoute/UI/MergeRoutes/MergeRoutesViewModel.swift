@@ -39,8 +39,8 @@ final class MergeRoutesViewModel {
     (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedDurationString()
   }
 
-  var totalPositionCount: Int {
-    orderedRoutes[0].positions.count + orderedRoutes[1].positions.count
+  var formattedTotalPositionCount: String {
+    (orderedRoutes[0].positions.count + orderedRoutes[1].positions.count).formatted()
   }
 
   // MARK: - Lifecycle
