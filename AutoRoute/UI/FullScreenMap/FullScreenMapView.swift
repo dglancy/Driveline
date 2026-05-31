@@ -41,7 +41,7 @@ struct FullScreenMapView: View {
 
         if let end = viewModel.coordinates.last, viewModel.coordinates.count > 1 {
           Annotation("", coordinate: end, anchor: .bottom) {
-            RouteEndAnnotation(systemName: "mappin.circle.fill")
+            RouteEndAnnotation()
           }
         }
       }

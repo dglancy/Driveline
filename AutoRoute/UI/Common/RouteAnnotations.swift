@@ -22,14 +22,10 @@ struct RouteStartAnnotation: View {
 
 struct RouteEndAnnotation: View {
 
-  // MARK: - Properties
-
-  let systemName: String
-
   // MARK: - Body
 
   var body: some View {
-    Image(systemName: systemName)
+    Image(systemName: "flag.pattern.checkered.circle.fill")
       .font(.system(size: 28))
       .foregroundStyle(.red, Color(.systemBackground))
       .shadow(color: .black.opacity(0.2), radius: 2, y: 1)

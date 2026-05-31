@@ -33,7 +33,7 @@ struct RouteDetailMapView: View {
 
       if let end = coordinates.last, coordinates.count > 1 {
         Annotation("", coordinate: end, anchor: .bottom) {
-          RouteEndAnnotation(systemName: "flag.pattern.checkered.circle.fill")
+          RouteEndAnnotation()
         }
       }
     }
