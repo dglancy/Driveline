@@ -30,10 +30,6 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   @ObservationIgnored private let manager = CLLocationManager()
   @ObservationIgnored private var alwaysAuthorizationRequested = false
 
-  // MARK: - Computed properties
-
-  var activityType: CLActivityType { manager.activityType }
-
   // MARK: - Lifecycle
 
   override init() {

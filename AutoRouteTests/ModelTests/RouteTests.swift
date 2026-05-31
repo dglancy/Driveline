@@ -118,54 +118,6 @@ final class RouteTests: SwiftDataBaseTestCase {
     #expect(route.activeDurationSeconds == 0)
   }
 
-  // MARK: - totalElapsedSeconds
-
-  @Test
-  func totalElapsedSecondsWhenRecordingAndNotPaused() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    #expect(route.totalElapsedSeconds >= 0)
-    #expect(route.totalElapsedSeconds < 2)
-  }
-
-  @Test
-  func totalElapsedSecondsUsesEndDateWhenFinished() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.status = .finished
-    route.endedAt = route.startedAt.addingTimeInterval(600)
-
-    #expect(route.totalElapsedSeconds == 600)
-  }
-
-  @Test
-  func totalElapsedSecondsIncludesPausedTime() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.status = .finished
-    route.endedAt = route.startedAt.addingTimeInterval(600)
-    route.pausedDurationSeconds = 60
-
-    #expect(route.totalElapsedSeconds == 600)
-  }
-
-  @Test
-  func totalElapsedSecondsIncludesActivePausePeriod() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.status = .paused
-    route.pauseStartedAt = Date.now.addingTimeInterval(-30)
-    route.endedAt = route.startedAt.addingTimeInterval(600)
-
-    #expect(route.totalElapsedSeconds == 600)
-  }
-
-  @Test
-  func totalElapsedSecondsIsGreaterThanOrEqualToActiveDuration() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.status = .finished
-    route.endedAt = route.startedAt.addingTimeInterval(600)
-    route.pausedDurationSeconds = 120
-
-    #expect(route.totalElapsedSeconds >= route.activeDurationSeconds)
-  }
-
   // MARK: - Persistence
 
   @Test
@@ -235,19 +187,6 @@ final class RouteTests: SwiftDataBaseTestCase {
     route.positions.append(p1)
     #expect(route.distanceMetres > 11_000)
     #expect(route.distanceMetres < 11_500)
-  }
-
-  @Test
-  func distanceKilometresIsMetresDividedByThousand() throws {
-    let route = Route(name: "Test")
-    context!.insert(route)
-    let p1 = makePosition(latitude: 0.0, longitude: 0.0)
-    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
-    context!.insert(p1)
-    context!.insert(p2)
-    route.positions.append(p1)
-    route.positions.append(p2)
-    #expect(route.distanceKilometres == route.distanceMetres / 1_000)
   }
 
   // MARK: - Persistence

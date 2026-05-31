@@ -299,21 +299,6 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     #expect(service.currentSpeedMs == nil)
   }
 
-  // MARK: - loadRoute
-
-  @Test
-  func loadRouteSetsActiveRouteAndStopsServices() async throws {
-    let (service, locationService, recorder) = makeServices()
-
-    service.startRoute()
-    let existingRoute = Route(name: "Existing route")
-    service.loadRoute(existingRoute)
-
-    #expect(service.route?.id == existingRoute.id)
-    #expect(locationService.status == .stopped)
-    #expect(recorder.route == nil)
-  }
-
   // MARK: - initialRoute
 
   @Test

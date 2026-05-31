@@ -63,10 +63,6 @@ final class RouteDetailViewModel {
     return String(localized: "\(kb) KB", comment: "File size in kilobytes")
   }
 
-  var gpxFilename: String {
-    route.name.components(separatedBy: .whitespaces).joined(separator: kDashString) + ".gpx"
-  }
-
   // MARK: - Lifecycle
 
   init(route: Route) {
