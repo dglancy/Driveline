@@ -135,12 +135,6 @@ final class RouteService {
     await endRoute()
   }
 
-  func loadRoute(_ route: Route) {
-    self.route = route
-    locationService.stop()
-    locationDataRecorder.stopRecording()
-  }
-
   func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
     guard networkMonitorService.isConnected else { return }
     let cutoff = Date().addingTimeInterval(-86400)

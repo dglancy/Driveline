@@ -81,16 +81,10 @@ final class Route {
     return total
   }
 
-  var distanceKilometres: Double { distanceMetres / 1_000 }
-
   var activeDurationSeconds: Double {
     let reference = endedAt ?? .now
     let currentPause = isPaused ? Date.now.timeIntervalSince(pauseStartedAt ?? .now) : 0
     return max(0, reference.timeIntervalSince(startedAt) - pausedDurationSeconds - currentPause)
-  }
-
-  var totalElapsedSeconds: Double {
-    (endedAt ?? .now).timeIntervalSince(startedAt)
   }
 
   var avgSpeedMetresPerSecond: CLLocationSpeed {

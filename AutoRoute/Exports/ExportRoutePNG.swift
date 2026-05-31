@@ -254,7 +254,7 @@ final class ExportRoutePNG: ExportingRoute {
 
 // MARK: - MapSize enum
 
-enum MapSize: String, CaseIterable {
+enum MapSize: String {
   case low
   case medium
   case high1
@@ -283,7 +283,7 @@ enum MapSize: String, CaseIterable {
 
 // MARK: - RouteWidth enum
 
-enum RouteWidth: String, CaseIterable {
+enum RouteWidth: String {
   case thin
   case medium
   case thick
