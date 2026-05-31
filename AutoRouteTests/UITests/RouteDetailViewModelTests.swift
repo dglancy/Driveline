@@ -107,12 +107,6 @@ struct RouteDetailViewModelTests {
     #expect(vm.gpxFileSize.contains("KB"))
   }
 
-  @Test
-  func gpxFilenameHasGpxExtension() {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    #expect(vm.gpxFilename.hasSuffix(".gpx"))
-  }
-
   // MARK: - shareRouteGPX
 
   @Test

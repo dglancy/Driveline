@@ -172,8 +172,7 @@ struct RouteDetailView: View {
         isStart: false,
         place: viewModel.endPlace,
         subtitle: String(localized: "Arrival", comment: "Endpoint row subtitle"),
-        time: viewModel.arrivalTime,
-        isLast: true
+        time: viewModel.arrivalTime
       )
     }
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
@@ -191,7 +190,7 @@ struct RouteDetailView: View {
         value: viewModel.triggerDisplayName
       )
       Divider().padding(.leading, 52)
-      MetadataRow(icon: "doc", title: String(localized: "GPX File", comment: "Metadata row"), value: viewModel.gpxFileSize, isLast: true)
+      MetadataRow(icon: "doc", title: String(localized: "GPX File", comment: "Metadata row"), value: viewModel.gpxFileSize)
     }
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
   }
@@ -291,7 +290,6 @@ private struct EndpointRow: View {
   let place: String?
   let subtitle: String
   let time: String?
-  var isLast: Bool = false
 
   // MARK: - Body
 
@@ -345,7 +343,6 @@ private struct MetadataRow: View {
   let icon: String
   let title: String
   let value: String
-  var isLast: Bool = false
 
   // MARK: - Body
 
