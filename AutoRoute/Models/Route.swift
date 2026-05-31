@@ -95,6 +95,8 @@ final class Route {
   }
 }
 
+// MARK: - Enums
+
 enum RouteStatus: String, Codable {
   case recording
   case paused
@@ -104,6 +106,8 @@ enum RouteStatus: String, Codable {
 enum RecordingTrigger: String, Codable {
   case bluetooth = "Bluetooth"
   case manual = "Started manually"
+
+  // MARK: - Computed properties
 
   var displayName: String {
     switch self {

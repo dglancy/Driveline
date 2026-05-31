@@ -23,7 +23,7 @@ final class RecordingViewModel {
   var accentColour: Color { routeService.isPaused ? .orange : .red }
   var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
-  
+
   var speedValue: String {
     guard !routeService.isPaused else { return kDashString }
     return routeService.currentSpeedMs?.localizedSpeedValueString() ?? kDashString
