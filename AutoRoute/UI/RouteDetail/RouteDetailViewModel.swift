@@ -5,8 +5,12 @@
 //  Created by Damien Glancy on 31/05/2026.
 //
 
+import CoreLocation
 import Foundation
+import MapKit
 import Observation
+import SwiftData
+import SwiftUI
 
 // MARK: - ExportedFile
 
@@ -32,6 +36,7 @@ final class RouteDetailViewModel {
   var exportError: String?
 
   @ObservationIgnored let route: Route
+  @ObservationIgnored private let stats: RouteStatsPresenter
 
   // MARK: - Computed Properties
 
@@ -41,13 +46,11 @@ final class RouteDetailViewModel {
     route.startedAt.formatted(.dateTime.weekday(.wide).month(.wide).day())
   }
 
-  var distanceValue: String { route.distanceMetres.localizedDistanceValueString() }
-  var distanceUnit: String { route.distanceMetres.localizedDistanceUnitSymbol() }
-
-  var durationValue: String { route.activeDurationSeconds.localizedHoursMinutesString() }
-
-  var avgSpeedValue: String { route.avgSpeedMetresPerSecond.localizedSpeedValueString() }
-  var avgSpeedUnit: String { route.avgSpeedMetresPerSecond.localizedSpeedUnitSymbol() }
+  var distanceValue: String { stats.distanceValue }
+  var distanceUnit: String { stats.distanceUnit }
+  var durationValue: String { stats.durationValue }
+  var avgSpeedValue: String { stats.avgSpeedValue }
+  var avgSpeedUnit: String { stats.avgSpeedUnit }
 
   var startPlace: String? { route.startPlaceName }
   var endPlace: String? { route.endPlaceName }
@@ -63,13 +66,28 @@ final class RouteDetailViewModel {
     return String(localized: "\(kb) KB", comment: "File size in kilobytes")
   }
 
+  var coordinates: [CLLocationCoordinate2D] {
+    route.orderedPositions.map {
+      CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+    }
+  }
+
+  var cameraPosition: MapCameraPosition {
+    .fit(to: coordinates, paddingMultiplier: 1.5)
+  }
+
   // MARK: - Lifecycle
 
   init(route: Route) {
     self.route = route
+    self.stats = RouteStatsPresenter(route: route)
   }
 
   // MARK: - Actions
+
+  func deleteRoute(using context: ModelContext) {
+    context.delete(route)
+  }
 
   func shareRouteGPX() {
     Task {

@@ -53,7 +53,7 @@ struct HomeView: View {
       Button(String(localized: "Delete", comment: "Confirm delete routes"), role: .destructive) {
         let selected = viewModel.selectedRoutes(from: viewModel.sections)
         viewModel.exitSelectMode()
-        deleteRoutes(selected)
+        viewModel.deleteRoutes(selected, using: modelContext)
       }
       Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
     } message: {
@@ -70,7 +70,7 @@ struct HomeView: View {
       if routesToMerge.count == 2 {
         MergeRoutesView(routes: routesToMerge) { orderedRoutes, mergedName in
           showingMergeSheet = false
-          mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName)
+          viewModel.mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName, using: modelContext)
         } onCancel: {
           showingMergeSheet = false
         }
@@ -119,24 +119,24 @@ struct HomeView: View {
 
         ForEach(viewModel.sections) { section in
           Section(section.title) {
-            ForEach(section.routes) { route in
+            ForEach(section.rows) { row in
               if viewModel.isSelectMode {
                 Button {
-                  viewModel.toggleSelection(for: route.id)
+                  viewModel.toggleSelection(for: row.route.id)
                 } label: {
-                  RouteRowView(route: route, isSelected: viewModel.selectedRouteIDs.contains(route.id))
+                  RouteRowView(display: row.display, isSelected: viewModel.selectedRouteIDs.contains(row.route.id))
                 }
                 .buttonStyle(.plain)
               } else {
-                NavigationLink(value: route) {
-                  RouteRowView(route: route)
+                NavigationLink(value: row.route) {
+                  RouteRowView(display: row.display)
                     .opacity(routeService.isRecording ? 0.4 : 1)
                 }
                 .disabled(routeService.isRecording)
               }
             }
             .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
-              deleteRoutes(at: indexSet, in: section)
+              viewModel.deleteRoutes(at: indexSet, in: section, using: modelContext)
             })
           }
         }
@@ -213,37 +213,6 @@ struct HomeView: View {
       }
     }
   }
-
-  // MARK: - Private Methods
-
-  private func deleteRoutes(_ routes: [Route]) {
-    for route in routes {
-      modelContext.delete(route)
-    }
-  }
-
-  private func deleteRoutes(at indexSet: IndexSet, in section: HomeViewModel.RouteSection) {
-    deleteRoutes(indexSet.map { section.routes[$0] })
-  }
-
-  private func mergeRoutes(orderedRoutes: [Route], mergedName: String) {
-    guard orderedRoutes.count == 2 else { return }
-    let first = orderedRoutes[0]
-    let second = orderedRoutes[1]
-
-    let merged = Route(name: mergedName)
-    merged.startedAt = first.startedAt
-    merged.endedAt = second.endedAt ?? first.endedAt
-    merged.status = .finished
-    merged.trigger = .manual
-    merged.startPlaceName = first.startPlaceName
-    merged.endPlaceName = second.endPlaceName
-    merged.positions = first.positions + second.positions
-
-    modelContext.insert(merged)
-    modelContext.delete(first)
-    modelContext.delete(second)
-  }
 }
 
 // MARK: - Subviews
@@ -261,7 +230,7 @@ private struct RecordingBannerSection: View {
     Section {
       Button(action: onTap) {
         HStack(spacing: 12) {
-          RecordingDot()
+          PulsingDot(color: .red, size: 10)
           VStack(alignment: .leading, spacing: 1) {
             Text("Recording drive…")
               .font(.system(size: 16, weight: .semibold))
@@ -331,32 +300,6 @@ private struct SelectionToolbar: View {
     .background(.regularMaterial)
     .overlay(alignment: .top) {
       Divider()
-    }
-  }
-}
-
-private struct RecordingDot: View {
-
-  // MARK: - Properties
-
-  @State private var animating = false
-
-  // MARK: - Body
-
-  var body: some View {
-    ZStack {
-      Circle()
-        .fill(Color.red)
-        .scaleEffect(animating ? 2.0 : 1.0)
-        .opacity(animating ? 0 : 0.4)
-      Circle()
-        .fill(Color.red)
-    }
-    .frame(width: 10, height: 10)
-    .onAppear {
-      withAnimation(.easeOut(duration: 1.6).repeatForever(autoreverses: false)) {
-        animating = true
-      }
     }
   }
 }

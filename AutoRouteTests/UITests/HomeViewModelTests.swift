@@ -89,7 +89,7 @@ struct HomeViewModelTests {
     let afternoon = makeRoute(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
     #expect(viewModel.sections.count == 1)
-    #expect(viewModel.sections[0].routes.count == 2)
+    #expect(viewModel.sections[0].rows.count == 2)
   }
 
   @Test
@@ -114,7 +114,7 @@ struct HomeViewModelTests {
 
     if expectedTitle == bTitle {
       #expect(viewModel.sections.count == 1)
-      #expect(viewModel.sections[0].routes.count == 2)
+      #expect(viewModel.sections[0].rows.count == 2)
     }
   }
 
@@ -138,8 +138,8 @@ struct HomeViewModelTests {
     let afternoon = makeRoute(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
     #expect(viewModel.sections.count == 1)
-    #expect(viewModel.sections[0].routes[0].name == "Afternoon")
-    #expect(viewModel.sections[0].routes[1].name == "Morning")
+    #expect(viewModel.sections[0].rows[0].display.name == "Afternoon")
+    #expect(viewModel.sections[0].rows[1].display.name == "Morning")
   }
 
   // MARK: - Summary Line
@@ -213,7 +213,7 @@ struct HomeViewModelTests {
     viewModel.update(with: [makeRoute(name: "A", daysAgo: 0)])
     viewModel.update(with: [makeRoute(name: "B", daysAgo: 0), makeRoute(name: "C", daysAgo: 1)])
     #expect(viewModel.sections.count == 2)
-    #expect(viewModel.sections[0].routes[0].name == "B")
+    #expect(viewModel.sections[0].rows[0].display.name == "B")
   }
 }
 

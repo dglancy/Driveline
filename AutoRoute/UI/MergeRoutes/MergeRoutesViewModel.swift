@@ -12,6 +12,15 @@ import Observation
 @MainActor
 final class MergeRoutesViewModel {
 
+  // MARK: - Types
+
+  struct MiniRouteCardDisplay {
+    let name: String
+    let dateTimeLabel: String
+    let formattedDistance: String
+    let formattedDuration: String
+  }
+
   // MARK: - Properties
 
   private(set) var orderedRoutes: [Route]
@@ -19,19 +28,19 @@ final class MergeRoutesViewModel {
 
   // MARK: - Computed Properties
 
-  var first: Route { orderedRoutes[0] }
-  var second: Route { orderedRoutes[1] }
+  var firstDisplay: MiniRouteCardDisplay { makeDisplay(for: orderedRoutes[0]) }
+  var secondDisplay: MiniRouteCardDisplay { makeDisplay(for: orderedRoutes[1]) }
 
   var formattedTotalDistance: String {
-    (first.distanceMetres + second.distanceMetres).localizedDistanceString()
+    (orderedRoutes[0].distanceMetres + orderedRoutes[1].distanceMetres).localizedDistanceString()
   }
 
   var formattedTotalDuration: String {
-    (first.activeDurationSeconds + second.activeDurationSeconds).localizedDurationString()
+    (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedDurationString()
   }
 
   var totalPositionCount: Int {
-    first.positions.count + second.positions.count
+    orderedRoutes[0].positions.count + orderedRoutes[1].positions.count
   }
 
   // MARK: - Lifecycle
@@ -47,5 +56,19 @@ final class MergeRoutesViewModel {
   func swapOrder() {
     orderedRoutes = [orderedRoutes[1], orderedRoutes[0]]
     mergedName = "\(orderedRoutes[0].name) + \(orderedRoutes[1].name)"
+  }
+
+  // MARK: - Private
+
+  private func makeDisplay(for route: Route) -> MiniRouteCardDisplay {
+    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
+    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
+    let parts: [String?] = ["\(datePart) · \(timePart)", route.startPlaceName]
+    return MiniRouteCardDisplay(
+      name: route.name,
+      dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
+      formattedDistance: route.distanceMetres.localizedDistanceString(),
+      formattedDuration: route.activeDurationSeconds.localizedDurationString()
+    )
   }
 }

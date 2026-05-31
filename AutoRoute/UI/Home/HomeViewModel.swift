@@ -7,16 +7,31 @@
 
 import Foundation
 import Observation
+import SwiftData
 
+@MainActor
 @Observable
 final class HomeViewModel {
 
   // MARK: - Types
 
+  struct RouteRowDisplay {
+    let name: String
+    let dateTimeLabel: String
+    let formattedDistance: String
+    let formattedDuration: String?
+  }
+
+  struct RouteRow: Identifiable {
+    let route: Route
+    let display: RouteRowDisplay
+    var id: UUID { route.id }
+  }
+
   struct RouteSection: Identifiable {
     var id: String { title }
     let title: String
-    let routes: [Route]
+    let rows: [RouteRow]
   }
 
   // MARK: - Properties
@@ -63,12 +78,41 @@ final class HomeViewModel {
   }
 
   func selectedRoutes(from sections: [RouteSection]) -> [Route] {
-    sections.flatMap(\.routes).filter { selectedRouteIDs.contains($0.id) }
+    sections.flatMap(\.rows).map(\.route).filter { selectedRouteIDs.contains($0.id) }
   }
 
   func update(with routes: [Route]) {
     sections = buildSections(from: routes)
     summaryLine = buildSummaryLine(from: routes)
+  }
+
+  func deleteRoutes(_ routes: [Route], using context: ModelContext) {
+    for route in routes {
+      context.delete(route)
+    }
+  }
+
+  func deleteRoutes(at indexSet: IndexSet, in section: RouteSection, using context: ModelContext) {
+    deleteRoutes(indexSet.map { section.rows[$0].route }, using: context)
+  }
+
+  func mergeRoutes(orderedRoutes: [Route], mergedName: String, using context: ModelContext) {
+    guard orderedRoutes.count == 2 else { return }
+    let first = orderedRoutes[0]
+    let second = orderedRoutes[1]
+
+    let merged = Route(name: mergedName)
+    merged.startedAt = first.startedAt
+    merged.endedAt = second.endedAt ?? first.endedAt
+    merged.status = .finished
+    merged.trigger = .manual
+    merged.startPlaceName = first.startPlaceName
+    merged.endPlaceName = second.endPlaceName
+    merged.positions = first.positions + second.positions
+
+    context.insert(merged)
+    context.delete(first)
+    context.delete(second)
   }
 
   // MARK: - Private
@@ -77,18 +121,31 @@ final class HomeViewModel {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: .now)
 
-    var groupMap: [(key: String, routes: [Route])] = []
+    var groupMap: [(key: String, rows: [RouteRow])] = []
 
     for route in routes.sorted(by: { $0.startedAt > $1.startedAt }) {
       let key = sectionTitle(for: route.startedAt, today: today, calendar: calendar)
+      let row = RouteRow(route: route, display: makeDisplay(for: route))
       if let index = groupMap.firstIndex(where: { $0.key == key }) {
-        groupMap[index].routes.append(route)
+        groupMap[index].rows.append(row)
       } else {
-        groupMap.append((key: key, routes: [route]))
+        groupMap.append((key: key, rows: [row]))
       }
     }
 
-    return groupMap.map { RouteSection(title: $0.key, routes: $0.routes) }
+    return groupMap.map { RouteSection(title: $0.key, rows: $0.rows) }
+  }
+
+  private func makeDisplay(for route: Route) -> RouteRowDisplay {
+    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
+    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
+    let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
+    return RouteRowDisplay(
+      name: route.name,
+      dateTimeLabel: "\(datePart) · \(timePart)",
+      formattedDistance: "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())",
+      formattedDuration: duration
+    )
   }
 
   private func buildSummaryLine(from routes: [Route]) -> String? {
