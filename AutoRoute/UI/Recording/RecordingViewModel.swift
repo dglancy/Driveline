@@ -20,34 +20,27 @@ final class RecordingViewModel {
   // MARK: - Computed Properties
 
   var isPaused: Bool { routeService.isPaused }
-
   var accentColour: Color { routeService.isPaused ? .orange : .red }
-
   var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
-
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
-
   var speedValue: String {
-    guard !routeService.isPaused else { return "—" }
-    return routeService.currentSpeedMs?.localizedSpeedValueString() ?? "—"
+    guard !routeService.isPaused else { return kDashString }
+    return routeService.currentSpeedMs?.localizedSpeedValueString() ?? kDashString
   }
 
   var speedUnit: String { (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol() }
-
   var positionCount: Int { routeService.route?.positions.count ?? 0 }
 
   var startedAt: String {
-    routeService.route?.startedAt.formatted(date: .omitted, time: .shortened) ?? "—"
+    routeService.route?.startedAt.formatted(date: .omitted, time: .shortened) ?? kDashString
   }
 
   var triggerIconName: String {
     routeService.route?.trigger == .bluetooth ? "bluetooth" : "hand.tap"
   }
 
-  var triggerDisplayName: String { routeService.route?.trigger.displayName ?? "" }
-
+  var triggerDisplayName: String { routeService.route?.trigger.displayName ?? kBlankString }
   var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
-
   var pauseResumeLabel: String { routeService.isPaused ? "Resume" : "Pause" }
 
   // MARK: - Lifecycle

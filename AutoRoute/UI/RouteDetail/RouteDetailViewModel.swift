@@ -48,7 +48,7 @@ final class RouteDetailViewModel {
   }
 
   var gpxFilename: String {
-    route.name.components(separatedBy: .whitespaces).joined(separator: "-") + ".gpx"
+    route.name.components(separatedBy: .whitespaces).joined(separator: kDashString) + ".gpx"
   }
 
   // MARK: - Lifecycle
