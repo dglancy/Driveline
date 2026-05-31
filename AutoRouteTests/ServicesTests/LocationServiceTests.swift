@@ -16,7 +16,8 @@ struct LocationServiceTests {
 
   // MARK: - Tests
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func updatesStatusOnLifecycleCalls() throws {
     let service = LocationService()
 
@@ -35,7 +36,8 @@ struct LocationServiceTests {
     #expect(service.status == .stopped)
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func publishesValidLocationThroughPublisher() async throws {
     let service = LocationService()
     var receivedLocations = [CLLocation]()
@@ -57,7 +59,8 @@ struct LocationServiceTests {
     cancellable.cancel()
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func doesNotPublishLocationWithNegativeAccuracy() async throws {
     let service = LocationService()
     var receivedLocations = [CLLocation]()
@@ -77,7 +80,8 @@ struct LocationServiceTests {
     cancellable.cancel()
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func doesNotPublishLocationBeyondAccuracyThreshold() async throws {
     let service = LocationService()
     var receivedLocations = [CLLocation]()
@@ -97,7 +101,8 @@ struct LocationServiceTests {
     cancellable.cancel()
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func doesNotPublishStaleLocation() async throws {
     let service = LocationService()
     var receivedLocations = [CLLocation]()
@@ -120,7 +125,8 @@ struct LocationServiceTests {
 
   // MARK: - isUsable
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func isUsableReturnsTrueForValidLocation() {
     let service = LocationService()
     let location = CLLocation(
@@ -131,7 +137,8 @@ struct LocationServiceTests {
     #expect(service.isUsable(location) == true)
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func isUsableReturnsFalseForNegativeAccuracy() {
     let service = LocationService()
     let location = CLLocation(
@@ -142,7 +149,8 @@ struct LocationServiceTests {
     #expect(service.isUsable(location) == false)
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func isUsableReturnsFalseForAccuracyAtThreshold() {
     let service = LocationService()
     let location = CLLocation(
@@ -153,7 +161,8 @@ struct LocationServiceTests {
     #expect(service.isUsable(location) == false)
   }
 
-  @Test @MainActor
+  @Test
+  @MainActor
   func isUsableReturnsFalseForStaleTimestamp() {
     let service = LocationService()
     let staleTimestamp = Date().addingTimeInterval(-(kMaxLocationAge + 1))
