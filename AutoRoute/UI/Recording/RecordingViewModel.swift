@@ -38,13 +38,7 @@ final class RecordingViewModel {
 
   var startedAt: String {
     guard let date = routeService.route?.startedAt else { return kDashString }
-    let template = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? kBlankString
-    let is24Hour = !template.contains("a")
-    if is24Hour {
-      return date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits))
-    } else {
-      return date.formatted(.dateTime.hour(.defaultDigits(amPM: .abbreviated)).minute(.twoDigits))
-    }
+    return date.formatted(.dateTime.hour().minute())
   }
 
   var triggerIconName: String {
