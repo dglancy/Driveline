@@ -17,7 +17,6 @@ struct HomeView: View {
   @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
   @State private var viewModel = HomeViewModel()
   @State private var showingRecordingScreen = false
-  @State private var recordingViewModel: RecordingViewModel?
   @State private var showingMergeSheet = false
   @State private var routesToMerge: [Route] = []
 
@@ -33,18 +32,13 @@ struct HomeView: View {
         }
         .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
           if isRecording {
-            recordingViewModel = RecordingViewModel(routeService: routeService)
             viewModel.exitSelectMode()
-          } else {
-            recordingViewModel = nil
           }
           showingRecordingScreen = isRecording
         }
     }
     .fullScreenCover(isPresented: $showingRecordingScreen) {
-      if let recordingViewModel {
-        RecordingView(viewModel: recordingViewModel)
-      }
+      RecordingView(routeService: routeService)
     }
     .alert(
       String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
