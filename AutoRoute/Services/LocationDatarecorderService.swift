@@ -41,7 +41,6 @@ final class LocationDataRecorderService {
     }
     Log.data.info("Starting recording locations")
     self.route = route
-    route.status = .recording
     modelContext.insert(route)
 
     do {
@@ -62,18 +61,6 @@ final class LocationDataRecorderService {
   func stopRecording() {
     Log.data.info("Stopping recording locations")
     locationCancellable = nil
-
-    guard let route else { return }
-
-    route.status = .finished
-
-    do {
-      try modelContext.save()
-      Log.data.info("Saved stopping recording locations")
-    } catch {
-      Log.data.error("Failed to save stopping recording locations: \(error)")
-    }
-
     self.route = nil
     Log.data.info("Stopped recording locations")
   }
