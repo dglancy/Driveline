@@ -32,6 +32,10 @@ final class RecordingViewModel {
   var speedUnit: String { (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol() }
   var positionCount: Int { routeService.route?.positions.count ?? 0 }
 
+  var formattedPositionCount: String {
+    Self.formattedCount(positionCount)
+  }
+
   var startedAt: String {
     guard let date = routeService.route?.startedAt else { return kDashString }
     let template = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? kBlankString
@@ -50,6 +54,25 @@ final class RecordingViewModel {
   var triggerDisplayName: String { routeService.route?.trigger.displayName ?? kBlankString }
   var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
   var pauseResumeLabel: String { routeService.isPaused ? "Resume" : "Pause" }
+
+  // MARK: - Formatting
+
+  private static let positionCountFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    return formatter
+  }()
+
+  static func formattedCount(_ count: Int) -> String {
+    switch count {
+    case ..<100_000:
+      return positionCountFormatter.string(from: NSNumber(value: count)) ?? "\(count)"
+    case ..<1_000_000:
+      return String(format: "%.1fk", Double(count) / 1_000)
+    default:
+      return String(format: "%.1fM", Double(count) / 1_000_000)
+    }
+  }
 
   // MARK: - Lifecycle
 
