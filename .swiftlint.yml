@@ -1,0 +1,24 @@
+included:
+  - AutoRoute
+  - AutoRouteTests
+  - AutoRouteUITests
+
+line_length:
+  warning: 150
+  error: 180
+
+identifier_name:
+  min_length: 2
+  max_length: 45
+  excluded:
+    - i
+    - x
+    - y
+    - id
+
+large_tuple:
+  warning: 10
+  error: 30
+
+disabled_rules:
+  - file_length
