@@ -33,15 +33,15 @@ final class RouteTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func initialisesWithBluetoothTrigger() throws {
-    let route = Route(name: "School Run", trigger: .bluetooth)
-    #expect(route.trigger == .bluetooth)
+  func initialisesWithAutomaticTrigger() throws {
+    let route = Route(name: "School Run", trigger: .automatic)
+    #expect(route.trigger == .automatic)
   }
 
   @Test
   func eachRouteHasUniqueID() throws {
-    let a = Route(name: "Route A", trigger: .bluetooth)
-    let b = Route(name: "Route B", trigger: .bluetooth)
+    let a = Route(name: "Route A", trigger: .automatic)
+    let b = Route(name: "Route B", trigger: .automatic)
     #expect(a.id != b.id)
   }
 
@@ -76,14 +76,14 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func activeDurationWhenRecordingAndNotPaused() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     #expect(route.activeDurationSeconds >= 0)
     #expect(route.activeDurationSeconds < 2)
   }
 
   @Test
   func activeDurationUsesEndDateWhenFinished() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .finished
     route.endedAt = route.startedAt.addingTimeInterval(600)
 
@@ -92,7 +92,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func activeDurationSubtractsPausedTime() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .finished
     route.endedAt = route.startedAt.addingTimeInterval(600)
     route.pausedDurationSeconds = 60
@@ -102,7 +102,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func activeDurationSubtractsActivePausePeriod() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .paused
     route.pauseStartedAt = Date.now.addingTimeInterval(-30)
     route.endedAt = route.startedAt.addingTimeInterval(600)
@@ -113,7 +113,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func activeDurationIsNeverNegative() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.pausedDurationSeconds = 99999
     #expect(route.activeDurationSeconds == 0)
   }
@@ -122,14 +122,14 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func totalElapsedSecondsWhenRecordingAndNotPaused() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     #expect(route.totalElapsedSeconds >= 0)
     #expect(route.totalElapsedSeconds < 2)
   }
 
   @Test
   func totalElapsedSecondsUsesEndDateWhenFinished() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .finished
     route.endedAt = route.startedAt.addingTimeInterval(600)
 
@@ -138,7 +138,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func totalElapsedSecondsIncludesPausedTime() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .finished
     route.endedAt = route.startedAt.addingTimeInterval(600)
     route.pausedDurationSeconds = 60
@@ -148,7 +148,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func totalElapsedSecondsIncludesActivePausePeriod() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .paused
     route.pauseStartedAt = Date.now.addingTimeInterval(-30)
     route.endedAt = route.startedAt.addingTimeInterval(600)
@@ -158,7 +158,7 @@ final class RouteTests: SwiftDataBaseTestCase {
 
   @Test
   func totalElapsedSecondsIsGreaterThanOrEqualToActiveDuration() throws {
-    let route = Route(name: "Test", trigger: .bluetooth)
+    let route = Route(name: "Test", trigger: .automatic)
     route.status = .finished
     route.endedAt = route.startedAt.addingTimeInterval(600)
     route.pausedDurationSeconds = 120
@@ -179,7 +179,7 @@ final class RouteTests: SwiftDataBaseTestCase {
   
   @Test
   func persistsAndFetchesRoute() throws {
-    let route = Route(name: "Coastal Drive", trigger: .bluetooth)
+    let route = Route(name: "Coastal Drive", trigger: .automatic)
     context!.insert(route)
     try context!.save()
 

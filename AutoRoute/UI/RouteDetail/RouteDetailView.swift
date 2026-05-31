@@ -395,7 +395,7 @@ private struct MetadataRow: View {
     return pos
   }
 
-  let route = Route(name: "Weekend to Tahoe", trigger: .bluetooth)
+  let route = Route(name: "Weekend to Tahoe", trigger: .automatic)
   route.startedAt = date(daysAgo: 6, hour: 7, minute: 5)
   route.endedAt = route.startedAt.addingTimeInterval(3 * 3600 + 28 * 60)
   route.status = .finished

@@ -86,10 +86,10 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - triggerIconName
 
   @Test
-  func triggerIconNameIsBluetoothForBluetoothTrigger() {
+  func triggerIconNameIsBluetoothForAutomaticTrigger() {
     let (service, _) = makeService()
     service.startRoute()
-    service.route?.trigger = .bluetooth
+    service.route?.trigger = .automatic
     let vm = RecordingViewModel(routeService: service)
     #expect(vm.triggerIconName == "bluetooth")
   }
