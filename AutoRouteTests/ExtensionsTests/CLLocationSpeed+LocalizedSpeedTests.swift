@@ -12,6 +12,7 @@ import Testing
 @testable import AutoRoute
 
 @Suite
+@MainActor
 struct CLLocationSpeedLocalizedSpeedTests {
 
   // MARK: - Unit Symbol

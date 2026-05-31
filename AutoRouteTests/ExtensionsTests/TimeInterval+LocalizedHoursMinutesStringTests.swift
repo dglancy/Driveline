@@ -12,6 +12,7 @@ import Testing
 import Foundation
 
 @Suite
+@MainActor
 struct TimeIntervalTests {
   
   @Test("zero seconds returns 0m for en_GB locale")

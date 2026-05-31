@@ -15,27 +15,48 @@ extension Double {
     locale.measurementSystem == .metric ? .kilometers : .miles
   }
 
-  // MARK: - Methods
+  @MainActor private static var distanceMeasurementFormatterCache: [String: MeasurementFormatter] = [:]
+  @MainActor private static var distanceNumberFormatterCache: [String: NumberFormatter] = [:]
 
-  func localizedDistanceString(locale: Locale = .current) -> String {
-    let converted = Measurement(value: self, unit: UnitLength.meters)
-      .converted(to: Self.preferredDistanceUnit(for: locale))
+  @MainActor
+  private static func distanceMeasurementFormatter(for locale: Locale) -> MeasurementFormatter {
+    let key = locale.identifier
+    if let cached = distanceMeasurementFormatterCache[key] { return cached }
     let formatter = MeasurementFormatter()
     formatter.locale = locale
     formatter.unitOptions = .providedUnit
     formatter.numberFormatter.maximumFractionDigits = 1
     formatter.numberFormatter.minimumFractionDigits = 1
-    return formatter.string(from: converted)
+    distanceMeasurementFormatterCache[key] = formatter
+    return formatter
   }
 
-  func localizedDistanceValueString(locale: Locale = .current) -> String {
-    let value = Measurement(value: self, unit: UnitLength.meters)
-      .converted(to: Self.preferredDistanceUnit(for: locale)).value
+  @MainActor
+  private static func distanceNumberFormatter(for locale: Locale) -> NumberFormatter {
+    let key = locale.identifier
+    if let cached = distanceNumberFormatterCache[key] { return cached }
     let formatter = NumberFormatter()
     formatter.locale = locale
     formatter.maximumFractionDigits = 1
     formatter.minimumFractionDigits = 1
-    return formatter.string(from: NSNumber(value: value)) ?? kBlankString
+    distanceNumberFormatterCache[key] = formatter
+    return formatter
+  }
+
+  // MARK: - Methods
+
+  @MainActor
+  func localizedDistanceString(locale: Locale = .current) -> String {
+    let converted = Measurement(value: self, unit: UnitLength.meters)
+      .converted(to: Self.preferredDistanceUnit(for: locale))
+    return Self.distanceMeasurementFormatter(for: locale).string(from: converted)
+  }
+
+  @MainActor
+  func localizedDistanceValueString(locale: Locale = .current) -> String {
+    let value = Measurement(value: self, unit: UnitLength.meters)
+      .converted(to: Self.preferredDistanceUnit(for: locale)).value
+    return Self.distanceNumberFormatter(for: locale).string(from: NSNumber(value: value)) ?? kBlankString
   }
 
   func localizedDistanceUnitSymbol(locale: Locale = .current) -> String {

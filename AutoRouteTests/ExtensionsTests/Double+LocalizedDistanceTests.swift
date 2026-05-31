@@ -11,6 +11,7 @@ import Testing
 @testable import AutoRoute
 
 @Suite
+@MainActor
 struct DoubleLocalizedDistanceTests {
 
   // MARK: - Unit Symbol

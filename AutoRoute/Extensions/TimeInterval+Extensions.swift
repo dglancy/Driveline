@@ -8,28 +8,74 @@
 import Foundation
 
 extension TimeInterval {
-  func localizedHoursMinutesString(locale: Locale = .current) -> String {
-    let formatter = DateComponentsFormatter()
-    if self < 3600 {
-      formatter.allowedUnits = [.minute]
-    } else {
-      formatter.allowedUnits = [.hour, .minute]
-    }
-    formatter.unitsStyle = .abbreviated
-    formatter.zeroFormattingBehavior = .pad
-    formatter.calendar = Calendar(identifier: .gregorian)
-    formatter.calendar?.locale = locale
 
-    return formatter.string(from: self) ?? kBlankString
+  // MARK: - Private
+
+  @MainActor private static var hoursMinutesSubHourFormatters: [String: DateComponentsFormatter] = [:]
+  @MainActor private static var hoursMinutesOverHourFormatters: [String: DateComponentsFormatter] = [:]
+  @MainActor private static var durationSubHourFormatters: [String: DateComponentsFormatter] = [:]
+  @MainActor private static var durationOverHourFormatters: [String: DateComponentsFormatter] = [:]
+
+  @MainActor
+  private static func hoursMinutesFormatter(locale: Locale, overHour: Bool) -> DateComponentsFormatter {
+    let key = locale.identifier
+    if overHour {
+      if let cached = hoursMinutesOverHourFormatters[key] { return cached }
+      let formatter = DateComponentsFormatter()
+      formatter.allowedUnits = [.hour, .minute]
+      formatter.unitsStyle = .abbreviated
+      formatter.zeroFormattingBehavior = .pad
+      formatter.calendar = Calendar(identifier: .gregorian)
+      formatter.calendar?.locale = locale
+      hoursMinutesOverHourFormatters[key] = formatter
+      return formatter
+    } else {
+      if let cached = hoursMinutesSubHourFormatters[key] { return cached }
+      let formatter = DateComponentsFormatter()
+      formatter.allowedUnits = [.minute]
+      formatter.unitsStyle = .abbreviated
+      formatter.zeroFormattingBehavior = .pad
+      formatter.calendar = Calendar(identifier: .gregorian)
+      formatter.calendar?.locale = locale
+      hoursMinutesSubHourFormatters[key] = formatter
+      return formatter
+    }
   }
 
+  @MainActor
+  private static func durationFormatter(locale: Locale, overHour: Bool) -> DateComponentsFormatter {
+    let key = locale.identifier
+    if overHour {
+      if let cached = durationOverHourFormatters[key] { return cached }
+      let formatter = DateComponentsFormatter()
+      formatter.unitsStyle = .abbreviated
+      formatter.allowedUnits = [.hour, .minute]
+      formatter.calendar = Calendar(identifier: .gregorian)
+      formatter.calendar?.locale = locale
+      durationOverHourFormatters[key] = formatter
+      return formatter
+    } else {
+      if let cached = durationSubHourFormatters[key] { return cached }
+      let formatter = DateComponentsFormatter()
+      formatter.unitsStyle = .abbreviated
+      formatter.allowedUnits = [.minute, .second]
+      formatter.calendar = Calendar(identifier: .gregorian)
+      formatter.calendar?.locale = locale
+      durationSubHourFormatters[key] = formatter
+      return formatter
+    }
+  }
+
+  // MARK: - Methods
+
+  @MainActor
+  func localizedHoursMinutesString(locale: Locale = .current) -> String {
+    Self.hoursMinutesFormatter(locale: locale, overHour: self >= 3600).string(from: self) ?? kBlankString
+  }
+
+  @MainActor
   func localizedDurationString(locale: Locale = .current) -> String {
-    let formatter = DateComponentsFormatter()
-    formatter.unitsStyle = .abbreviated
-    formatter.allowedUnits = self >= 3600 ? [.hour, .minute] : [.minute, .second]
-    formatter.calendar = Calendar(identifier: .gregorian)
-    formatter.calendar?.locale = locale
-    return formatter.string(from: self) ?? kBlankString
+    Self.durationFormatter(locale: locale, overHour: self >= 3600).string(from: self) ?? kBlankString
   }
 
   func elapsedTimeString() -> String {
