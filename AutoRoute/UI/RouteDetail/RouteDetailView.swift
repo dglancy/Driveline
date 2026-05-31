@@ -50,9 +50,9 @@ struct RouteDetailView: View {
             shareRouteButton
           }
           .padding(.horizontal, 16)
-          .padding(.top, 16)
           .padding(.bottom, 24)
         }
+        .padding(.top, 20)
         .contentMargins(.top, 0, for: .scrollContent)
       }
     }
