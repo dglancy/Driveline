@@ -116,6 +116,35 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     #expect(vm.positionCount == 0)
   }
 
+  // MARK: - formattedPositionCount
+
+  @Test
+  func formattedPositionCountIsZeroWithNoPositions() {
+    let vm = makeViewModel()
+    #expect(vm.formattedPositionCount == "0")
+  }
+
+  @Test
+  func formattedCountBelowThresholdUsesGroupingSeparator() {
+    #expect(RecordingViewModel.formattedCount(999) == "999")
+    #expect(RecordingViewModel.formattedCount(1_500) == "1,500")
+    #expect(RecordingViewModel.formattedCount(99_999) == "99,999")
+  }
+
+  @Test
+  func formattedCountAtHundredThousandUsesKSuffix() {
+    #expect(RecordingViewModel.formattedCount(100_000) == "100.0k")
+    #expect(RecordingViewModel.formattedCount(101_500) == "101.5k")
+    #expect(RecordingViewModel.formattedCount(500_100) == "500.1k")
+  }
+
+  @Test
+  func formattedCountAtMillionUsesMSuffix() {
+    #expect(RecordingViewModel.formattedCount(1_000_000) == "1.0M")
+    #expect(RecordingViewModel.formattedCount(1_500_000) == "1.5M")
+    #expect(RecordingViewModel.formattedCount(10_000_000) == "10.0M")
+  }
+
   // MARK: - startedAt
 
   @Test

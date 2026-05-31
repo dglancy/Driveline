@@ -120,7 +120,7 @@ struct RecordingView: View {
     HStack(spacing: 0) {
       StatColumn(value: viewModel.speedValue, label: LocalizedStringKey(viewModel.speedUnit))
       Divider().frame(height: 36)
-      StatColumn(value: "\(viewModel.positionCount)", label: "logged")
+      StatColumn(value: viewModel.formattedPositionCount, label: "logged")
       Divider().frame(height: 36)
       StatColumn(value: viewModel.startedAt, label: "started")
     }
