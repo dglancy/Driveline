@@ -139,25 +139,7 @@ struct RouteDetailViewModelTests {
     let file = try #require(vm.exportedFile)
     defer { try? FileManager.default.removeItem(at: file.url) }
     #expect(vm.exportError == nil)
-  }
-
-  @Test
-  func shareRouteGPXWithPositionsProducesGPXFile() async throws {
-    let vm = RouteDetailViewModel(route: routeWithOnePosition())
-    vm.shareRouteGPX()
-    for _ in 0..<20 { await Task.yield() }
-    let file = try #require(vm.exportedFile)
-    defer { try? FileManager.default.removeItem(at: file.url) }
     #expect(file.url.pathExtension == "gpx")
-  }
-
-  @Test
-  func shareRouteGPXWithPositionsWritesFileToURL() async throws {
-    let vm = RouteDetailViewModel(route: routeWithOnePosition())
-    vm.shareRouteGPX()
-    for _ in 0..<20 { await Task.yield() }
-    let file = try #require(vm.exportedFile)
-    defer { try? FileManager.default.removeItem(at: file.url) }
     #expect(FileManager.default.fileExists(atPath: file.url.path))
   }
 
