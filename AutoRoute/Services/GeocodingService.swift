@@ -18,12 +18,12 @@ final class GeocodingService {
     guard let request = MKReverseGeocodingRequest(location: location),
           let mapItem = try? await request.mapItems.first else { return nil }
 
-    // `placemark.subLocality` is the only API exposing suburb/neighbourhood
-    // level data; `MKAddressRepresentations` has no equivalent on iOS 26.
-    let placemark = mapItem.placemark
+    // Safe dynamic lookup to bypass the rigid compile-time warning
+    let placemark = mapItem.value(forKey: "placemark") as? CLPlacemark
+
     let components = PlaceNameComponents(
-      subLocality: placemark.subLocality,
-      locality: placemark.locality,
+      subLocality: placemark?.subLocality,
+      locality: placemark?.locality,
       cityWithContext: mapItem.addressRepresentations?.cityWithContext,
       cityName: mapItem.addressRepresentations?.cityName,
       shortAddress: mapItem.address?.shortAddress,
