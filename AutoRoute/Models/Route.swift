@@ -21,7 +21,7 @@ final class Route {
   }
 
   enum RecordingTrigger: String, Codable {
-    case automatic = "automaticaly"
+    case automatic = "automatically"
     case manual = "manually"
 
     // MARK: - Computed properties
@@ -29,9 +29,9 @@ final class Route {
     var displayName: String {
       switch self {
       case .automatic:
-        String(localized: "Automaticaly", comment: "Recording trigger: started automaticaly by automation")
+        String(localized: "Started automatically", comment: "Recording trigger: started automatically by automation")
       case .manual:
-        String(localized: "Manually", comment: "Recording trigger: started manually by the user")
+        String(localized: "Started manually", comment: "Recording trigger: started manually by the user")
       }
     }
   }

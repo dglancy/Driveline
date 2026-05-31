@@ -48,7 +48,7 @@ final class RecordingViewModel {
   }
 
   var triggerIconName: String {
-    routeService.route?.trigger == .automatic ? "bluetooth" : "hand.tap"
+    routeService.route?.trigger == .automatic ? "autostartstop" : "hand.tap"
   }
 
   var triggerDisplayName: String { routeService.route?.trigger.displayName ?? kBlankString }
