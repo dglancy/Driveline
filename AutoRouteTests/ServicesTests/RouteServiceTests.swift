@@ -74,7 +74,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
 
     service.startRoute()
     let startedRoute = service.route!
-    service.endRoute()
+    await service.endRoute()
 
     #expect(locationService.status == .stopped)
     #expect(startedRoute.isRecording == false)
@@ -90,7 +90,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = makeServices()
 
     service.startRoute()
-    service.endRoute()
+    await service.endRoute()
 
     #expect(service.isRecording == false)
   }
@@ -101,7 +101,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
 
     service.startRoute()
     service.pauseRoute()
-    service.endRoute()
+    await service.endRoute()
 
     #expect(service.isPaused == false)
   }
@@ -113,7 +113,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     service.startRoute()
     service.pauseRoute()
     let route = service.route!
-    service.endRoute()
+    await service.endRoute()
 
     #expect(route.isPaused == false)
   }
@@ -129,7 +129,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    service.endRoute()
+    await service.endRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -138,7 +138,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteWithNoActiveRouteDoesNothing() async throws {
     let (service, _, _) = makeServices()
 
-    service.endRoute()
+    await service.endRoute()
 
     #expect(service.route == nil)
   }
@@ -294,7 +294,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    service.endRoute()
+    await service.endRoute()
 
     #expect(service.currentSpeedMs == nil)
   }

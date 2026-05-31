@@ -27,14 +27,21 @@ final class RouteService {
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
+  @ObservationIgnored private let geocodingService: GeocodingService
   @ObservationIgnored private var speedCancellable: AnyCancellable?
+  @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, locationService: LocationService, locationDataRecorder: LocationDataRecorderService, initialRoute: Route? = nil) {
+  init(modelContext: ModelContext,
+       locationService: LocationService,
+       locationDataRecorder: LocationDataRecorderService,
+       geocodingService: GeocodingService = GeocodingService(),
+       initialRoute: Route? = nil) {
     self.modelContext = modelContext
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
+    self.geocodingService = geocodingService
     self.route = initialRoute
   }
 
@@ -52,16 +59,34 @@ final class RouteService {
       .sink { [weak self] location in
         self?.currentSpeedMs = location.speed >= 0 ? location.speed : nil
       }
+
+    startGeocodeCancellable = locationService.locationPublisher
+      .prefix(1)
+      .sink { [weak self] location in
+        guard let self else { return }
+        Task { [weak self] in
+          guard let self else { return }
+          self.route?.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
+          self.saveModelContext()
+        }
+      }
   }
 
-  func endRoute() {
+  func endRoute() async {
     speedCancellable = nil
+    startGeocodeCancellable = nil
     locationService.stop()
 
     if let route {
       route.endedAt = Date()
       route.status = .finished
       locationDataRecorder.stopRecording()
+
+      if let last = route.orderedPositions.last {
+        let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
+        route.endPlaceName = await geocodingService.reverseGeocode(location: location)
+      }
+
       saveModelContext()
     }
 

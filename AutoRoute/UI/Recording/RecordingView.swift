@@ -183,7 +183,7 @@ struct RecordingView: View {
 
       VStack(spacing: 9) {
         Button {
-          viewModel.endRoute()
+          Task { await viewModel.endRoute() }
         } label: {
           ZStack {
             Circle()

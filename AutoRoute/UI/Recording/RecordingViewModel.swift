@@ -66,7 +66,7 @@ final class RecordingViewModel {
     }
   }
 
-  func endRoute() {
-    routeService.endRoute()
+  func endRoute() async {
+    await routeService.endRoute()
   }
 }

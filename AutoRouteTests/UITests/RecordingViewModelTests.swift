@@ -144,9 +144,9 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - endRoute
 
   @Test
-  func endRouteStopsRecording() {
+  func endRouteStopsRecording() async {
     let (service, vm) = makeServiceAndViewModel()
-    vm.endRoute()
+    await vm.endRoute()
     #expect(service.isRecording == false)
   }
 
