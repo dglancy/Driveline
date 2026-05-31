@@ -1,5 +1,5 @@
 //
-//  Untitled.swift
+//  CoreLocation+ExtensionsTests.swift
 //  AutoRoute
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -10,22 +10,46 @@ import CoreLocation
 import Foundation
 import Testing
 
+@MainActor
 struct CoreLocationExtensionsTests {
 
-  // MARK: - Tests
+  // MARK: - ActivityTypeSetting tests
 
   @Test
-  func mapsSettingsStringsToActivityType() async {
-    #expect(CLActivityType(fromSettings: "automotive") == .automotiveNavigation)
-    #expect(CLActivityType(fromSettings: "fitness") == .fitness)
-    #expect(CLActivityType(fromSettings: "other") == .other)
-    #expect(CLActivityType(fromSettings: "flight") == .airborne)
+  func activityTypeSettingRawValuesMatchPlist() async {
+    #expect(ActivityTypeSetting.automatic.rawValue == "automatic")
+    #expect(ActivityTypeSetting.automotive.rawValue == "automotive")
+    #expect(ActivityTypeSetting.fitness.rawValue == "fitness")
+    #expect(ActivityTypeSetting.other.rawValue == "other")
+    #expect(ActivityTypeSetting.flight.rawValue == "flight")
   }
 
   @Test
-  func defaultsToOtherNavigation() async {
+  func activityTypeSettingMapsToCorrectCLActivityType() async {
+    #expect(ActivityTypeSetting.automatic.activityType == .automotiveNavigation)
+    #expect(ActivityTypeSetting.automotive.activityType == .automotiveNavigation)
+    #expect(ActivityTypeSetting.fitness.activityType == .fitness)
+    #expect(ActivityTypeSetting.other.activityType == .other)
+    #expect(ActivityTypeSetting.flight.activityType == .airborne)
+  }
+
+  @Test
+  func activityTypeSettingDefaultIsAutomotive() async {
+    #expect(ActivityTypeSetting.default == .automotive)
+  }
+
+  // MARK: - CLActivityType(fromSettings:) tests
+
+  @Test
+  func fromSettingsDelegatesToEnum() async {
+    for setting in ActivityTypeSetting.allCases {
+      #expect(CLActivityType(fromSettings: setting.rawValue) == setting.activityType)
+    }
+  }
+
+  @Test
+  func fromSettingsDefaultsToOtherNavigationForUnknownValue() async {
     #expect(CLActivityType(fromSettings: "unexpected-value") == .otherNavigation)
   }
-  
-}
 
+}

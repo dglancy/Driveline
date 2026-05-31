@@ -126,7 +126,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   // MARK: - Private functions
 
   private func activityTypeFromSettings() -> CLActivityType {
-    let rawValue = UserDefaults.standard.string(forKey: "ActivityType") ?? "automotive"
+    let rawValue = UserDefaults.standard.string(forKey: "ActivityType") ?? ActivityTypeSetting.default.rawValue
     let type = CLActivityType(fromSettings: rawValue)
     Log.location.info("Location activity type set to \"\(rawValue)\" from user settings")
     return type
