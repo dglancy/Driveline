@@ -189,8 +189,6 @@ struct RouteDetailView: View {
         title: String(localized: "Started by", comment: "Metadata row"),
         value: viewModel.triggerDisplayName
       )
-      Divider().padding(.leading, 52)
-      MetadataRow(icon: "doc", title: String(localized: "GPX File", comment: "Metadata row"), value: viewModel.gpxFileSize)
     }
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
   }

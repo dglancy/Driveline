@@ -61,10 +61,6 @@ final class RouteDetailViewModel {
   var topSpeed: String { route.maxSpeedMetresPerSecond.localizedSpeedString() }
   var trackPoints: String { route.positions.count.formatted() }
   var triggerDisplayName: String { route.trigger.displayName }
-  var gpxFileSize: String {
-    let kb = max(1, route.positions.count * 180 / 1024)
-    return String(localized: "\(kb) KB", comment: "File size in kilobytes")
-  }
 
   var coordinates: [CLLocationCoordinate2D] {
     route.orderedPositions.map {
