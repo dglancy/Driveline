@@ -93,7 +93,7 @@ struct RecordingView: View {
         .textCase(.uppercase)
         .padding(.bottom, 6)
 
-      Text(TimeInterval(viewModel.elapsedSeconds).elapsedTimeString())
+      Text(viewModel.elapsedDisplay)
         .font(.system(size: 74, weight: .semibold))
         .monospacedDigit()
         .foregroundStyle(Color(.label))
@@ -101,11 +101,11 @@ struct RecordingView: View {
         .animation(.easeInOut(duration: 0.3), value: viewModel.isPaused)
 
       VStack(spacing: -6) {
-        Text(viewModel.distanceMetres.localizedDistanceValueString())
+        Text(viewModel.distanceValue)
           .font(.system(size: 52, weight: .semibold))
           .monospacedDigit()
           .foregroundStyle(viewModel.accentColour)
-        Text(viewModel.distanceMetres.localizedDistanceUnitSymbol())
+        Text(viewModel.distanceUnit)
           .font(.system(size: 22, weight: .medium))
           .foregroundStyle(Color(.secondaryLabel))
       }
@@ -118,7 +118,7 @@ struct RecordingView: View {
 
   private var secondaryStats: some View {
     HStack(spacing: 0) {
-      StatColumn(value: viewModel.speedValue, label: LocalizedStringKey(viewModel.speedUnit))
+      StatColumn(value: viewModel.speedValue, label: viewModel.speedUnit)
       Divider().frame(height: 36)
       StatColumn(value: viewModel.formattedPositionCount, label: "logged")
       Divider().frame(height: 36)
@@ -214,7 +214,7 @@ private struct StatColumn: View {
   // MARK: - Properties
 
   let value: String
-  let label: LocalizedStringKey
+  let label: String
 
   // MARK: - Body
 

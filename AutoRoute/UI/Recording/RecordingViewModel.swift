@@ -24,6 +24,10 @@ final class RecordingViewModel {
   var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
 
+  var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
+  var distanceValue: String { distanceMetres.localizedDistanceValueString() }
+  var distanceUnit: String { distanceMetres.localizedDistanceUnitSymbol() }
+
   var speedValue: String {
     guard !routeService.isPaused else { return kDashString }
     return routeService.currentSpeedMs?.localizedSpeedValueString() ?? kDashString
