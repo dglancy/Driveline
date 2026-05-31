@@ -27,8 +27,8 @@ final class EditRouteViewModel {
   init(route: Route) {
     self.route = route
     self.routeName = route.name
-    self.startPlaceName = route.startPlaceName ?? ""
-    self.endPlaceName = route.endPlaceName ?? ""
+    self.startPlaceName = route.startPlaceName ?? kBlankString
+    self.endPlaceName = route.endPlaceName ?? kBlankString
   }
 
   // MARK: - Actions
