@@ -45,7 +45,8 @@ final class RouteDetailViewModel {
   var trackPoints: String { route.positions.count.formatted() }
   var triggerDisplayName: String { route.trigger.displayName }
   var gpxFileSize: String {
-    String(localized: "\(route.estimatedGPXFileSizeKB) KB", comment: "File size in kilobytes")
+    let kb = max(1, route.positions.count * 180 / 1024)
+    return String(localized: "\(kb) KB", comment: "File size in kilobytes")
   }
 
   var gpxFilename: String {

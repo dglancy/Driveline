@@ -1,5 +1,5 @@
 //
-//  ExportRouteServicePNG.swift
+//  ExportRoutePNG.swift
 //  AutoRoute
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -10,22 +10,36 @@ import MapKit
 import UIKit
 import os.log
 
-// MARK: - PNG Export Service
+// MARK: - PNG export error
 
-final class ExportRoutePNG: ExportRouteBase {
+enum ExportRoutePNGError: LocalizedError {
+  case snapshotFailure(String)
+  case dataPreparationFailure
+  case fileWriteFailure(String)
 
-  // MARK: - Lifecycle
-
-  nonisolated override init() {
-    super.init()
+  var errorDescription: String? {
+    switch self {
+    case .snapshotFailure(let message):
+      return String(localized: "Failed to create PNG. Please try again.\n\nDetails: \(message)", comment: "Export error: map snapshot failed")
+    case .dataPreparationFailure:
+      return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
+    case .fileWriteFailure(let message):
+      return String(localized: "Failed to save PNG. Please try again.\n\nDetails: \(message)",
+                    comment: "Export error: writing PNG file to disk failed")
+    }
   }
+}
+
+// MARK: - PNG export service
+
+final class ExportRoutePNG: ExportingRoute {
 
   // MARK: - Actions
 
-  override func export(route: Route) async throws -> URL {
+  func export(route: Route) async throws -> URL {
     Log.ui.info("A route was selected for PNG export: \(route.startedAt)")
 
-    let coordinates = try coordinates(for: route)
+    let coordinates = try validatedCoordinates(for: route)
     let mapSize = exportMapSizeFromSettings()
 
     let options = MKMapSnapshotter.Options()
@@ -38,27 +52,20 @@ final class ExportRoutePNG: ExportRouteBase {
     options.pointOfInterestFilter = .excludingAll
 
     let snapshot = try await takeSnapshot(with: options, route: route)
-
-    guard let image = renderSnapshotImage(snapshot, coordinates: coordinates) else {
-      throw ExportRouteServicePNGError.renderingFailure
-    }
+    let image = renderSnapshotImage(snapshot, coordinates: coordinates)
 
     guard let pngData = image.pngData() else {
-      throw ExportRouteServicePNGError.dataPreparationFailure
+      throw ExportRoutePNGError.dataPreparationFailure
     }
 
     let fileURL = ExportRouteFileNamingService.fileURL(for: route, type: .png)
 
     do {
-      if FileManager.default.fileExists(atPath: fileURL.path) {
-        try FileManager.default.removeItem(at: fileURL)
-      }
-
       try pngData.write(to: fileURL, options: .atomic)
       return fileURL
     } catch {
       Log.ui.error("Failed to write PNG for route: \(route.startedAt) — error: \(error.localizedDescription)")
-      throw ExportRouteServicePNGError.fileWriteFailure(error.localizedDescription)
+      throw ExportRoutePNGError.fileWriteFailure(error.localizedDescription)
     }
   }
 
@@ -109,39 +116,40 @@ final class ExportRoutePNG: ExportRouteBase {
     return MKCoordinateRegion(center: center, span: span)
   }
 
-  private func renderSnapshotImage(_ snapshot: MKMapSnapshotter.Snapshot, coordinates: [CLLocationCoordinate2D]) -> UIImage? {
+  private func renderSnapshotImage(_ snapshot: MKMapSnapshotter.Snapshot, coordinates: [CLLocationCoordinate2D]) -> UIImage {
     let image = snapshot.image
-    UIGraphicsBeginImageContextWithOptions(image.size, true, image.scale)
-    image.draw(at: .zero)
+    let format = UIGraphicsImageRendererFormat()
+    format.scale = image.scale
+    format.opaque = true
+    let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
 
-    let polylinePath = UIBezierPath()
+    return renderer.image { _ in
+      image.draw(at: .zero)
 
-    for (index, coordinate) in coordinates.enumerated() {
-      let point = snapshot.point(for: coordinate)
-      if index == 0 {
-        polylinePath.move(to: point)
-      } else {
-        polylinePath.addLine(to: point)
+      let polylinePath = UIBezierPath()
+      for (index, coordinate) in coordinates.enumerated() {
+        let point = snapshot.point(for: coordinate)
+        if index == 0 {
+          polylinePath.move(to: point)
+        } else {
+          polylinePath.addLine(to: point)
+        }
+      }
+
+      UIColor.systemBlue.setStroke()
+      polylinePath.lineWidth = exportMapRouteWidthFromSettings()
+      polylinePath.lineCapStyle = .round
+      polylinePath.lineJoinStyle = .round
+      polylinePath.stroke()
+
+      if let startCoordinate = coordinates.first {
+        drawMarker(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: "house.fill", label: "Start")
+      }
+
+      if let endCoordinate = coordinates.last {
+        drawMarker(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: "flag.pattern.checkered", label: "Finish")
       }
     }
-
-    UIColor.systemBlue.setStroke()
-    polylinePath.lineWidth = exportMapRouteWidthFromSettings()
-    polylinePath.lineCapStyle = .round
-    polylinePath.lineJoinStyle = .round
-    polylinePath.stroke()
-
-    if let startCoordinate = coordinates.first {
-      drawMarker(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: "house.fill", label: "Start")
-    }
-
-    if let endCoordinate = coordinates.last {
-      drawMarker(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: "flag.pattern.checkered", label: "Finish")
-    }
-
-    let renderedImage = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return renderedImage
   }
 
   private func drawMarker(at point: CGPoint, color: UIColor, systemName: String, label: String) {
@@ -209,12 +217,12 @@ final class ExportRoutePNG: ExportRouteBase {
       MKMapSnapshotter(options: options).start { snapshot, error in
         if let error {
           Log.ui.error("Failed to create PNG snapshot for route: \(route.startedAt) — error: \(error.localizedDescription)")
-          continuation.resume(throwing: ExportRouteServicePNGError.snapshotFailure(error.localizedDescription))
+          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure(error.localizedDescription))
           return
         }
 
         guard let snapshot else {
-          continuation.resume(throwing: ExportRouteServicePNGError.snapshotFailure("Unknown error"))
+          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure("Unknown error"))
           return
         }
 
@@ -244,7 +252,7 @@ final class ExportRoutePNG: ExportRouteBase {
   }
 }
 
-// MARK: - MapSize Enum
+// MARK: - MapSize enum
 
 enum MapSize: String, CaseIterable {
   case low
@@ -259,7 +267,7 @@ enum MapSize: String, CaseIterable {
     case .medium: return CGSize(width: 1024, height: 768)
     case .high1: return CGSize(width: 1600, height: 1200)
     case .high2: return CGSize(width: 1920, height: 1080)
-    case .highest: return CGSize(width: 2400, height: 800)
+    case .highest: return CGSize(width: 2400, height: 1800)
     }
   }
 
@@ -273,7 +281,7 @@ enum MapSize: String, CaseIterable {
   }
 }
 
-// MARK: - RouteWidth Enum
+// MARK: - RouteWidth enum
 
 enum RouteWidth: String, CaseIterable {
   case thin
@@ -291,28 +299,6 @@ enum RouteWidth: String, CaseIterable {
   init?(from string: String) {
     let key = string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     self.init(rawValue: key)
-  }
- }
-
-// MARK: - Error enum
-
-enum ExportRouteServicePNGError: LocalizedError {
-  case snapshotFailure(String)
-  case renderingFailure
-  case dataPreparationFailure
-  case fileWriteFailure(String)
-
-  var errorDescription: String? {
-    switch self {
-    case .snapshotFailure(let message):
-      return "Failed to create PNG. Please try again.\n\nDetails: \(message)"
-    case .renderingFailure:
-      return "Unable to render route onto the map snapshot."
-    case .dataPreparationFailure:
-      return "Failed to prepare PNG data for sharing."
-    case .fileWriteFailure(let message):
-      return "Failed to create PNG. Please try again.\n\nDetails: \(message)"
-    }
   }
 }
 

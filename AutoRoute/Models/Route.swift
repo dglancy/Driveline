@@ -102,10 +102,6 @@ final class Route {
     positions.compactMap { $0.speed >= 0 ? $0.speed : nil }.max() ?? 0
   }
 
-  var estimatedGPXFileSizeKB: Int {
-    max(1, positions.count * 180 / 1024)
-  }
-
   // MARK: - Lifecycle
 
   init(name: String, trigger: RecordingTrigger = .manual) {

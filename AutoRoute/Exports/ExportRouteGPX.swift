@@ -1,5 +1,5 @@
 //
-//  ExportRouteServiceGPX.swift
+//  ExportRouteGPX.swift
 //  AutoRoute
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -10,43 +10,35 @@ import CoreLocation
 import GPXKit
 import os.log
 
-// MARK: – GPX Export Service Errors
+// MARK: - GPX export error
 
-enum ExportRouteServiceGPXError: Error {
+enum ExportRouteGPXError: LocalizedError {
   case encodingFailed
+
+  var errorDescription: String? {
+    switch self {
+    case .encodingFailed:
+      return String(localized: "Failed to prepare GPX data for sharing.", comment: "Export error: GPX string could not be encoded as UTF-8")
+    }
+  }
 }
 
-// MARK: - GPX Export Service
+// MARK: - GPX export service
 
-final class ExportRouteGPX: ExportRouteBase {
-
-  // MARK: - Lifecycle
-
-  nonisolated override init() {
-    super.init()
-  }
-
-  // MARK: - Computed properties
-
-  private static func formattedStartedAt(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
-    formatter.timeZone = .current
-    formatter.locale = .current
-    return formatter.string(from: date)
-  }
+final class ExportRouteGPX: ExportingRoute {
 
   // MARK: - Actions
 
-  override func export(route: Route) async throws -> URL {
-    _ = try coordinates(for: route)
+  func export(route: Route) async throws -> URL {
+    let positions = route.orderedPositions
+    guard !positions.isEmpty else { throw ExportRouteError.emptyRoute }
 
-    let track = try await buildTrack(from: route)
+    let track = try buildTrack(positions: positions, startedAt: route.startedAt)
     let gpxExport = GPXExporter(track: track, shouldExportDate: true, creatorName: kGPXCreator).xmlString
     let fileURL = ExportRouteFileNamingService.fileURL(for: route, type: .gpx)
 
     guard let gpxExportData = gpxExport.data(using: .utf8) else {
-      throw ExportRouteServiceGPXError.encodingFailed
+      throw ExportRouteGPXError.encodingFailed
     }
 
     try gpxExportData.write(to: fileURL, options: .atomic)
@@ -55,19 +47,18 @@ final class ExportRouteGPX: ExportRouteBase {
 
   // MARK: - Private
 
-  func buildTrack(from route: Route) async throws -> GPXTrack {
-    let trackPoints = try buildTrackPoints(from: route)
-    let track = try GPXTrack(
-      title: Self.formattedStartedAt(route.startedAt),
+  private func buildTrack(positions: [Position], startedAt: Date) throws -> GPXTrack {
+    let trackPoints = buildTrackPoints(from: positions)
+    return try GPXTrack(
+      title: ExportRouteFileNamingService.startedAtFormatter.string(from: startedAt),
       trackPoints: trackPoints,
       keywords: [],
       elevationSmoothing: .none
     )
-    return track
   }
 
-  func buildTrackPoints(from route: Route) throws -> [TrackPoint] {
-    return route.orderedPositions.map { position in
+  private func buildTrackPoints(from positions: [Position]) -> [TrackPoint] {
+    positions.map { position in
       TrackPoint(
         coordinate: Coordinate(latitude: position.latitude, longitude: position.longitude, elevation: position.altitude),
         date: position.timestamp,
