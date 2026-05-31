@@ -45,11 +45,6 @@ final class RecordingViewModel {
     return date.formatted(.dateTime.hour().minute())
   }
 
-  var triggerIconName: String {
-    routeService.route?.trigger == .automatic ? "autostartstop" : "hand.tap"
-  }
-
-  var triggerDisplayName: String { routeService.route?.trigger.displayName ?? kBlankString }
   var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
   var pauseResumeLabel: String { routeService.isPaused ? "Resume" : "Pause" }
 
