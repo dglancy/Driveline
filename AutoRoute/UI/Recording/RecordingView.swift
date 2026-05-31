@@ -100,7 +100,7 @@ struct RecordingView: View {
         .opacity(viewModel.isPaused ? 0.5 : 1)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isPaused)
 
-      HStack(alignment: .lastTextBaseline, spacing: 6) {
+      VStack(spacing: -6) {
         Text(viewModel.distanceMetres.localizedDistanceValueString())
           .font(.system(size: 52, weight: .semibold))
           .monospacedDigit()
@@ -122,7 +122,7 @@ struct RecordingView: View {
       Divider().frame(height: 36)
       StatColumn(value: "\(viewModel.positionCount)", label: "logged")
       Divider().frame(height: 36)
-      StatColumn(value: viewModel.startedAt, label: "Started")
+      StatColumn(value: viewModel.startedAt, label: "started")
     }
     .frame(width: 280)
   }
