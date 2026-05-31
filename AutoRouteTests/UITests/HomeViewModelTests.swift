@@ -183,7 +183,7 @@ struct HomeViewModelTests {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
-    let expectedUnit = 0.0.localizedDistanceUnitSymbol()
+    let expectedUnit = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
     #expect(summary.contains("\(expectedUnit) in the last 30 days"))
   }
 

@@ -32,7 +32,7 @@ final class MergeRoutesViewModel {
   var secondDisplay: MiniRouteCardDisplay { makeDisplay(for: orderedRoutes[1]) }
 
   var formattedTotalDistance: String {
-    (orderedRoutes[0].distanceMetres + orderedRoutes[1].distanceMetres).localizedDistanceString()
+    Measurement(value: orderedRoutes[0].distanceMetres + orderedRoutes[1].distanceMetres, unit: UnitLength.meters).localizedDistanceString()
   }
 
   var formattedTotalDuration: String {
@@ -65,7 +65,7 @@ final class MergeRoutesViewModel {
     return MiniRouteCardDisplay(
       name: route.name,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
-      formattedDistance: route.distanceMetres.localizedDistanceString(),
+      formattedDistance: Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
       formattedDuration: route.activeDurationSeconds.localizedDurationString()
     )
   }
