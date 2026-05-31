@@ -23,8 +23,48 @@ final class HomeViewModel {
 
   private(set) var sections: [RouteSection] = []
   private(set) var summaryLine: String?
+  private(set) var isSelectMode: Bool = false
+  private(set) var selectedRouteIDs: Set<UUID> = []
+  var showingDeleteConfirmation: Bool = false
+
+  // MARK: - Computed Properties
+
+  var canMerge: Bool { selectedRouteIDs.count == 2 }
+  var canDelete: Bool { !selectedRouteIDs.isEmpty }
+
+  var selectionCountText: String {
+    if selectedRouteIDs.isEmpty {
+      return String(localized: "Select 2 routes to merge", comment: "Multiselect placeholder when nothing is selected")
+    }
+    return String(
+      localized: "\(selectedRouteIDs.count) selected",
+      comment: "Multiselect count of selected routes"
+    )
+  }
 
   // MARK: - Methods
+
+  func enterSelectMode() {
+    isSelectMode = true
+    selectedRouteIDs = []
+  }
+
+  func exitSelectMode() {
+    isSelectMode = false
+    selectedRouteIDs = []
+  }
+
+  func toggleSelection(for id: UUID) {
+    if selectedRouteIDs.contains(id) {
+      selectedRouteIDs.remove(id)
+    } else {
+      selectedRouteIDs.insert(id)
+    }
+  }
+
+  func selectedRoutes(from sections: [RouteSection]) -> [Route] {
+    sections.flatMap(\.routes).filter { selectedRouteIDs.contains($0.id) }
+  }
 
   func update(with routes: [Route]) {
     sections = buildSections(from: routes)

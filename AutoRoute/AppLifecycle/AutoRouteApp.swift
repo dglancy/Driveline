@@ -99,7 +99,8 @@ struct AutoRouteApp: App {
     var descriptor = FetchDescriptor<Route>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
     descriptor.fetchLimit = 1
     let activeRoute = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
-    return RouteService(modelContext: modelContext, locationService: locationService, locationDataRecorder: locationDataRecorder, initialRoute: activeRoute)
+    return RouteService(modelContext: modelContext, locationService: locationService,
+                        locationDataRecorder: locationDataRecorder, initialRoute: activeRoute)
   }
 
   // MARK: - Background Tasks

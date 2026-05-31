@@ -12,11 +12,18 @@ struct RouteRowView: View {
   // MARK: - Properties
 
   let route: Route
+  var isSelected: Bool?
 
   // MARK: - Body
 
   var body: some View {
     HStack(spacing: 13) {
+      if let isSelected {
+        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+          .font(.system(size: 24))
+          .foregroundStyle(isSelected ? Color.accentColor : Color(.tertiaryLabel))
+          .animation(.easeInOut(duration: 0.15), value: isSelected)
+      }
       iconBadge
 
       VStack(alignment: .leading, spacing: 1) {

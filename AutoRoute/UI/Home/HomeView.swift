@@ -18,6 +18,8 @@ struct HomeView: View {
   @State private var viewModel = HomeViewModel()
   @State private var showingRecordingScreen = false
   @State private var recordingViewModel: RecordingViewModel?
+  @State private var showingMergeSheet = false
+  @State private var routesToMerge: [Route] = []
 
   // MARK: - Body
 
@@ -25,13 +27,14 @@ struct HomeView: View {
     NavigationStack {
       content
         .navigationTitle("Routes")
-        .toolbar { recordButton }
+        .toolbar { toolbarItems }
         .onChange(of: routes, initial: true) { _, newRoutes in
           viewModel.update(with: newRoutes)
         }
         .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
           if isRecording {
             recordingViewModel = RecordingViewModel(routeService: routeService)
+            viewModel.exitSelectMode()
           } else {
             recordingViewModel = nil
           }
@@ -41,6 +44,35 @@ struct HomeView: View {
     .fullScreenCover(isPresented: $showingRecordingScreen) {
       if let recordingViewModel {
         RecordingView(viewModel: recordingViewModel)
+      }
+    }
+    .alert(
+      String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
+      isPresented: $viewModel.showingDeleteConfirmation
+    ) {
+      Button(String(localized: "Delete", comment: "Confirm delete routes"), role: .destructive) {
+        let routes = viewModel.selectedRoutes(from: viewModel.sections)
+        viewModel.exitSelectMode()
+        deleteRoutes(routes)
+      }
+      Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
+    } message: {
+      let count = viewModel.selectedRouteIDs.count
+      if count == 1 {
+        Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete single route confirmation message"))
+      } else {
+        Text(String(localized: "These \(count) routes and all their data will be permanently deleted.",
+                    comment: "Delete multiple routes confirmation message"))
+      }
+    }
+    .sheet(isPresented: $showingMergeSheet) {
+      if routesToMerge.count == 2 {
+        MergeRoutesView(routes: routesToMerge) { orderedRoutes, mergedName in
+          showingMergeSheet = false
+          mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName)
+        } onCancel: {
+          showingMergeSheet = false
+        }
       }
     }
   }
@@ -65,40 +97,62 @@ struct HomeView: View {
   }
 
   private var routeList: some View {
-    List {
-      if routeService.isRecording {
-        recordingBanner
-      }
-
-      if let summary = viewModel.summaryLine {
-        Section {
-          Text(summary)
-            .font(.system(size: 15))
-            .foregroundStyle(.secondary)
-            .listRowBackground(Color.clear)
-            .frame(maxWidth: .infinity, alignment: .center)
+    ZStack(alignment: .bottom) {
+      List {
+        if routeService.isRecording {
+          recordingBanner
         }
-        .listSectionSpacing(0)
-      }
 
-      ForEach(viewModel.sections) { section in
-        Section(section.title) {
-          ForEach(section.routes) { route in
-            NavigationLink(value: route) {
-              RouteRowView(route: route)
-                .opacity(routeService.isRecording ? 0.4 : 1)
+        if let summary = viewModel.summaryLine {
+          Section {
+            Text(summary)
+              .font(.system(size: 15))
+              .foregroundStyle(.secondary)
+              .listRowBackground(Color.clear)
+              .frame(maxWidth: .infinity, alignment: .center)
+          }
+          .listSectionSpacing(0)
+        }
+
+        ForEach(viewModel.sections) { section in
+          Section(section.title) {
+            ForEach(section.routes) { route in
+              if viewModel.isSelectMode {
+                Button {
+                  viewModel.toggleSelection(for: route.id)
+                } label: {
+                  RouteRowView(route: route, isSelected: viewModel.selectedRouteIDs.contains(route.id))
+                }
+                .buttonStyle(.plain)
+              } else {
+                NavigationLink(value: route) {
+                  RouteRowView(route: route)
+                    .opacity(routeService.isRecording ? 0.4 : 1)
+                }
+                .disabled(routeService.isRecording)
+              }
             }
-            .disabled(routeService.isRecording)
-          }
-          .onDelete { indexSet in
-            deleteRoutes(at: indexSet, in: section)
+            .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
+              deleteRoutes(at: indexSet, in: section)
+            })
           }
         }
+
+        if viewModel.isSelectMode {
+          Color.clear
+            .frame(height: 70)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
       }
-    }
-    .contentMargins(.top, 0, for: .scrollContent)
-    .navigationDestination(for: Route.self) { route in
-      RouteDetailView(route: route)
+      .contentMargins(.top, 0, for: .scrollContent)
+      .navigationDestination(for: Route.self) { route in
+        RouteDetailView(route: route)
+      }
+
+      if viewModel.isSelectMode {
+        selectionToolbar
+      }
     }
   }
 
@@ -137,40 +191,118 @@ struct HomeView: View {
     .listSectionSeparator(.hidden)
   }
 
-  // MARK: - Private Methods
+  private var selectionToolbar: some View {
+    HStack {
+      Button {
+        let routes = viewModel.selectedRoutes(from: viewModel.sections)
+        routesToMerge = routes.sorted { $0.startedAt < $1.startedAt }
+        showingMergeSheet = true
+      } label: {
+        Label(
+          String(localized: "Merge", comment: "Merge selected routes button"),
+          systemImage: "arrow.triangle.merge"
+        )
+        .font(.system(size: 17, weight: .medium))
+      }
+      .disabled(!viewModel.canMerge)
+      .frame(maxWidth: .infinity, alignment: .leading)
 
-  private func deleteRoutes(at indexSet: IndexSet, in section: HomeViewModel.RouteSection) {
-    for index in indexSet {
-      modelContext.delete(section.routes[index])
+      Text(viewModel.selectionCountText)
+        .font(.system(size: 13))
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity, alignment: .center)
+
+      Button(String(localized: "Delete", comment: "Delete selected routes button")) {
+        viewModel.showingDeleteConfirmation = true
+      }
+      .font(.system(size: 17, weight: .medium))
+      .foregroundStyle(viewModel.canDelete ? Color.red : Color(.tertiaryLabel))
+      .disabled(!viewModel.canDelete)
+      .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    .padding(.horizontal, 18)
+    .padding(.top, 10)
+    .padding(.bottom, 30)
+    .background(.regularMaterial)
+    .overlay(alignment: .top) {
+      Divider()
     }
   }
 
+  // MARK: - Toolbar
+
   @ToolbarContentBuilder
-  private var recordButton: some ToolbarContent {
-    ToolbarItem(placement: .topBarTrailing) {
-      Button {
-        if routeService.isRecording {
-          showingRecordingScreen = true
-        } else {
-          routeService.startRoute()
+  private var toolbarItems: some ToolbarContent {
+    ToolbarItem(placement: .topBarLeading) {
+      if viewModel.isSelectMode {
+        Button(String(localized: "Cancel", comment: "Exit multiselect mode")) {
+          viewModel.exitSelectMode()
         }
-      } label: {
-        ZStack {
-          Circle().fill(Color(.systemFill))
-          if routeService.isRecording {
-            RoundedRectangle(cornerRadius: 3)
-              .fill(.red)
-              .frame(width: 11, height: 11)
-          } else {
-            Image(systemName: "circle.inset.filled")
-              .font(.system(size: 22))
-              .foregroundStyle(.red)
-          }
+      } else {
+        Button(String(localized: "Select", comment: "Enter multiselect mode")) {
+          viewModel.enterSelectMode()
         }
-        .frame(width: 36, height: 36)
+        .disabled(routeService.isRecording)
       }
-      .buttonStyle(.plain)
     }
+
+    ToolbarItem(placement: .topBarTrailing) {
+      if !viewModel.isSelectMode {
+        Button {
+          if routeService.isRecording {
+            showingRecordingScreen = true
+          } else {
+            routeService.startRoute()
+          }
+        } label: {
+          ZStack {
+            Circle().fill(Color(.systemFill))
+            if routeService.isRecording {
+              RoundedRectangle(cornerRadius: 3)
+                .fill(.red)
+                .frame(width: 11, height: 11)
+            } else {
+              Image(systemName: "circle.inset.filled")
+                .font(.system(size: 22))
+                .foregroundStyle(.red)
+            }
+          }
+          .frame(width: 36, height: 36)
+        }
+        .buttonStyle(.plain)
+      }
+    }
+  }
+
+  // MARK: - Private Methods
+
+  private func deleteRoutes(_ routes: [Route]) {
+    for route in routes {
+      modelContext.delete(route)
+    }
+  }
+
+  private func deleteRoutes(at indexSet: IndexSet, in section: HomeViewModel.RouteSection) {
+    deleteRoutes(indexSet.map { section.routes[$0] })
+  }
+
+  private func mergeRoutes(orderedRoutes: [Route], mergedName: String) {
+    guard orderedRoutes.count == 2 else { return }
+    let first = orderedRoutes[0]
+    let second = orderedRoutes[1]
+
+    let merged = Route(name: mergedName)
+    merged.startedAt = first.startedAt
+    merged.endedAt = second.endedAt ?? first.endedAt
+    merged.status = .finished
+    merged.trigger = .manual
+    merged.startPlaceName = first.startPlaceName
+    merged.endPlaceName = second.endPlaceName
+    merged.positions = first.positions + second.positions
+
+    modelContext.insert(merged)
+    modelContext.delete(first)
+    modelContext.delete(second)
   }
 }
 
