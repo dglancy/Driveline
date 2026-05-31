@@ -165,14 +165,14 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
   private func makeViewModel(paused: Bool = false) -> RecordingViewModel {
     let (service, _) = makeService()
-    service.startRoute()
+    try! service.startRoute()
     if paused { service.pauseRoute() }
     return RecordingViewModel(routeService: service)
   }
 
   private func makeServiceAndViewModel() -> (RouteService, RecordingViewModel) {
     let (service, _) = makeService()
-    service.startRoute()
+    try! service.startRoute()
     return (service, RecordingViewModel(routeService: service))
   }
 }

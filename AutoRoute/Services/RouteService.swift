@@ -63,12 +63,17 @@ final class RouteService {
 
   // MARK: - Actions
 
-  func startRoute(trigger: Route.RecordingTrigger = .manual) {
+  func startRoute(trigger: Route.RecordingTrigger = .manual) throws {
     let route = Route(name: routeNameForCurrentTime(), trigger: trigger)
     self.route = route
     currentSpeedMs = nil
 
-    locationDataRecorder.startRecording(with: route)
+    do {
+      try locationDataRecorder.startRecording(with: route)
+    } catch {
+      self.route = nil
+      throw error
+    }
     locationService.start()
 
     speedCancellable = locationService.locationPublisher
