@@ -23,6 +23,7 @@ final class RecordingViewModel {
   var accentColour: Color { routeService.isPaused ? .orange : .red }
   var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
+  
   var speedValue: String {
     guard !routeService.isPaused else { return kDashString }
     return routeService.currentSpeedMs?.localizedSpeedValueString() ?? kDashString
@@ -32,7 +33,14 @@ final class RecordingViewModel {
   var positionCount: Int { routeService.route?.positions.count ?? 0 }
 
   var startedAt: String {
-    routeService.route?.startedAt.formatted(date: .omitted, time: .shortened) ?? kDashString
+    guard let date = routeService.route?.startedAt else { return kDashString }
+    let template = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? kBlankString
+    let is24Hour = !template.contains("a")
+    if is24Hour {
+      return date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits))
+    } else {
+      return date.formatted(.dateTime.hour(.defaultDigits(amPM: .abbreviated)).minute(.twoDigits))
+    }
   }
 
   var triggerIconName: String {
