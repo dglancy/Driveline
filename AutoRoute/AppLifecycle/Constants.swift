@@ -16,6 +16,6 @@ let kGPXCreator = "\(kAppName) for iOS"
 let kBlankString = ""
 let kDashString = "—"
 
-// MARK: – Testing
+// MARK: - Testing
 
 let kUITestingFlag = "-ui-testing"
