@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+import BackgroundTasks
 import CoreLocation
 import Foundation
 import Observation
@@ -17,6 +18,9 @@ import os.log
 final class RouteService {
 
   // MARK: - Properties
+
+  static let pauseTimeoutInterval: TimeInterval = 3 * 3600
+  static let pauseTimeoutTaskIdentifier = "com.targatrips.AutoRoute.pause-timeout"
 
   private(set) var route: Route?
   private(set) var currentSpeedMs: Double?
@@ -73,6 +77,7 @@ final class RouteService {
   }
 
   func endRoute() async {
+    cancelPauseTimeout()
     speedCancellable = nil
     startGeocodeCancellable = nil
     locationService.stop()
@@ -98,15 +103,24 @@ final class RouteService {
     locationService.pause()
     route?.status = .paused
     route?.pauseStartedAt = Date()
+    schedulePauseTimeout()
   }
 
   func resumeRoute() {
+    cancelPauseTimeout()
     if let route, let pauseStart = route.pauseStartedAt {
       route.pausedDurationSeconds += Date().timeIntervalSince(pauseStart)
       route.pauseStartedAt = nil
     }
     route?.status = .recording
     locationService.resume()
+  }
+
+  func checkAndAutoFinishIfTimedOut() async {
+    guard isPaused,
+          let pauseStartedAt = route?.pauseStartedAt,
+          Date().timeIntervalSince(pauseStartedAt) >= Self.pauseTimeoutInterval else { return }
+    await endRoute()
   }
 
   func loadRoute(_ route: Route) {
@@ -116,6 +130,16 @@ final class RouteService {
   }
 
   // MARK: - Private
+
+  private func schedulePauseTimeout() {
+    let request = BGAppRefreshTaskRequest(identifier: Self.pauseTimeoutTaskIdentifier)
+    request.earliestBeginDate = Date().addingTimeInterval(Self.pauseTimeoutInterval)
+    try? BGTaskScheduler.shared.submit(request)
+  }
+
+  private func cancelPauseTimeout() {
+    BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.pauseTimeoutTaskIdentifier)
+  }
 
   private func routeNameForCurrentTime() -> String {
     let hour = Calendar.current.component(.hour, from: Date())

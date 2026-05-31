@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+import BackgroundTasks
 import SwiftUI
 import SwiftData
 
@@ -14,6 +15,7 @@ struct AutoRouteApp: App {
   // MARK: - Properties
 
   @State private var routeService: RouteService
+  @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
 
@@ -35,6 +37,7 @@ struct AutoRouteApp: App {
     _routeService = State(initialValue: routeService)
 
     Self.registerIntentDependencies(routeService: routeService)
+    Self.registerBGTasks(routeService: routeService)
 
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
@@ -48,6 +51,10 @@ struct AutoRouteApp: App {
     WindowGroup {
       HomeView()
         .environment(routeService)
+        .onChange(of: scenePhase) { _, newPhase in
+          guard newPhase == .active else { return }
+          Task { await routeService.checkAndAutoFinishIfTimedOut() }
+        }
     }
     .modelContainer(modelContainer)
   }
@@ -89,7 +96,26 @@ struct AutoRouteApp: App {
     locationDataRecorder: LocationDataRecorderService
   ) -> RouteService {
     Log.lifecycle.info("Setting up route service")
-    return RouteService(modelContext: modelContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
+    var descriptor = FetchDescriptor<Route>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
+    descriptor.fetchLimit = 1
+    let activeRoute = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
+    return RouteService(modelContext: modelContext, locationService: locationService, locationDataRecorder: locationDataRecorder, initialRoute: activeRoute)
+  }
+
+  // MARK: - Background Tasks
+
+  private static func registerBGTasks(routeService: RouteService) {
+    Log.lifecycle.info("Registering background tasks")
+    BGTaskScheduler.shared.register(
+      forTaskWithIdentifier: RouteService.pauseTimeoutTaskIdentifier,
+      using: .main
+    ) { task in
+      task.expirationHandler = { task.setTaskCompleted(success: false) }
+      Task { @MainActor in
+        await routeService.checkAndAutoFinishIfTimedOut()
+        task.setTaskCompleted(success: true)
+      }
+    }
   }
 
   // MARK: - App Intents

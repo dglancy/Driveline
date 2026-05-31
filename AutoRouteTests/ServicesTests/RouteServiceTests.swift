@@ -370,6 +370,69 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     #expect(service.isPaused == false)
   }
 
+  // MARK: - checkAndAutoFinishIfTimedOut
+
+  @Test
+  func checkAndAutoFinishIfTimedOutDoesNothingWithNoRoute() async throws {
+    let (service, _, _) = makeServices()
+
+    await service.checkAndAutoFinishIfTimedOut()
+
+    #expect(service.route == nil)
+    #expect(service.isRecording == false)
+  }
+
+  @Test
+  func checkAndAutoFinishIfTimedOutDoesNothingWhenRouteIsRecording() async throws {
+    let (service, _, _) = makeServices()
+    service.startRoute()
+
+    await service.checkAndAutoFinishIfTimedOut()
+
+    #expect(service.isRecording == true)
+    #expect(service.isPaused == false)
+  }
+
+  @Test
+  func checkAndAutoFinishIfTimedOutDoesNothingWhenPausedBelowThreshold() async throws {
+    let (service, _, _) = makeServices()
+    service.startRoute()
+    service.pauseRoute()
+
+    await service.checkAndAutoFinishIfTimedOut()
+
+    #expect(service.isPaused == true)
+    #expect(service.isRecording == true)
+  }
+
+  @Test
+  func checkAndAutoFinishIfTimedOutFinishesRouteWhenPausedBeyondThreshold() async throws {
+    let (service, _, _) = makeServices()
+    service.startRoute()
+    service.pauseRoute()
+    service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
+
+    await service.checkAndAutoFinishIfTimedOut()
+
+    #expect(service.isRecording == false)
+    #expect(service.route == nil)
+  }
+
+  @Test
+  func checkAndAutoFinishIfTimedOutPersistsRouteAsFinished() async throws {
+    let (service, _, _) = makeServices()
+    service.startRoute()
+    service.pauseRoute()
+    service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
+
+    await service.checkAndAutoFinishIfTimedOut()
+
+    let routes = try context!.fetch(FetchDescriptor<Route>())
+    #expect(routes.count == 1)
+    #expect(routes.first?.status == .finished)
+    #expect(routes.first?.endedAt != nil)
+  }
+
   // MARK: - Helpers
 
   private func makeServices() -> (RouteService, LocationService, LocationDataRecorderService) {
