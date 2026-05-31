@@ -9,8 +9,17 @@ import CoreLocation
 import Foundation
 import MapKit
 
+// MARK: - Protocol
+
 @MainActor
-final class GeocodingService {
+protocol GeocodingServiceProtocol {
+  func reverseGeocode(location: CLLocation) async -> String?
+}
+
+// MARK: - GeocodingService
+
+@MainActor
+final class GeocodingService: GeocodingServiceProtocol {
 
   // MARK: - Types
 
