@@ -190,9 +190,9 @@ final class HomeViewModel {
     case 1:
       return String(localized: "Yesterday")
     case 2...6:
-      return date.formatted(.dateTime.weekday(.wide))
+      return date.weekdayName()
     default:
-      return date.formatted(.dateTime.month(.wide).year())
+      return date.monthAndYear()
     }
   }
 }

@@ -42,7 +42,7 @@ final class RecordingViewModel {
 
   var startedAt: String {
     guard let date = routeService.route?.startedAt else { return kDashString }
-    return date.formatted(.dateTime.hour().minute())
+    return date.clockTime()
   }
 
   var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
