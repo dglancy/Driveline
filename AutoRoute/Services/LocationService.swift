@@ -85,8 +85,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   }
 
   func resume() {
-    guard status != .started else {
-      Log.location.info("Monitoring locations already resumed; ignoring.")
+    guard status == .paused else {
+      Log.location.info("resume() called while status=\(status); ignoring.")
       return
     }
 
