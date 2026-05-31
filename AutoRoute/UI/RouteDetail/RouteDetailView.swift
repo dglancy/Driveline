@@ -35,6 +35,12 @@ struct RouteDetailView: View {
       VStack(spacing: 0) {
         RouteDetailMapView(route: viewModel.route)
           .frame(height: mapHeight)
+          .overlay(alignment: .bottomTrailing) {
+            glassButton(systemImage: "viewfinder") {
+              viewModel.showingFullScreenMap = true
+            }
+            .padding(14)
+          }
 
         ScrollView {
           VStack(alignment: .leading, spacing: 14) {
@@ -56,6 +62,9 @@ struct RouteDetailView: View {
         .padding(.top, 4)
     }
     .toolbar(.hidden, for: .navigationBar)
+    .navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
+      FullScreenMapView(route: viewModel.route)
+    }
     .sheet(isPresented: $viewModel.showingShareSheet) {
       shareSheetContent
     }
@@ -226,7 +235,7 @@ private struct EndpointRow: View {
         .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
         .shadow(color: .black.opacity(0.15), radius: 1)
     } else {
-      Image(systemName: "mappin")
+      Image(systemName: "flag.pattern.checkered")
         .font(.system(size: 18, weight: .medium))
         .foregroundStyle(.red)
     }
