@@ -15,6 +15,7 @@ struct RouteDetailView: View {
 
   @State private var viewModel: RouteDetailViewModel
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
 
   private let mapHeight: CGFloat = 280
 
@@ -34,6 +35,21 @@ struct RouteDetailView: View {
       VStack(spacing: 0) {
         RouteDetailMapView(route: viewModel.route)
           .frame(height: mapHeight)
+          .overlay(alignment: .topLeading) {
+            glassButton(systemImage: "chevron.left") { dismiss() }
+              .padding(14)
+          }
+          .overlay(alignment: .topTrailing) {
+            HStack(spacing: 8) {
+              glassButton(systemImage: "square.and.arrow.up") {
+                viewModel.showSharingDialog = true
+              }
+              glassButton(systemImage: "ellipsis") {
+                viewModel.showingMoreMenu = true
+              }
+            }
+            .padding(14)
+          }
           .overlay(alignment: .bottomTrailing) {
             glassButton(systemImage: "viewfinder") {
               viewModel.showingFullScreenMap = true
@@ -71,6 +87,32 @@ struct RouteDetailView: View {
       Button(String(localized: "OK", comment: "Dismiss export error alert")) { viewModel.exportError = nil }
     } message: { error in
       Text(error)
+    }
+    .confirmationDialog("", isPresented: $viewModel.showingMoreMenu, titleVisibility: .hidden) {
+      Button(String(localized: "Edit Route Details", comment: "More menu option")) {
+        viewModel.showingEditRoute = true
+      }
+      Button(String(localized: "Delete Route", comment: "More menu option"), role: .destructive) {
+        viewModel.showingDeleteConfirmation = true
+      }
+      Button(String(localized: "Cancel", comment: "More menu cancel"), role: .cancel) { }
+    }
+    .alert(
+      String(localized: "Delete Route", comment: "Delete confirmation alert title"),
+      isPresented: $viewModel.showingDeleteConfirmation
+    ) {
+      Button(String(localized: "Delete", comment: "Confirm delete route"), role: .destructive) {
+        modelContext.delete(viewModel.route)
+        dismiss()
+      }
+      Button(String(localized: "Cancel", comment: "Cancel delete route"), role: .cancel) { }
+    } message: {
+      Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete route confirmation message"))
+    }
+    .sheet(isPresented: $viewModel.showingEditRoute) {
+      EditRouteView(route: viewModel.route)
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
   }
 
