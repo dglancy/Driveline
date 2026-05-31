@@ -82,7 +82,7 @@ final class RouteService {
       }
 
     startGeocodeCancellable = locationService.locationPublisher
-      .first(where: { $0.horizontalAccuracy >= 0 && $0.horizontalAccuracy < kMinimumLocationAccuracyForGeocoding })
+      .first(where: { $0.horizontalAccuracy >= 0 && $0.horizontalAccuracy < kMinimumLocationAccuracy })
       .sink { [weak self] location in
         Task { [weak self] in
           guard let self, let route = self.route else { return }

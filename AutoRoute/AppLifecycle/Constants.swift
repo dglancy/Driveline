@@ -17,7 +17,7 @@ let kGPXCreator = "AutoRoute for iOS"
 
 // MARK: - Configuration
 
-let kMinimumLocationAccuracyForGeocoding: CLLocationAccuracy = 50
+let kMinimumLocationAccuracy: CLLocationAccuracy = 50
 let kRouteAgeCutoff: TimeInterval = -86400
 let kPauseTimeoutInterval: TimeInterval = 3 * 3600
 
