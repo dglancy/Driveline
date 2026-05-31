@@ -91,7 +91,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     service.startRoute()
     service.route?.trigger = .automatic
     let vm = RecordingViewModel(routeService: service)
-    #expect(vm.triggerIconName == "bluetooth")
+    #expect(vm.triggerIconName == "autostartstop")
   }
 
   @Test

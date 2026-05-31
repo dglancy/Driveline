@@ -6,6 +6,10 @@
 	<array>
 		<string>Intent</string>
 	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.targatrips.AutoRoute.pause-timeout</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
