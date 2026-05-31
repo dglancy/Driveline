@@ -9,6 +9,7 @@
 import Testing
 import Foundation
 import SwiftData
+import CoreLocation
 
 @Suite("Position")
 @MainActor
@@ -140,5 +141,21 @@ final class PositionTests: SwiftDataBaseTestCase {
 
     let fetchedRoute = try context!.fetch(FetchDescriptor<Route>()).first!
     #expect(fetchedRoute.positions.count == 5)
+  }
+  
+  @Test
+  func toCLLocation() async {
+    let position = Position(latitude: 1.0, longitude: 1.0, altitude: 1.0, horizontalAccuracy: 1.0, verticalAccuracy: 1.0,
+                            course: 1.0, courseAccuracy: 1.0, speed: 1.0, speedAccuracy: 1.0)
+
+    #expect(position.location.coordinate.latitude == 1.0)
+    #expect(position.location.coordinate.longitude == 1.0)
+    #expect(position.location.altitude == 1.0)
+    #expect(position.location.horizontalAccuracy == 1.0)
+    #expect(position.location.verticalAccuracy == 1.0)
+    #expect(position.location.course == 1.0)
+    #expect(position.location.courseAccuracy == 1.0)
+    #expect(position.location.speed == 1.0)
+    #expect(position.location.speedAccuracy == 1.0)
   }
 }

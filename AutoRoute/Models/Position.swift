@@ -27,6 +27,14 @@ final class Position {
 
   var route: Route?
 
+  // MARK: – Computed Property
+
+  var location: CLLocation {
+    CLLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), altitude: altitude,
+               horizontalAccuracy: horizontalAccuracy, verticalAccuracy: verticalAccuracy, course: course,
+               courseAccuracy: courseAccuracy, speed: speed, speedAccuracy: speedAccuracy, timestamp: timestamp)
+  }
+
   // MARK: - Lifecycle
 
   init(

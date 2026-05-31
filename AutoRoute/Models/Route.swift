@@ -65,6 +65,10 @@ final class Route {
       .sorted(by: { $0.timestamp < $1.timestamp})
   }
 
+  var positionLocationCoordinatesIn2D: [CLLocationCoordinate2D] {
+    orderedPositions.map(\.location.coordinate)
+  }
+
   var distanceMetres: Double {
     let sorted = positions.sorted { $0.timestamp < $1.timestamp }
     guard sorted.count > 1 else { return 0 }
