@@ -51,15 +51,16 @@ struct HomeView: View {
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
       Button(String(localized: "Delete", comment: "Confirm delete routes"), role: .destructive) {
-        let routes = viewModel.selectedRoutes(from: viewModel.sections)
+        let selected = viewModel.selectedRoutes(from: viewModel.sections)
         viewModel.exitSelectMode()
-        deleteRoutes(routes)
+        deleteRoutes(selected)
       }
       Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
     } message: {
       let count = viewModel.selectedRouteIDs.count
       if count == 1 {
-        Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete single route confirmation message"))
+        Text(String(localized: "This route and all its data will be permanently deleted.",
+                    comment: "Delete single route confirmation message"))
       } else {
         Text(String(localized: "These \(count) routes and all their data will be permanently deleted.",
                     comment: "Delete multiple routes confirmation message"))
@@ -100,7 +101,9 @@ struct HomeView: View {
     ZStack(alignment: .bottom) {
       List {
         if routeService.isRecording {
-          recordingBanner
+          RecordingBannerSection(triggerDisplayName: routeService.route?.trigger.displayName) {
+            showingRecordingScreen = true
+          }
         }
 
         if let summary = viewModel.summaryLine {
@@ -151,81 +154,18 @@ struct HomeView: View {
       }
 
       if viewModel.isSelectMode {
-        selectionToolbar
-      }
-    }
-  }
-
-  @ViewBuilder
-  private var recordingBanner: some View {
-    Section {
-      Button {
-        showingRecordingScreen = true
-      } label: {
-        HStack(spacing: 12) {
-          RecordingDot()
-          VStack(alignment: .leading, spacing: 1) {
-            Text("Recording drive…")
-              .font(.system(size: 16, weight: .semibold))
-              .foregroundStyle(Color(.label))
-            if let displayName = routeService.route?.trigger.displayName {
-              Text("\(displayName) · Tap to view")
-                .font(.system(size: 13.5))
-                .foregroundStyle(Color(.secondaryLabel))
-            } else {
-              Text("Tap to view")
-                .font(.system(size: 13.5))
-                .foregroundStyle(Color(.secondaryLabel))
-            }
-          }
-          Spacer()
-          Image(systemName: "chevron.right")
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(Color(.tertiaryLabel))
+        SelectionToolbar(
+          canMerge: viewModel.canMerge,
+          canDelete: viewModel.canDelete,
+          selectionCountText: viewModel.selectionCountText
+        ) {
+          let routes = viewModel.selectedRoutes(from: viewModel.sections)
+          routesToMerge = routes.sorted { $0.startedAt < $1.startedAt }
+          showingMergeSheet = true
+        } onDelete: {
+          viewModel.showingDeleteConfirmation = true
         }
-        .padding(.vertical, 4)
       }
-      .buttonStyle(.plain)
-      .listRowBackground(Color.red.opacity(0.08))
-    }
-    .listSectionSeparator(.hidden)
-  }
-
-  private var selectionToolbar: some View {
-    HStack {
-      Button {
-        let routes = viewModel.selectedRoutes(from: viewModel.sections)
-        routesToMerge = routes.sorted { $0.startedAt < $1.startedAt }
-        showingMergeSheet = true
-      } label: {
-        Label(
-          String(localized: "Merge", comment: "Merge selected routes button"),
-          systemImage: "arrow.triangle.merge"
-        )
-        .font(.system(size: 17, weight: .medium))
-      }
-      .disabled(!viewModel.canMerge)
-      .frame(maxWidth: .infinity, alignment: .leading)
-
-      Text(viewModel.selectionCountText)
-        .font(.system(size: 13))
-        .foregroundStyle(.secondary)
-        .frame(maxWidth: .infinity, alignment: .center)
-
-      Button(String(localized: "Delete", comment: "Delete selected routes button")) {
-        viewModel.showingDeleteConfirmation = true
-      }
-      .font(.system(size: 17, weight: .medium))
-      .foregroundStyle(viewModel.canDelete ? Color.red : Color(.tertiaryLabel))
-      .disabled(!viewModel.canDelete)
-      .frame(maxWidth: .infinity, alignment: .trailing)
-    }
-    .padding(.horizontal, 18)
-    .padding(.top, 10)
-    .padding(.bottom, 30)
-    .background(.regularMaterial)
-    .overlay(alignment: .top) {
-      Divider()
     }
   }
 
@@ -307,6 +247,93 @@ struct HomeView: View {
 }
 
 // MARK: - Subviews
+
+private struct RecordingBannerSection: View {
+
+  // MARK: - Properties
+
+  let triggerDisplayName: String?
+  let onTap: () -> Void
+
+  // MARK: - Body
+
+  var body: some View {
+    Section {
+      Button(action: onTap) {
+        HStack(spacing: 12) {
+          RecordingDot()
+          VStack(alignment: .leading, spacing: 1) {
+            Text("Recording drive…")
+              .font(.system(size: 16, weight: .semibold))
+              .foregroundStyle(Color(.label))
+            if let triggerDisplayName {
+              Text("\(triggerDisplayName) · Tap to view")
+                .font(.system(size: 13.5))
+                .foregroundStyle(Color(.secondaryLabel))
+            } else {
+              Text("Tap to view")
+                .font(.system(size: 13.5))
+                .foregroundStyle(Color(.secondaryLabel))
+            }
+          }
+          Spacer()
+          Image(systemName: "chevron.right")
+            .font(.system(size: 12, weight: .semibold))
+            .foregroundStyle(Color(.tertiaryLabel))
+        }
+        .padding(.vertical, 4)
+      }
+      .buttonStyle(.plain)
+      .listRowBackground(Color.red.opacity(0.08))
+    }
+    .listSectionSeparator(.hidden)
+  }
+}
+
+private struct SelectionToolbar: View {
+
+  // MARK: - Properties
+
+  let canMerge: Bool
+  let canDelete: Bool
+  let selectionCountText: String
+  let onMerge: () -> Void
+  let onDelete: () -> Void
+
+  // MARK: - Body
+
+  var body: some View {
+    HStack {
+      Button(action: onMerge) {
+        Label(
+          String(localized: "Merge", comment: "Merge selected routes button"),
+          systemImage: "arrow.triangle.merge"
+        )
+        .font(.system(size: 17, weight: .medium))
+      }
+      .disabled(!canMerge)
+      .frame(maxWidth: .infinity, alignment: .leading)
+
+      Text(selectionCountText)
+        .font(.system(size: 13))
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity, alignment: .center)
+
+      Button(String(localized: "Delete", comment: "Delete selected routes button"), action: onDelete)
+        .font(.system(size: 17, weight: .medium))
+        .foregroundStyle(canDelete ? Color.red : Color(.tertiaryLabel))
+        .disabled(!canDelete)
+        .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    .padding(.horizontal, 18)
+    .padding(.top, 10)
+    .padding(.bottom, 30)
+    .background(.regularMaterial)
+    .overlay(alignment: .top) {
+      Divider()
+    }
+  }
+}
 
 private struct RecordingDot: View {
 
