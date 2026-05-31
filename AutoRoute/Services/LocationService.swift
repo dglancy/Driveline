@@ -111,10 +111,16 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     Task { @MainActor in
       Log.location.info("\(locations.count) new location(s) received")
-      for location in locations {
+      for location in locations where isUsable(location) {
         locationPublisher.send(location)
       }
     }
+  }
+
+  nonisolated func isUsable(_ location: CLLocation) -> Bool {
+    location.horizontalAccuracy >= 0 &&
+    location.horizontalAccuracy < kMinimumLocationAccuracy &&
+    -location.timestamp.timeIntervalSinceNow < kMaxLocationAge
   }
 
   // MARK: - Private functions
