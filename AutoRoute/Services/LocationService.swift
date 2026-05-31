@@ -10,17 +10,17 @@ import CoreLocation
 import Combine
 import Observation
 
-// MARK: - Location Service Status
-
-enum LocationServiceStatus {
-  case stopped, started, paused
-}
-
 // MARK: - Location Service
 
 @MainActor
 @Observable
 final class LocationService: NSObject, CLLocationManagerDelegate {
+
+  // MARK: - Types
+
+  enum LocationServiceStatus {
+    case stopped, started, paused
+  }
 
   // MARK: - Properties
 

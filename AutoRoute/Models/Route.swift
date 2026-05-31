@@ -12,6 +12,30 @@ import SwiftData
 @Model
 final class Route {
 
+  // MARK: - Types
+
+  enum RouteStatus: String, Codable {
+    case recording
+    case paused
+    case finished
+  }
+
+  enum RecordingTrigger: String, Codable {
+    case bluetooth = "Bluetooth"
+    case manual = "Started manually"
+
+    // MARK: - Computed properties
+
+    var displayName: String {
+      switch self {
+      case .bluetooth:
+        String(localized: "Bluetooth", comment: "Recording trigger: started via Bluetooth")
+      case .manual:
+        String(localized: "Manually", comment: "Recording trigger: started manually by the user")
+      }
+    }
+  }
+
   // MARK: - Properties
 
   @Attribute(.unique) var id: UUID
@@ -92,29 +116,5 @@ final class Route {
     self.pausedDurationSeconds = 0
     self.pauseStartedAt = nil
     self.positions = []
-  }
-}
-
-// MARK: - Enums
-
-enum RouteStatus: String, Codable {
-  case recording
-  case paused
-  case finished
-}
-
-enum RecordingTrigger: String, Codable {
-  case bluetooth = "Bluetooth"
-  case manual = "Started manually"
-
-  // MARK: - Computed properties
-
-  var displayName: String {
-    switch self {
-    case .bluetooth:
-      String(localized: "Bluetooth", comment: "Recording trigger: started via Bluetooth")
-    case .manual:
-      String(localized: "Manually", comment: "Recording trigger: started manually by the user")
-    }
   }
 }

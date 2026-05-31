@@ -105,7 +105,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   @Test
   func triggerDisplayNameMatchesRouteDisplayName() {
     let vm = makeViewModel()
-    #expect(vm.triggerDisplayName == RecordingTrigger.manual.displayName)
+    #expect(vm.triggerDisplayName == Route.RecordingTrigger.manual.displayName)
   }
 
   // MARK: - positionCount

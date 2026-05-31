@@ -12,6 +12,17 @@ import MapKit
 @MainActor
 final class GeocodingService {
 
+  // MARK: - Types
+
+  struct PlaceNameComponents {
+    let subLocality: String?
+    let locality: String?
+    let cityWithContext: String?
+    let cityName: String?
+    let shortAddress: String?
+    let name: String?
+  }
+
   // MARK: - Actions
 
   func reverseGeocode(location: CLLocation) async -> String? {
@@ -45,15 +56,4 @@ final class GeocodingService {
     if let cityName = components.cityName { return cityName }
     return components.shortAddress ?? components.name
   }
-}
-
-// MARK: - PlaceNameComponents
-
-struct PlaceNameComponents {
-  let subLocality: String?
-  let locality: String?
-  let cityWithContext: String?
-  let cityName: String?
-  let shortAddress: String?
-  let name: String?
 }

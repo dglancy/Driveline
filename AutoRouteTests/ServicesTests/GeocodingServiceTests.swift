@@ -16,7 +16,7 @@ struct GeocodingServiceTests {
   @Test
   func combinesSubLocalityAndLocality() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: "Surry Hills",
         locality: "Sydney",
         cityWithContext: "Sydney, Australia",
@@ -32,7 +32,7 @@ struct GeocodingServiceTests {
   @Test
   func returnsSubLocalityAloneWhenLocalityNil() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: "Camden",
         locality: nil,
         cityWithContext: nil,
@@ -48,7 +48,7 @@ struct GeocodingServiceTests {
   @Test
   func returnsSubLocalityAloneWhenLocalityMatches() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: "Galway",
         locality: "Galway",
         cityWithContext: "Galway, Ireland",
@@ -66,7 +66,7 @@ struct GeocodingServiceTests {
   @Test
   func fallsBackToCityWithContextWhenSubLocalityNil() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: nil,
         locality: "Dublin",
         cityWithContext: "Dublin, Ireland",
@@ -82,7 +82,7 @@ struct GeocodingServiceTests {
   @Test
   func fallsBackToCityNameWhenCityWithContextNil() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: nil,
         locality: nil,
         cityWithContext: nil,
@@ -98,7 +98,7 @@ struct GeocodingServiceTests {
   @Test
   func fallsBackToShortAddressWhenNoCityInfo() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: nil,
         locality: nil,
         cityWithContext: nil,
@@ -114,7 +114,7 @@ struct GeocodingServiceTests {
   @Test
   func fallsBackToNameWhenShortAddressNil() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: nil,
         locality: nil,
         cityWithContext: nil,
@@ -130,7 +130,7 @@ struct GeocodingServiceTests {
   @Test
   func returnsNilWhenAllFieldsNil() {
     let result = GeocodingService.composePlaceName(
-      from: PlaceNameComponents(
+      from: GeocodingService.PlaceNameComponents(
         subLocality: nil,
         locality: nil,
         cityWithContext: nil,
