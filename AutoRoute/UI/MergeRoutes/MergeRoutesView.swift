@@ -68,8 +68,8 @@ struct MergeRoutesView: View {
       sectionHeader(String(localized: "Order", comment: "Merge order section header"))
       ZStack(alignment: .trailing) {
         VStack(spacing: 8) {
-          MiniRouteCard(route: viewModel.first, index: 1)
-          MiniRouteCard(route: viewModel.second, index: 2)
+          MiniRouteCard(display: viewModel.firstDisplay, index: 1)
+          MiniRouteCard(display: viewModel.secondDisplay, index: 2)
         }
         swapButton
           .padding(.trailing, 14)
@@ -202,7 +202,7 @@ private struct MiniRouteCard: View {
 
   // MARK: - Properties
 
-  let route: Route
+  let display: MergeRoutesViewModel.MiniRouteCardDisplay
   let index: Int
 
   // MARK: - Body
@@ -218,10 +218,10 @@ private struct MiniRouteCard: View {
           .foregroundStyle(.white)
       }
       VStack(alignment: .leading, spacing: 1) {
-        Text(route.name)
+        Text(display.name)
           .font(.system(size: 16, weight: .semibold))
           .lineLimit(1)
-        Text(dateTimeLabel)
+        Text(display.dateTimeLabel)
           .font(.system(size: 13))
           .foregroundStyle(.secondary)
           .lineLimit(1)
@@ -229,9 +229,9 @@ private struct MiniRouteCard: View {
       .frame(maxWidth: .infinity, alignment: .leading)
 
       VStack(alignment: .trailing, spacing: 1) {
-        Text(route.distanceMetres.localizedDistanceString())
+        Text(display.formattedDistance)
           .font(.system(size: 15, weight: .medium))
-        Text(route.activeDurationSeconds.localizedDurationString())
+        Text(display.formattedDuration)
           .font(.system(size: 12))
           .foregroundStyle(.tertiary)
       }
@@ -240,12 +240,5 @@ private struct MiniRouteCard: View {
     .padding(.vertical, 13)
     .background(Color(.secondarySystemGroupedBackground))
     .clipShape(RoundedRectangle(cornerRadius: 14))
-  }
-
-  private var dateTimeLabel: String {
-    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
-    let parts: [String?] = ["\(datePart) · \(timePart)", route.startPlaceName]
-    return parts.compactMap { $0 }.joined(separator: " · ")
   }
 }

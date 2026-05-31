@@ -70,7 +70,7 @@ struct RecordingView: View {
           .fill(viewModel.accentColour)
           .frame(width: 9, height: 9)
       } else {
-        PulsingDot(color: viewModel.accentColour)
+        PulsingDot(color: viewModel.accentColour, size: 9)
       }
       let statusKey: LocalizedStringKey = viewModel.isPaused ? "PAUSED" : "RECORDING"
       Text(statusKey)
@@ -208,33 +208,6 @@ struct RecordingView: View {
 }
 
 // MARK: - Subviews
-
-private struct PulsingDot: View {
-
-  // MARK: - Properties
-
-  let color: Color
-  @State private var animating = false
-
-  // MARK: - Body
-
-  var body: some View {
-    ZStack {
-      Circle()
-        .fill(color)
-        .scaleEffect(animating ? 2.2 : 1.0)
-        .opacity(animating ? 0 : 0.5)
-      Circle()
-        .fill(color)
-    }
-    .frame(width: 9, height: 9)
-    .onAppear {
-      withAnimation(.easeOut(duration: 1.6).repeatForever(autoreverses: false)) {
-        animating = true
-      }
-    }
-  }
-}
 
 private struct StatColumn: View {
 

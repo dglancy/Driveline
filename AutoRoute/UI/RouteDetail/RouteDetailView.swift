@@ -33,20 +33,20 @@ struct RouteDetailView: View {
         .ignoresSafeArea()
 
       VStack(spacing: 0) {
-        RouteDetailMapView(route: viewModel.route)
+        RouteDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
           .frame(height: mapHeight)
           .overlay(alignment: .topLeading) {
-            glassButton(systemImage: "chevron.left") { dismiss() }
+            GlassButton(systemImage: "chevron.left") { dismiss() }
               .padding(14)
           }
           .overlay(alignment: .topTrailing) {
-            glassButton(systemImage: "ellipsis") {
+            GlassButton(systemImage: "ellipsis") {
               viewModel.showingMoreMenu = true
             }
             .padding(14)
           }
           .overlay(alignment: .bottomTrailing) {
-            glassButton(systemImage: "viewfinder") {
+            GlassButton(systemImage: "viewfinder") {
               viewModel.showingFullScreenMap = true
             }
             .padding(14)
@@ -88,7 +88,7 @@ struct RouteDetailView: View {
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
       Button(String(localized: "Delete", comment: "Confirm delete route"), role: .destructive) {
-        modelContext.delete(viewModel.route)
+        viewModel.deleteRoute(using: modelContext)
         dismiss()
       }
       Button(String(localized: "Cancel", comment: "Cancel delete route"), role: .cancel) { }
@@ -257,16 +257,6 @@ struct RouteDetailView: View {
     }
   }
 
-  private func glassButton(systemImage: String, action: @escaping () -> Void) -> some View {
-    Button(action: action) {
-      Image(systemName: systemImage)
-        .font(.system(size: 16, weight: .semibold))
-        .foregroundStyle(.primary)
-        .frame(width: 38, height: 38)
-        .background(.regularMaterial, in: Circle())
-        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
-    }
-  }
 }
 
 // MARK: - Private Subviews

@@ -35,20 +35,13 @@ struct FullScreenMapView: View {
 
         if let start = viewModel.coordinates.first {
           Annotation("", coordinate: start, anchor: .center) {
-            Circle()
-              .fill(Color.green)
-              .frame(width: 14, height: 14)
-              .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2.5))
-              .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
+            RouteStartAnnotation()
           }
         }
 
         if let end = viewModel.coordinates.last, viewModel.coordinates.count > 1 {
           Annotation("", coordinate: end, anchor: .bottom) {
-            Image(systemName: "mappin.circle.fill")
-              .font(.system(size: 28))
-              .foregroundStyle(.red, Color(.systemBackground))
-              .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
+            RouteEndAnnotation(systemName: "mappin.circle.fill")
           }
         }
       }
@@ -57,7 +50,7 @@ struct FullScreenMapView: View {
 
       VStack {
         HStack {
-          glassButton(systemImage: "chevron.left") { dismiss() }
+          GlassButton(systemImage: "chevron.left") { dismiss() }
           Spacer()
         }
         .padding(.horizontal, 14)
@@ -104,16 +97,6 @@ struct FullScreenMapView: View {
     }
   }
 
-  private func glassButton(systemImage: String, action: @escaping () -> Void) -> some View {
-    Button(action: action) {
-      Image(systemName: systemImage)
-        .font(.system(size: 16, weight: .semibold))
-        .foregroundStyle(.primary)
-        .frame(width: 38, height: 38)
-        .background(.regularMaterial, in: Circle())
-        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
-    }
-  }
 }
 
 // MARK: - Preview

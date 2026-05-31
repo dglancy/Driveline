@@ -11,7 +11,7 @@ struct RouteRowView: View {
 
   // MARK: - Properties
 
-  let route: Route
+  let display: HomeViewModel.RouteRowDisplay
   var isSelected: Bool?
 
   // MARK: - Body
@@ -27,10 +27,10 @@ struct RouteRowView: View {
       iconBadge
 
       VStack(alignment: .leading, spacing: 1) {
-        Text(route.name)
+        Text(display.name)
           .font(.system(size: 17, weight: .semibold))
           .lineLimit(1)
-        Text(dateTimeLabel)
+        Text(display.dateTimeLabel)
           .font(.system(size: 14))
           .foregroundStyle(.secondary)
           .lineLimit(1)
@@ -38,10 +38,10 @@ struct RouteRowView: View {
       .frame(maxWidth: .infinity, alignment: .leading)
 
       VStack(alignment: .trailing) {
-        Text(formattedDistance)
+        Text(display.formattedDistance)
           .font(.system(size: 15))
           .foregroundStyle(.primary)
-        if let duration = formattedDuration {
+        if let duration = display.formattedDuration {
           Text(duration)
             .font(.system(size: 13))
             .foregroundStyle(.tertiary)
@@ -61,21 +61,5 @@ struct RouteRowView: View {
         .font(.system(size: 21))
         .foregroundStyle(.tint)
     }
-  }
-
-  // MARK: - Computed Properties
-
-  private var dateTimeLabel: String {
-    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
-    return "\(datePart) · \(timePart)"
-  }
-
-  private var formattedDuration: String? {
-    guard route.endedAt != nil else { return nil }
-    return route.activeDurationSeconds.localizedDurationString()  }
-
-  private var formattedDistance: String {
-    return "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())"
   }
 }
