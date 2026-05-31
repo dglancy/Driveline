@@ -12,8 +12,14 @@ struct RecordingView: View {
 
   // MARK: - Properties
 
-  var viewModel: RecordingViewModel
+  @State private var viewModel: RecordingViewModel
   @Environment(\.dismiss) private var dismiss
+
+  // MARK: - Lifecycle
+
+  init(routeService: RouteService) {
+    _viewModel = State(initialValue: RecordingViewModel(routeService: routeService))
+  }
 
   // MARK: - Body
 
@@ -234,7 +240,6 @@ private struct StatColumn: View {
     locationDataRecorder: locationDataRecorder,
     initialRoute: route
   )
-  let viewModel = RecordingViewModel(routeService: routeService)
-  RecordingView(viewModel: viewModel)
+  RecordingView(routeService: routeService)
     .modelContainer(container)
 }
