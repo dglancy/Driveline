@@ -28,8 +28,8 @@ struct RouteStatsPresenter {
   var avgSpeedUnit: String { route.avgSpeedMetresPerSecond.localizedSpeedUnitSymbol() }
 
   var startTimeLabel: String {
-    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
+    let datePart = route.startedAt.abbreviatedMonthAndDay()
+    let timePart = route.startedAt.clockTime()
     return "\(datePart) · \(timePart)"
   }
 }
