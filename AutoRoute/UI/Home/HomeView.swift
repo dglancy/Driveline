@@ -114,9 +114,15 @@ struct HomeView: View {
             Text("Recording drive…")
               .font(.system(size: 16, weight: .semibold))
               .foregroundStyle(Color(.label))
-            Text("\(routeService.route?.trigger.displayName ?? kBlankString) · Tap to view")
-              .font(.system(size: 13.5))
-              .foregroundStyle(Color(.secondaryLabel))
+            if let displayName = routeService.route?.trigger.displayName {
+              Text("\(displayName) · Tap to view")
+                .font(.system(size: 13.5))
+                .foregroundStyle(Color(.secondaryLabel))
+            } else {
+              Text("Tap to view")
+                .font(.system(size: 13.5))
+                .foregroundStyle(Color(.secondaryLabel))
+            }
           }
           Spacer()
           Image(systemName: "chevron.right")
