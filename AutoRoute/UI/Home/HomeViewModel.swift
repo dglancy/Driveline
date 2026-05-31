@@ -41,6 +41,8 @@ final class HomeViewModel {
   private(set) var isSelectMode: Bool = false
   private(set) var selectedRouteIDs: Set<UUID> = []
   var showingDeleteConfirmation: Bool = false
+  var showingStartRouteError: Bool = false
+  private(set) var startRouteErrorMessage: String?
 
   // MARK: - Computed Properties
 
@@ -72,6 +74,15 @@ final class HomeViewModel {
   }
 
   // MARK: - Methods
+
+  func startRoute(trigger: Route.RecordingTrigger = .manual, using routeService: RouteService) {
+    do {
+      try routeService.startRoute(trigger: trigger)
+    } catch {
+      startRouteErrorMessage = error.localizedDescription
+      showingStartRouteError = true
+    }
+  }
 
   func enterSelectMode() {
     isSelectMode = true

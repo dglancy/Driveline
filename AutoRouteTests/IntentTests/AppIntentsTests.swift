@@ -62,7 +62,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   @Test
   func startOrResumeIntentResumesRouteWhenPaused() async throws {
-    routeService.startRoute()
+    try routeService.startRoute()
     routeService.pauseRoute()
 
     _ = try await StartOrResumeRouteIntent().perform()
@@ -73,7 +73,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   @Test
   func startOrResumeIntentIsNoOpWhenAlreadyStarted() async throws {
-    routeService.startRoute()
+    try routeService.startRoute()
 
     _ = try await StartOrResumeRouteIntent().perform()
 
@@ -85,7 +85,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   @Test
   func pauseIntentPausesRouteWhenStarted() async throws {
-    routeService.startRoute()
+    try routeService.startRoute()
 
     _ = try await PauseRouteIntent().perform()
 
@@ -94,7 +94,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   @Test
   func pauseIntentIsNoOpWhenAlreadyPaused() async throws {
-    routeService.startRoute()
+    try routeService.startRoute()
     routeService.pauseRoute()
 
     _ = try await PauseRouteIntent().perform()

@@ -53,6 +53,14 @@ struct HomeView: View {
     } message: {
       Text(viewModel.deleteConfirmationMessage)
     }
+    .alert(
+      String(localized: "Couldn't Start Recording", comment: "Start route failure alert title"),
+      isPresented: $viewModel.showingStartRouteError
+    ) {
+      Button(String(localized: "OK", comment: "Dismiss start route error alert"), role: .cancel) { }
+    } message: {
+      Text(viewModel.startRouteErrorMessage ?? "")
+    }
     .sheet(isPresented: $showingMergeSheet) {
       if routesToMerge.count == 2 {
         MergeRoutesView(routes: routesToMerge) { orderedRoutes, mergedName in
@@ -179,7 +187,7 @@ struct HomeView: View {
           if routeService.isRecording {
             showingRecordingScreen = true
           } else {
-            routeService.startRoute()
+            viewModel.startRoute(using: routeService)
           }
         } label: {
           ZStack {
