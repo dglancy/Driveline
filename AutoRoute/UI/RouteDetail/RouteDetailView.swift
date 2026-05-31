@@ -40,13 +40,8 @@ struct RouteDetailView: View {
               .padding(14)
           }
           .overlay(alignment: .topTrailing) {
-            HStack(spacing: 8) {
-              glassButton(systemImage: "square.and.arrow.up") {
-                viewModel.showSharingDialog = true
-              }
-              glassButton(systemImage: "ellipsis") {
-                viewModel.showingMoreMenu = true
-              }
+            glassButton(systemImage: "ellipsis") {
+              viewModel.showingMoreMenu = true
             }
             .padding(14)
           }
@@ -88,15 +83,6 @@ struct RouteDetailView: View {
     } message: { error in
       Text(error)
     }
-    .confirmationDialog("", isPresented: $viewModel.showingMoreMenu, titleVisibility: .hidden) {
-      Button(String(localized: "Edit Route Details", comment: "More menu option")) {
-        viewModel.showingEditRoute = true
-      }
-      Button(String(localized: "Delete Route", comment: "More menu option"), role: .destructive) {
-        viewModel.showingDeleteConfirmation = true
-      }
-      Button(String(localized: "Cancel", comment: "More menu cancel"), role: .cancel) { }
-    }
     .alert(
       String(localized: "Delete Route", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
@@ -114,6 +100,27 @@ struct RouteDetailView: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
+    .overlay {
+      if viewModel.showingMoreMenu {
+        Color.black.opacity(0.35)
+          .ignoresSafeArea()
+          .onTapGesture {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+              viewModel.showingMoreMenu = false
+            }
+          }
+          .transition(.opacity)
+      }
+    }
+    .overlay(alignment: .bottom) {
+      if viewModel.showingMoreMenu {
+        moreMenuActionSheet
+          .padding(.horizontal, 8)
+          .padding(.bottom, 8)
+          .transition(.move(edge: .bottom).combined(with: .opacity))
+      }
+    }
+    .animation(.spring(response: 0.3, dampingFraction: 0.85), value: viewModel.showingMoreMenu)
   }
 
   // MARK: - Private Views
@@ -203,6 +210,51 @@ struct RouteDetailView: View {
       Button(String(localized: "Share GPX", comment: "Share route as GPX")) { viewModel.shareRouteGPX() }
       Button(String(localized: "Share PNG", comment: "Share route as PNG")) { viewModel.shareRoutePNG() }
       Button(String(localized: "Cancel", comment: "Cancel share route"), role: .cancel) { }
+    }
+  }
+
+  private var moreMenuActionSheet: some View {
+    VStack(spacing: 8) {
+      VStack(spacing: 0) {
+        Button {
+          withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+            viewModel.showingMoreMenu = false
+          }
+          viewModel.showingEditRoute = true
+        } label: {
+          Text(String(localized: "Edit Route Details", comment: "More menu action"))
+            .font(.system(size: 20))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 18)
+        }
+
+        Divider()
+
+        Button(role: .destructive) {
+          withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+            viewModel.showingMoreMenu = false
+          }
+          viewModel.showingDeleteConfirmation = true
+        } label: {
+          Text(String(localized: "Delete Route", comment: "More menu action"))
+            .font(.system(size: 20))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 18)
+        }
+      }
+      .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
+
+      Button {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+          viewModel.showingMoreMenu = false
+        }
+      } label: {
+        Text(String(localized: "Cancel", comment: "More menu cancel"))
+          .font(.system(size: 20, weight: .semibold))
+          .frame(maxWidth: .infinity)
+          .padding(.vertical, 18)
+      }
+      .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
     }
   }
 

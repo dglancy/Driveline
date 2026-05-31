@@ -114,7 +114,7 @@ struct HomeView: View {
             Text("Recording drive…")
               .font(.system(size: 16, weight: .semibold))
               .foregroundStyle(Color(.label))
-            Text("\(routeService.route?.trigger.displayName ?? "") · Tap to view")
+            Text("\(routeService.route?.trigger.displayName ?? kBlankString) · Tap to view")
               .font(.system(size: 13.5))
               .foregroundStyle(Color(.secondaryLabel))
           }
