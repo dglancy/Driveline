@@ -25,6 +25,9 @@ final class RouteDetailViewModel {
 
   var showSharingDialog = false
   var showingFullScreenMap = false
+  var showingMoreMenu = false
+  var showingDeleteConfirmation = false
+  var showingEditRoute = false
   var exportedFile: ExportedFile?
   var exportError: String?
 
