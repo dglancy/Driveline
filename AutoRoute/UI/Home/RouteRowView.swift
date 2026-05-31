@@ -37,10 +37,15 @@ struct RouteRowView: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
 
-      if let duration = formattedDuration {
-        Text(duration)
-          .font(.system(size: 13))
-          .foregroundStyle(.tertiary)
+      VStack(alignment: .trailing) {
+        Text(formattedDistance)
+          .font(.system(size: 15))
+          .foregroundStyle(.primary)
+        if let duration = formattedDuration {
+          Text(duration)
+            .font(.system(size: 13))
+            .foregroundStyle(.tertiary)
+        }
       }
     }
   }
@@ -68,6 +73,9 @@ struct RouteRowView: View {
 
   private var formattedDuration: String? {
     guard route.endedAt != nil else { return nil }
-    return route.activeDurationSeconds.localizedDurationString()
+    return route.activeDurationSeconds.localizedDurationString()  }
+
+  private var formattedDistance: String {
+    return "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())"
   }
 }
