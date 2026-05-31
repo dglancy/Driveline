@@ -8,14 +8,25 @@
 import Foundation
 import Observation
 
+// MARK: - ExportedFile
+
+struct ExportedFile: Identifiable {
+  let id = UUID()
+  let url: URL
+}
+
+// MARK: - RouteDetailViewModel
+
 @MainActor
 @Observable
 final class RouteDetailViewModel {
 
   // MARK: - Properties
 
-  var showingShareSheet = false
+  var showSharingDialog = false
   var showingFullScreenMap = false
+  var exportedFile: ExportedFile?
+  var exportError: String?
 
   @ObservationIgnored let route: Route
 
@@ -57,5 +68,29 @@ final class RouteDetailViewModel {
 
   init(route: Route) {
     self.route = route
+  }
+
+  // MARK: - Actions
+
+  func shareRouteGPX() {
+    Task {
+      do {
+        let url = try await ExportRouteGPX().export(route: route)
+        exportedFile = ExportedFile(url: url)
+      } catch {
+        exportError = error.localizedDescription
+      }
+    }
+  }
+
+  func shareRoutePNG() {
+    Task {
+      do {
+        let url = try await ExportRoutePNG().export(route: route)
+        exportedFile = ExportedFile(url: url)
+      } catch {
+        exportError = error.localizedDescription
+      }
+    }
   }
 }

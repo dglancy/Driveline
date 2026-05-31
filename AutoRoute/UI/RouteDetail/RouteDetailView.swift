@@ -14,7 +14,6 @@ struct RouteDetailView: View {
   // MARK: - Properties
 
   @State private var viewModel: RouteDetailViewModel
-
   @Environment(\.dismiss) private var dismiss
 
   private let mapHeight: CGFloat = 280
@@ -48,7 +47,7 @@ struct RouteDetailView: View {
             statTiles
             endpointsCard
             metadataCard
-            shareGPXButton
+            shareRouteButton
           }
           .padding(.horizontal, 16)
           .padding(.top, 16)
@@ -56,17 +55,22 @@ struct RouteDetailView: View {
         }
         .contentMargins(.top, 0, for: .scrollContent)
       }
-
-      floatingControls
-        .padding(.horizontal, 14)
-        .padding(.top, 4)
     }
     .toolbar(.hidden, for: .navigationBar)
     .navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
       FullScreenMapView(route: viewModel.route)
     }
-    .sheet(isPresented: $viewModel.showingShareSheet) {
-      shareSheetContent
+    .sheet(item: $viewModel.exportedFile) { file in
+      ActivityViewController(activityItems: [file.url])
+    }
+    .alert(
+      String(localized: "Export Failed", comment: "Export error alert title"),
+      isPresented: Binding(get: { viewModel.exportError != nil }, set: { if !$0 { viewModel.exportError = nil } }),
+      presenting: viewModel.exportError
+    ) { _ in
+      Button(String(localized: "OK", comment: "Dismiss export error alert")) { viewModel.exportError = nil }
+    } message: { error in
+      Text(error)
     }
   }
 
@@ -143,23 +147,20 @@ struct RouteDetailView: View {
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
   }
 
-  private var shareGPXButton: some View {
+  private var shareRouteButton: some View {
     Button {
-      viewModel.showingShareSheet = true
+      viewModel.showSharingDialog = true
     } label: {
-      Label(String(localized: "Share GPX File", comment: "Share button"), systemImage: "square.and.arrow.up")
+      Label(String(localized: "Share Route", comment: "Share button"), systemImage: "square.and.arrow.up")
         .font(.system(size: 17, weight: .medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
     }
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
-  }
-
-  private var floatingControls: some View {
-    HStack {
-      glassButton(systemImage: "chevron.left") { dismiss() }
-      Spacer()
-      glassButton(systemImage: "square.and.arrow.up") { viewModel.showingShareSheet = true }
+    .alert(String(localized: "Share Route", comment: "Share route alert title"), isPresented: $viewModel.showSharingDialog) {
+      Button(String(localized: "Share GPX", comment: "Share route as GPX")) { viewModel.shareRouteGPX() }
+      Button(String(localized: "Share PNG", comment: "Share route as PNG")) { viewModel.shareRoutePNG() }
+      Button(String(localized: "Cancel", comment: "Cancel share route"), role: .cancel) { }
     }
   }
 
@@ -173,19 +174,20 @@ struct RouteDetailView: View {
         .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
     }
   }
-
-  @ViewBuilder
-  private var shareSheetContent: some View {
-    ShareLink(
-      item: URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(viewModel.gpxFilename),
-      subject: Text(viewModel.name),
-      message: Text(String(localized: "GPX track exported from AutoRoute", comment: "Share sheet message"))
-    )
-    .presentationDetents([.medium])
-  }
 }
 
 // MARK: - Private Subviews
+
+private struct ActivityViewController: UIViewControllerRepresentable {
+
+  let activityItems: [Any]
+
+  func makeUIViewController(context: Context) -> UIActivityViewController {
+    UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+  }
+
+  func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
 
 private struct EndpointRow: View {
 
