@@ -61,9 +61,7 @@ final class MergeRoutesViewModel {
   // MARK: - Private
 
   private func makeDisplay(for route: Route) -> MiniRouteCardDisplay {
-    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
-    let parts: [String?] = ["\(datePart) · \(timePart)", route.startPlaceName]
+    let parts: [String?] = [route.startTimeLabel, route.startPlaceName]
     return MiniRouteCardDisplay(
       name: route.name,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),

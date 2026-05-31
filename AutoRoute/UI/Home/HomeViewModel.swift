@@ -137,12 +137,10 @@ final class HomeViewModel {
   }
 
   private func makeDisplay(for route: Route) -> RouteRowDisplay {
-    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
     let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
     return RouteRowDisplay(
       name: route.name,
-      dateTimeLabel: "\(datePart) · \(timePart)",
+      dateTimeLabel: route.startTimeLabel,
       formattedDistance: "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())",
       formattedDuration: duration
     )

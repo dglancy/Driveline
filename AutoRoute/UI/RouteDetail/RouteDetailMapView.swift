@@ -20,22 +20,7 @@ struct RouteDetailMapView: View {
 
   var body: some View {
     Map(initialPosition: cameraPosition) {
-      if coordinates.count > 1 {
-        MapPolyline(coordinates: coordinates)
-          .stroke(Color.blue, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-      }
-
-      if let start = coordinates.first {
-        Annotation("", coordinate: start, anchor: .center) {
-          RouteStartAnnotation()
-        }
-      }
-
-      if let end = coordinates.last, coordinates.count > 1 {
-        Annotation("", coordinate: end, anchor: .bottom) {
-          RouteEndAnnotation()
-        }
-      }
+      RouteMapContent(coordinates: coordinates)
     }
     .mapStyle(.standard(emphasis: .muted))
   }

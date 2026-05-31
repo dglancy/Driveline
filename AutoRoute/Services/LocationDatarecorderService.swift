@@ -47,12 +47,10 @@ final class LocationDataRecorderService {
     self.route = route
     modelContext.insert(route)
 
-    do {
-      try modelContext.save()
-      Log.data.info("Saved starting recording locations")
-    } catch {
-      Log.data.error("Failed to save starting recording locations: \(error)")
-    }
+    modelContext.safeSave(
+      onSuccess: { Log.data.info("Saved starting recording locations") },
+      onFailure: { Log.data.error("Failed to save starting recording locations: \($0)") }
+    )
 
     locationCancellable = locationService.locationPublisher
       .sink { [weak self] location in
@@ -102,12 +100,12 @@ final class LocationDataRecorderService {
 
   private func saveIfNeeded() {
     guard hasPendingPositions else { return }
-    do {
-      try modelContext.save()
-      hasPendingPositions = false
-      Log.data.info("Saved pending positions")
-    } catch {
-      Log.data.error("Failed to save positions: \(error)")
-    }
+    modelContext.safeSave(
+      onSuccess: {
+        self.hasPendingPositions = false
+        Log.data.info("Saved pending positions")
+      },
+      onFailure: { Log.data.error("Failed to save positions: \($0)") }
+    )
   }
 }

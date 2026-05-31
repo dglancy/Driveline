@@ -43,7 +43,7 @@ final class ExportRoutePNG: ExportingRoute {
     let mapSize = exportMapSizeFromSettings()
 
     let options = MKMapSnapshotter.Options()
-    options.region = boundingRegion(for: coordinates, mapSize: mapSize)
+    options.region = .fitting(coordinates, mapSize: mapSize)
     options.size = mapSize
     options.scale = UITraitCollection.current.displayScale
     if exportMapAlwaysUseLightAppearanceFromSettings() {
@@ -70,51 +70,6 @@ final class ExportRoutePNG: ExportingRoute {
   }
 
   // MARK: - Private functions
-
-  private func boundingRegion(for coordinates: [CLLocationCoordinate2D], mapSize: CGSize) -> MKCoordinateRegion {
-    guard let first = coordinates.first else { return .init() }
-
-    var minLat = first.latitude
-    var maxLat = first.latitude
-    var minLon = first.longitude
-    var maxLon = first.longitude
-
-    for coord in coordinates {
-      minLat = min(minLat, coord.latitude)
-      maxLat = max(maxLat, coord.latitude)
-      minLon = min(minLon, coord.longitude)
-      maxLon = max(maxLon, coord.longitude)
-    }
-
-    let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
-                                        longitude: (minLon + maxLon) / 2)
-
-    let minimumSpan: CLLocationDegrees = 0.005
-    let targetAspectRatio = mapSize.width / max(mapSize.height, 0.0001)
-    let paddingMultiplier: CLLocationDegrees = 1.5
-
-    let latitudeDelta = max(maxLat - minLat, minimumSpan) * paddingMultiplier
-    let longitudeDelta = max(maxLon - minLon, minimumSpan) * paddingMultiplier
-
-    let centerLatitudeRadians = center.latitude * .pi / 180
-    let normalizedLongitudeDelta = longitudeDelta * cos(centerLatitudeRadians)
-
-    var adjustedLongitudeDeltaNormalized = normalizedLongitudeDelta
-    var adjustedLatitudeDelta = latitudeDelta
-
-    if adjustedLongitudeDeltaNormalized / adjustedLatitudeDelta < targetAspectRatio {
-      adjustedLongitudeDeltaNormalized = adjustedLatitudeDelta * targetAspectRatio
-    } else {
-      adjustedLatitudeDelta = adjustedLongitudeDeltaNormalized / targetAspectRatio
-    }
-
-    let longitudeScale = max(cos(centerLatitudeRadians), 0.0001)
-    let adjustedLongitudeDelta = max(adjustedLongitudeDeltaNormalized / longitudeScale, minimumSpan)
-
-    let span = MKCoordinateSpan(latitudeDelta: max(adjustedLatitudeDelta, minimumSpan),
-                                longitudeDelta: adjustedLongitudeDelta)
-    return MKCoordinateRegion(center: center, span: span)
-  }
 
   private func renderSnapshotImage(_ snapshot: MKMapSnapshotter.Snapshot, coordinates: [CLLocationCoordinate2D]) -> UIImage {
     let image = snapshot.image
