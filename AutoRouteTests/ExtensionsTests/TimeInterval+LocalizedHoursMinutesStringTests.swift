@@ -118,33 +118,46 @@ struct TimeIntervalTests {
 
   // MARK: - elapsedTimeString
 
-  @Test("0 seconds returns '00:00'")
+  @Test("0 seconds returns '00:00' in en_GB")
   func testElapsedZeroSeconds() {
-    #expect(TimeInterval(0).elapsedTimeString() == "00:00")
+    let locale = Locale(identifier: "en_GB")
+    #expect(TimeInterval(0).elapsedTimeString(locale: locale) == "00:00")
   }
 
-  @Test("65 seconds returns '01:05'")
+  @Test("65 seconds returns '01:05' in en_GB")
   func testElapsed65Seconds() {
-    #expect(TimeInterval(65).elapsedTimeString() == "01:05")
+    let locale = Locale(identifier: "en_GB")
+    #expect(TimeInterval(65).elapsedTimeString(locale: locale) == "01:05")
   }
 
-  @Test("59 minutes 59 seconds returns '59:59'")
+  @Test("59 minutes 59 seconds returns '59:59' in en_GB")
   func testElapsed59MinutesWith59Seconds() {
-    #expect(TimeInterval(59 * 60 + 59).elapsedTimeString() == "59:59")
+    let locale = Locale(identifier: "en_GB")
+    #expect(TimeInterval(59 * 60 + 59).elapsedTimeString(locale: locale) == "59:59")
   }
 
-  @Test("exactly 1 hour returns '1:00:00'")
+  @Test("exactly 1 hour returns '1:00:00' in en_GB")
   func testElapsedExactlyOneHour() {
-    #expect(TimeInterval(3600).elapsedTimeString() == "1:00:00")
+    let locale = Locale(identifier: "en_GB")
+    #expect(TimeInterval(3600).elapsedTimeString(locale: locale) == "1:00:00")
   }
 
-  @Test("1 hour 1 minute 1 second returns '1:01:01'")
+  @Test("1 hour 1 minute 1 second returns '1:01:01' in en_GB")
   func testElapsedOneHourOneMinuteOneSecond() {
-    #expect(TimeInterval(3661).elapsedTimeString() == "1:01:01")
+    let locale = Locale(identifier: "en_GB")
+    #expect(TimeInterval(3661).elapsedTimeString(locale: locale) == "1:01:01")
   }
 
-  @Test("10 hours returns '10:00:00'")
+  @Test("10 hours returns '10:00:00' in en_GB")
   func testElapsedTenHours() {
-    #expect(TimeInterval(36000).elapsedTimeString() == "10:00:00")
+    let locale = Locale(identifier: "en_GB")
+    #expect(TimeInterval(36000).elapsedTimeString(locale: locale) == "10:00:00")
+  }
+
+  @Test("ar_EG locale uses Arabic-Indic digits")
+  func testElapsedArabicLocaleUsesLocalisedDigits() {
+    let locale = Locale(identifier: "ar_EG")
+    let result = TimeInterval(65).elapsedTimeString(locale: locale)
+    #expect(result == "٠١:٠٥")
   }
 }
