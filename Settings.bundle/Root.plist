@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Activity Type</string>
+			<key>Key</key>
+			<string>ActivityType</string>
+			<key>Titles</key>
+			<array>
+				<string>Automatic</string>
+				<string>Automotive</string>
+				<string>Fitness</string>
+				<string>Other</string>
+				<string>Flight</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>automatic</string>
+				<string>automotive</string>
+				<string>fitness</string>
+				<string>other</string>
+				<string>flight</string>
+			</array>
+			<key>DefaultValue</key>
+			<string>automotive</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Export Map Size</string>
+			<key>Key</key>
+			<string>ExportMapSize</string>
+			<key>Titles</key>
+			<array>
+				<string>Low (800×600)</string>
+				<string>Medium (1024×768)</string>
+				<string>High (1600×1200)</string>
+				<string>Full HD (1920×1080)</string>
+				<string>Highest (2400×1800)</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>low</string>
+				<string>medium</string>
+				<string>high1</string>
+				<string>high2</string>
+				<string>highest</string>
+			</array>
+			<key>DefaultValue</key>
+			<string>high2</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Always Use Light Map Appearance</string>
+			<key>Key</key>
+			<string>AlwaysUseLightMapAppearance</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Export Route Width</string>
+			<key>Key</key>
+			<string>RouteWidth</string>
+			<key>Titles</key>
+			<array>
+				<string>Thin</string>
+				<string>Medium</string>
+				<string>Thick</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>thin</string>
+				<string>medium</string>
+				<string>thick</string>
+			</array>
+			<key>DefaultValue</key>
+			<string>medium</string>
+		</dict>
+	</array>
+</dict>
+</plist>

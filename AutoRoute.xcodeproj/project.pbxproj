@@ -1,0 +1,721 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */; };
+		6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */; };
+		6DFE8AFF2FCC31D900DC88CB /* GPXKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFE8AFE2FCC31D900DC88CB /* GPXKit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6D47A5202FCAD20800E6C7B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
+			remoteInfo = AutoRoute;
+		};
+		6D47A52A2FCAD20800E6C7B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
+			remoteInfo = AutoRoute;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6D47A5102FCAD20600E6C7B7 /* AutoRoute.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoRoute.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D47A51F2FCAD20800E6C7B7 /* AutoRouteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoRouteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoRouteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		6D47A54F2FCAE68700E6C7B7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		6D47A5502FCAE68700E6C7B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6D47A58C2FCB0FCF00E6C7B7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppLifecycle/Constants.swift,
+			);
+			target = 6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */;
+		};
+		6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppLifecycle/Constants.swift,
+			);
+			target = 6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */;
+		};
+		6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRoute" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		6D47A5122FCAD20600E6C7B7 /* AutoRoute */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRoute" target */,
+				6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */,
+				6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteUITests" target */,
+			);
+			path = AutoRoute;
+			sourceTree = "<group>";
+		};
+		6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AutoRouteTests;
+			sourceTree = "<group>";
+		};
+		6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AutoRouteUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6D47A50D2FCAD20600E6C7B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */,
+				6DFE8AFF2FCC31D900DC88CB /* GPXKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D47A51C2FCAD20800E6C7B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D47A5262FCAD20800E6C7B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6D47A5072FCAD20600E6C7B7 = {
+			isa = PBXGroup;
+			children = (
+				6D47A58C2FCB0FCF00E6C7B7 /* .swiftlint.yml */,
+				6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */,
+				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
+				6D47A5502FCAE68700E6C7B7 /* README.md */,
+				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
+				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
+				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,
+				6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */,
+				6D47A59F2FCB2B1400E6C7B7 /* Frameworks */,
+				6D47A5112FCAD20600E6C7B7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6D47A5112FCAD20600E6C7B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6D47A5102FCAD20600E6C7B7 /* AutoRoute.app */,
+				6D47A51F2FCAD20800E6C7B7 /* AutoRouteTests.xctest */,
+				6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6D47A59F2FCB2B1400E6C7B7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6D47A50F2FCAD20600E6C7B7 /* AutoRoute */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D47A5332FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoute" */;
+			buildPhases = (
+				6D47A50C2FCAD20600E6C7B7 /* Sources */,
+				6D47A50D2FCAD20600E6C7B7 /* Frameworks */,
+				6D47A50E2FCAD20600E6C7B7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D47A5902FCB124300E6C7B7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
+			);
+			name = AutoRoute;
+			packageProductDependencies = (
+				6DFE8AFE2FCC31D900DC88CB /* GPXKit */,
+			);
+			productName = AutoRoute;
+			productReference = 6D47A5102FCAD20600E6C7B7 /* AutoRoute.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D47A5362FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteTests" */;
+			buildPhases = (
+				6D47A51B2FCAD20800E6C7B7 /* Sources */,
+				6D47A51C2FCAD20800E6C7B7 /* Frameworks */,
+				6D47A51D2FCAD20800E6C7B7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D47A5212FCAD20800E6C7B7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
+			);
+			name = AutoRouteTests;
+			packageProductDependencies = (
+			);
+			productName = AutoRouteTests;
+			productReference = 6D47A51F2FCAD20800E6C7B7 /* AutoRouteTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D47A5392FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteUITests" */;
+			buildPhases = (
+				6D47A5252FCAD20800E6C7B7 /* Sources */,
+				6D47A5262FCAD20800E6C7B7 /* Frameworks */,
+				6D47A5272FCAD20800E6C7B7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D47A52B2FCAD20800E6C7B7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,
+			);
+			name = AutoRouteUITests;
+			packageProductDependencies = (
+			);
+			productName = AutoRouteUITests;
+			productReference = 6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6D47A5082FCAD20600E6C7B7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					6D47A50F2FCAD20600E6C7B7 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					6D47A51E2FCAD20800E6C7B7 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 6D47A50F2FCAD20600E6C7B7;
+					};
+					6D47A5282FCAD20800E6C7B7 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 6D47A50F2FCAD20600E6C7B7;
+					};
+				};
+			};
+			buildConfigurationList = 6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "AutoRoute" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6D47A5072FCAD20600E6C7B7;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				6DFE8AFD2FCC31D900DC88CB /* XCRemoteSwiftPackageReference "GPXKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6D47A5112FCAD20600E6C7B7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6D47A50F2FCAD20600E6C7B7 /* AutoRoute */,
+				6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */,
+				6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6D47A50E2FCAD20600E6C7B7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D47A51D2FCAD20800E6C7B7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D47A5272FCAD20800E6C7B7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6D47A50C2FCAD20600E6C7B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D47A51B2FCAD20800E6C7B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D47A5252FCAD20800E6C7B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6D47A5212FCAD20800E6C7B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+			targetProxy = 6D47A5202FCAD20800E6C7B7 /* PBXContainerItemProxy */;
+		};
+		6D47A52B2FCAD20800E6C7B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+			targetProxy = 6D47A52A2FCAD20800E6C7B7 /* PBXContainerItemProxy */;
+		};
+		6D47A5902FCB124300E6C7B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 6D47A58F2FCB124300E6C7B7 /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6D47A5312FCAD20800E6C7B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		6D47A5322FCAD20800E6C7B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6D47A5342FCAD20800E6C7B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AutoRoute/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AutoRoute supports recording your drives even when the app is in the background";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AutoRoute requires your location to record your drives";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoute;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		6D47A5352FCAD20800E6C7B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AutoRoute/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AutoRoute supports recording your drives even when the app is in the background";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AutoRoute requires your location to record your drives";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoute;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		6D47A5372FCAD20800E6C7B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoRoute.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoRoute";
+			};
+			name = Debug;
+		};
+		6D47A5382FCAD20800E6C7B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoRoute.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoRoute";
+			};
+			name = Release;
+		};
+		6D47A53A2FCAD20800E6C7B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = AutoRoute;
+			};
+			name = Debug;
+		};
+		6D47A53B2FCAD20800E6C7B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = AutoRoute;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "AutoRoute" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D47A5312FCAD20800E6C7B7 /* Debug */,
+				6D47A5322FCAD20800E6C7B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D47A5332FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoute" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D47A5342FCAD20800E6C7B7 /* Debug */,
+				6D47A5352FCAD20800E6C7B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D47A5362FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D47A5372FCAD20800E6C7B7 /* Debug */,
+				6D47A5382FCAD20800E6C7B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D47A5392FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D47A53A2FCAD20800E6C7B7 /* Debug */,
+				6D47A53B2FCAD20800E6C7B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.63.3;
+			};
+		};
+		6DFE8AFD2FCC31D900DC88CB /* XCRemoteSwiftPackageReference "GPXKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://codeberg.org/mmllr/GPXKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6D47A58F2FCB124300E6C7B7 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		6DFE8AFE2FCC31D900DC88CB /* GPXKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DFE8AFD2FCC31D900DC88CB /* XCRemoteSwiftPackageReference "GPXKit" */;
+			productName = GPXKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 6D47A5082FCAD20600E6C7B7 /* Project object */;
+}
