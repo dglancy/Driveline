@@ -93,12 +93,6 @@ final class Route {
     positions.compactMap { $0.speed >= 0 ? $0.speed : nil }.max() ?? 0
   }
 
-  var startTimeLabel: String {
-    let datePart = startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = startedAt.formatted(.dateTime.hour().minute())
-    return "\(datePart) · \(timePart)"
-  }
-
   // MARK: - Lifecycle
 
   init(name: String, trigger: RecordingTrigger = .manual) {

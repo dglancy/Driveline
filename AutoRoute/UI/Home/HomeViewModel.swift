@@ -154,7 +154,7 @@ final class HomeViewModel {
     let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
     return RouteRowDisplay(
       name: route.name,
-      dateTimeLabel: route.startTimeLabel,
+      dateTimeLabel: RouteStatsPresenter(route: route).startTimeLabel,
       formattedDistance: "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())",
       formattedDuration: duration
     )

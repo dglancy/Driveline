@@ -26,4 +26,10 @@ struct RouteStatsPresenter {
   var durationValue: String { route.activeDurationSeconds.localizedHoursMinutesString() }
   var avgSpeedValue: String { route.avgSpeedMetresPerSecond.localizedSpeedValueString() }
   var avgSpeedUnit: String { route.avgSpeedMetresPerSecond.localizedSpeedUnitSymbol() }
+
+  var startTimeLabel: String {
+    let datePart = route.startedAt.formatted(.dateTime.month(.abbreviated).day())
+    let timePart = route.startedAt.formatted(.dateTime.hour().minute())
+    return "\(datePart) · \(timePart)"
+  }
 }
