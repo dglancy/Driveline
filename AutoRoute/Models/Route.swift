@@ -65,6 +65,19 @@ final class Route {
     (endedAt ?? .now).timeIntervalSince(startedAt)
   }
 
+  var avgSpeedMetresPerSecond: CLLocationSpeed {
+    guard activeDurationSeconds > 0 else { return 0 }
+    return distanceMetres / activeDurationSeconds
+  }
+
+  var maxSpeedMetresPerSecond: CLLocationSpeed {
+    positions.compactMap { $0.speed >= 0 ? $0.speed : nil }.max() ?? 0
+  }
+
+  var estimatedGPXFileSizeKB: Int {
+    max(1, positions.count * 180 / 1024)
+  }
+
   // MARK: - Lifecycle
 
   init(name: String, trigger: RecordingTrigger = .manual) {
@@ -97,7 +110,7 @@ enum RecordingTrigger: String, Codable {
     case .bluetooth:
       String(localized: "Bluetooth", comment: "Recording trigger: started via Bluetooth")
     case .manual:
-      String(localized: "Started manually", comment: "Recording trigger: started manually by the user")
+      String(localized: "Manually", comment: "Recording trigger: started manually by the user")
     }
   }
 }
