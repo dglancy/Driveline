@@ -25,7 +25,7 @@ struct AutoRouteApp: App {
     Log.lifecycle.info("App starting")
     let isUITesting = Self.isUITesting()
 
-    let modelContainer = Self.createModelContainer(isUITesting: isUITesting)
+    let modelContainer = Self.createModelContainer(inMemoryOnly: isUITesting)
     let locationService = Self.setupLocationService()
     let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService,
                                                                      modelContext: modelContainer.mainContext)
@@ -66,14 +66,14 @@ struct AutoRouteApp: App {
 
   // MARK: - Factories
 
-  private static func createModelContainer(isUITesting: Bool) -> ModelContainer {
+  private static func createModelContainer(inMemoryOnly: Bool) -> ModelContainer {
     Log.lifecycle.info("Setting up data model and container")
     let schema = Schema([
       Route.self,
       Position.self
     ])
 
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isUITesting)
+    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemoryOnly)
 
     do {
       return try ModelContainer(for: schema, configurations: [modelConfiguration])
