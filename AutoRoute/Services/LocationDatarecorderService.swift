@@ -22,14 +22,18 @@ final class LocationDataRecorderService {
 
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let modelContext: ModelContext
+  @ObservationIgnored private let saveInterval: TimeInterval
   @ObservationIgnored private var locationCancellable: AnyCancellable?
+  @ObservationIgnored private var saveCancellable: AnyCancellable?
+  @ObservationIgnored private var hasPendingPositions = false
   private(set) var route: Route?
 
   // MARK: - Lifecycle
 
-  init(locationService: LocationService, modelContext: ModelContext) {
+  init(locationService: LocationService, modelContext: ModelContext, saveInterval: TimeInterval = 30) {
     self.locationService = locationService
     self.modelContext = modelContext
+    self.saveInterval = saveInterval
   }
 
   // MARK: - Actions
@@ -55,12 +59,18 @@ final class LocationDataRecorderService {
         self?.persist(location)
       }
 
+    saveCancellable = Timer.publish(every: saveInterval, on: .main, in: .common)
+      .autoconnect()
+      .sink { [weak self] _ in self?.saveIfNeeded() }
+
     Log.data.info("Started recording locations")
   }
 
   func stopRecording() {
     Log.data.info("Stopping recording locations")
     locationCancellable = nil
+    saveCancellable = nil
+    saveIfNeeded()
     self.route = nil
     Log.data.info("Stopped recording locations")
   }
@@ -86,12 +96,18 @@ final class LocationDataRecorderService {
     )
 
     route.positions.append(position)
+    hasPendingPositions = true
+    Log.data.info("Queued new location: \(position.latitude), \(position.longitude)")
+  }
 
+  private func saveIfNeeded() {
+    guard hasPendingPositions else { return }
     do {
       try modelContext.save()
-      Log.data.info("Saved a new location as a position: \(position.latitude), \(position.longitude)")
+      hasPendingPositions = false
+      Log.data.info("Saved pending positions")
     } catch {
-      Log.data.error("Failed to save position: \(error)")
+      Log.data.error("Failed to save positions: \(error)")
     }
   }
 }
