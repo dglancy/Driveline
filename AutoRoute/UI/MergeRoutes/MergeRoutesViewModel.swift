@@ -8,8 +8,8 @@
 import Foundation
 import Observation
 
-@Observable
 @MainActor
+@Observable
 final class MergeRoutesViewModel {
 
   // MARK: - Types
