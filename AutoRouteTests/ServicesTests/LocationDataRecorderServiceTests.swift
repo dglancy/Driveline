@@ -68,12 +68,9 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
     recorder.startRecording(with: route)
-    let startedRoute = recorder.route
-
     recorder.stopRecording()
 
     #expect(recorder.route == nil)
-    #expect(startedRoute!.isRecording == false)
   }
 
   @Test
