@@ -29,9 +29,11 @@ struct AutoRouteApp: App {
     let locationService = Self.setupLocationService()
     let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService,
                                                                      modelContext: modelContainer.mainContext)
+    let networkMonitorService = NetworkMonitorService()
     let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext,
                                               locationService: locationService,
-                                              locationDataRecorder: locationDataRecorder)
+                                              locationDataRecorder: locationDataRecorder,
+                                              networkMonitorService: networkMonitorService)
 
     self.modelContainer = modelContainer
     _routeService = State(initialValue: routeService)
@@ -53,7 +55,10 @@ struct AutoRouteApp: App {
         .environment(routeService)
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }
-          Task { await routeService.checkAndAutoFinishIfTimedOut() }
+          Task {
+            await routeService.checkAndAutoFinishIfTimedOut()
+            await routeService.checkAndRetryNilPlaceNamesForFinishedRoutes()
+          }
         }
     }
     .modelContainer(modelContainer)
@@ -93,14 +98,17 @@ struct AutoRouteApp: App {
   private static func setupRouteService(
     modelContext: ModelContext,
     locationService: LocationService,
-    locationDataRecorder: LocationDataRecorderService
+    locationDataRecorder: LocationDataRecorderService,
+    networkMonitorService: NetworkMonitorService
   ) -> RouteService {
     Log.lifecycle.info("Setting up route service")
     var descriptor = FetchDescriptor<Route>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
     descriptor.fetchLimit = 1
     let activeRoute = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
     return RouteService(modelContext: modelContext, locationService: locationService,
-                        locationDataRecorder: locationDataRecorder, initialRoute: activeRoute)
+                        locationDataRecorder: locationDataRecorder,
+                        networkMonitorService: networkMonitorService,
+                        initialRoute: activeRoute)
   }
 
   // MARK: - Background Tasks

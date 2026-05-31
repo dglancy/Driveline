@@ -32,8 +32,10 @@ final class RouteService {
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
   @ObservationIgnored private let geocodingService: GeocodingService
+  @ObservationIgnored private let networkMonitorService: NetworkMonitorService
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
+  @ObservationIgnored private var networkCancellable: AnyCancellable?
 
   // MARK: - Lifecycle
 
@@ -41,12 +43,22 @@ final class RouteService {
        locationService: LocationService,
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: GeocodingService = GeocodingService(),
+       networkMonitorService: NetworkMonitorService = NetworkMonitorService(),
        initialRoute: Route? = nil) {
     self.modelContext = modelContext
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
+    self.networkMonitorService = networkMonitorService
     self.route = initialRoute
+
+    networkCancellable = networkMonitorService.connectivityRestoredPublisher
+      .sink { [weak self] in
+        Task { [weak self] in
+          guard let self else { return }
+          await self.retryNilPlaceNamesOnConnectivity()
+        }
+      }
   }
 
   // MARK: - Actions
@@ -129,7 +141,41 @@ final class RouteService {
     locationDataRecorder.stopRecording()
   }
 
+  func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
+    guard networkMonitorService.isConnected else { return }
+    let cutoff = Date().addingTimeInterval(-86400)
+    let descriptor = FetchDescriptor<Route>(
+      predicate: #Predicate<Route> { $0.startedAt >= cutoff }
+    )
+    guard let candidates = try? modelContext.fetch(descriptor) else { return }
+    let needsRetry = candidates.filter {
+      $0.status == .finished && ($0.startPlaceName == nil || $0.endPlaceName == nil)
+    }
+    guard !needsRetry.isEmpty else { return }
+    for finishedRoute in needsRetry {
+      if finishedRoute.startPlaceName == nil, let first = finishedRoute.orderedPositions.first {
+        let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
+        finishedRoute.startPlaceName = await geocodingService.reverseGeocode(location: location)
+      }
+      if finishedRoute.endPlaceName == nil, let last = finishedRoute.orderedPositions.last {
+        let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
+        finishedRoute.endPlaceName = await geocodingService.reverseGeocode(location: location)
+      }
+      saveModelContext()
+    }
+  }
+
   // MARK: - Private
+
+  private func retryNilPlaceNamesOnConnectivity() async {
+    if let activeRoute = route, activeRoute.startPlaceName == nil,
+       let first = activeRoute.orderedPositions.first {
+      let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
+      activeRoute.startPlaceName = await geocodingService.reverseGeocode(location: location)
+      saveModelContext()
+    }
+    await checkAndRetryNilPlaceNamesForFinishedRoutes()
+  }
 
   private func schedulePauseTimeout() {
     let request = BGAppRefreshTaskRequest(identifier: Self.pauseTimeoutTaskIdentifier)
