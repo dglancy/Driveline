@@ -15,6 +15,7 @@ final class RouteDetailViewModel {
   // MARK: - Properties
 
   var showingShareSheet = false
+  var showingFullScreenMap = false
 
   @ObservationIgnored let route: Route
 

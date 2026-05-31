@@ -31,8 +31,8 @@ struct RouteDetailMapView: View {
     }
     let lats = coordinates.map(\.latitude)
     let lons = coordinates.map(\.longitude)
-    let minLat = lats.min()!, maxLat = lats.max()!
-    let minLon = lons.min()!, maxLon = lons.max()!
+    guard let minLat = lats.min(), let maxLat = lats.max(),
+          let minLon = lons.min(), let maxLon = lons.max() else { return .automatic }
     let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2, longitude: (minLon + maxLon) / 2)
     let latDelta = max((maxLat - minLat) * 1.5, 0.005)
     let lonDelta = max((maxLon - minLon) * 1.5, 0.005)
@@ -56,7 +56,7 @@ struct RouteDetailMapView: View {
 
       if let end = coordinates.last, coordinates.count > 1 {
         Annotation("", coordinate: end, anchor: .bottom) {
-          Image(systemName: "mappin.circle.fill")
+          Image(systemName: "flag.pattern.checkered.circle.fill")
             .font(.system(size: 28))
             .foregroundStyle(.red, Color(.systemBackground))
             .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
