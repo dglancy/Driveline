@@ -47,6 +47,20 @@ final class HomeViewModel {
   var canMerge: Bool { selectedRouteIDs.count == 2 }
   var canDelete: Bool { !selectedRouteIDs.isEmpty }
 
+  var deleteConfirmationMessage: String {
+    if selectedRouteIDs.count == 1 {
+      return String(
+        localized: "This route and all its data will be permanently deleted.",
+        comment: "Delete single route confirmation message"
+      )
+    } else {
+      return String(
+        localized: "These \(selectedRouteIDs.count) routes and all their data will be permanently deleted.",
+        comment: "Delete multiple routes confirmation message"
+      )
+    }
+  }
+
   var selectionCountText: String {
     if selectedRouteIDs.isEmpty {
       return String(localized: "Select 2 routes to merge", comment: "Multiselect placeholder when nothing is selected")

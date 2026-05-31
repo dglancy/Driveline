@@ -57,14 +57,7 @@ struct HomeView: View {
       }
       Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
     } message: {
-      let count = viewModel.selectedRouteIDs.count
-      if count == 1 {
-        Text(String(localized: "This route and all its data will be permanently deleted.",
-                    comment: "Delete single route confirmation message"))
-      } else {
-        Text(String(localized: "These \(count) routes and all their data will be permanently deleted.",
-                    comment: "Delete multiple routes confirmation message"))
-      }
+      Text(viewModel.deleteConfirmationMessage)
     }
     .sheet(isPresented: $showingMergeSheet) {
       if routesToMerge.count == 2 {
