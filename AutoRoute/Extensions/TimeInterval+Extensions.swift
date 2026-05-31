@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension TimeInterval {
+extension TimeInterval {
   func localizedHoursMinutesString(locale: Locale = .current) -> String {
     let formatter = DateComponentsFormatter()
     if self < 3600 {
