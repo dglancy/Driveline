@@ -35,6 +35,7 @@ final class RouteService {
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
+  @ObservationIgnored private var pauseTimeoutTimer: Timer?
 
   // MARK: - Lifecycle
 
@@ -177,11 +178,23 @@ final class RouteService {
   private func schedulePauseTimeout() {
     let request = BGAppRefreshTaskRequest(identifier: Self.pauseTimeoutTaskIdentifier)
     request.earliestBeginDate = Date().addingTimeInterval(kPauseTimeoutInterval)
-    try? BGTaskScheduler.shared.submit(request)
+    do {
+      try BGTaskScheduler.shared.submit(request)
+    } catch {
+      Log.lifecycle.error("Failed to schedule pause timeout background task: \(error)")
+    }
+
+    pauseTimeoutTimer = Timer.scheduledTimer(withTimeInterval: kPauseTimeoutInterval, repeats: false) { [weak self] _ in
+      Task { @MainActor [weak self] in
+        self?.checkAndAutoFinishIfTimedOut()
+      }
+    }
   }
 
   private func cancelPauseTimeout() {
     BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.pauseTimeoutTaskIdentifier)
+    pauseTimeoutTimer?.invalidate()
+    pauseTimeoutTimer = nil
   }
 
   private func routeNameForCurrentTime() -> String {
