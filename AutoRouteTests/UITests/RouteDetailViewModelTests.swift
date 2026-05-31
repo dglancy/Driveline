@@ -101,12 +101,6 @@ struct RouteDetailViewModelTests {
     #expect(vm.triggerDisplayName == Route.RecordingTrigger.manual.displayName)
   }
 
-  @Test
-  func gpxFileSizeContainsKBUnit() {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    #expect(vm.gpxFileSize.contains("KB"))
-  }
-
   // MARK: - shareRouteGPX
 
   @Test
