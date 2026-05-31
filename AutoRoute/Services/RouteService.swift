@@ -47,8 +47,8 @@ final class RouteService {
 
   // MARK: - Actions
 
-  func startRoute() {
-    let route = Route(name: routeNameForCurrentTime())
+  func startRoute(trigger: Route.RecordingTrigger = .manual) {
+    let route = Route(name: routeNameForCurrentTime(), trigger: trigger)
     self.route = route
     currentSpeedMs = nil
 

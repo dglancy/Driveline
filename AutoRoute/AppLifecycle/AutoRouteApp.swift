@@ -34,6 +34,8 @@ struct AutoRouteApp: App {
     self.modelContainer = modelContainer
     _routeService = State(initialValue: routeService)
 
+    Self.registerIntentDependencies(routeService: routeService)
+
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
     }
@@ -88,6 +90,15 @@ struct AutoRouteApp: App {
   ) -> RouteService {
     Log.lifecycle.info("Setting up route service")
     return RouteService(modelContext: modelContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
+  }
+
+  // MARK: - App Intents
+
+  private static func registerIntentDependencies(
+    routeService: RouteService
+  ) {
+    Log.lifecycle.info("Registering dependencies for App Intents")
+    IntentDependencyResolver.provider = { routeService }
   }
 
   // MARK: - Private functions

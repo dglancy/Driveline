@@ -67,7 +67,7 @@ struct StartOrResumeRouteIntent: AppIntent {
     if isPaused {
       await routeService.resumeRoute()
     } else if !isRecording {
-      await routeService.startRoute()
+      await routeService.startRoute(trigger: .bluetooth)
     }
     return .result()
   }
