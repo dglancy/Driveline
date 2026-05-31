@@ -93,7 +93,7 @@ final class PositionTests: SwiftDataBaseTestCase {
 
   @Test
   func associatesWithRoute() throws {
-    let route = Route(name: "Evening Drive", trigger: .bluetooth)
+    let route = Route(name: "Evening Drive", trigger: .automatic)
     context!.insert(route)
 
     let position = Position(
