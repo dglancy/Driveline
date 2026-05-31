@@ -19,3 +19,6 @@ identifier_name:
 large_tuple:
   warning: 10
   error: 30
+
+disabled_rules:
+  - file_length
