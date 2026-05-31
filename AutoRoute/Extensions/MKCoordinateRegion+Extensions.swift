@@ -12,9 +12,9 @@ extension MKCoordinateRegion {
 
   static func fitting(
     _ coordinates: [CLLocationCoordinate2D],
-    mapSize: CGSize,
     paddingMultiplier: CLLocationDegrees = 1.5,
-    minimumSpan: CLLocationDegrees = 0.005
+    minimumSpan: CLLocationDegrees = 0.005,
+    aspectRatio: CGFloat? = nil
   ) -> MKCoordinateRegion {
     guard let first = coordinates.first else { return .init() }
 
@@ -33,7 +33,7 @@ extension MKCoordinateRegion {
     let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
                                         longitude: (minLon + maxLon) / 2)
     let centerLatitudeRadians = center.latitude * .pi / 180
-    let targetAspectRatio = mapSize.width / max(mapSize.height, 0.0001)
+    let longitudeScale = max(cos(centerLatitudeRadians), 0.0001)
 
     let latitudeDelta = max(maxLat - minLat, minimumSpan) * paddingMultiplier
     let longitudeDelta = max(maxLon - minLon, minimumSpan) * paddingMultiplier
@@ -42,15 +42,15 @@ extension MKCoordinateRegion {
     var adjustedLonNormalized = normalizedLongitudeDelta
     var adjustedLat = latitudeDelta
 
-    if adjustedLonNormalized / adjustedLat < targetAspectRatio {
-      adjustedLonNormalized = adjustedLat * targetAspectRatio
-    } else {
-      adjustedLat = adjustedLonNormalized / targetAspectRatio
+    if let aspectRatio {
+      if adjustedLonNormalized / adjustedLat < aspectRatio {
+        adjustedLonNormalized = adjustedLat * aspectRatio
+      } else {
+        adjustedLat = adjustedLonNormalized / aspectRatio
+      }
     }
 
-    let longitudeScale = max(cos(centerLatitudeRadians), 0.0001)
     let adjustedLon = max(adjustedLonNormalized / longitudeScale, minimumSpan)
-
     let span = MKCoordinateSpan(latitudeDelta: max(adjustedLat, minimumSpan),
                                 longitudeDelta: adjustedLon)
     return MKCoordinateRegion(center: center, span: span)

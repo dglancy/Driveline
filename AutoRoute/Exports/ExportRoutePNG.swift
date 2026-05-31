@@ -43,7 +43,7 @@ final class ExportRoutePNG: ExportingRoute {
     let mapSize = exportMapSizeFromSettings()
 
     let options = MKMapSnapshotter.Options()
-    options.region = .fitting(coordinates, mapSize: mapSize)
+    options.region = .fitting(coordinates, aspectRatio: mapSize.width / max(mapSize.height, 0.0001))
     options.size = mapSize
     options.scale = UITraitCollection.current.displayScale
     if exportMapAlwaysUseLightAppearanceFromSettings() {
