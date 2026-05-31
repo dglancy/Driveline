@@ -1,3 +1,5 @@
+![Hero image](https://github.com/dglancy/AutoRoute/blob/dg/dev/hero.png)
+
 # AutoRoute
 
 A lightweight iOS app that records your drives in the background and saves them as GPX files. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
