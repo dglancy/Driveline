@@ -29,9 +29,9 @@ final class Route {
     var displayName: String {
       switch self {
       case .automatic:
-        String(localized: "Started automatically", comment: "Recording trigger: started automatically by automation")
+        String(localized: "Automatically", comment: "Recording trigger: started automatically by automation")
       case .manual:
-        String(localized: "Started manually", comment: "Recording trigger: started manually by the user")
+        String(localized: "Manually", comment: "Recording trigger: started manually by the user")
       }
     }
   }

@@ -83,31 +83,6 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     #expect(vm.pauseResumeLabel == "Resume")
   }
 
-  // MARK: - triggerIconName
-
-  @Test
-  func triggerIconNameIsBluetoothForAutomaticTrigger() {
-    let (service, _) = makeService()
-    service.startRoute()
-    service.route?.trigger = .automatic
-    let vm = RecordingViewModel(routeService: service)
-    #expect(vm.triggerIconName == "autostartstop")
-  }
-
-  @Test
-  func triggerIconNameIsHandTapForManualTrigger() {
-    let vm = makeViewModel()
-    #expect(vm.triggerIconName == "hand.tap")
-  }
-
-  // MARK: - triggerDisplayName
-
-  @Test
-  func triggerDisplayNameMatchesRouteDisplayName() {
-    let vm = makeViewModel()
-    #expect(vm.triggerDisplayName == Route.RecordingTrigger.manual.displayName)
-  }
-
   // MARK: - positionCount
 
   @Test

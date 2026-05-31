@@ -35,7 +35,7 @@ struct RecordingView: View {
       heroSection
       Spacer()
       batteryNote
-      triggerLine
+      Spacer()
       controlButtons
     }
   }
@@ -144,18 +144,6 @@ struct RecordingView: View {
     .clipShape(RoundedRectangle(cornerRadius: 14))
     .padding(.horizontal, 20)
     .padding(.bottom, 18)
-  }
-
-  private var triggerLine: some View {
-    HStack(spacing: 6) {
-      Image(systemName: viewModel.triggerIconName)
-        .font(.system(size: 14))
-        .foregroundStyle(Color(.tertiaryLabel))
-      Text(viewModel.triggerDisplayName)
-        .font(.system(size: 13))
-        .foregroundStyle(Color(.tertiaryLabel))
-    }
-    .padding(.bottom, 16)
   }
 
   private var controlButtons: some View {
