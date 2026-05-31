@@ -31,7 +31,7 @@ final class RouteService {
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
-  @ObservationIgnored private let geocodingService: GeocodingService
+  @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let networkMonitorService: NetworkMonitorService
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
@@ -42,7 +42,7 @@ final class RouteService {
   init(modelContext: ModelContext,
        locationService: LocationService,
        locationDataRecorder: LocationDataRecorderService,
-       geocodingService: GeocodingService = GeocodingService(),
+       geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        networkMonitorService: NetworkMonitorService = NetworkMonitorService(),
        initialRoute: Route? = nil) {
     self.modelContext = modelContext
@@ -77,12 +77,11 @@ final class RouteService {
       }
 
     startGeocodeCancellable = locationService.locationPublisher
-      .prefix(1)
+      .first(where: { $0.horizontalAccuracy >= 0 && $0.horizontalAccuracy < kMinimumLocationAccuracyForGeocoding })
       .sink { [weak self] location in
-        guard let self else { return }
         Task { [weak self] in
-          guard let self else { return }
-          self.route?.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
+          guard let self, let route = self.route else { return }
+          route.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
           self.saveModelContext()
         }
       }
