@@ -74,7 +74,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
 
     service.startRoute()
     let startedRoute = service.route!
-    await service.endRoute()
+    service.endRoute()
 
     #expect(locationService.status == .stopped)
     #expect(startedRoute.isRecording == false)
@@ -90,7 +90,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = makeServices()
 
     service.startRoute()
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.isRecording == false)
   }
@@ -101,7 +101,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
 
     service.startRoute()
     service.pauseRoute()
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.isPaused == false)
   }
@@ -113,7 +113,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     service.startRoute()
     service.pauseRoute()
     let route = service.route!
-    await service.endRoute()
+    service.endRoute()
 
     #expect(route.isPaused == false)
   }
@@ -129,7 +129,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -138,7 +138,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteWithNoActiveRouteDoesNothing() async throws {
     let (service, _, _) = makeServices()
 
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.route == nil)
   }
@@ -294,7 +294,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -361,7 +361,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func checkAndAutoFinishIfTimedOutDoesNothingWithNoRoute() async throws {
     let (service, _, _) = makeServices()
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.route == nil)
     #expect(service.isRecording == false)
@@ -372,7 +372,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = makeServices()
     service.startRoute()
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.isRecording == true)
     #expect(service.isPaused == false)
@@ -384,7 +384,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     service.startRoute()
     service.pauseRoute()
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.isPaused == true)
     #expect(service.isRecording == true)
@@ -397,7 +397,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     service.pauseRoute()
     service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.isRecording == false)
     #expect(service.route == nil)
@@ -410,7 +410,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     service.pauseRoute()
     service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     let routes = try context!.fetch(FetchDescriptor<Route>())
     #expect(routes.count == 1)

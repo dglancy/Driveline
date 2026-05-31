@@ -87,7 +87,7 @@ final class RouteService {
       }
   }
 
-  func endRoute() async {
+  func endRoute() {
     cancelPauseTimeout()
     speedCancellable = nil
     startGeocodeCancellable = nil
@@ -97,13 +97,16 @@ final class RouteService {
       route.endedAt = Date()
       route.status = .finished
       locationDataRecorder.stopRecording()
+      saveModelContext()
 
       if let last = route.orderedPositions.last {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        route.endPlaceName = await geocodingService.reverseGeocode(location: location)
+        Task { [weak self] in
+          guard let self else { return }
+          route.endPlaceName = await geocodingService.reverseGeocode(location: location)
+          saveModelContext()
+        }
       }
-
-      saveModelContext()
     }
 
     currentSpeedMs = nil
@@ -127,11 +130,11 @@ final class RouteService {
     locationService.resume()
   }
 
-  func checkAndAutoFinishIfTimedOut() async {
+  func checkAndAutoFinishIfTimedOut() {
     guard isPaused,
           let pauseStartedAt = route?.pauseStartedAt,
           Date().timeIntervalSince(pauseStartedAt) >= Self.pauseTimeoutInterval else { return }
-    await endRoute()
+    endRoute()
   }
 
   func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
