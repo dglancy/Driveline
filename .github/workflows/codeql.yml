@@ -29,7 +29,7 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_26.5.app
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: swift
 
@@ -42,6 +42,6 @@ jobs:
             -skipPackagePluginValidation
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:swift"
