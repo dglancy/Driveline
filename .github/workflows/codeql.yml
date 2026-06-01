@@ -40,8 +40,8 @@ jobs:
       - name: Build
         run: |
           xcodebuild build \
-            -project AutoRoute.xcodeproj \
-            -scheme AutoRoute \
+            -project AutoRoutes.xcodeproj \
+            -scheme AutoRoutes \
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
             -derivedDataPath .build/DerivedData \
             -skipPackagePluginValidation

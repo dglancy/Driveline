@@ -34,10 +34,10 @@ jobs:
         run: |
           rm -rf TestResults.xcresult
           xcodebuild test \
-            -project AutoRoute.xcodeproj \
-            -scheme AutoRoute \
+            -project AutoRoutes.xcodeproj \
+            -scheme AutoRoutes \
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
-            -testPlan AutoRoute \
+            -testPlan AutoRoutes \
             -skipPackagePluginValidation \
             -resultBundlePath TestResults.xcresult \
             | xcpretty

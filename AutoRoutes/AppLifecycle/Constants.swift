@@ -10,9 +10,9 @@ import CoreLocation
 
 // MARK: - App
 
-let kAppName = "AutoRoute"
-let kAppBundleId = "com.targatrips.AutoRoute"
-let kGPXCreator = "AutoRoute for iOS"
+let kAppName = "AutoRoutes"
+let kAppBundleId = "com.targatrips.AutoRoutes"
+let kGPXCreator = "AutoRoutes for iOS"
 
 // MARK: - Configuration
 
