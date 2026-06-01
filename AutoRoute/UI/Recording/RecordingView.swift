@@ -137,7 +137,9 @@ struct RecordingView: View {
     HStack(spacing: 0) {
       StatColumn(value: viewModel.speedValue, label: viewModel.speedUnit)
       Divider().frame(height: 36)
-      StatColumn(value: viewModel.formattedPositionCount, label: String(localized: "logged", comment: "Label for the count of GPS positions logged during a drive"))
+      StatColumn(value: viewModel.formattedPositionCount,
+                 label: String(localized: "logged",
+                               comment: "Label for the count of GPS positions logged during a drive"))
       Divider().frame(height: 36)
       StatColumn(value: viewModel.startedAt, label: String(localized: "started", comment: "Label for the time the drive started"))
     }

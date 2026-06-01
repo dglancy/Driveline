@@ -181,7 +181,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   private func makeService() -> (RouteService, LocationService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     return (service, locationService)
   }
 

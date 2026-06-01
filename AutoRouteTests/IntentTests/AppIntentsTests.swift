@@ -24,7 +24,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     try await super.init()
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    routeService = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder)
+    routeService = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     IntentDependencyResolver.provider = { [weak self] in
       self?.routeService
     }
