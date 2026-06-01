@@ -39,6 +39,7 @@
 		6D47A58C2FCB0FCF00E6C7B7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		6D8311D02FCD89F90036D01E /* AutoRoute.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AutoRoute.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -128,6 +129,7 @@
 				6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */,
 				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
 				6D47A5502FCAE68700E6C7B7 /* README.md */,
+				6D8311D02FCD89F90036D01E /* AutoRoute.xctestplan */,
 				6D8311CF2FCD81C40036D01E /* workflows */,
 				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
 				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,

@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "BF240DD6-69DD-4E7C-A6FC-EFDC91037323",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AutoRoute.xcodeproj",
+      "identifier" : "6D47A50F2FCAD20600E6C7B7",
+      "name" : "AutoRoute"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AutoRoute.xcodeproj",
+        "identifier" : "6D47A51E2FCAD20800E6C7B7",
+        "name" : "AutoRouteTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AutoRoute.xcodeproj",
+        "identifier" : "6D47A5282FCAD20800E6C7B7",
+        "name" : "AutoRouteUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
