@@ -33,7 +33,7 @@ struct UserPreferences {
   var exportMapSize: CGSize {
     let rawValue = defaults.string(forKey: Keys.exportMapSize) ?? "high2"
     Log.settings.info("Export map size set to \"\(rawValue)\" from user settings")
-    return MapSize.size(for: rawValue)
+    return (MapSize(from: rawValue) ?? .high2).size
   }
 
   var alwaysUseLightMapAppearance: Bool {

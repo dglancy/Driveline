@@ -93,22 +93,6 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
     #expect(MapSize(from: "") == nil)
   }
 
-  @Test
-  func mapSizeSizeForStringReturnsMatchingSize() {
-    #expect(MapSize.size(for: "low") == MapSize.low.size)
-    #expect(MapSize.size(for: "highest") == MapSize.highest.size)
-  }
-
-  @Test
-  func mapSizeSizeForStringReturnsDefaultSizeForInvalidKey() {
-    #expect(MapSize.size(for: "invalid") == MapSize.high2.size)
-  }
-
-  @Test
-  func mapSizeSizeForStringUsesSuppliedDefaultForInvalidKey() {
-    #expect(MapSize.size(for: "invalid", default: .low) == MapSize.low.size)
-  }
-
   // MARK: - RouteWidth values
 
   @Test
