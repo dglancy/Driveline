@@ -267,8 +267,7 @@ private struct StatColumn: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let route = Route(name: "Morning Drive", trigger: .automatic)
