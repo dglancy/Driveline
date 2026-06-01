@@ -179,7 +179,7 @@ final class ExportRoutePNG: ExportingRoute {
   }
 
   private func takeSnapshot(with options: MKMapSnapshotter.Options, route: Route) async throws -> MKMapSnapshotter.Snapshot {
-    try await withCheckedThrowingContinuation { continuation in
+    let box: SnapshotBox = try await withCheckedThrowingContinuation { continuation in
       MKMapSnapshotter(options: options).start { snapshot, error in
         if let error {
           Log.ui.error("Failed to create PNG snapshot for route: \(route.startedAt) — error: \(error.localizedDescription)")
@@ -192,9 +192,10 @@ final class ExportRoutePNG: ExportingRoute {
           return
         }
 
-        continuation.resume(returning: snapshot)
+        continuation.resume(returning: SnapshotBox(snapshot))
       }
     }
+    return box.snapshot
   }
 
 }
@@ -246,6 +247,9 @@ enum RouteWidth: String {
   }
 }
 
-// MARK: - MKMapSnapshotter.Snapshot extension
+// MARK: - SnapshotBox
 
-extension MKMapSnapshotter.Snapshot: @unchecked @retroactive Sendable {}
+private final class SnapshotBox: @unchecked Sendable {
+  let snapshot: MKMapSnapshotter.Snapshot
+  init(_ snapshot: MKMapSnapshotter.Snapshot) { self.snapshot = snapshot }
+}
