@@ -15,13 +15,6 @@ final class HomeViewModel {
 
   // MARK: - Types
 
-  struct RouteRowDisplay {
-    let name: String
-    let dateTimeLabel: String
-    let formattedDistance: String
-    let formattedDuration: String?
-  }
-
   struct RouteRow: Identifiable {
     let route: Route
     let display: RouteRowDisplay

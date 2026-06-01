@@ -116,7 +116,7 @@ struct HomeView: View {
                 Button {
                   viewModel.toggleSelection(for: row.route.id)
                 } label: {
-                  RouteRowView(display: row.display, isSelected: viewModel.selectedRouteIDs.contains(row.route.id))
+                  RouteRowView(display: row.display, style: .list(isSelected: viewModel.selectedRouteIDs.contains(row.route.id)))
                 }
                 .buttonStyle(.plain)
               } else {

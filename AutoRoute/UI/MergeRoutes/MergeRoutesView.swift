@@ -60,8 +60,8 @@ struct MergeRoutesView: View {
       sectionHeader(String(localized: "Order", comment: "Merge order section header"))
       ZStack(alignment: .trailing) {
         VStack(spacing: 8) {
-          MiniRouteCard(display: viewModel.firstDisplay, index: 1)
-          MiniRouteCard(display: viewModel.secondDisplay, index: 2)
+          RouteRowView(display: viewModel.firstDisplay, style: .card(index: 1))
+          RouteRowView(display: viewModel.secondDisplay, style: .card(index: 2))
         }
         swapButton
           .padding(.trailing, 14)
@@ -162,51 +162,5 @@ struct MergeRoutesView: View {
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity)
-  }
-}
-
-// MARK: - Subviews
-
-private struct MiniRouteCard: View {
-
-  // MARK: - Properties
-
-  let display: MergeRoutesViewModel.MiniRouteCardDisplay
-  let index: Int
-
-  // MARK: - Body
-
-  var body: some View {
-    HStack(spacing: 13) {
-      ZStack {
-        Circle()
-          .fill(.tint)
-          .frame(width: 26, height: 26)
-        Text("\(index)")
-          .font(.subheadline.weight(.bold))
-          .foregroundStyle(.white)
-      }
-      VStack(alignment: .leading, spacing: 1) {
-        Text(display.name)
-          .font(.callout.weight(.semibold))
-          .lineLimit(1)
-        Text(display.dateTimeLabel)
-          .font(.footnote)
-          .foregroundStyle(.secondary)
-          .lineLimit(1)
-      }
-      .frame(maxWidth: .infinity, alignment: .leading)
-
-      VStack(alignment: .trailing, spacing: 1) {
-        Text(display.formattedDistance)
-          .font(.callout.weight(.medium))
-        Text(display.formattedDuration)
-          .font(.caption)
-          .foregroundStyle(.tertiary)
-      }
-    }
-    .padding(.horizontal, 15)
-    .padding(.vertical, 13)
-    .cardBackground()
   }
 }
