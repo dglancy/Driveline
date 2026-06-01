@@ -26,9 +26,7 @@ struct RecordingView: View {
   var body: some View {
     ZStack {
       Color(.systemBackground).ignoresSafeArea()
-      TimelineView(.periodic(from: .now, by: 1.0)) { _ in
-        mainContent
-      }
+      mainContent
     }
   }
 
@@ -38,7 +36,9 @@ struct RecordingView: View {
     VStack(spacing: 0) {
       header
       Spacer()
-      heroSection
+      TimelineView(.periodic(from: .now, by: 1.0)) { _ in
+        heroSection
+      }
       Spacer()
       batteryNote
       Spacer()
