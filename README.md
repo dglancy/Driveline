@@ -21,9 +21,7 @@ AutoRoute is built in the spirit of the [Unix philosophy](https://en.wikipedia.o
 
 The app records drives and exports them. That is all it does. The GPX files it produces are a lingua franca understood by Strava, Komoot, RideWithGPS, QGIS, and dozens of other tools. The Shortcuts integration means AutoRoute can sit in the middle of a larger automation: a shortcut can start a recording, hand off the resulting export to a cloud-storage action, notify you, or chain into anything else the Shortcuts app supports. The app does not need to know about any of that; it just needs to do its part cleanly.
 
-Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html) describes this as the Rule of Modularity and the Rule of Composition — build simple parts connected by clean interfaces, and design programs to be connected with other programs. 
-
-AutoRoute tries to follow both.
+Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html) describes this as the Rule of Modularity and the Rule of Composition — build simple parts connected by clean interfaces, and design programs to be connected with other programs. AutoRoute tries to follow both.
 
 ## Why no live map during recording?
 
