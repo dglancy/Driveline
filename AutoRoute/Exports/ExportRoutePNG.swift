@@ -10,25 +10,6 @@ import MapKit
 import UIKit
 import os.log
 
-// MARK: - PNG export error
-
-enum ExportRoutePNGError: LocalizedError {
-  case snapshotFailure
-  case dataPreparationFailure
-  case fileWriteFailure
-
-  var errorDescription: String? {
-    switch self {
-    case .snapshotFailure:
-      return String(localized: "Failed to create PNG. Please try again.", comment: "Export error: map snapshot failed")
-    case .dataPreparationFailure:
-      return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
-    case .fileWriteFailure:
-      return String(localized: "Failed to save PNG. Please try again.", comment: "Export error: writing PNG file to disk failed")
-    }
-  }
-}
-
 // MARK: - PNG export service
 
 final class ExportRoutePNG: ExportingRoute {
@@ -64,7 +45,7 @@ final class ExportRoutePNG: ExportingRoute {
     let image = renderSnapshotImage(snapshot, coordinates: coordinates)
 
     guard let pngData = image.pngData() else {
-      throw ExportRoutePNGError.dataPreparationFailure
+      throw ExportError.pngDataPreparationFailure
     }
 
     let fileURL = ExportRouteFileNamingService.fileURL(for: route, type: .png)
@@ -74,7 +55,7 @@ final class ExportRoutePNG: ExportingRoute {
       return fileURL
     } catch {
       Log.ui.error("Failed to write PNG for route: \(route.startedAt) — error: \(error.localizedDescription)")
-      throw ExportRoutePNGError.fileWriteFailure
+      throw ExportError.pngFileWriteFailure
     }
   }
 
@@ -183,12 +164,12 @@ final class ExportRoutePNG: ExportingRoute {
       MKMapSnapshotter(options: options).start { snapshot, error in
         if let error {
           Log.ui.error("Failed to create PNG snapshot for route: \(route.startedAt) — error: \(error.localizedDescription)")
-          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure)
+          continuation.resume(throwing: ExportError.pngSnapshotFailure)
           return
         }
 
         guard let snapshot else {
-          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure)
+          continuation.resume(throwing: ExportError.pngSnapshotFailure)
           return
         }
 

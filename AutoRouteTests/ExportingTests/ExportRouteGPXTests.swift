@@ -17,14 +17,14 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func emptyRouteErrorHasUserFacingDescription() {
-    #expect(ExportRouteError.emptyRoute.errorDescription != nil)
-    #expect(ExportRouteError.emptyRoute.errorDescription?.isEmpty == false)
+    #expect(ExportError.emptyRoute.errorDescription != nil)
+    #expect(ExportError.emptyRoute.errorDescription?.isEmpty == false)
   }
 
   @Test
   func encodingFailedErrorHasUserFacingDescription() {
-    #expect(ExportRouteGPXError.encodingFailed.errorDescription != nil)
-    #expect(ExportRouteGPXError.encodingFailed.errorDescription?.isEmpty == false)
+    #expect(ExportError.gpxEncodingFailed.errorDescription != nil)
+    #expect(ExportError.gpxEncodingFailed.errorDescription?.isEmpty == false)
   }
 
   // MARK: - Empty route
@@ -33,7 +33,7 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
   func throwsEmptyRouteErrorWhenRouteHasNoPositions() async {
     let route = Route(name: "Empty Route")
 
-    await #expect(throws: ExportRouteError.emptyRoute) {
+    await #expect(throws: ExportError.emptyRoute) {
       _ = try await ExportRouteGPX().export(route: route)
     }
   }

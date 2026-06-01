@@ -17,21 +17,21 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
 
   @Test
   func snapshotFailureHasUserFacingDescription() {
-    let error = ExportRoutePNGError.snapshotFailure
+    let error = ExportError.pngSnapshotFailure
     #expect(error.errorDescription != nil)
     #expect(error.errorDescription?.isEmpty == false)
   }
 
   @Test
   func dataPreparationFailureHasUserFacingDescription() {
-    let error = ExportRoutePNGError.dataPreparationFailure
+    let error = ExportError.pngDataPreparationFailure
     #expect(error.errorDescription != nil)
     #expect(error.errorDescription?.isEmpty == false)
   }
 
   @Test
   func fileWriteFailureHasUserFacingDescription() {
-    let error = ExportRoutePNGError.fileWriteFailure
+    let error = ExportError.pngFileWriteFailure
     #expect(error.errorDescription != nil)
     #expect(error.errorDescription?.isEmpty == false)
   }
@@ -135,7 +135,7 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
   func throwsEmptyRouteErrorWhenRouteHasNoPositions() async {
     let route = Route(name: "Empty Route")
 
-    await #expect(throws: ExportRouteError.emptyRoute) {
+    await #expect(throws: ExportError.emptyRoute) {
       _ = try await ExportRoutePNG().export(route: route)
     }
   }
