@@ -27,6 +27,7 @@ final class FullScreenMapViewModel {
   var distanceValue: String { stats.distanceValue }
   var distanceUnit: String { stats.distanceUnit }
   var durationValue: String { stats.durationValue }
+  var durationUnit: String { stats.durationUnit }
   var avgSpeedValue: String { stats.avgSpeedValue }
   var avgSpeedUnit: String { stats.avgSpeedUnit }
 
