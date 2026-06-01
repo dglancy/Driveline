@@ -60,7 +60,7 @@ struct ExportRouteFileNamingService {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
     formatter.timeZone = .current
-    formatter.locale = .current
+    formatter.locale = Locale(identifier: "en_US_POSIX")
     return formatter
   }()
 
