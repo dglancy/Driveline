@@ -4,6 +4,10 @@
 
 A lightweight iOS app that records your drives in the background, then produces exportable maps and GPX files from each one. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
 
+## Background
+
+AutoRoutes grew out of a personal need. I run [Targa Trips](https://www.targatrips.com), a travel blog about driving a Porsche 911 Targa across Europe. Every post benefits from a clear, accurate route map — and the tools I tried either did too much, locked exports behind subscriptions, or produced maps that looked nothing like what I wanted. AutoRoutes is what I built instead: a focused recorder that gets out of the way during the drive and produces clean GPX files and map images I can drop straight into a post.
+
 ## What it does
 
 - **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and pause actions to Bluetooth connect/disconnect automations in the Shortcuts app and AutoRoute handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
