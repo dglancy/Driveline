@@ -26,9 +26,7 @@ struct RecordingView: View {
   var body: some View {
     ZStack {
       Color(.systemBackground).ignoresSafeArea()
-      TimelineView(.periodic(from: .now, by: 1.0)) { _ in
-        mainContent
-      }
+      mainContent
     }
   }
 
@@ -38,7 +36,9 @@ struct RecordingView: View {
     VStack(spacing: 0) {
       header
       Spacer()
-      heroSection
+      TimelineView(.periodic(from: .now, by: 1.0)) { _ in
+        heroSection
+      }
       Spacer()
       batteryNote
       Spacer()
@@ -51,7 +51,7 @@ struct RecordingView: View {
       Button { dismiss() } label: {
         ZStack {
           Circle().fill(Color(.systemFill))
-          Image(systemName: "chevron.down")
+          Image(systemName: SystemImage.chevronDown)
             .font(.body.weight(.semibold))
             .foregroundStyle(Color(.secondaryLabel))
         }
@@ -137,16 +137,18 @@ struct RecordingView: View {
     HStack(spacing: 0) {
       StatColumn(value: viewModel.speedValue, label: viewModel.speedUnit)
       Divider().frame(height: 36)
-      StatColumn(value: viewModel.formattedPositionCount, label: "logged")
+      StatColumn(value: viewModel.formattedPositionCount,
+                 label: String(localized: "logged",
+                               comment: "Label for the count of GPS positions logged during a drive"))
       Divider().frame(height: 36)
-      StatColumn(value: viewModel.startedAt, label: "started")
+      StatColumn(value: viewModel.startedAt, label: String(localized: "started", comment: "Label for the time the drive started"))
     }
     .frame(width: 280)
   }
 
   private var batteryNote: some View {
     HStack(spacing: 11) {
-      Image(systemName: "battery.75percent")
+      Image(systemName: SystemImage.battery)
         .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
       Text("Running in the background to save battery. Your full route map appears here when the drive ends.")
@@ -165,51 +167,21 @@ struct RecordingView: View {
 
   private var controlButtons: some View {
     HStack(spacing: 60) {
-      VStack(spacing: 9) {
-        Button {
-          viewModel.pauseOrResume()
-        } label: {
-          ZStack {
-            Circle()
-              .fill(Color(.systemFill))
-              .overlay(Circle().stroke(Color(.separator), lineWidth: 2))
-            Image(systemName: viewModel.pauseResumeIconName)
-              .font(.title)
-              .foregroundStyle(Color(.label))
-          }
-          .frame(width: 76, height: 76)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(viewModel.pauseResumeLabel)
+      RecordingControlButton(
+        iconName: viewModel.pauseResumeIconName,
+        label: viewModel.pauseResumeLabel,
+        background: .fill(Color(.systemFill), stroke: Color(.separator)),
+        iconColor: Color(.label),
+        action: viewModel.pauseOrResume
+      )
 
-        Text(viewModel.pauseResumeLabel)
-          .font(.footnote)
-          .foregroundStyle(Color(.secondaryLabel))
-          .accessibilityHidden(true)
-      }
-
-      VStack(spacing: 9) {
-        Button {
-          viewModel.endRoute()
-        } label: {
-          ZStack {
-            Circle()
-              .fill(.red)
-              .shadow(color: .red.opacity(0.35), radius: 10, y: 6)
-            Image(systemName: "stop.fill")
-              .font(.title)
-              .foregroundStyle(.white)
-          }
-          .frame(width: 76, height: 76)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(String(localized: "End Drive", comment: "End drive button accessibility label"))
-
-        Text("End Drive")
-          .font(.footnote)
-          .foregroundStyle(Color(.secondaryLabel))
-          .accessibilityHidden(true)
-      }
+      RecordingControlButton(
+        iconName: SystemImage.stop,
+        label: String(localized: "End Drive", comment: "End drive button label"),
+        background: .red,
+        iconColor: .white,
+        action: viewModel.endRoute
+      )
     }
     .padding(.bottom, 42)
   }
@@ -217,6 +189,57 @@ struct RecordingView: View {
 }
 
 // MARK: - Subviews
+
+private struct RecordingControlButton: View {
+
+  // MARK: - Types
+
+  enum Background {
+    case fill(Color, stroke: Color)
+    case red
+  }
+
+  // MARK: - Properties
+
+  let iconName: String
+  let label: String
+  let background: Background
+  let iconColor: Color
+  let action: () -> Void
+
+  // MARK: - Body
+
+  var body: some View {
+    VStack(spacing: 9) {
+      Button(action: action) {
+        ZStack {
+          switch background {
+          case .fill(let fillColor, let strokeColor):
+            Circle()
+              .fill(fillColor)
+              .overlay(Circle().stroke(strokeColor, lineWidth: 2))
+          case .red:
+            Circle()
+              .fill(Color.red)
+              .shadow(color: .red.opacity(0.35), radius: 10, y: 6)
+          }
+          Image(systemName: iconName)
+            .font(.title)
+            .foregroundStyle(iconColor)
+        }
+        .frame(width: 76, height: 76)
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel(label)
+
+      Text(label)
+        .font(.footnote)
+        .foregroundStyle(Color(.secondaryLabel))
+        .accessibilityHidden(true)
+    }
+  }
+
+}
 
 private struct StatColumn: View {
 
@@ -244,8 +267,7 @@ private struct StatColumn: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let route = Route(name: "Morning Drive", trigger: .automatic)

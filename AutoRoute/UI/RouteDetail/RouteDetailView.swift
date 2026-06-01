@@ -87,11 +87,11 @@ struct RouteDetailView: View {
       String(localized: "Delete Route", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
-      Button(String(localized: "Delete", comment: "Confirm delete route"), role: .destructive) {
+      Button.delete {
         viewModel.deleteRoute(using: modelContext)
         dismiss()
       }
-      Button(String(localized: "Cancel", comment: "Cancel delete route"), role: .cancel) { }
+      Button.cancel()
     } message: {
       Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete route confirmation message"))
     }
@@ -110,7 +110,7 @@ struct RouteDetailView: View {
       Button(String(localized: "Delete Route", comment: "More menu action"), role: .destructive) {
         viewModel.showingDeleteConfirmation = true
       }
-      Button(String(localized: "Cancel", comment: "More menu cancel"), role: .cancel) { }
+      Button.cancel()
     }
   }
 
@@ -139,7 +139,7 @@ struct RouteDetailView: View {
         icon: "clock",
         label: String(localized: "Duration", comment: "Stat tile label"),
         value: viewModel.durationValue,
-        unit: String(localized: "active", comment: "Active duration (not including pauses)")
+        unit: viewModel.durationUnit
       )
       RouteStatTile(
         icon: "speedometer",
@@ -169,35 +169,35 @@ struct RouteDetailView: View {
         subtitle: String(localized: "Arrival", comment: "Endpoint row subtitle"),
         trailing: viewModel.arrivalTime
       ) {
-        Image(systemName: "flag.pattern.checkered")
+        Image(systemName: SystemImage.finishFlag)
           .font(.body.weight(.medium))
           .foregroundStyle(.red)
       }
     }
-    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+    .cardBackground(cornerRadius: 16)
   }
 
   private var metadataCard: some View {
     VStack(spacing: 0) {
       IconRow(title: String(localized: "Top Speed", comment: "Metadata row"), trailing: viewModel.topSpeed) {
-        Image(systemName: "gauge")
+        Image(systemName: SystemImage.speed)
           .font(.callout)
           .foregroundStyle(.secondary)
       }
       Divider().padding(.leading, 52)
       IconRow(title: String(localized: "Track Points", comment: "Metadata row"), trailing: viewModel.trackPoints) {
-        Image(systemName: "location")
+        Image(systemName: SystemImage.location)
           .font(.callout)
           .foregroundStyle(.secondary)
       }
       Divider().padding(.leading, 52)
       IconRow(title: String(localized: "Started by", comment: "Metadata row"), trailing: viewModel.triggerDisplayName) {
-        Image(systemName: "dot.radiowaves.left.and.right")
+        Image(systemName: SystemImage.gpsSignal)
           .font(.callout)
           .foregroundStyle(.secondary)
       }
     }
-    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+    .cardBackground(cornerRadius: 16)
   }
 
   private var shareRouteButton: some View {
@@ -209,11 +209,11 @@ struct RouteDetailView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
     }
-    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+    .cardBackground(cornerRadius: 16)
     .alert(String(localized: "Share Route", comment: "Share route alert title"), isPresented: $viewModel.showSharingDialog) {
       Button(String(localized: "Share GPX", comment: "Share route as GPX")) { viewModel.shareRouteGPX() }
       Button(String(localized: "Share PNG", comment: "Share route as PNG")) { viewModel.shareRoutePNG() }
-      Button(String(localized: "Cancel", comment: "Cancel share route"), role: .cancel) { }
+      Button.cancel()
     }
   }
 
@@ -222,8 +222,7 @@ struct RouteDetailView: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   let route = PreviewSampleData.sampleRoute(in: container.mainContext)
   return NavigationStack {
     RouteDetailView(route: route)

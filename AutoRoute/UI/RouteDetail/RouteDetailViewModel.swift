@@ -47,14 +47,15 @@ final class RouteDetailViewModel {
   var distanceValue: String { stats.distanceValue }
   var distanceUnit: String { stats.distanceUnit }
   var durationValue: String { stats.durationValue }
+  var durationUnit: String { stats.durationUnit }
   var avgSpeedValue: String { stats.avgSpeedValue }
   var avgSpeedUnit: String { stats.avgSpeedUnit }
 
   var startPlace: String? { route.startPlaceName }
   var endPlace: String? { route.endPlaceName }
 
-  var departureTime: String { route.startedAt.clockTime() }
-  var arrivalTime: String? { route.endedAt?.clockTime() }
+  var departureTime: String { route.startedAt.clockString() }
+  var arrivalTime: String? { route.endedAt?.clockString() }
 
   var topSpeed: String { Measurement(value: route.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
   var trackPoints: String { route.positions.count.formatted() }

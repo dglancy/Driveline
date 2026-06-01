@@ -60,13 +60,13 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   @Test
   func pauseResumeIconNameIsPauseFillWhenRunning() {
     let vm = makeViewModel()
-    #expect(vm.pauseResumeIconName == "pause.fill")
+    #expect(vm.pauseResumeIconName == SystemImage.pause)
   }
 
   @Test
   func pauseResumeIconNameIsPlayFillWhenPaused() {
     let vm = makeViewModel(paused: true)
-    #expect(vm.pauseResumeIconName == "play.fill")
+    #expect(vm.pauseResumeIconName == SystemImage.play)
   }
 
   // MARK: - pauseResumeLabel
@@ -181,7 +181,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   private func makeService() -> (RouteService, LocationService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     return (service, locationService)
   }
 

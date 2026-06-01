@@ -57,11 +57,15 @@ final class RecordingViewModel {
 
   var startedAt: String {
     guard let date = routeService.route?.startedAt else { return kDashString }
-    return date.clockTime()
+    return date.clockString()
   }
 
-  var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
-  var pauseResumeLabel: String { routeService.isPaused ? "Resume" : "Pause" }
+  var pauseResumeIconName: String { routeService.isPaused ? SystemImage.play : SystemImage.pause }
+  var pauseResumeLabel: String {
+    routeService.isPaused ?
+    String(localized: "Resume", comment: "Resume a paused drive") :
+    String(localized: "Pause", comment: "Pause an active drive")
+  }
 
   // MARK: - Formatting
 

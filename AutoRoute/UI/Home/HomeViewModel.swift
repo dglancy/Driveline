@@ -15,13 +15,6 @@ final class HomeViewModel {
 
   // MARK: - Types
 
-  struct RouteRowDisplay {
-    let name: String
-    let dateTimeLabel: String
-    let formattedDistance: String
-    let formattedDuration: String?
-  }
-
   struct RouteRow: Identifiable {
     let route: Route
     let display: RouteRowDisplay
@@ -130,7 +123,6 @@ final class HomeViewModel {
     merged.startedAt = first.startedAt
     merged.endedAt = second.endedAt ?? first.endedAt
     merged.status = .finished
-    merged.trigger = .manual
     merged.startPlaceName = first.startPlaceName
     merged.endPlaceName = second.endPlaceName
     merged.positions = first.positions + second.positions
@@ -162,7 +154,7 @@ final class HomeViewModel {
   }
 
   private func makeDisplay(for route: Route) -> RouteRowDisplay {
-    let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
+    let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedHoursMinutesString() : nil
     let distance = Measurement(value: route.distanceMetres, unit: UnitLength.meters)
     return RouteRowDisplay(
       name: route.name,

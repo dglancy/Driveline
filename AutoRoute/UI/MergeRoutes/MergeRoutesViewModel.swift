@@ -12,15 +12,6 @@ import Observation
 @Observable
 final class MergeRoutesViewModel {
 
-  // MARK: - Types
-
-  struct MiniRouteCardDisplay {
-    let name: String
-    let dateTimeLabel: String
-    let formattedDistance: String
-    let formattedDuration: String
-  }
-
   // MARK: - Properties
 
   private(set) var orderedRoutes: [Route]
@@ -28,15 +19,15 @@ final class MergeRoutesViewModel {
 
   // MARK: - Computed Properties
 
-  var firstDisplay: MiniRouteCardDisplay { makeDisplay(for: orderedRoutes[0]) }
-  var secondDisplay: MiniRouteCardDisplay { makeDisplay(for: orderedRoutes[1]) }
+  var firstDisplay: RouteRowDisplay { makeDisplay(for: orderedRoutes[0]) }
+  var secondDisplay: RouteRowDisplay { makeDisplay(for: orderedRoutes[1]) }
 
   var formattedTotalDistance: String {
     Measurement(value: orderedRoutes[0].distanceMetres + orderedRoutes[1].distanceMetres, unit: UnitLength.meters).localizedDistanceString()
   }
 
   var formattedTotalDuration: String {
-    (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedDurationString()
+    (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedHoursMinutesString()
   }
 
   var formattedTotalPositionCount: String {
@@ -60,13 +51,13 @@ final class MergeRoutesViewModel {
 
   // MARK: - Private
 
-  private func makeDisplay(for route: Route) -> MiniRouteCardDisplay {
+  private func makeDisplay(for route: Route) -> RouteRowDisplay {
     let parts: [String?] = [RouteStatsPresenter(route: route).startTimeLabel, route.startPlaceName]
-    return MiniRouteCardDisplay(
+    return RouteRowDisplay(
       name: route.name,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
       formattedDistance: Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
-      formattedDuration: route.activeDurationSeconds.localizedDurationString()
+      formattedDuration: route.activeDurationSeconds.localizedHoursMinutesString()
     )
   }
 }

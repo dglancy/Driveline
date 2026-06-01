@@ -44,12 +44,12 @@ struct HomeView: View {
       String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
-      Button(String(localized: "Delete", comment: "Confirm delete routes"), role: .destructive) {
+      Button.delete {
         let selected = viewModel.selectedRoutes(from: viewModel.sections)
         viewModel.exitSelectMode()
         viewModel.deleteRoutes(selected, using: modelContext)
       }
-      Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
+      Button.cancel()
     } message: {
       Text(viewModel.deleteConfirmationMessage)
     }
@@ -64,10 +64,7 @@ struct HomeView: View {
     .sheet(isPresented: $showingMergeSheet) {
       if routesToMerge.count == 2 {
         MergeRoutesView(routes: routesToMerge) { orderedRoutes, mergedName in
-          showingMergeSheet = false
           viewModel.mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName, using: modelContext)
-        } onCancel: {
-          showingMergeSheet = false
         }
       }
     }
@@ -119,7 +116,7 @@ struct HomeView: View {
                 Button {
                   viewModel.toggleSelection(for: row.route.id)
                 } label: {
-                  RouteRowView(display: row.display, isSelected: viewModel.selectedRouteIDs.contains(row.route.id))
+                  RouteRowView(display: row.display, style: .list(isSelected: viewModel.selectedRouteIDs.contains(row.route.id)))
                 }
                 .buttonStyle(.plain)
               } else {
@@ -170,9 +167,7 @@ struct HomeView: View {
   private var toolbarItems: some ToolbarContent {
     ToolbarItem(placement: .topBarLeading) {
       if viewModel.isSelectMode {
-        Button(String(localized: "Cancel", comment: "Exit multiselect mode")) {
-          viewModel.exitSelectMode()
-        }
+        Button.cancel { viewModel.exitSelectMode() }
       } else {
         Button(String(localized: "Select", comment: "Enter multiselect mode")) {
           viewModel.enterSelectMode()
@@ -197,7 +192,7 @@ struct HomeView: View {
                 .fill(.red)
                 .frame(width: 11, height: 11)
             } else {
-              Image(systemName: "circle.inset.filled")
+              Image(systemName: SystemImage.recordingActive)
                 .font(.title2)
                 .foregroundStyle(.red)
             }
@@ -218,8 +213,7 @@ struct HomeView: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   PreviewSampleData.insertSampleRoutes(in: container.mainContext)
 
   let locationService = LocationService()

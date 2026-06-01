@@ -8,7 +8,6 @@
 import Foundation
 import CoreLocation
 import GPXKit
-import os.log
 
 // MARK: - GPX export service
 
