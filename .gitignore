@@ -26,6 +26,9 @@ Package.resolved
 # hence it is not needed unless you have added a package configuration file to your project
 .swiftpm
 
+#Test Results
+TestResults.xcresult/
+
 .build/
 
 # macOS
