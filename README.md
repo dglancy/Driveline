@@ -23,6 +23,22 @@ The app records drives and exports them. That is all it does. The GPX files it p
 
 Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html) describes this as the Rule of Modularity and the Rule of Composition — build simple parts connected by clean interfaces, and design programs to be connected with other programs. AutoRoute tries to follow both.
 
+## Setting up Shortcuts automations
+
+The app exposes two actions to the Shortcuts app: `Start or resume route` and `Pause route`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
+
+For each trigger type you want to use:
+
+1. Open the Shortcuts app and create a new Automation.
+2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
+3. Add the action "Start or resume route" from AutoRoute.
+4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Pause route" action.
+
+If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
+
+If you stop the car and forget to end the route, AutoRoute will automatically finish it after a timeout period once it detects it has been paused long enough.
+
+
 ## Why no live map during recording?
 
 AutoRoute is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and continuously redrawing the UI, which is not a good trade for a drive that could last several hours. Instead, the app writes GPS points directly to the database as they arrive and renders the full map only after the drive is complete.
@@ -71,21 +87,6 @@ AutoRoute is built to run almost entirely in the background. Rendering a live ma
 3. Select your development team under **Signing & Capabilities** for the `AutoRoute` target. The bundle identifier is `com.targatrips.AutoRoute`; you can change it to match your own prefix if you prefer.
 
 4. Build and run on a connected device. The first launch will ask for location permission; choose "Always Allow" so recording works when the screen is off.
-
-**Setting up Shortcuts automations**
-
-The app exposes two actions to the Shortcuts app: `Start or resume route` and `Pause route`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
-
-For each trigger type you want to use:
-
-1. Open the Shortcuts app and create a new Automation.
-2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
-3. Add the action "Start or resume route" from AutoRoute.
-4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Pause route" action.
-
-If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
-
-If you stop the car and forget to end the route, AutoRoute will automatically finish it after a timeout period once it detects it has been paused long enough.
 
 ## Licence
 
