@@ -2,24 +2,82 @@
 
 # AutoRoute
 
-A lightweight iOS app that records your drives in the background and saves them as GPX files. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
+A lightweight iOS app that records your drives in the background, then produces exportable maps and GPX files from each one. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
 
 ## What it does
 
-- **Automatic recording** via Apple Shortcuts — trigger start, pause, and stop from Bluetooth connect/disconnect events
-- **GPX export** — every route is saved as a standard GPX file you can share with any mapping app
-- **Route list** — all your drives in one place, grouped by date, with distance and duration at a glance
-- **Route map** — tap any route to see the full drive plotted on a map with pinch-to-zoom
-- **Merge routes** — select two routes and join them end-to-end into a single route
-- **Minimal recording screen** — shows elapsed time and distance while recording; no live map by design (keeps CPU and memory low for long drives)
+- **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and pause actions to Bluetooth connect/disconnect automations in the Shortcuts app and AutoRoute handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
+- **Route list** showing all your drives grouped by date, with start and end place names, distance, and duration at a glance.
+- **Route map** that plots the full drive with pinch-to-zoom once a route is finished.
+- **Merge routes** to join two drives end-to-end into a single route, useful when you forget to start recording and pick it up partway through.
+- **GPX export** in standard format, compatible with Strava, Komoot, or any other mapping tool that accepts GPX files.
+- **PNG export** that renders a clean map snapshot with the route drawn on it, suitable for sharing.
+- **Minimal recording screen** showing elapsed time and current speed. There is no live map during recording; see below for why.
 
 ## Why no live map during recording?
 
-AutoRoute is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and updating the UI continuously — neither of which makes sense for a drive that could last all day. Instead, the app writes GPS points directly to SwiftData as they arrive and renders the full route map only once the drive is complete.
+AutoRoute is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and continuously redrawing the UI, which is not a good trade for a drive that could last several hours. Instead, the app writes GPS points directly to the database as they arrive and renders the full map only after the drive is complete.
 
 ## Tech
 
-- iOS 26+
-- Swift 6 / SwiftUI
-- SwiftData for persistence
-- MVVM with `@Observable`
+**Language and frameworks**
+- Swift 6.3 with strict concurrency throughout
+- SwiftUI on iOS 26+
+- SwiftData for persistence (two model types: `Route` and `Position`)
+
+**Apple frameworks**
+- CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`
+- MapKit for route rendering and map snapshots on export
+- AppIntents for the Shortcuts actions (start/resume and pause)
+- BackgroundTasks for scheduling a pause timeout that fires even when the app is suspended
+- Combine for publishing location updates through the service layer
+- Network framework (via `NWPathMonitor`) for detecting connectivity changes used to retry failed reverse geocoding
+
+**Third-party packages (Swift Package Manager)**
+- [GPXKit](https://codeberg.org/mmllr/GPXKit) for building and exporting GPX tracks
+
+**Development tooling**
+- SwiftLint for style enforcement
+
+**Testing**
+- Swift Testing framework (`import Testing`) for unit tests
+- XCTest for UI tests, with an in-memory SwiftData store to keep tests isolated
+
+## Building it yourself
+
+**Requirements**
+
+- Xcode 26 or later (the project targets iOS 26.0)
+- A physical iPhone for any testing that involves background location or Shortcuts automations. The simulator does not support background location in a meaningful way.
+
+**Steps**
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/dglancy/AutoRoute.git
+   ```
+
+2. Open `AutoRoute.xcodeproj` in Xcode.
+
+3. Select your development team under **Signing & Capabilities** for the `AutoRoute` target. The bundle identifier is `com.targatrips.AutoRoute`; you can change it to match your own prefix if you prefer.
+
+4. Build and run on a connected device. The first launch will ask for location permission; choose "Always Allow" so recording works when the screen is off.
+
+**Setting up Shortcuts automations**
+
+The app exposes two actions to the Shortcuts app: `Start or resume route` and `Pause route`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
+
+For each trigger type you want to use:
+
+1. Open the Shortcuts app and create a new Automation.
+2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
+3. Add the action "Start or resume route" from AutoRoute.
+4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Pause route" action.
+
+If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
+
+If you stop the car and forget to end the route, AutoRoute will automatically finish it after a timeout period once it detects it has been paused long enough.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
