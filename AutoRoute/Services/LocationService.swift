@@ -32,11 +32,11 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
   // MARK: - Lifecycle
 
-  override init() {
+  init(preferences: UserPreferences = UserPreferences()) {
     super.init()
     manager.delegate = self
     manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-    manager.activityType = activityTypeFromSettings()
+    manager.activityType = preferences.activityType
     manager.pausesLocationUpdatesAutomatically = false
     manager.allowsBackgroundLocationUpdates = true
   }
@@ -123,12 +123,4 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     -location.timestamp.timeIntervalSinceNow < kMaxLocationAge
   }
 
-  // MARK: - Private functions
-
-  private func activityTypeFromSettings() -> CLActivityType {
-    let rawValue = UserDefaults.standard.string(forKey: "ActivityType") ?? ActivityTypeSetting.default.rawValue
-    let type = CLActivityType(fromSettings: rawValue)
-    Log.location.info("Location activity type set to \"\(rawValue)\" from user settings")
-    return type
-  }
 }

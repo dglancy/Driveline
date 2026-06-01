@@ -34,19 +34,29 @@ enum ExportRoutePNGError: LocalizedError {
 
 final class ExportRoutePNG: ExportingRoute {
 
+  // MARK: - Properties
+
+  private let preferences: UserPreferences
+
+  // MARK: - Lifecycle
+
+  init(preferences: UserPreferences = UserPreferences()) {
+    self.preferences = preferences
+  }
+
   // MARK: - Actions
 
   func export(route: Route) async throws -> URL {
     Log.ui.info("A route was selected for PNG export: \(route.startedAt)")
 
     let coordinates = try validatedCoordinates(for: route)
-    let mapSize = exportMapSizeFromSettings()
+    let mapSize = preferences.exportMapSize
 
     let options = MKMapSnapshotter.Options()
     options.region = .fitting(coordinates, aspectRatio: mapSize.width / max(mapSize.height, 0.0001))
     options.size = mapSize
     options.scale = UITraitCollection.current.displayScale
-    if exportMapAlwaysUseLightAppearanceFromSettings() {
+    if preferences.alwaysUseLightMapAppearance {
       options.traitCollection = UITraitCollection(userInterfaceStyle: .light)
     }
     options.pointOfInterestFilter = .excludingAll
@@ -92,7 +102,7 @@ final class ExportRoutePNG: ExportingRoute {
       }
 
       UIColor.systemBlue.setStroke()
-      polylinePath.lineWidth = exportMapRouteWidthFromSettings()
+      polylinePath.lineWidth = preferences.routeWidth
       polylinePath.lineCapStyle = .round
       polylinePath.lineJoinStyle = .round
       polylinePath.stroke()
@@ -186,25 +196,6 @@ final class ExportRoutePNG: ExportingRoute {
     }
   }
 
-  private func exportMapSizeFromSettings() -> CGSize {
-    let rawValue = UserDefaults.standard.string(forKey: "ExportMapSize") ?? "high2"
-    let size = MapSize.size(for: rawValue)
-    Log.ui.info("Export map size set to \"\(rawValue)\" from user settings")
-    return size
-  }
-
-  private func exportMapAlwaysUseLightAppearanceFromSettings() -> Bool {
-    let alwaysUseLightAppearance = UserDefaults.standard.bool(forKey: "AlwaysUseLightMapAppearance")
-    Log.ui.info("Always use light map appearance set to \"\(alwaysUseLightAppearance)\" from user settings")
-    return alwaysUseLightAppearance
-  }
-
-  private func exportMapRouteWidthFromSettings() -> CGFloat {
-    let rawValue = UserDefaults.standard.string(forKey: "RouteWidth") ?? "medium"
-    let routeWidth = RouteWidth(from: rawValue) ?? RouteWidth.medium
-    Log.ui.info("Route width set to \"\(routeWidth)\" from user settings")
-    return routeWidth.width
-  }
 }
 
 // MARK: - MapSize enum

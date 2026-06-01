@@ -38,4 +38,5 @@ enum Log {
   static let location = AppLogger(category: "Location")
   static let data = AppLogger(category: "Data")
   static let intent = AppLogger(category: "Intent")
+  static let settings = AppLogger(category: "Settings")
 }
