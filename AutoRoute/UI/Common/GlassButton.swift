@@ -20,7 +20,7 @@ struct GlassButton: View {
   var body: some View {
     Button(action: action) {
       Image(systemName: systemImage)
-        .font(.system(size: 16, weight: .semibold))
+        .font(.callout.weight(.semibold))
         .foregroundStyle(.primary)
         .frame(width: 38, height: 38)
         .background(.regularMaterial, in: Circle())

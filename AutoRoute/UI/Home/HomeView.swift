@@ -104,7 +104,7 @@ struct HomeView: View {
         if let summary = viewModel.summaryLine {
           Section {
             Text(summary)
-              .font(.system(size: 15))
+              .font(.callout)
               .foregroundStyle(.secondary)
               .listRowBackground(Color.clear)
               .frame(maxWidth: .infinity, alignment: .center)
@@ -198,7 +198,7 @@ struct HomeView: View {
                 .frame(width: 11, height: 11)
             } else {
               Image(systemName: "circle.inset.filled")
-                .font(.system(size: 22))
+                .font(.title2)
                 .foregroundStyle(.red)
             }
           }
@@ -233,21 +233,21 @@ private struct RecordingBannerSection: View {
           PulsingDot(color: .red, size: 10)
           VStack(alignment: .leading, spacing: 1) {
             Text("Recording drive…")
-              .font(.system(size: 16, weight: .semibold))
+              .font(.callout.weight(.semibold))
               .foregroundStyle(Color(.label))
             if let triggerDisplayName {
               Text("\(triggerDisplayName) · Tap to view")
-                .font(.system(size: 13.5))
+                .font(.footnote)
                 .foregroundStyle(Color(.secondaryLabel))
             } else {
               Text("Tap to view")
-                .font(.system(size: 13.5))
+                .font(.footnote)
                 .foregroundStyle(Color(.secondaryLabel))
             }
           }
           Spacer()
           Image(systemName: "chevron.right")
-            .font(.system(size: 12, weight: .semibold))
+            .font(.caption.weight(.semibold))
             .foregroundStyle(Color(.tertiaryLabel))
             .accessibilityHidden(true)
         }
@@ -279,18 +279,18 @@ private struct SelectionToolbar: View {
           String(localized: "Merge", comment: "Merge selected routes button"),
           systemImage: "arrow.triangle.merge"
         )
-        .font(.system(size: 17, weight: .medium))
+        .font(.body.weight(.medium))
       }
       .disabled(!canMerge)
       .frame(maxWidth: .infinity, alignment: .leading)
 
       Text(selectionCountText)
-        .font(.system(size: 13))
+        .font(.footnote)
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity, alignment: .center)
 
       Button(String(localized: "Delete", comment: "Delete selected routes button"), action: onDelete)
-        .font(.system(size: 17, weight: .medium))
+        .font(.body.weight(.medium))
         .foregroundStyle(canDelete ? Color.red : Color(.tertiaryLabel))
         .disabled(!canDelete)
         .frame(maxWidth: .infinity, alignment: .trailing)
