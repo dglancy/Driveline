@@ -38,6 +38,7 @@ Every screen-level View **must** have a paired ViewModel:
 - Do not write comments in generated code unless it is absolutely necessary to aid understanding
 - Use `// MARK: -` sections to organise Swift types (e.g. `// MARK: - Properties`, `// MARK: - Computed Properties`, `// MARK: - Lifecycle`)
 – Any hardcoded strings that are available to the UI (i.e. not Log statements) should be localisation/accessibility friendly.
+- We need to have a project with zero warnings on compile.
 - Begin every new Swift file with the standard Xcode boilerplate header, using the current date and "Damien Glancy" as the author:
   ```
   //
