@@ -64,10 +64,7 @@ struct HomeView: View {
     .sheet(isPresented: $showingMergeSheet) {
       if routesToMerge.count == 2 {
         MergeRoutesView(routes: routesToMerge) { orderedRoutes, mergedName in
-          showingMergeSheet = false
           viewModel.mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName, using: modelContext)
-        } onCancel: {
-          showingMergeSheet = false
         }
       }
     }
