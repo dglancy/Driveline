@@ -41,6 +41,7 @@
 		6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		6D8311D12FCD8C620036D01E /* AutoRoute.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AutoRoute.xctestplan; sourceTree = "<group>"; };
 		6D8311D22FCD908F0036D01E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		6D8311D32FCD9B7C0036D01E /* CODE_OF_CONDUCT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CODE_OF_CONDUCT.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -131,6 +132,7 @@
 				6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */,
 				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
 				6D47A5502FCAE68700E6C7B7 /* README.md */,
+				6D8311D32FCD9B7C0036D01E /* CODE_OF_CONDUCT.md */,
 				6D8311D12FCD8C620036D01E /* AutoRoute.xctestplan */,
 				6D8311CF2FCD81C40036D01E /* workflows */,
 				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
