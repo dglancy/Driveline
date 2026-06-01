@@ -161,7 +161,7 @@ final class HomeViewModel {
   }
 
   private func makeDisplay(for route: Route) -> RouteRowDisplay {
-    let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
+    let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedHoursMinutesString() : nil
     let distance = Measurement(value: route.distanceMetres, unit: UnitLength.meters)
     return RouteRowDisplay(
       name: route.name,
