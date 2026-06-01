@@ -11,24 +11,21 @@ struct MergeRoutesView: View {
 
   // MARK: - Properties
 
+  @Environment(\.dismiss) private var dismiss
   @State private var viewModel: MergeRoutesViewModel
   let onConfirm: ([Route], String) -> Void
-  let onCancel: () -> Void
 
   // MARK: - Lifecycle
 
-  init(routes: [Route], onConfirm: @escaping ([Route], String) -> Void, onCancel: @escaping () -> Void) {
+  init(routes: [Route], onConfirm: @escaping ([Route], String) -> Void) {
     _viewModel = State(initialValue: MergeRoutesViewModel(routes: routes))
     self.onConfirm = onConfirm
-    self.onCancel = onCancel
   }
 
   // MARK: - Body
 
   var body: some View {
-    VStack(spacing: 0) {
-      header
-      Divider()
+    NavigationStack {
       ScrollView {
         VStack(alignment: .leading, spacing: 0) {
           orderSection
@@ -38,30 +35,27 @@ struct MergeRoutesView: View {
         }
         .padding(.bottom, 20)
       }
-      Divider()
-      confirmButton
+      .background(Color(.systemGroupedBackground))
+      .navigationTitle(String(localized: "Merge Routes", comment: "Merge sheet navigation title"))
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button(String(localized: "Cancel", comment: "Dismiss merge sheet")) {
+            dismiss()
+          }
+        }
+        ToolbarItem(placement: .confirmationAction) {
+          Button(String(localized: "Merge", comment: "Confirm route merge")) {
+            onConfirm(viewModel.orderedRoutes, viewModel.mergedName)
+            dismiss()
+          }
+          .fontWeight(.semibold)
+        }
+      }
     }
-    .background(Color(.systemGroupedBackground))
   }
 
   // MARK: - Private Views
-
-  private var header: some View {
-    ZStack {
-      Text("Merge Routes")
-        .font(.body.weight(.semibold))
-      HStack {
-        Button(String(localized: "Cancel", comment: "Dismiss merge sheet")) {
-          onCancel()
-        }
-        .font(.body)
-        Spacer()
-      }
-    }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 14)
-    .background(Color(.systemGroupedBackground))
-  }
 
   private var orderSection: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -150,28 +144,6 @@ struct MergeRoutesView: View {
     .foregroundStyle(.secondary)
     .padding(.horizontal, 22)
     .padding(.top, 12)
-  }
-
-  private var confirmButton: some View {
-    Button {
-      onConfirm(viewModel.orderedRoutes, viewModel.mergedName)
-    } label: {
-      Label(
-        String(localized: "Merge into One Route", comment: "Merge confirmation button"),
-        systemImage: "arrow.triangle.merge"
-      )
-      .font(.body.weight(.semibold))
-      .frame(maxWidth: .infinity)
-      .padding(.vertical, 15)
-      .background(.tint)
-      .foregroundStyle(.white)
-      .clipShape(RoundedRectangle(cornerRadius: 14))
-    }
-    .buttonStyle(.plain)
-    .padding(.horizontal, 16)
-    .padding(.top, 12)
-    .padding(.bottom, 30)
-    .background(Color(.systemGroupedBackground))
   }
 
   private func sectionHeader(_ title: String) -> some View {
