@@ -36,7 +36,7 @@ final class MergeRoutesViewModel {
   }
 
   var formattedTotalDuration: String {
-    (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedDurationString()
+    (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedHoursMinutesString()
   }
 
   var formattedTotalPositionCount: String {
@@ -66,7 +66,7 @@ final class MergeRoutesViewModel {
       name: route.name,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
       formattedDistance: Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
-      formattedDuration: route.activeDurationSeconds.localizedDurationString()
+      formattedDuration: route.activeDurationSeconds.localizedHoursMinutesString()
     )
   }
 }

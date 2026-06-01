@@ -17,11 +17,6 @@ extension TimeInterval {
   }
 
   @MainActor
-  func localizedDurationString(locale: Locale = .current) -> String {
-    Self.durationFormatter(locale: locale, overHour: self >= 3600).string(from: self) ?? kBlankString
-  }
-
-  @MainActor
   func elapsedTimeString(locale: Locale = .current) -> String {
     let padded = Self.elapsedTimeNumberFormatter(locale: locale, padded: true)
     let unpadded = Self.elapsedTimeNumberFormatter(locale: locale, padded: false)
@@ -39,7 +34,6 @@ extension TimeInterval {
   // MARK: - Private
 
   @MainActor private static var hoursMinutesFormatters: [String: DateComponentsFormatter] = [:]
-  @MainActor private static var durationFormatters: [String: DateComponentsFormatter] = [:]
   @MainActor private static var elapsedTimeNumberFormatters: [String: NumberFormatter] = [:]
 
   @MainActor
@@ -53,19 +47,6 @@ extension TimeInterval {
     formatter.calendar = Calendar(identifier: .gregorian)
     formatter.calendar?.locale = locale
     hoursMinutesFormatters[key] = formatter
-    return formatter
-  }
-
-  @MainActor
-  private static func durationFormatter(locale: Locale, overHour: Bool) -> DateComponentsFormatter {
-    let key = "\(locale.identifier)-\(overHour)"
-    if let cached = durationFormatters[key] { return cached }
-    let formatter = DateComponentsFormatter()
-    formatter.unitsStyle = .abbreviated
-    formatter.allowedUnits = overHour ? [.hour, .minute] : [.minute, .second]
-    formatter.calendar = Calendar(identifier: .gregorian)
-    formatter.calendar?.locale = locale
-    durationFormatters[key] = formatter
     return formatter
   }
 

@@ -71,51 +71,6 @@ struct TimeIntervalTests {
     #expect(ti.localizedHoursMinutesString(locale: locale) == "10h 0m")
   }
 
-  // MARK: - localizedDurationString
-
-  @Test("30 seconds returns '30s' in en_GB")
-  func testDuration30Seconds() {
-    let locale = Locale(identifier: "en_GB")
-    #expect(TimeInterval(30).localizedDurationString(locale: locale) == "30s")
-  }
-
-  @Test("90 seconds returns '1m 30s' in en_GB")
-  func testDuration90Seconds() {
-    let locale = Locale(identifier: "en_GB")
-    #expect(TimeInterval(90).localizedDurationString(locale: locale) == "1m 30s")
-  }
-
-  @Test("59 minutes and 59 seconds returns abbreviated with seconds in en_GB")
-  func testDurationUnderOneHour() {
-    let locale = Locale(identifier: "en_GB")
-    let ti: TimeInterval = 59 * 60 + 59
-    #expect(ti.localizedDurationString(locale: locale) == "59m 59s")
-  }
-
-  @Test("exactly 1 hour returns '1h' in en_GB (trailing zero dropped without padding)")
-  func testDurationExactlyOneHour() {
-    let locale = Locale(identifier: "en_GB")
-    #expect(TimeInterval(3600).localizedDurationString(locale: locale) == "1h")
-  }
-
-  @Test("1 hour 30 minutes returns '1h 30m' in en_GB")
-  func testDurationOneHourThirtyMinutes() {
-    let locale = Locale(identifier: "en_GB")
-    #expect(TimeInterval(5400).localizedDurationString(locale: locale) == "1h 30m")
-  }
-
-  @Test("90 seconds returns '1min 30s' in fr_FR")
-  func testDurationFrenchLocale() {
-    let locale = Locale(identifier: "fr_FR")
-    #expect(TimeInterval(90).localizedDurationString(locale: locale) == "1min 30s")
-  }
-
-  @Test("1 hour 30 minutes returns '1h 30min' in fr_FR")
-  func testDurationFrenchLocaleOverOneHour() {
-    let locale = Locale(identifier: "fr_FR")
-    #expect(TimeInterval(5400).localizedDurationString(locale: locale) == "1h 30min")
-  }
-
   // MARK: - elapsedTimeString
 
   @Test("0 seconds returns '00:00' in en_GB")
