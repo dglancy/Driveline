@@ -32,6 +32,7 @@ jobs:
 
       - name: Build & Test
         run: |
+          rm -rf TestResults.xcresult
           xcodebuild test \
             -project AutoRoute.xcodeproj \
             -scheme AutoRoute \
