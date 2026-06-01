@@ -223,9 +223,6 @@ enum MapSize: String {
     self.init(rawValue: key)
   }
 
-  static func size(for string: String, default defaultSize: MapSize = .high2) -> CGSize {
-    MapSize(from: string)?.size ?? defaultSize.size
-  }
 }
 
 // MARK: - RouteWidth enum
