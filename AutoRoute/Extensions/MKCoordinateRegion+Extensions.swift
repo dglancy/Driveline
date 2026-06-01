@@ -10,13 +10,8 @@ import MapKit
 
 extension MKCoordinateRegion {
 
-  static func fitting(
-    _ coordinates: [CLLocationCoordinate2D],
-    paddingMultiplier: CLLocationDegrees = 1.5,
-    minimumSpan: CLLocationDegrees = 0.005,
-    aspectRatio: CGFloat? = nil
-  ) -> MKCoordinateRegion {
-    guard let first = coordinates.first else { return .init() }
+  static func boundingBox(of coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion? {
+    guard let first = coordinates.first else { return nil }
 
     var minLat = first.latitude
     var maxLat = first.latitude
@@ -32,11 +27,24 @@ extension MKCoordinateRegion {
 
     let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
                                         longitude: (minLon + maxLon) / 2)
-    let centerLatitudeRadians = center.latitude * .pi / 180
+    let span = MKCoordinateSpan(latitudeDelta: maxLat - minLat,
+                                longitudeDelta: maxLon - minLon)
+    return MKCoordinateRegion(center: center, span: span)
+  }
+
+  static func fitting(
+    _ coordinates: [CLLocationCoordinate2D],
+    paddingMultiplier: CLLocationDegrees = 1.5,
+    minimumSpan: CLLocationDegrees = 0.005,
+    aspectRatio: CGFloat? = nil
+  ) -> MKCoordinateRegion {
+    guard let box = boundingBox(of: coordinates) else { return .init() }
+
+    let centerLatitudeRadians = box.center.latitude * .pi / 180
     let longitudeScale = max(cos(centerLatitudeRadians), 0.0001)
 
-    let latitudeDelta = max(maxLat - minLat, minimumSpan) * paddingMultiplier
-    let longitudeDelta = max(maxLon - minLon, minimumSpan) * paddingMultiplier
+    let latitudeDelta = max(box.span.latitudeDelta, minimumSpan) * paddingMultiplier
+    let longitudeDelta = max(box.span.longitudeDelta, minimumSpan) * paddingMultiplier
     let normalizedLongitudeDelta = longitudeDelta * cos(centerLatitudeRadians)
 
     var adjustedLonNormalized = normalizedLongitudeDelta
@@ -53,6 +61,6 @@ extension MKCoordinateRegion {
     let adjustedLon = max(adjustedLonNormalized / longitudeScale, minimumSpan)
     let span = MKCoordinateSpan(latitudeDelta: max(adjustedLat, minimumSpan),
                                 longitudeDelta: adjustedLon)
-    return MKCoordinateRegion(center: center, span: span)
+    return MKCoordinateRegion(center: box.center, span: span)
   }
 }
