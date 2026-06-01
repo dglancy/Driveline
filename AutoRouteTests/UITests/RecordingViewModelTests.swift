@@ -154,6 +154,28 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     #expect(service.isRecording == false)
   }
 
+  // MARK: - elapsedSpeechValue
+
+  @Test
+  func elapsedSpeechValueIsNonEmptyAtZeroSeconds() {
+    let vm = makeViewModel()
+    #expect(!vm.elapsedSpeechValue.isEmpty)
+  }
+
+  @Test
+  func elapsedSpeechValueDoesNotContainColons() {
+    let vm = makeViewModel()
+    #expect(!vm.elapsedSpeechValue.contains(":"))
+  }
+
+  @Test
+  func elapsedSpeechValueSpellsOutUnits() {
+    let vm = makeViewModel()
+    let value = vm.elapsedSpeechValue.lowercased()
+    let hasTimeUnit = value.contains("second") || value.contains("minute") || value.contains("hour")
+    #expect(hasTimeUnit)
+  }
+
   // MARK: - Helpers
 
   private func makeService() -> (RouteService, LocationService) {

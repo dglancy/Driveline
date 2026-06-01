@@ -36,17 +36,17 @@ struct RouteDetailView: View {
         RouteDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
           .frame(height: mapHeight)
           .overlay(alignment: .topLeading) {
-            GlassButton(systemImage: "chevron.left") { dismiss() }
+            GlassButton(systemImage: "chevron.left", accessibilityLabel: "Back") { dismiss() }
               .padding(14)
           }
           .overlay(alignment: .topTrailing) {
-            GlassButton(systemImage: "ellipsis") {
+            GlassButton(systemImage: "ellipsis", accessibilityLabel: "More options") {
               viewModel.showingMoreMenu = true
             }
             .padding(14)
           }
           .overlay(alignment: .bottomTrailing) {
-            GlassButton(systemImage: "viewfinder") {
+            GlassButton(systemImage: "viewfinder", accessibilityLabel: "Full screen map") {
               viewModel.showingFullScreenMap = true
             }
             .padding(14)

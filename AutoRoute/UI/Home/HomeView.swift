@@ -205,6 +205,11 @@ struct HomeView: View {
           .frame(width: 36, height: 36)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(
+          routeService.isRecording
+            ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
+            : String(localized: "Start a new route", comment: "Record button when idle")
+        )
       }
     }
   }
@@ -244,6 +249,7 @@ private struct RecordingBannerSection: View {
           Image(systemName: "chevron.right")
             .font(.system(size: 12, weight: .semibold))
             .foregroundStyle(Color(.tertiaryLabel))
+            .accessibilityHidden(true)
         }
         .padding(.vertical, 4)
       }

@@ -42,5 +42,7 @@ struct RouteStatTile: View {
     .padding(14)
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+    .accessibilityElement(children: .combine)
+    .accessibilityLabel("\(label): \(value) \(unit)")
   }
 }
