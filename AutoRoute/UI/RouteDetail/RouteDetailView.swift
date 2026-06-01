@@ -128,10 +128,10 @@ struct RouteDetailView: View {
   private var routeHeader: some View {
     VStack(alignment: .leading, spacing: 3) {
       Text(viewModel.name)
-        .font(.system(size: 28, weight: .bold))
+        .font(.title.weight(.bold))
         .foregroundStyle(Color(.label))
       Text(viewModel.dateString)
-        .font(.system(size: 15))
+        .font(.callout)
         .foregroundStyle(.secondary)
     }
   }
@@ -198,7 +198,7 @@ struct RouteDetailView: View {
       viewModel.showSharingDialog = true
     } label: {
       Label(String(localized: "Share Route", comment: "Share button"), systemImage: "square.and.arrow.up")
-        .font(.system(size: 17, weight: .medium))
+        .font(.body.weight(.medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
     }
@@ -220,7 +220,7 @@ struct RouteDetailView: View {
           viewModel.showingEditRoute = true
         } label: {
           Text(String(localized: "Edit Route Details", comment: "More menu action"))
-            .font(.system(size: 20))
+            .font(.title3)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 18)
         }
@@ -234,7 +234,7 @@ struct RouteDetailView: View {
           viewModel.showingDeleteConfirmation = true
         } label: {
           Text(String(localized: "Delete Route", comment: "More menu action"))
-            .font(.system(size: 20))
+            .font(.title3)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 18)
         }
@@ -247,7 +247,7 @@ struct RouteDetailView: View {
         }
       } label: {
         Text(String(localized: "Cancel", comment: "More menu cancel"))
-          .font(.system(size: 20, weight: .semibold))
+          .font(.title3.weight(.semibold))
           .frame(maxWidth: .infinity)
           .padding(.vertical, 18)
       }
@@ -288,9 +288,9 @@ private struct EndpointRow: View {
 
       VStack(alignment: .leading, spacing: 1) {
         Text(place ?? String(localized: "Unknown", comment: "Unknown place name"))
-          .font(.system(size: 16))
+          .font(.callout)
         Text(subtitle)
-          .font(.system(size: 13))
+          .font(.footnote)
           .foregroundStyle(.secondary)
       }
 
@@ -298,7 +298,7 @@ private struct EndpointRow: View {
 
       if let time {
         Text(time)
-          .font(.system(size: 15))
+          .font(.callout)
           .foregroundStyle(.secondary)
       }
     }
@@ -318,7 +318,7 @@ private struct EndpointRow: View {
         .shadow(color: .black.opacity(0.15), radius: 1)
     } else {
       Image(systemName: "flag.pattern.checkered")
-        .font(.system(size: 18, weight: .medium))
+        .font(.body.weight(.medium))
         .foregroundStyle(.red)
     }
   }
@@ -337,17 +337,17 @@ private struct MetadataRow: View {
   var body: some View {
     HStack(spacing: 12) {
       Image(systemName: icon)
-        .font(.system(size: 16))
+        .font(.callout)
         .foregroundStyle(.secondary)
         .frame(width: 24)
 
       Text(title)
-        .font(.system(size: 16))
+        .font(.callout)
 
       Spacer()
 
       Text(value)
-        .font(.system(size: 16))
+        .font(.callout)
         .foregroundStyle(.secondary)
     }
     .padding(.horizontal, 16)

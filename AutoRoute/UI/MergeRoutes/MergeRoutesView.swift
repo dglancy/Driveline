@@ -49,12 +49,12 @@ struct MergeRoutesView: View {
   private var header: some View {
     ZStack {
       Text("Merge Routes")
-        .font(.system(size: 17, weight: .semibold))
+        .font(.body.weight(.semibold))
       HStack {
         Button(String(localized: "Cancel", comment: "Dismiss merge sheet")) {
           onCancel()
         }
-        .font(.system(size: 17))
+        .font(.body)
         Spacer()
       }
     }
@@ -86,7 +86,7 @@ struct MergeRoutesView: View {
       }
     } label: {
       Image(systemName: "arrow.up.arrow.down")
-        .font(.system(size: 16, weight: .medium))
+        .font(.callout.weight(.medium))
         .foregroundStyle(.tint)
         .frame(width: 36, height: 36)
         .background(Color(.systemGroupedBackground))
@@ -104,7 +104,7 @@ struct MergeRoutesView: View {
         String(localized: "Route name", comment: "Merge name text field placeholder"),
         text: $viewModel.mergedName
       )
-      .font(.system(size: 17))
+      .font(.body)
       .padding(.horizontal, 15)
       .padding(.vertical, 13)
       .background(Color(.secondarySystemGroupedBackground))
@@ -146,7 +146,7 @@ struct MergeRoutesView: View {
       "The two GPS tracks are joined end-to-end in this order. The original routes are removed and can't be restored.",
       comment: "Merge disclaimer about track joining and deletion"
     )
-    .font(.system(size: 13))
+    .font(.footnote)
     .foregroundStyle(.secondary)
     .padding(.horizontal, 22)
     .padding(.top, 12)
@@ -160,7 +160,7 @@ struct MergeRoutesView: View {
         String(localized: "Merge into One Route", comment: "Merge confirmation button"),
         systemImage: "arrow.triangle.merge"
       )
-      .font(.system(size: 17, weight: .semibold))
+      .font(.body.weight(.semibold))
       .frame(maxWidth: .infinity)
       .padding(.vertical, 15)
       .background(.tint)
@@ -176,7 +176,7 @@ struct MergeRoutesView: View {
 
   private func sectionHeader(_ title: String) -> some View {
     Text(title)
-      .font(.system(size: 13))
+      .font(.footnote)
       .foregroundStyle(.secondary)
       .textCase(.uppercase)
       .tracking(0.2)
@@ -186,10 +186,10 @@ struct MergeRoutesView: View {
   private func statColumn(value: String, label: String) -> some View {
     VStack(spacing: 2) {
       Text(value)
-        .font(.system(size: 22, weight: .semibold))
+        .font(.title2.weight(.semibold))
         .foregroundStyle(.tint)
       Text(label)
-        .font(.system(size: 12))
+        .font(.caption)
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity)
@@ -214,15 +214,15 @@ private struct MiniRouteCard: View {
           .fill(.tint)
           .frame(width: 26, height: 26)
         Text("\(index)")
-          .font(.system(size: 14, weight: .bold))
+          .font(.subheadline.weight(.bold))
           .foregroundStyle(.white)
       }
       VStack(alignment: .leading, spacing: 1) {
         Text(display.name)
-          .font(.system(size: 16, weight: .semibold))
+          .font(.callout.weight(.semibold))
           .lineLimit(1)
         Text(display.dateTimeLabel)
-          .font(.system(size: 13))
+          .font(.footnote)
           .foregroundStyle(.secondary)
           .lineLimit(1)
       }
@@ -230,9 +230,9 @@ private struct MiniRouteCard: View {
 
       VStack(alignment: .trailing, spacing: 1) {
         Text(display.formattedDistance)
-          .font(.system(size: 15, weight: .medium))
+          .font(.callout.weight(.medium))
         Text(display.formattedDuration)
-          .font(.system(size: 12))
+          .font(.caption)
           .foregroundStyle(.tertiary)
       }
     }
