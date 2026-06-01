@@ -61,7 +61,11 @@ final class RecordingViewModel {
   }
 
   var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
-  var pauseResumeLabel: String { routeService.isPaused ? "Resume" : "Pause" }
+  var pauseResumeLabel: String {
+    routeService.isPaused ?
+    String(localized: "Resume", comment: "Resume a paused drive") :
+    String(localized: "Pause", comment: "Pause an active drive")
+  }
 
   // MARK: - Formatting
 
