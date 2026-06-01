@@ -30,63 +30,63 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6D47A5102FCAD20600E6C7B7 /* AutoRoute.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoRoute.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D47A51F2FCAD20800E6C7B7 /* AutoRouteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoRouteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoRouteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D47A5102FCAD20600E6C7B7 /* AutoRoutes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoRoutes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D47A51F2FCAD20800E6C7B7 /* AutoRoutesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoRoutesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D47A5292FCAD20800E6C7B7 /* AutoRoutesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutoRoutesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		6D47A54F2FCAE68700E6C7B7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6D47A5502FCAE68700E6C7B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6D47A58C2FCB0FCF00E6C7B7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		6D8311D12FCD8C620036D01E /* AutoRoute.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AutoRoute.xctestplan; sourceTree = "<group>"; };
+		6D8311D12FCD8C620036D01E /* AutoRoutes.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AutoRoutes.xctestplan; sourceTree = "<group>"; };
 		6D8311D22FCD908F0036D01E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		6D8311D32FCD9B7C0036D01E /* CODE_OF_CONDUCT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CODE_OF_CONDUCT.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteUITests" target */ = {
+		6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoutes" folder in "AutoRoutesUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AppLifecycle/Constants.swift,
 			);
-			target = 6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */;
+			target = 6D47A5282FCAD20800E6C7B7 /* AutoRoutesUITests */;
 		};
-		6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */ = {
+		6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoutes" folder in "AutoRoutesTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AppLifecycle/Constants.swift,
 			);
-			target = 6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */;
+			target = 6D47A51E2FCAD20800E6C7B7 /* AutoRoutesTests */;
 		};
-		6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRoute" target */ = {
+		6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoutes" folder in "AutoRoutes" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoutes */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		6D47A5122FCAD20600E6C7B7 /* AutoRoute */ = {
+		6D47A5122FCAD20600E6C7B7 /* AutoRoutes */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRoute" target */,
-				6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteTests" target */,
-				6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoute" folder in "AutoRouteUITests" target */,
+				6D47A5A32FCB2B2900E6C7B7 /* Exceptions for "AutoRoutes" folder in "AutoRoutes" target */,
+				6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "AutoRoutes" folder in "AutoRoutesTests" target */,
+				6D47A5892FCB019F00E6C7B7 /* Exceptions for "AutoRoutes" folder in "AutoRoutesUITests" target */,
 			);
-			path = AutoRoute;
+			path = AutoRoutes;
 			sourceTree = "<group>";
 		};
-		6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */ = {
+		6D47A5222FCAD20800E6C7B7 /* AutoRoutesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AutoRouteTests;
+			path = AutoRoutesTests;
 			sourceTree = "<group>";
 		};
-		6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */ = {
+		6D47A52C2FCAD20800E6C7B7 /* AutoRoutesUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AutoRouteUITests;
+			path = AutoRoutesUITests;
 			sourceTree = "<group>";
 		};
 		6D8311CF2FCD81C40036D01E /* workflows */ = {
@@ -133,11 +133,11 @@
 				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
 				6D47A5502FCAE68700E6C7B7 /* README.md */,
 				6D8311D32FCD9B7C0036D01E /* CODE_OF_CONDUCT.md */,
-				6D8311D12FCD8C620036D01E /* AutoRoute.xctestplan */,
+				6D8311D12FCD8C620036D01E /* AutoRoutes.xctestplan */,
 				6D8311CF2FCD81C40036D01E /* workflows */,
-				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
-				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
-				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,
+				6D47A5122FCAD20600E6C7B7 /* AutoRoutes */,
+				6D47A5222FCAD20800E6C7B7 /* AutoRoutesTests */,
+				6D47A52C2FCAD20800E6C7B7 /* AutoRoutesUITests */,
 				6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */,
 				6D47A59F2FCB2B1400E6C7B7 /* Frameworks */,
 				6D47A5112FCAD20600E6C7B7 /* Products */,
@@ -147,9 +147,9 @@
 		6D47A5112FCAD20600E6C7B7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6D47A5102FCAD20600E6C7B7 /* AutoRoute.app */,
-				6D47A51F2FCAD20800E6C7B7 /* AutoRouteTests.xctest */,
-				6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */,
+				6D47A5102FCAD20600E6C7B7 /* AutoRoutes.app */,
+				6D47A51F2FCAD20800E6C7B7 /* AutoRoutesTests.xctest */,
+				6D47A5292FCAD20800E6C7B7 /* AutoRoutesUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,9 +165,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6D47A50F2FCAD20600E6C7B7 /* AutoRoute */ = {
+		6D47A50F2FCAD20600E6C7B7 /* AutoRoutes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6D47A5332FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoute" */;
+			buildConfigurationList = 6D47A5332FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoutes" */;
 			buildPhases = (
 				6D47A50C2FCAD20600E6C7B7 /* Sources */,
 				6D47A50D2FCAD20600E6C7B7 /* Frameworks */,
@@ -179,19 +179,19 @@
 				6D47A5902FCB124300E6C7B7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
+				6D47A5122FCAD20600E6C7B7 /* AutoRoutes */,
 			);
-			name = AutoRoute;
+			name = AutoRoutes;
 			packageProductDependencies = (
 				6DFE8AFE2FCC31D900DC88CB /* GPXKit */,
 			);
 			productName = AutoRoute;
-			productReference = 6D47A5102FCAD20600E6C7B7 /* AutoRoute.app */;
+			productReference = 6D47A5102FCAD20600E6C7B7 /* AutoRoutes.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */ = {
+		6D47A51E2FCAD20800E6C7B7 /* AutoRoutesTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6D47A5362FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteTests" */;
+			buildConfigurationList = 6D47A5362FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoutesTests" */;
 			buildPhases = (
 				6D47A51B2FCAD20800E6C7B7 /* Sources */,
 				6D47A51C2FCAD20800E6C7B7 /* Frameworks */,
@@ -203,18 +203,18 @@
 				6D47A5212FCAD20800E6C7B7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
+				6D47A5222FCAD20800E6C7B7 /* AutoRoutesTests */,
 			);
-			name = AutoRouteTests;
+			name = AutoRoutesTests;
 			packageProductDependencies = (
 			);
 			productName = AutoRouteTests;
-			productReference = 6D47A51F2FCAD20800E6C7B7 /* AutoRouteTests.xctest */;
+			productReference = 6D47A51F2FCAD20800E6C7B7 /* AutoRoutesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */ = {
+		6D47A5282FCAD20800E6C7B7 /* AutoRoutesUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6D47A5392FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteUITests" */;
+			buildConfigurationList = 6D47A5392FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoutesUITests" */;
 			buildPhases = (
 				6D47A5252FCAD20800E6C7B7 /* Sources */,
 				6D47A5262FCAD20800E6C7B7 /* Frameworks */,
@@ -226,13 +226,13 @@
 				6D47A52B2FCAD20800E6C7B7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,
+				6D47A52C2FCAD20800E6C7B7 /* AutoRoutesUITests */,
 			);
-			name = AutoRouteUITests;
+			name = AutoRoutesUITests;
 			packageProductDependencies = (
 			);
 			productName = AutoRouteUITests;
-			productReference = 6D47A5292FCAD20800E6C7B7 /* AutoRouteUITests.xctest */;
+			productReference = 6D47A5292FCAD20800E6C7B7 /* AutoRoutesUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -258,7 +258,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "AutoRoute" */;
+			buildConfigurationList = 6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "AutoRoutes" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -279,9 +279,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6D47A50F2FCAD20600E6C7B7 /* AutoRoute */,
-				6D47A51E2FCAD20800E6C7B7 /* AutoRouteTests */,
-				6D47A5282FCAD20800E6C7B7 /* AutoRouteUITests */,
+				6D47A50F2FCAD20600E6C7B7 /* AutoRoutes */,
+				6D47A51E2FCAD20800E6C7B7 /* AutoRoutesTests */,
+				6D47A5282FCAD20800E6C7B7 /* AutoRoutesUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -338,12 +338,12 @@
 /* Begin PBXTargetDependency section */
 		6D47A5212FCAD20800E6C7B7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoutes */;
 			targetProxy = 6D47A5202FCAD20800E6C7B7 /* PBXContainerItemProxy */;
 		};
 		6D47A52B2FCAD20800E6C7B7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoute */;
+			target = 6D47A50F2FCAD20600E6C7B7 /* AutoRoutes */;
 			targetProxy = 6D47A52A2FCAD20800E6C7B7 /* PBXContainerItemProxy */;
 		};
 		6D47A5902FCB124300E6C7B7 /* PBXTargetDependency */ = {
@@ -491,7 +491,7 @@
 				DEVELOPMENT_TEAM = 4U6275HKV3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = AutoRoute/Info.plist;
+				INFOPLIST_FILE = AutoRoutes/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AutoRoute supports recording your drives even when the app is in the background";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AutoRoute requires your location to record your drives";
@@ -533,7 +533,7 @@
 				DEVELOPMENT_TEAM = 4U6275HKV3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = AutoRoute/Info.plist;
+				INFOPLIST_FILE = AutoRoutes/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AutoRoute supports recording your drives even when the app is in the background";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AutoRoute requires your location to record your drives";
@@ -548,7 +548,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoute;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoutes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -586,7 +586,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoRoute.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoRoute";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoRoutes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoRoutes";
 			};
 			name = Debug;
 		};
@@ -600,7 +600,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoutesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -612,7 +612,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoRoute.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoRoute";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AutoRoutes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AutoRoutes";
 			};
 			name = Release;
 		};
@@ -623,6 +623,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4U6275HKV3;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -647,8 +648,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4U6275HKV3;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoutesUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -667,7 +669,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "AutoRoute" */ = {
+		6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "AutoRoutes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D47A5312FCAD20800E6C7B7 /* Debug */,
@@ -676,7 +678,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6D47A5332FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoute" */ = {
+		6D47A5332FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoutes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D47A5342FCAD20800E6C7B7 /* Debug */,
@@ -685,7 +687,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6D47A5362FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteTests" */ = {
+		6D47A5362FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoutesTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D47A5372FCAD20800E6C7B7 /* Debug */,
@@ -694,7 +696,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6D47A5392FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRouteUITests" */ = {
+		6D47A5392FCAD20800E6C7B7 /* Build configuration list for PBXNativeTarget "AutoRoutesUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D47A53A2FCAD20800E6C7B7 /* Debug */,

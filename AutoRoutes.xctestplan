@@ -16,7 +16,7 @@
       "target" : {
         "containerPath" : "container:AutoRoute.xcodeproj",
         "identifier" : "6D47A51E2FCAD20800E6C7B7",
-        "name" : "AutoRouteTests"
+        "name" : "AutoRoutesTests"
       }
     }
   ],

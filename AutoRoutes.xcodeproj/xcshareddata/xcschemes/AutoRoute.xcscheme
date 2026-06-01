@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-               BuildableName = "AutoRoute.app"
-               BlueprintName = "AutoRoute"
-               ReferencedContainer = "container:AutoRoute.xcodeproj">
+               BuildableName = "AutoRoutes.app"
+               BlueprintName = "AutoRoutes"
+               ReferencedContainer = "container:AutoRoutes.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:AutoRoute.xctestplan"
+            reference = "container:AutoRoutes.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -41,9 +41,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6D47A51E2FCAD20800E6C7B7"
-               BuildableName = "AutoRouteTests.xctest"
-               BlueprintName = "AutoRouteTests"
-               ReferencedContainer = "container:AutoRoute.xcodeproj">
+               BuildableName = "AutoRoutesTests.xctest"
+               BlueprintName = "AutoRoutesTests"
+               ReferencedContainer = "container:AutoRoutes.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -52,9 +52,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6D47A5282FCAD20800E6C7B7"
-               BuildableName = "AutoRouteUITests.xctest"
-               BlueprintName = "AutoRouteUITests"
-               ReferencedContainer = "container:AutoRoute.xcodeproj">
+               BuildableName = "AutoRoutesUITests.xctest"
+               BlueprintName = "AutoRoutesUITests"
+               ReferencedContainer = "container:AutoRoutes.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-            BuildableName = "AutoRoute.app"
-            BlueprintName = "AutoRoute"
-            ReferencedContainer = "container:AutoRoute.xcodeproj">
+            BuildableName = "AutoRoutes.app"
+            BlueprintName = "AutoRoutes"
+            ReferencedContainer = "container:AutoRoutes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -92,9 +92,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-            BuildableName = "AutoRoute.app"
-            BlueprintName = "AutoRoute"
-            ReferencedContainer = "container:AutoRoute.xcodeproj">
+            BuildableName = "AutoRoutes.app"
+            BlueprintName = "AutoRoutes"
+            ReferencedContainer = "container:AutoRoutes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
