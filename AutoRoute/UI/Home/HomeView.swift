@@ -213,8 +213,7 @@ struct HomeView: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   PreviewSampleData.insertSampleRoutes(in: container.mainContext)
 
   let locationService = LocationService()

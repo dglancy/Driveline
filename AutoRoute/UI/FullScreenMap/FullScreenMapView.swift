@@ -87,8 +87,7 @@ struct FullScreenMapView: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   let route = PreviewSampleData.sampleRoute(in: container.mainContext)
   return NavigationStack {
     FullScreenMapView(route: route)

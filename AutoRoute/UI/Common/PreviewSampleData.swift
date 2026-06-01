@@ -11,6 +11,12 @@ import SwiftData
 enum PreviewSampleData {
 
   @MainActor
+  static func previewContainer() -> ModelContainer {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    return try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  }
+
+  @MainActor
   static func sampleRoute(in context: ModelContext) -> Route {
     let calendar = Calendar.current
     let now = Date.now
