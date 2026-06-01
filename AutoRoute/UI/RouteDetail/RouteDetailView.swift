@@ -174,7 +174,7 @@ struct RouteDetailView: View {
           .foregroundStyle(.red)
       }
     }
-    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+    .cardBackground(cornerRadius: 16)
   }
 
   private var metadataCard: some View {
@@ -197,7 +197,7 @@ struct RouteDetailView: View {
           .foregroundStyle(.secondary)
       }
     }
-    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+    .cardBackground(cornerRadius: 16)
   }
 
   private var shareRouteButton: some View {
@@ -209,7 +209,7 @@ struct RouteDetailView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
     }
-    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+    .cardBackground(cornerRadius: 16)
     .alert(String(localized: "Share Route", comment: "Share route alert title"), isPresented: $viewModel.showSharingDialog) {
       Button(String(localized: "Share GPX", comment: "Share route as GPX")) { viewModel.shareRouteGPX() }
       Button(String(localized: "Share PNG", comment: "Share route as PNG")) { viewModel.shareRoutePNG() }

@@ -126,8 +126,7 @@ struct MergeRoutesView: View {
         )
       }
       .padding(16)
-      .background(Color(.secondarySystemGroupedBackground))
-      .clipShape(RoundedRectangle(cornerRadius: 14))
+      .cardBackground()
     }
     .padding(.horizontal, 16)
     .padding(.top, 22)
@@ -208,7 +207,6 @@ private struct MiniRouteCard: View {
     }
     .padding(.horizontal, 15)
     .padding(.vertical, 13)
-    .background(Color(.secondarySystemGroupedBackground))
-    .clipShape(RoundedRectangle(cornerRadius: 14))
+    .cardBackground()
   }
 }
