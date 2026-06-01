@@ -10,7 +10,6 @@ import Combine
 import CoreLocation
 import Observation
 import SwiftData
-import os.log
 
 // MARK: - Location Data Recorder Service
 

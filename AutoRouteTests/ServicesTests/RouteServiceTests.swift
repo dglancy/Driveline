@@ -306,7 +306,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let existingRoute = Route(name: "Existing route")
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: existingRoute)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: existingRoute)
 
     #expect(service.route?.id == existingRoute.id)
   }
@@ -317,7 +317,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
     route.status = .recording
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
 
     #expect(service.isRecording == true)
   }
@@ -328,7 +328,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
     route.status = .finished
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
 
     #expect(service.isRecording == false)
   }
@@ -339,7 +339,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
     route.status = .paused
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
 
     #expect(service.isPaused == true)
   }
@@ -350,7 +350,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let route = Route(name: "Test")
     route.status = .recording
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialRoute: route)
+    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
 
     #expect(service.isPaused == false)
   }
@@ -476,7 +476,8 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       modelContext: context!,
       locationService: locationService,
       locationDataRecorder: recorder,
-      geocodingService: geocodingService ?? GeocodingService()
+      geocodingService: geocodingService ?? MockGeocodingService(),
+      networkMonitorService: MockNetworkMonitorService()
     )
     return (service, locationService, recorder)
   }

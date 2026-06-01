@@ -97,7 +97,7 @@ struct AutoRouteApp: App {
     modelContext: ModelContext,
     locationService: LocationService,
     locationDataRecorder: LocationDataRecorderService,
-    networkMonitorService: NetworkMonitorService
+    networkMonitorService: any NetworkMonitorServiceProtocol
   ) -> RouteService {
     Log.lifecycle.info("Setting up route service")
     var descriptor = FetchDescriptor<Route>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])

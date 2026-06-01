@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-  func clockTime(locale: Locale = .current) -> String {
+  func clockString(locale: Locale = .current) -> String {
     formatted(.dateTime.hour().minute().locale(locale))
   }
 

@@ -62,7 +62,7 @@ struct FullScreenMapView: View {
       HStack(spacing: 0) {
         statChip(value: viewModel.distanceValue, unit: viewModel.distanceUnit)
         Divider().frame(height: 28).padding(.horizontal, 12)
-        statChip(value: viewModel.durationValue, unit: String(localized: "active", comment: "Active duration"))
+        statChip(value: viewModel.durationValue, unit: viewModel.durationUnit)
         Divider().frame(height: 28).padding(.horizontal, 12)
         statChip(value: viewModel.avgSpeedValue, unit: viewModel.avgSpeedUnit)
       }
@@ -87,8 +87,7 @@ struct FullScreenMapView: View {
 // MARK: - Preview
 
 #Preview {
-  let config = ModelConfiguration(isStoredInMemoryOnly: true)
-  let container = try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+  let container = PreviewSampleData.previewContainer()
   let route = PreviewSampleData.sampleRoute(in: container.mainContext)
   return NavigationStack {
     FullScreenMapView(route: route)

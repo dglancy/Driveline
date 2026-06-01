@@ -23,16 +23,16 @@ struct DateExtensionsTests {
     ))!
   }()
 
-  // MARK: - clockTime
+  // MARK: - clockString
 
-  @Test("clockTime returns HH:mm in en_GB")
-  func testClockTimeEnGB() {
-    #expect(referenceDate.clockTime(locale: Locale(identifier: "en_GB")) == "14:30")
+  @Test("clockString returns HH:mm in en_GB")
+  func testClockStringEnGB() {
+    #expect(referenceDate.clockString(locale: Locale(identifier: "en_GB")) == "14:30")
   }
 
-  @Test("clockTime returns HH:mm in fr_FR")
-  func testClockTimeFrFR() {
-    #expect(referenceDate.clockTime(locale: Locale(identifier: "fr_FR")) == "14:30")
+  @Test("clockString returns HH:mm in fr_FR")
+  func testClockStringFrFR() {
+    #expect(referenceDate.clockString(locale: Locale(identifier: "fr_FR")) == "14:30")
   }
 
   // MARK: - longDateString

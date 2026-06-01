@@ -11,7 +11,6 @@ import Foundation
 import Observation
 import SwiftData
 import Combine
-import os.log
 
 @MainActor
 @Observable
@@ -31,7 +30,7 @@ final class RouteService {
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
-  @ObservationIgnored private let networkMonitorService: NetworkMonitorService
+  @ObservationIgnored private let networkMonitorService: any NetworkMonitorServiceProtocol
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
@@ -43,7 +42,7 @@ final class RouteService {
        locationService: LocationService,
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
-       networkMonitorService: NetworkMonitorService = NetworkMonitorService(),
+       networkMonitorService: any NetworkMonitorServiceProtocol = NetworkMonitorService(),
        initialRoute: Route? = nil) {
     self.modelContext = modelContext
     self.locationService = locationService

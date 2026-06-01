@@ -10,9 +10,19 @@ import Foundation
 import Network
 import Observation
 
+// MARK: - Protocol
+
+@MainActor
+protocol NetworkMonitorServiceProtocol {
+  var isConnected: Bool { get }
+  var connectivityRestoredPublisher: AnyPublisher<Void, Never> { get }
+}
+
+// MARK: - NetworkMonitorService
+
 @MainActor
 @Observable
-final class NetworkMonitorService {
+final class NetworkMonitorService: NetworkMonitorServiceProtocol {
 
   // MARK: - Properties
 
