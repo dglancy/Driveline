@@ -130,7 +130,6 @@ final class HomeViewModel {
     merged.startedAt = first.startedAt
     merged.endedAt = second.endedAt ?? first.endedAt
     merged.status = .finished
-    merged.trigger = .manual
     merged.startPlaceName = first.startPlaceName
     merged.endPlaceName = second.endPlaceName
     merged.positions = first.positions + second.positions
