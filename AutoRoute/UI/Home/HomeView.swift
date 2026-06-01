@@ -33,6 +33,8 @@ struct HomeView: View {
         .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
           if isRecording {
             viewModel.exitSelectMode()
+          } else {
+            viewModel.update(with: routes)
           }
           showingRecordingScreen = isRecording
         }
