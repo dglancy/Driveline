@@ -7,7 +7,7 @@
 
 import Foundation
 
-@testable import AutoRoute
+@testable import AutoRoutes
 import Testing
 import Foundation
 

@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-@testable import AutoRoute
+@testable import AutoRoutes
 
 @Suite
 struct DateExtensionsTests {

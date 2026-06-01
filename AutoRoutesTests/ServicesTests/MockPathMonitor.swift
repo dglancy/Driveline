@@ -5,7 +5,7 @@
 //  Created by Damien Glancy on 31/05/2026.
 //
 
-@testable import AutoRoute
+@testable import AutoRoutes
 import Foundation
 
 final class MockPathMonitor: PathMonitoring {
