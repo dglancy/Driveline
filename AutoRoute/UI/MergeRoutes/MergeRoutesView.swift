@@ -79,7 +79,7 @@ struct MergeRoutesView: View {
         viewModel.swapOrder()
       }
     } label: {
-      Image(systemName: "arrow.up.arrow.down")
+      Image(systemName: SystemImage.reorderRoutes)
         .font(.callout.weight(.medium))
         .foregroundStyle(.tint)
         .frame(width: 36, height: 36)

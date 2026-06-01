@@ -19,7 +19,7 @@ struct RouteRowView: View {
   var body: some View {
     HStack(spacing: 13) {
       if let isSelected {
-        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+        Image(systemName: isSelected ? SystemImage.selected : SystemImage.deselected)
           .font(.title2)
           .foregroundStyle(isSelected ? Color.accentColor : Color(.tertiaryLabel))
           .animation(.easeInOut(duration: 0.15), value: isSelected)
@@ -61,7 +61,7 @@ struct RouteRowView: View {
       RoundedRectangle(cornerRadius: 11)
         .fill(.tint.opacity(0.14))
         .frame(width: 38, height: 38)
-      Image(systemName: "point.bottomleft.forward.to.point.topright.scurvepath")
+      Image(systemName: SystemImage.routeBadge)
         .font(.title3)
         .foregroundStyle(.tint)
     }

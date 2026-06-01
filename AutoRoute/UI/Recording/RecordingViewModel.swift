@@ -60,7 +60,7 @@ final class RecordingViewModel {
     return date.clockTime()
   }
 
-  var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
+  var pauseResumeIconName: String { routeService.isPaused ? SystemImage.play : SystemImage.pause }
   var pauseResumeLabel: String {
     routeService.isPaused ?
     String(localized: "Resume", comment: "Resume a paused drive") :
