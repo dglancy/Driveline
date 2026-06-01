@@ -50,12 +50,10 @@ struct EditRouteView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
-          Button(String(localized: "Cancel", comment: "Cancel edit route")) {
-            dismiss()
-          }
+          Button.cancel { dismiss() }
         }
         ToolbarItem(placement: .topBarTrailing) {
-          Button(String(localized: "Save", comment: "Save edit route")) {
+          Button.save {
             viewModel.save()
             dismiss()
           }

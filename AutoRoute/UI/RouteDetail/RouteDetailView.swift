@@ -87,11 +87,11 @@ struct RouteDetailView: View {
       String(localized: "Delete Route", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
-      Button(String(localized: "Delete", comment: "Confirm delete route"), role: .destructive) {
+      Button.delete {
         viewModel.deleteRoute(using: modelContext)
         dismiss()
       }
-      Button(String(localized: "Cancel", comment: "Cancel delete route"), role: .cancel) { }
+      Button.cancel()
     } message: {
       Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete route confirmation message"))
     }
@@ -110,7 +110,7 @@ struct RouteDetailView: View {
       Button(String(localized: "Delete Route", comment: "More menu action"), role: .destructive) {
         viewModel.showingDeleteConfirmation = true
       }
-      Button(String(localized: "Cancel", comment: "More menu cancel"), role: .cancel) { }
+      Button.cancel()
     }
   }
 
@@ -213,7 +213,7 @@ struct RouteDetailView: View {
     .alert(String(localized: "Share Route", comment: "Share route alert title"), isPresented: $viewModel.showSharingDialog) {
       Button(String(localized: "Share GPX", comment: "Share route as GPX")) { viewModel.shareRouteGPX() }
       Button(String(localized: "Share PNG", comment: "Share route as PNG")) { viewModel.shareRoutePNG() }
-      Button(String(localized: "Cancel", comment: "Cancel share route"), role: .cancel) { }
+      Button.cancel()
     }
   }
 

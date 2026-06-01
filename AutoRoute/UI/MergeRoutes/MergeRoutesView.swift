@@ -40,9 +40,7 @@ struct MergeRoutesView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button(String(localized: "Cancel", comment: "Dismiss merge sheet")) {
-            dismiss()
-          }
+          Button.cancel { dismiss() }
         }
         ToolbarItem(placement: .confirmationAction) {
           Button(String(localized: "Merge", comment: "Confirm route merge")) {
@@ -137,7 +135,7 @@ struct MergeRoutesView: View {
 
   private var disclaimerText: some View {
     Text(
-      "The two GPS tracks are joined end-to-end in this order. The original routes are removed and can't be restored.",
+      "The two routes are joined end-to-end in this order. The original routes are removed and can't be restored.",
       comment: "Merge disclaimer about track joining and deletion"
     )
     .font(.footnote)
