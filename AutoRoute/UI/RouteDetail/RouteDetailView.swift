@@ -139,7 +139,7 @@ struct RouteDetailView: View {
         icon: "clock",
         label: String(localized: "Duration", comment: "Stat tile label"),
         value: viewModel.durationValue,
-        unit: String(localized: "active", comment: "Active duration (not including pauses)")
+        unit: viewModel.durationUnit
       )
       RouteStatTile(
         icon: "speedometer",
