@@ -17,7 +17,6 @@ struct HomeView: View {
   @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
   @State private var viewModel = HomeViewModel()
   @State private var showingRecordingScreen = false
-  @State private var recordingViewModel: RecordingViewModel?
   @State private var showingMergeSheet = false
   @State private var routesToMerge: [Route] = []
 
@@ -33,18 +32,13 @@ struct HomeView: View {
         }
         .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
           if isRecording {
-            recordingViewModel = RecordingViewModel(routeService: routeService)
             viewModel.exitSelectMode()
-          } else {
-            recordingViewModel = nil
           }
           showingRecordingScreen = isRecording
         }
     }
     .fullScreenCover(isPresented: $showingRecordingScreen) {
-      if let recordingViewModel {
-        RecordingView(viewModel: recordingViewModel)
-      }
+      RecordingView(routeService: routeService)
     }
     .alert(
       String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
@@ -57,14 +51,15 @@ struct HomeView: View {
       }
       Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
     } message: {
-      let count = viewModel.selectedRouteIDs.count
-      if count == 1 {
-        Text(String(localized: "This route and all its data will be permanently deleted.",
-                    comment: "Delete single route confirmation message"))
-      } else {
-        Text(String(localized: "These \(count) routes and all their data will be permanently deleted.",
-                    comment: "Delete multiple routes confirmation message"))
-      }
+      Text(viewModel.deleteConfirmationMessage)
+    }
+    .alert(
+      String(localized: "Couldn't Start Recording", comment: "Start route failure alert title"),
+      isPresented: $viewModel.showingStartRouteError
+    ) {
+      Button(String(localized: "OK", comment: "Dismiss start route error alert"), role: .cancel) { }
+    } message: {
+      Text(viewModel.startRouteErrorMessage ?? "")
     }
     .sheet(isPresented: $showingMergeSheet) {
       if routesToMerge.count == 2 {
@@ -109,7 +104,7 @@ struct HomeView: View {
         if let summary = viewModel.summaryLine {
           Section {
             Text(summary)
-              .font(.system(size: 15))
+              .font(.callout)
               .foregroundStyle(.secondary)
               .listRowBackground(Color.clear)
               .frame(maxWidth: .infinity, alignment: .center)
@@ -192,7 +187,7 @@ struct HomeView: View {
           if routeService.isRecording {
             showingRecordingScreen = true
           } else {
-            routeService.startRoute()
+            viewModel.startRoute(using: routeService)
           }
         } label: {
           ZStack {
@@ -203,103 +198,19 @@ struct HomeView: View {
                 .frame(width: 11, height: 11)
             } else {
               Image(systemName: "circle.inset.filled")
-                .font(.system(size: 22))
+                .font(.title2)
                 .foregroundStyle(.red)
             }
           }
           .frame(width: 36, height: 36)
         }
         .buttonStyle(.plain)
-      }
-    }
-  }
-}
-
-// MARK: - Subviews
-
-private struct RecordingBannerSection: View {
-
-  // MARK: - Properties
-
-  let triggerDisplayName: String?
-  let onTap: () -> Void
-
-  // MARK: - Body
-
-  var body: some View {
-    Section {
-      Button(action: onTap) {
-        HStack(spacing: 12) {
-          PulsingDot(color: .red, size: 10)
-          VStack(alignment: .leading, spacing: 1) {
-            Text("Recording drive…")
-              .font(.system(size: 16, weight: .semibold))
-              .foregroundStyle(Color(.label))
-            if let triggerDisplayName {
-              Text("\(triggerDisplayName) · Tap to view")
-                .font(.system(size: 13.5))
-                .foregroundStyle(Color(.secondaryLabel))
-            } else {
-              Text("Tap to view")
-                .font(.system(size: 13.5))
-                .foregroundStyle(Color(.secondaryLabel))
-            }
-          }
-          Spacer()
-          Image(systemName: "chevron.right")
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(Color(.tertiaryLabel))
-        }
-        .padding(.vertical, 4)
-      }
-      .buttonStyle(.plain)
-      .listRowBackground(Color.red.opacity(0.08))
-    }
-    .listSectionSeparator(.hidden)
-  }
-}
-
-private struct SelectionToolbar: View {
-
-  // MARK: - Properties
-
-  let canMerge: Bool
-  let canDelete: Bool
-  let selectionCountText: String
-  let onMerge: () -> Void
-  let onDelete: () -> Void
-
-  // MARK: - Body
-
-  var body: some View {
-    HStack {
-      Button(action: onMerge) {
-        Label(
-          String(localized: "Merge", comment: "Merge selected routes button"),
-          systemImage: "arrow.triangle.merge"
+        .accessibilityLabel(
+          routeService.isRecording
+            ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
+            : String(localized: "Start a new route", comment: "Record button when idle")
         )
-        .font(.system(size: 17, weight: .medium))
       }
-      .disabled(!canMerge)
-      .frame(maxWidth: .infinity, alignment: .leading)
-
-      Text(selectionCountText)
-        .font(.system(size: 13))
-        .foregroundStyle(.secondary)
-        .frame(maxWidth: .infinity, alignment: .center)
-
-      Button(String(localized: "Delete", comment: "Delete selected routes button"), action: onDelete)
-        .font(.system(size: 17, weight: .medium))
-        .foregroundStyle(canDelete ? Color.red : Color(.tertiaryLabel))
-        .disabled(!canDelete)
-        .frame(maxWidth: .infinity, alignment: .trailing)
-    }
-    .padding(.horizontal, 18)
-    .padding(.top, 10)
-    .padding(.bottom, 30)
-    .background(.regularMaterial)
-    .overlay(alignment: .top) {
-      Divider()
     }
   }
 }

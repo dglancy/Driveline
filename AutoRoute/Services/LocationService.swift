@@ -32,11 +32,11 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
   // MARK: - Lifecycle
 
-  override init() {
+  init(preferences: UserPreferences = UserPreferences()) {
     super.init()
     manager.delegate = self
     manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-    manager.activityType = activityTypeFromSettings()
+    manager.activityType = preferences.activityType
     manager.pausesLocationUpdatesAutomatically = false
     manager.allowsBackgroundLocationUpdates = true
   }
@@ -85,8 +85,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   }
 
   func resume() {
-    guard status != .started else {
-      Log.location.info("Monitoring locations already resumed; ignoring.")
+    guard status == .paused else {
+      Log.location.info("resume() called while status=\(status); ignoring.")
       return
     }
 
@@ -111,18 +111,16 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     Task { @MainActor in
       Log.location.info("\(locations.count) new location(s) received")
-      for location in locations {
+      for location in locations where isUsable(location) {
         locationPublisher.send(location)
       }
     }
   }
 
-  // MARK: - Private functions
-
-  private func activityTypeFromSettings() -> CLActivityType {
-    let rawValue = UserDefaults.standard.string(forKey: "ActivityType") ?? "automotive"
-    let type = CLActivityType(fromSettings: rawValue)
-    Log.location.info("Location activity type set to \"\(rawValue)\" from user settings")
-    return type
+  nonisolated func isUsable(_ location: CLLocation) -> Bool {
+    location.horizontalAccuracy >= 0 &&
+    location.horizontalAccuracy < kMinimumLocationAccuracy &&
+    -location.timestamp.timeIntervalSinceNow < kMaxLocationAge
   }
+
 }

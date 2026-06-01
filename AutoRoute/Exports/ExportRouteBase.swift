@@ -19,20 +19,32 @@ protocol ExportingRoute {
 extension ExportingRoute {
   func validatedCoordinates(for route: Route) throws -> [CLLocationCoordinate2D] {
     let coords = route.positionLocationCoordinatesIn2D
-    guard !coords.isEmpty else { throw ExportRouteError.emptyRoute }
+    guard !coords.isEmpty else { throw ExportError.emptyRoute }
     return coords
   }
 }
 
-// MARK: - Export route error enum
+// MARK: - Export error enum
 
-enum ExportRouteError: LocalizedError, Equatable {
+enum ExportError: LocalizedError, Equatable {
   case emptyRoute
+  case gpxEncodingFailed
+  case pngSnapshotFailure
+  case pngDataPreparationFailure
+  case pngFileWriteFailure
 
   var errorDescription: String? {
     switch self {
     case .emptyRoute:
       return String(localized: "Cannot export a route with no coordinates.", comment: "Export error: route has no recorded positions")
+    case .gpxEncodingFailed:
+      return String(localized: "Failed to prepare GPX data for sharing.", comment: "Export error: GPX string could not be encoded as UTF-8")
+    case .pngSnapshotFailure:
+      return String(localized: "Failed to create PNG. Please try again.", comment: "Export error: map snapshot failed")
+    case .pngDataPreparationFailure:
+      return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
+    case .pngFileWriteFailure:
+      return String(localized: "Failed to save PNG. Please try again.", comment: "Export error: writing PNG file to disk failed")
     }
   }
 }
@@ -60,7 +72,7 @@ struct ExportRouteFileNamingService {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
     formatter.timeZone = .current
-    formatter.locale = .current
+    formatter.locale = Locale(identifier: "en_US_POSIX")
     return formatter
   }()
 

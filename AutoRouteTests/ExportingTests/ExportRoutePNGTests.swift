@@ -16,22 +16,24 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
   // MARK: - Error descriptions
 
   @Test
-  func snapshotFailureErrorIncludesMessage() {
-    let error = ExportRoutePNGError.snapshotFailure("Connection timeout")
-    #expect(error.errorDescription?.contains("Connection timeout") == true)
-  }
-
-  @Test
-  func dataPreparationFailureHasUserFacingDescription() {
-    let error = ExportRoutePNGError.dataPreparationFailure
+  func snapshotFailureHasUserFacingDescription() {
+    let error = ExportError.pngSnapshotFailure
     #expect(error.errorDescription != nil)
     #expect(error.errorDescription?.isEmpty == false)
   }
 
   @Test
-  func fileWriteFailureErrorIncludesMessage() {
-    let error = ExportRoutePNGError.fileWriteFailure("Disk full")
-    #expect(error.errorDescription?.contains("Disk full") == true)
+  func dataPreparationFailureHasUserFacingDescription() {
+    let error = ExportError.pngDataPreparationFailure
+    #expect(error.errorDescription != nil)
+    #expect(error.errorDescription?.isEmpty == false)
+  }
+
+  @Test
+  func fileWriteFailureHasUserFacingDescription() {
+    let error = ExportError.pngFileWriteFailure
+    #expect(error.errorDescription != nil)
+    #expect(error.errorDescription?.isEmpty == false)
   }
 
   // MARK: - MapSize dimensions
@@ -91,29 +93,13 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
     #expect(MapSize(from: "") == nil)
   }
 
-  @Test
-  func mapSizeSizeForStringReturnsMatchingSize() {
-    #expect(MapSize.size(for: "low") == MapSize.low.size)
-    #expect(MapSize.size(for: "highest") == MapSize.highest.size)
-  }
-
-  @Test
-  func mapSizeSizeForStringReturnsDefaultSizeForInvalidKey() {
-    #expect(MapSize.size(for: "invalid") == MapSize.high2.size)
-  }
-
-  @Test
-  func mapSizeSizeForStringUsesSuppliedDefaultForInvalidKey() {
-    #expect(MapSize.size(for: "invalid", default: .low) == MapSize.low.size)
-  }
-
   // MARK: - RouteWidth values
 
   @Test
   func routeWidthValuesAreCorrect() {
-    #expect(RouteWidth.thin.width == 2.0)
+    #expect(RouteWidth.thin.width == 3.0)
     #expect(RouteWidth.medium.width == 6.0)
-    #expect(RouteWidth.thick.width == 10.0)
+    #expect(RouteWidth.thick.width == 9.0)
   }
 
   // MARK: - RouteWidth initialiser
@@ -149,7 +135,7 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
   func throwsEmptyRouteErrorWhenRouteHasNoPositions() async {
     let route = Route(name: "Empty Route")
 
-    await #expect(throws: ExportRouteError.emptyRoute) {
+    await #expect(throws: ExportError.emptyRoute) {
       _ = try await ExportRoutePNG().export(route: route)
     }
   }

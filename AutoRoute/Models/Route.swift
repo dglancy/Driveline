@@ -29,9 +29,9 @@ final class Route {
     var displayName: String {
       switch self {
       case .automatic:
-        String(localized: "Started automatically", comment: "Recording trigger: started automatically by automation")
+        String(localized: "Automatically", comment: "Recording trigger: started automatically by automation")
       case .manual:
-        String(localized: "Started manually", comment: "Recording trigger: started manually by the user")
+        String(localized: "Manually", comment: "Recording trigger: started manually by the user")
       }
     }
   }
@@ -91,12 +91,6 @@ final class Route {
 
   var maxSpeedMetresPerSecond: CLLocationSpeed {
     positions.compactMap { $0.speed >= 0 ? $0.speed : nil }.max() ?? 0
-  }
-
-  var startTimeLabel: String {
-    let datePart = startedAt.formatted(.dateTime.month(.abbreviated).day())
-    let timePart = startedAt.formatted(.dateTime.hour().minute())
-    return "\(datePart) · \(timePart)"
   }
 
   // MARK: - Lifecycle

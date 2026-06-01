@@ -80,14 +80,14 @@ struct FullScreenMapViewModelTests {
   func distanceValueMatchesRouteFormatting() {
     let route = makeRoute()
     let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.distanceValue == route.distanceMetres.localizedDistanceValueString())
+    #expect(vm.distanceValue == Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString())
   }
 
   @Test
   func distanceUnitMatchesRouteFormatting() {
     let route = makeRoute()
     let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.distanceUnit == route.distanceMetres.localizedDistanceUnitSymbol())
+    #expect(vm.distanceUnit == Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol())
   }
 
   // MARK: - durationValue
@@ -105,14 +105,14 @@ struct FullScreenMapViewModelTests {
   func avgSpeedValueMatchesRouteFormatting() {
     let route = makeRoute()
     let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.avgSpeedValue == route.avgSpeedMetresPerSecond.localizedSpeedValueString())
+    #expect(vm.avgSpeedValue == Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString())
   }
 
   @Test
   func avgSpeedUnitMatchesRouteFormatting() {
     let route = makeRoute()
     let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.avgSpeedUnit == route.avgSpeedMetresPerSecond.localizedSpeedUnitSymbol())
+    #expect(vm.avgSpeedUnit == Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol())
   }
 }
 

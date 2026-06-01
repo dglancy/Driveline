@@ -21,7 +21,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func startRouteCreatesRecordingRoute() async throws {
     let (service, locationService, recorder) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     #expect(service.route != nil)
     #expect(service.route!.isRecording == true)
@@ -33,7 +33,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func startRouteSetsIsRecordingToTrue() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     #expect(service.isRecording == true)
   }
@@ -42,7 +42,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func startRouteSetsIsPausedToFalse() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     #expect(service.isPaused == false)
   }
@@ -51,7 +51,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func startRouteResetsCurrentSpeedMs() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -60,7 +60,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func startRouteGeneratesTimeBasedName() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     let validNames = ["Morning Drive", "Afternoon Drive", "Evening Drive", "Night Drive"]
     #expect(validNames.contains(service.route!.name))
@@ -72,9 +72,9 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteStopsRecordingAndPersists() async throws {
     let (service, locationService, recorder) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     let startedRoute = service.route!
-    await service.endRoute()
+    service.endRoute()
 
     #expect(locationService.status == .stopped)
     #expect(startedRoute.isRecording == false)
@@ -89,8 +89,8 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteSetsIsRecordingToFalse() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
-    await service.endRoute()
+    try service.startRoute()
+    service.endRoute()
 
     #expect(service.isRecording == false)
   }
@@ -99,9 +99,9 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteSetsIsPausedToFalse() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.isPaused == false)
   }
@@ -110,10 +110,10 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteSetsIsPausedToFalseOnRouteModel() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
     let route = service.route!
-    await service.endRoute()
+    service.endRoute()
 
     #expect(route.isPaused == false)
   }
@@ -122,14 +122,14 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteResetsCurrentSpeedMs() async throws {
     let (service, locationService, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -138,7 +138,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func endRouteWithNoActiveRouteDoesNothing() async throws {
     let (service, _, _) = makeServices()
 
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.route == nil)
   }
@@ -149,7 +149,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func pauseRoutePausesLocationService() async throws {
     let (service, locationService, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
 
     #expect(locationService.status == .paused)
@@ -159,7 +159,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func pauseRouteSetsIsPausedToTrue() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
 
     #expect(service.isPaused == true)
@@ -169,7 +169,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func pauseRouteSetsIsPausedOnRouteModel() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
 
     #expect(service.route?.isPaused == true)
@@ -179,7 +179,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func pauseRouteSetsPauseStartedAtOnRouteModel() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
 
     #expect(service.route?.pauseStartedAt != nil)
@@ -191,7 +191,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func resumeRouteResumesLocationService() async throws {
     let (service, locationService, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
     service.resumeRoute()
 
@@ -202,7 +202,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func resumeRouteSetsIsPausedToFalse() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
     service.resumeRoute()
 
@@ -213,7 +213,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func resumeRouteSetsIsPausedToFalseOnRouteModel() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
     service.resumeRoute()
 
@@ -224,7 +224,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func resumeRouteClearsPauseStartedAtOnRouteModel() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
     service.resumeRoute()
 
@@ -235,7 +235,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func resumeRouteAccumulatesPausedDurationSeconds() async throws {
     let (service, _, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
     service.resumeRoute()
 
@@ -255,7 +255,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func currentSpeedMsUpdatesWhenLocationPublished() async throws {
     let (service, locationService, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -271,7 +271,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func currentSpeedMsIsNilForInvalidLocationSpeed() async throws {
     let (service, locationService, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -287,14 +287,14 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func currentSpeedMsIsNilAfterEndRoute() async throws {
     let (service, locationService, _) = makeServices()
 
-    service.startRoute()
+    try service.startRoute()
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    await service.endRoute()
+    service.endRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -361,7 +361,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func checkAndAutoFinishIfTimedOutDoesNothingWithNoRoute() async throws {
     let (service, _, _) = makeServices()
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.route == nil)
     #expect(service.isRecording == false)
@@ -370,9 +370,9 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   @Test
   func checkAndAutoFinishIfTimedOutDoesNothingWhenRouteIsRecording() async throws {
     let (service, _, _) = makeServices()
-    service.startRoute()
+    try service.startRoute()
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.isRecording == true)
     #expect(service.isPaused == false)
@@ -381,10 +381,10 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   @Test
   func checkAndAutoFinishIfTimedOutDoesNothingWhenPausedBelowThreshold() async throws {
     let (service, _, _) = makeServices()
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.isPaused == true)
     #expect(service.isRecording == true)
@@ -393,11 +393,11 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   @Test
   func checkAndAutoFinishIfTimedOutFinishesRouteWhenPausedBeyondThreshold() async throws {
     let (service, _, _) = makeServices()
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
-    service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
+    service.route!.pauseStartedAt = Date().addingTimeInterval(-(kPauseTimeoutInterval + 1))
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     #expect(service.isRecording == false)
     #expect(service.route == nil)
@@ -406,11 +406,11 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   @Test
   func checkAndAutoFinishIfTimedOutPersistsRouteAsFinished() async throws {
     let (service, _, _) = makeServices()
-    service.startRoute()
+    try service.startRoute()
     service.pauseRoute()
-    service.route!.pauseStartedAt = Date().addingTimeInterval(-(RouteService.pauseTimeoutInterval + 1))
+    service.route!.pauseStartedAt = Date().addingTimeInterval(-(kPauseTimeoutInterval + 1))
 
-    await service.checkAndAutoFinishIfTimedOut()
+    service.checkAndAutoFinishIfTimedOut()
 
     let routes = try context!.fetch(FetchDescriptor<Route>())
     #expect(routes.count == 1)
@@ -418,12 +418,66 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     #expect(routes.first?.endedAt != nil)
   }
 
+  // MARK: - startRoute geocoding accuracy
+
+  @Test
+  func startRouteSetsStartPlaceNameFromAccurateLocation() async throws {
+    let mockGeocoding = MockGeocodingService()
+    let (service, locationService, _) = makeServices(geocodingService: mockGeocoding)
+
+    try service.startRoute()
+
+    let goodLocation = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(goodLocation)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(service.route?.startPlaceName == "Test Place")
+  }
+
+  @Test
+  func startRouteGeocodesOnlyOnceEvenWithMultipleGoodLocations() async throws {
+    let mockGeocoding = MockGeocodingService()
+    let (service, locationService, _) = makeServices(geocodingService: mockGeocoding)
+
+    try service.startRoute()
+
+    let firstGood = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    let secondGood = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.502, longitude: -0.102),
+      altitude: 0, horizontalAccuracy: 8, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+
+    locationService.locationPublisher.send(firstGood)
+    locationService.locationPublisher.send(secondGood)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockGeocoding.geocodedLocations.count == 1)
+  }
+
   // MARK: - Helpers
 
-  private func makeServices() -> (RouteService, LocationService, LocationDataRecorderService) {
+  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil) -> (RouteService, LocationService, LocationDataRecorderService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder)
+    let service = RouteService(
+      modelContext: context!,
+      locationService: locationService,
+      locationDataRecorder: recorder,
+      geocodingService: geocodingService ?? GeocodingService()
+    )
     return (service, locationService, recorder)
   }
 }

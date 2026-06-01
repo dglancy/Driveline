@@ -38,7 +38,7 @@ final class LocationDataRecorderService {
 
   // MARK: - Actions
 
-  func startRecording(with route: Route) {
+  func startRecording(with route: Route) throws {
     guard self.route == nil else {
       Log.data.error("startRecording called while already recording; ignoring.")
       return
@@ -47,10 +47,15 @@ final class LocationDataRecorderService {
     self.route = route
     modelContext.insert(route)
 
-    modelContext.safeSave(
-      onSuccess: { Log.data.info("Saved starting recording locations") },
-      onFailure: { Log.data.error("Failed to save starting recording locations: \($0)") }
-    )
+    do {
+      try modelContext.save()
+      Log.data.info("Saved starting recording locations")
+    } catch {
+      modelContext.delete(route)
+      self.route = nil
+      Log.data.error("Failed to save starting recording locations: \(error)")
+      throw error
+    }
 
     locationCancellable = locationService.locationPublisher
       .sink { [weak self] location in
