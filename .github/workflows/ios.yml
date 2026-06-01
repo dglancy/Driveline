@@ -36,6 +36,7 @@ jobs:
             -project AutoRoute.xcodeproj \
             -scheme AutoRoute \
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
+            -testPlan AutoRoute \
             -skipPackagePluginValidation \
             -resultBundlePath TestResults.xcresult \
             | xcpretty
