@@ -28,9 +28,7 @@ jobs:
       - name: Cache SPM packages
         uses: actions/cache@v5
         with:
-          path: |
-            ~/Library/Developer/Xcode/DerivedData
-            ~/.swiftpm
+          path: ~/.swiftpm
           key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             spm-${{ runner.os }}-
@@ -49,6 +47,7 @@ jobs:
             -project AutoRoute.xcodeproj \
             -scheme AutoRoute \
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
+            -derivedDataPath .build/DerivedData \
             -skipPackagePluginValidation
 
       - name: Perform CodeQL Analysis
