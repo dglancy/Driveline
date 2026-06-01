@@ -114,7 +114,7 @@ struct RouteDetailView: View {
     }
     .overlay(alignment: .bottom) {
       if viewModel.showingMoreMenu {
-        moreMenuActionSheet
+        MoreMenuActionSheet(viewModel: viewModel)
           .padding(.horizontal, 8)
           .padding(.bottom, 8)
           .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -161,34 +161,50 @@ struct RouteDetailView: View {
 
   private var endpointsCard: some View {
     VStack(spacing: 0) {
-      EndpointRow(
-        isStart: true,
-        place: viewModel.startPlace,
+      IconRow(
+        title: viewModel.startPlace ?? String(localized: "Unknown", comment: "Unknown place name"),
         subtitle: String(localized: "Departure", comment: "Endpoint row subtitle"),
-        time: viewModel.departureTime
-      )
+        trailing: viewModel.departureTime
+      ) {
+        Circle()
+          .fill(Color.green)
+          .frame(width: 13, height: 13)
+          .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
+          .shadow(color: .black.opacity(0.15), radius: 1)
+      }
       Divider().padding(.leading, 52)
-      EndpointRow(
-        isStart: false,
-        place: viewModel.endPlace,
+      IconRow(
+        title: viewModel.endPlace ?? String(localized: "Unknown", comment: "Unknown place name"),
         subtitle: String(localized: "Arrival", comment: "Endpoint row subtitle"),
-        time: viewModel.arrivalTime
-      )
+        trailing: viewModel.arrivalTime
+      ) {
+        Image(systemName: "flag.pattern.checkered")
+          .font(.body.weight(.medium))
+          .foregroundStyle(.red)
+      }
     }
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
   }
 
   private var metadataCard: some View {
     VStack(spacing: 0) {
-      MetadataRow(icon: "gauge", title: String(localized: "Top Speed", comment: "Metadata row"), value: viewModel.topSpeed)
+      IconRow(title: String(localized: "Top Speed", comment: "Metadata row"), trailing: viewModel.topSpeed) {
+        Image(systemName: "gauge")
+          .font(.callout)
+          .foregroundStyle(.secondary)
+      }
       Divider().padding(.leading, 52)
-      MetadataRow(icon: "location", title: String(localized: "Track Points", comment: "Metadata row"), value: viewModel.trackPoints)
+      IconRow(title: String(localized: "Track Points", comment: "Metadata row"), trailing: viewModel.trackPoints) {
+        Image(systemName: "location")
+          .font(.callout)
+          .foregroundStyle(.secondary)
+      }
       Divider().padding(.leading, 52)
-      MetadataRow(
-        icon: "dot.radiowaves.left.and.right",
-        title: String(localized: "Started by", comment: "Metadata row"),
-        value: viewModel.triggerDisplayName
-      )
+      IconRow(title: String(localized: "Started by", comment: "Metadata row"), trailing: viewModel.triggerDisplayName) {
+        Image(systemName: "dot.radiowaves.left.and.right")
+          .font(.callout)
+          .foregroundStyle(.secondary)
+      }
     }
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
   }
@@ -210,149 +226,6 @@ struct RouteDetailView: View {
     }
   }
 
-  private var moreMenuActionSheet: some View {
-    VStack(spacing: 8) {
-      VStack(spacing: 0) {
-        Button {
-          withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-            viewModel.showingMoreMenu = false
-          }
-          viewModel.showingEditRoute = true
-        } label: {
-          Text(String(localized: "Edit Route Details", comment: "More menu action"))
-            .font(.title3)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 18)
-        }
-
-        Divider()
-
-        Button(role: .destructive) {
-          withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-            viewModel.showingMoreMenu = false
-          }
-          viewModel.showingDeleteConfirmation = true
-        } label: {
-          Text(String(localized: "Delete Route", comment: "More menu action"))
-            .font(.title3)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 18)
-        }
-      }
-      .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
-
-      Button {
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-          viewModel.showingMoreMenu = false
-        }
-      } label: {
-        Text(String(localized: "Cancel", comment: "More menu cancel"))
-          .font(.title3.weight(.semibold))
-          .frame(maxWidth: .infinity)
-          .padding(.vertical, 18)
-      }
-      .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
-    }
-  }
-
-}
-
-// MARK: - Private Subviews
-
-private struct ActivityViewController: UIViewControllerRepresentable {
-
-  let activityItems: [Any]
-
-  func makeUIViewController(context: Context) -> UIActivityViewController {
-    UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-  }
-
-  func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
-private struct EndpointRow: View {
-
-  // MARK: - Properties
-
-  let isStart: Bool
-  let place: String?
-  let subtitle: String
-  let time: String?
-
-  // MARK: - Body
-
-  var body: some View {
-    HStack(spacing: 12) {
-      leadingIcon
-        .frame(width: 24)
-
-      VStack(alignment: .leading, spacing: 1) {
-        Text(place ?? String(localized: "Unknown", comment: "Unknown place name"))
-          .font(.callout)
-        Text(subtitle)
-          .font(.footnote)
-          .foregroundStyle(.secondary)
-      }
-
-      Spacer()
-
-      if let time {
-        Text(time)
-          .font(.callout)
-          .foregroundStyle(.secondary)
-      }
-    }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
-  }
-
-  // MARK: - Private Views
-
-  @ViewBuilder
-  private var leadingIcon: some View {
-    if isStart {
-      Circle()
-        .fill(Color.green)
-        .frame(width: 13, height: 13)
-        .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
-        .shadow(color: .black.opacity(0.15), radius: 1)
-    } else {
-      Image(systemName: "flag.pattern.checkered")
-        .font(.body.weight(.medium))
-        .foregroundStyle(.red)
-    }
-  }
-}
-
-private struct MetadataRow: View {
-
-  // MARK: - Properties
-
-  let icon: String
-  let title: String
-  let value: String
-
-  // MARK: - Body
-
-  var body: some View {
-    HStack(spacing: 12) {
-      Image(systemName: icon)
-        .font(.callout)
-        .foregroundStyle(.secondary)
-        .frame(width: 24)
-
-      Text(title)
-        .font(.callout)
-
-      Spacer()
-
-      Text(value)
-        .font(.callout)
-        .foregroundStyle(.secondary)
-    }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 12)
-  }
 }
 
 // MARK: - Preview
