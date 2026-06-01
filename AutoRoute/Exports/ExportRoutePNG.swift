@@ -234,9 +234,9 @@ enum RouteWidth: String {
 
   var width: CGFloat {
     switch self {
-    case .thin: return 2.0
+    case .thin: return 3.0
     case .medium: return 6.0
-    case .thick: return 10.0
+    case .thick: return 9.0
     }
   }
 

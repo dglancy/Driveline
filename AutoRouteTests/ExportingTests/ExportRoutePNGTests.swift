@@ -97,9 +97,9 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
 
   @Test
   func routeWidthValuesAreCorrect() {
-    #expect(RouteWidth.thin.width == 2.0)
+    #expect(RouteWidth.thin.width == 3.0)
     #expect(RouteWidth.medium.width == 6.0)
-    #expect(RouteWidth.thick.width == 10.0)
+    #expect(RouteWidth.thick.width == 9.0)
   }
 
   // MARK: - RouteWidth initialiser
