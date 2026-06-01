@@ -100,27 +100,18 @@ struct RouteDetailView: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
-    .overlay {
-      if viewModel.showingMoreMenu {
-        Color.black.opacity(0.35)
-          .ignoresSafeArea()
-          .onTapGesture {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-              viewModel.showingMoreMenu = false
-            }
-          }
-          .transition(.opacity)
+    .confirmationDialog(
+      String(localized: "Route Options", comment: "More menu title"),
+      isPresented: $viewModel.showingMoreMenu
+    ) {
+      Button(String(localized: "Edit Route Details", comment: "More menu action")) {
+        viewModel.showingEditRoute = true
       }
-    }
-    .overlay(alignment: .bottom) {
-      if viewModel.showingMoreMenu {
-        MoreMenuActionSheet(viewModel: viewModel)
-          .padding(.horizontal, 8)
-          .padding(.bottom, 8)
-          .transition(.move(edge: .bottom).combined(with: .opacity))
+      Button(String(localized: "Delete Route", comment: "More menu action"), role: .destructive) {
+        viewModel.showingDeleteConfirmation = true
       }
+      Button(String(localized: "Cancel", comment: "More menu cancel"), role: .cancel) { }
     }
-    .animation(.spring(response: 0.3, dampingFraction: 0.85), value: viewModel.showingMoreMenu)
   }
 
   // MARK: - Private Views
