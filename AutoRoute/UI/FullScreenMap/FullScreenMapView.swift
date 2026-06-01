@@ -35,7 +35,7 @@ struct FullScreenMapView: View {
 
       VStack {
         HStack {
-          GlassButton(systemImage: "chevron.left") { dismiss() }
+          GlassButton(systemImage: "chevron.left", accessibilityLabel: "Back") { dismiss() }
           Spacer()
         }
         .padding(.horizontal, 14)

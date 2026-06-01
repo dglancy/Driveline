@@ -17,6 +17,7 @@ struct RouteStartAnnotation: View {
       .frame(width: 14, height: 14)
       .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2.5))
       .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
+      .accessibilityHidden(true)
   }
 }
 
@@ -29,5 +30,6 @@ struct RouteEndAnnotation: View {
       .font(.system(size: 28))
       .foregroundStyle(.red, Color(.systemBackground))
       .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
+      .accessibilityHidden(true)
   }
 }

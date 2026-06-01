@@ -23,6 +23,7 @@ struct RouteRowView: View {
           .font(.system(size: 24))
           .foregroundStyle(isSelected ? Color.accentColor : Color(.tertiaryLabel))
           .animation(.easeInOut(duration: 0.15), value: isSelected)
+          .accessibilityHidden(true)
       }
       iconBadge
 
@@ -48,6 +49,9 @@ struct RouteRowView: View {
         }
       }
     }
+    .accessibilityElement(children: .combine)
+    .accessibilityLabel("\(display.name), \(display.formattedDistance), \(display.dateTimeLabel)")
+    .accessibilityAddTraits(isSelected == true ? .isSelected : [])
   }
 
   // MARK: - Private Views

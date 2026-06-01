@@ -34,6 +34,7 @@ struct PulsingDot: View {
         .fill(color)
     }
     .frame(width: size, height: size)
+    .accessibilityHidden(true)
     .onAppear {
       withAnimation(.easeOut(duration: 1.6).repeatForever(autoreverses: false)) {
         animating = true

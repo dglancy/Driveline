@@ -12,6 +12,7 @@ struct GlassButton: View {
   // MARK: - Properties
 
   let systemImage: String
+  let accessibilityLabel: LocalizedStringResource
   let action: () -> Void
 
   // MARK: - Body
@@ -25,5 +26,6 @@ struct GlassButton: View {
         .background(.regularMaterial, in: Circle())
         .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
     }
+    .accessibilityLabel(Text(accessibilityLabel))
   }
 }

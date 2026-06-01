@@ -58,6 +58,7 @@ struct RecordingView: View {
         .frame(width: 36, height: 36)
       }
       .buttonStyle(.plain)
+      .accessibilityLabel(String(localized: "Minimise recording screen", comment: "Dismiss button accessibility label"))
 
       Spacer()
       recordingBadge
@@ -83,6 +84,11 @@ struct RecordingView: View {
         .font(.system(size: 13, weight: .bold))
         .foregroundStyle(viewModel.accentColour)
         .tracking(1.4)
+        .accessibilityLabel(
+          viewModel.isPaused
+            ? String(localized: "Recording paused", comment: "Status badge accessibility label")
+            : String(localized: "Recording in progress", comment: "Status badge accessibility label")
+        )
     }
     .padding(.vertical, 7)
     .padding(.horizontal, 14)
@@ -98,6 +104,7 @@ struct RecordingView: View {
         .tracking(1)
         .textCase(.uppercase)
         .padding(.bottom, 6)
+        .accessibilityHidden(true)
 
       Text(viewModel.elapsedDisplay)
         .font(.system(size: 74, weight: .semibold))
@@ -105,6 +112,8 @@ struct RecordingView: View {
         .foregroundStyle(Color(.label))
         .opacity(viewModel.isPaused ? 0.5 : 1)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isPaused)
+        .accessibilityLabel(String(localized: "Elapsed time", comment: "Timer accessibility label"))
+        .accessibilityValue(viewModel.elapsedSpeechValue)
 
       VStack(spacing: -6) {
         Text(viewModel.distanceValue)
@@ -169,10 +178,12 @@ struct RecordingView: View {
           .frame(width: 76, height: 76)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(viewModel.pauseResumeLabel)
 
         Text(viewModel.pauseResumeLabel)
           .font(.system(size: 13))
           .foregroundStyle(Color(.secondaryLabel))
+          .accessibilityHidden(true)
       }
 
       VStack(spacing: 9) {
@@ -190,10 +201,12 @@ struct RecordingView: View {
           .frame(width: 76, height: 76)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "End Drive", comment: "End drive button accessibility label"))
 
         Text("End Drive")
           .font(.system(size: 13))
           .foregroundStyle(Color(.secondaryLabel))
+          .accessibilityHidden(true)
       }
     }
     .padding(.bottom, 42)

@@ -25,6 +25,14 @@ final class RecordingViewModel {
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
 
   var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
+
+  var elapsedSpeechValue: String {
+    let formatter = DateComponentsFormatter()
+    formatter.unitsStyle = .spellOut
+    formatter.allowedUnits = [.hour, .minute, .second]
+    formatter.zeroFormattingBehavior = .dropLeading
+    return formatter.string(from: TimeInterval(elapsedSeconds)) ?? elapsedDisplay
+  }
   var distanceValue: String {
     Measurement(value: distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
   }
