@@ -1,4 +1,4 @@
-![Hero image](https://github.com/dglancy/AutoRoute/blob/main/hero.png)
+![Hero image](https://github.com/dglancy/AutoRoutes/blob/main/hero.png)
 
 # AutoRoutes
 
@@ -10,7 +10,7 @@ AutoRoutes grew out of a personal need. I run [Targa Trips](https://www.targatri
 
 ## What it does
 
-- **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and pause actions to Bluetooth connect/disconnect automations in the Shortcuts app and AutoRoute handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
+- **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and pause actions to Bluetooth connect/disconnect automations in the Shortcuts app and AutoRoutes handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
 - **Route list** showing all your drives grouped by date, with start and end place names, distance, and duration at a glance.
 - **Route map** that plots the full drive with pinch-to-zoom once a route is finished.
 - **Merge routes** to join two drives end-to-end into a single route, useful when you forget to start recording and pick it up partway through.
@@ -21,11 +21,11 @@ AutoRoutes grew out of a personal need. I run [Targa Trips](https://www.targatri
 
 ## Philosophy
 
-AutoRoute is built in the spirit of the [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy): do one thing well, produce output in standard formats, and let other tools take it from there. Doug McIlroy's [original formulation](https://harmful.cat-v.org/cat-v/unix_prog_design.pdf) put it plainly — write programs that do one thing and do it well, and write programs that work together.
+AutoRoutes is built in the spirit of the [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy): do one thing well, produce output in standard formats, and let other tools take it from there. Doug McIlroy's [original formulation](https://harmful.cat-v.org/cat-v/unix_prog_design.pdf) put it plainly — write programs that do one thing and do it well, and write programs that work together.
 
-The app records drives and exports them. That is all it does. The GPX files it produces are a lingua franca understood by Strava, Komoot, RideWithGPS, QGIS, and dozens of other tools. The Shortcuts integration means AutoRoute can sit in the middle of a larger automation: a shortcut can start a recording, hand off the resulting export to a cloud-storage action, notify you, or chain into anything else the Shortcuts app supports. The app does not need to know about any of that; it just needs to do its part cleanly.
+The app records drives and exports them. That is all it does. The GPX files it produces are a lingua franca understood by Strava, Komoot, RideWithGPS, QGIS, and dozens of other tools. The Shortcuts integration means AutoRoutes can sit in the middle of a larger automation: a shortcut can start a recording, hand off the resulting export to a cloud-storage action, notify you, or chain into anything else the Shortcuts app supports. The app does not need to know about any of that; it just needs to do its part cleanly.
 
-Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html) describes this as the Rule of Modularity and the Rule of Composition — build simple parts connected by clean interfaces, and design programs to be connected with other programs. AutoRoute tries to follow both.
+Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html) describes this as the Rule of Modularity and the Rule of Composition — build simple parts connected by clean interfaces, and design programs to be connected with other programs. AutoRoutes tries to follow both.
 
 ## Setting up Shortcuts automations
 
@@ -35,17 +35,17 @@ For each trigger type you want to use:
 
 1. Open the Shortcuts app and create a new Automation.
 2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
-3. Add the action "Start or resume route" from AutoRoute.
+3. Add the action "Start or resume route" from AutoRoutes.
 4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Pause route" action.
 
 If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
 
-If you stop the car and forget to end the route, AutoRoute will automatically finish it after a timeout period once it detects it has been paused long enough.
+If you stop the car and forget to end the route, AutoRoutes will automatically finish it after a timeout period once it detects it has been paused long enough.
 
 
 ## Why no live map during recording?
 
-AutoRoute is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and continuously redrawing the UI, which is not a good trade for a drive that could last several hours. Instead, the app writes GPS points directly to the database as they arrive and renders the full map only after the drive is complete.
+AutoRoutes is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and continuously redrawing the UI, which is not a good trade for a drive that could last several hours. Instead, the app writes GPS points directly to the database as they arrive and renders the full map only after the drive is complete.
 
 ## Tech
 
@@ -83,12 +83,12 @@ AutoRoute is built to run almost entirely in the background. Rendering a live ma
 
 1. Clone the repository:
    ```
-   git clone https://github.com/dglancy/AutoRoute.git
+   git clone https://github.com/dglancy/AutoRoutes.git
    ```
 
-2. Open `AutoRoute.xcodeproj` in Xcode.
+2. Open `AutoRoutes.xcodeproj` in Xcode.
 
-3. Select your development team under **Signing & Capabilities** for the `AutoRoute` target. The bundle identifier is `com.targatrips.AutoRoute`; you can change it to match your own prefix if you prefer.
+3. Select your development team under **Signing & Capabilities** for the `AutoRoutes` target. The bundle identifier is `com.targatrips.AutoRoutes`; you can change it to match your own prefix if you prefer.
 
 4. Build and run on a connected device. The first launch will ask for location permission; choose "Always Allow" so recording works when the screen is off.
 
