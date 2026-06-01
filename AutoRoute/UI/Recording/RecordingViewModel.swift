@@ -24,12 +24,31 @@ final class RecordingViewModel {
   var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
 
-  var speedValue: String {
-    guard !routeService.isPaused else { return kDashString }
-    return routeService.currentSpeedMs?.localizedSpeedValueString() ?? kDashString
+  var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
+
+  var elapsedSpeechValue: String {
+    let formatter = DateComponentsFormatter()
+    formatter.unitsStyle = .spellOut
+    formatter.allowedUnits = [.hour, .minute, .second]
+    formatter.zeroFormattingBehavior = .dropLeading
+    return formatter.string(from: TimeInterval(elapsedSeconds)) ?? elapsedDisplay
+  }
+  var distanceValue: String {
+    Measurement(value: distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
+  }
+  var distanceUnit: String {
+    Measurement(value: distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
   }
 
-  var speedUnit: String { (routeService.currentSpeedMs ?? 0).localizedSpeedUnitSymbol() }
+  var speedValue: String {
+    guard !routeService.isPaused else { return kDashString }
+    guard let ms = routeService.currentSpeedMs else { return kDashString }
+    return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
+  }
+
+  var speedUnit: String {
+    Measurement(value: routeService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+  }
   var positionCount: Int { routeService.route?.positions.count ?? 0 }
 
   var formattedPositionCount: String {
@@ -38,14 +57,9 @@ final class RecordingViewModel {
 
   var startedAt: String {
     guard let date = routeService.route?.startedAt else { return kDashString }
-    return date.formatted(.dateTime.hour().minute())
+    return date.clockTime()
   }
 
-  var triggerIconName: String {
-    routeService.route?.trigger == .automatic ? "autostartstop" : "hand.tap"
-  }
-
-  var triggerDisplayName: String { routeService.route?.trigger.displayName ?? kBlankString }
   var pauseResumeIconName: String { routeService.isPaused ? "play.fill" : "pause.fill" }
   var pauseResumeLabel: String { routeService.isPaused ? "Resume" : "Pause" }
 
@@ -80,7 +94,7 @@ final class RecordingViewModel {
     }
   }
 
-  func endRoute() async {
-    await routeService.endRoute()
+  func endRoute() {
+    routeService.endRoute()
   }
 }

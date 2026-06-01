@@ -35,7 +35,7 @@ struct FullScreenMapView: View {
 
       VStack {
         HStack {
-          GlassButton(systemImage: "chevron.left") { dismiss() }
+          GlassButton(systemImage: "chevron.left", accessibilityLabel: "Back") { dismiss() }
           Spacer()
         }
         .padding(.horizontal, 14)
@@ -56,7 +56,7 @@ struct FullScreenMapView: View {
   private var infoCard: some View {
     VStack(alignment: .leading, spacing: 10) {
       Text(viewModel.name)
-        .font(.system(size: 17, weight: .semibold))
+        .font(.body.weight(.semibold))
         .foregroundStyle(Color(.label))
 
       HStack(spacing: 0) {
@@ -75,9 +75,9 @@ struct FullScreenMapView: View {
   private func statChip(value: String, unit: String) -> some View {
     VStack(spacing: 1) {
       Text(value)
-        .font(.system(size: 17, weight: .semibold))
+        .font(.body.weight(.semibold))
       Text(unit)
-        .font(.system(size: 12))
+        .font(.caption)
         .foregroundStyle(.secondary)
     }
   }

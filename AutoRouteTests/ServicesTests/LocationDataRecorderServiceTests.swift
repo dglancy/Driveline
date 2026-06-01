@@ -23,7 +23,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    recorder.startRecording(with: route)
+    try recorder.startRecording(with: route)
 
     #expect(recorder.route != nil)
   }
@@ -34,7 +34,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    recorder.startRecording(with: route)
+    try recorder.startRecording(with: route)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -67,7 +67,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    recorder.startRecording(with: route)
+    try recorder.startRecording(with: route)
     recorder.stopRecording()
 
     #expect(recorder.route == nil)
@@ -79,7 +79,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    recorder.startRecording(with: route)
+    try recorder.startRecording(with: route)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -97,7 +97,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!, saveInterval: 0.1)
 
-    recorder.startRecording(with: route)
+    try recorder.startRecording(with: route)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -116,7 +116,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    recorder.startRecording(with: route)
+    try recorder.startRecording(with: route)
     recorder.stopRecording()
 
     let location = CLLocation(

@@ -22,25 +22,27 @@ struct RouteStatTile: View {
     VStack(alignment: .leading, spacing: 6) {
       HStack(spacing: 4) {
         Image(systemName: icon)
-          .font(.system(size: 12, weight: .medium))
+          .font(.caption.weight(.medium))
           .foregroundStyle(.tint)
         Text(label)
-          .font(.system(size: 12, weight: .medium))
+          .font(.caption.weight(.medium))
           .foregroundStyle(.secondary)
       }
 
       Text(value)
-        .font(.system(size: 24, weight: .semibold))
+        .font(.title2.weight(.semibold))
         .foregroundStyle(.primary)
         .minimumScaleFactor(0.7)
         .lineLimit(1)
 
       Text(unit)
-        .font(.system(size: 12))
+        .font(.caption)
         .foregroundStyle(.secondary)
     }
     .padding(14)
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+    .accessibilityElement(children: .combine)
+    .accessibilityLabel("\(label): \(value) \(unit)")
   }
 }

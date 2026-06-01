@@ -20,18 +20,19 @@ struct RouteRowView: View {
     HStack(spacing: 13) {
       if let isSelected {
         Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-          .font(.system(size: 24))
+          .font(.title2)
           .foregroundStyle(isSelected ? Color.accentColor : Color(.tertiaryLabel))
           .animation(.easeInOut(duration: 0.15), value: isSelected)
+          .accessibilityHidden(true)
       }
       iconBadge
 
       VStack(alignment: .leading, spacing: 1) {
         Text(display.name)
-          .font(.system(size: 17, weight: .semibold))
+          .font(.body.weight(.semibold))
           .lineLimit(1)
         Text(display.dateTimeLabel)
-          .font(.system(size: 14))
+          .font(.subheadline)
           .foregroundStyle(.secondary)
           .lineLimit(1)
       }
@@ -39,15 +40,18 @@ struct RouteRowView: View {
 
       VStack(alignment: .trailing) {
         Text(display.formattedDistance)
-          .font(.system(size: 15))
+          .font(.callout)
           .foregroundStyle(.primary)
         if let duration = display.formattedDuration {
           Text(duration)
-            .font(.system(size: 13))
+            .font(.footnote)
             .foregroundStyle(.tertiary)
         }
       }
     }
+    .accessibilityElement(children: .combine)
+    .accessibilityLabel("\(display.name), \(display.formattedDistance), \(display.dateTimeLabel)")
+    .accessibilityAddTraits(isSelected == true ? .isSelected : [])
   }
 
   // MARK: - Private Views
@@ -58,7 +62,7 @@ struct RouteRowView: View {
         .fill(.tint.opacity(0.14))
         .frame(width: 38, height: 38)
       Image(systemName: "point.bottomleft.forward.to.point.topright.scurvepath")
-        .font(.system(size: 21))
+        .font(.title3)
         .foregroundStyle(.tint)
     }
   }

@@ -83,31 +83,6 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     #expect(vm.pauseResumeLabel == "Resume")
   }
 
-  // MARK: - triggerIconName
-
-  @Test
-  func triggerIconNameIsBluetoothForAutomaticTrigger() {
-    let (service, _) = makeService()
-    service.startRoute()
-    service.route?.trigger = .automatic
-    let vm = RecordingViewModel(routeService: service)
-    #expect(vm.triggerIconName == "autostartstop")
-  }
-
-  @Test
-  func triggerIconNameIsHandTapForManualTrigger() {
-    let vm = makeViewModel()
-    #expect(vm.triggerIconName == "hand.tap")
-  }
-
-  // MARK: - triggerDisplayName
-
-  @Test
-  func triggerDisplayNameMatchesRouteDisplayName() {
-    let vm = makeViewModel()
-    #expect(vm.triggerDisplayName == Route.RecordingTrigger.manual.displayName)
-  }
-
   // MARK: - positionCount
 
   @Test
@@ -173,10 +148,32 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - endRoute
 
   @Test
-  func endRouteStopsRecording() async {
+  func endRouteStopsRecording() {
     let (service, vm) = makeServiceAndViewModel()
-    await vm.endRoute()
+    vm.endRoute()
     #expect(service.isRecording == false)
+  }
+
+  // MARK: - elapsedSpeechValue
+
+  @Test
+  func elapsedSpeechValueIsNonEmptyAtZeroSeconds() {
+    let vm = makeViewModel()
+    #expect(!vm.elapsedSpeechValue.isEmpty)
+  }
+
+  @Test
+  func elapsedSpeechValueDoesNotContainColons() {
+    let vm = makeViewModel()
+    #expect(!vm.elapsedSpeechValue.contains(":"))
+  }
+
+  @Test
+  func elapsedSpeechValueSpellsOutUnits() {
+    let vm = makeViewModel()
+    let value = vm.elapsedSpeechValue.lowercased()
+    let hasTimeUnit = value.contains("second") || value.contains("minute") || value.contains("hour")
+    #expect(hasTimeUnit)
   }
 
   // MARK: - Helpers
@@ -190,14 +187,14 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
   private func makeViewModel(paused: Bool = false) -> RecordingViewModel {
     let (service, _) = makeService()
-    service.startRoute()
+    try! service.startRoute()
     if paused { service.pauseRoute() }
     return RecordingViewModel(routeService: service)
   }
 
   private func makeServiceAndViewModel() -> (RouteService, RecordingViewModel) {
     let (service, _) = makeService()
-    service.startRoute()
+    try! service.startRoute()
     return (service, RecordingViewModel(routeService: service))
   }
 }

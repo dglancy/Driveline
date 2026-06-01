@@ -19,7 +19,6 @@ final class RouteService {
 
   // MARK: - Properties
 
-  static let pauseTimeoutInterval: TimeInterval = 3 * 3600
   static let pauseTimeoutTaskIdentifier = "com.targatrips.AutoRoute.pause-timeout"
 
   private(set) var route: Route?
@@ -31,18 +30,19 @@ final class RouteService {
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
-  @ObservationIgnored private let geocodingService: GeocodingService
+  @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let networkMonitorService: NetworkMonitorService
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
+  @ObservationIgnored private var pauseTimeoutTimer: Timer?
 
   // MARK: - Lifecycle
 
   init(modelContext: ModelContext,
        locationService: LocationService,
        locationDataRecorder: LocationDataRecorderService,
-       geocodingService: GeocodingService = GeocodingService(),
+       geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        networkMonitorService: NetworkMonitorService = NetworkMonitorService(),
        initialRoute: Route? = nil) {
     self.modelContext = modelContext
@@ -63,12 +63,17 @@ final class RouteService {
 
   // MARK: - Actions
 
-  func startRoute(trigger: Route.RecordingTrigger = .manual) {
+  func startRoute(trigger: Route.RecordingTrigger = .manual) throws {
     let route = Route(name: routeNameForCurrentTime(), trigger: trigger)
     self.route = route
     currentSpeedMs = nil
 
-    locationDataRecorder.startRecording(with: route)
+    do {
+      try locationDataRecorder.startRecording(with: route)
+    } catch {
+      self.route = nil
+      throw error
+    }
     locationService.start()
 
     speedCancellable = locationService.locationPublisher
@@ -77,18 +82,17 @@ final class RouteService {
       }
 
     startGeocodeCancellable = locationService.locationPublisher
-      .prefix(1)
+      .first()
       .sink { [weak self] location in
-        guard let self else { return }
         Task { [weak self] in
-          guard let self else { return }
-          self.route?.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
+          guard let self, let route = self.route else { return }
+          route.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
           self.saveModelContext()
         }
       }
   }
 
-  func endRoute() async {
+  func endRoute() {
     cancelPauseTimeout()
     speedCancellable = nil
     startGeocodeCancellable = nil
@@ -98,13 +102,16 @@ final class RouteService {
       route.endedAt = Date()
       route.status = .finished
       locationDataRecorder.stopRecording()
+      saveModelContext()
 
       if let last = route.orderedPositions.last {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        route.endPlaceName = await geocodingService.reverseGeocode(location: location)
+        Task { [weak self] in
+          guard let self else { return }
+          route.endPlaceName = await geocodingService.reverseGeocode(location: location)
+          saveModelContext()
+        }
       }
-
-      saveModelContext()
     }
 
     currentSpeedMs = nil
@@ -128,23 +135,25 @@ final class RouteService {
     locationService.resume()
   }
 
-  func checkAndAutoFinishIfTimedOut() async {
+  func checkAndAutoFinishIfTimedOut() {
     guard isPaused,
-          let pauseStartedAt = route?.pauseStartedAt,
-          Date().timeIntervalSince(pauseStartedAt) >= Self.pauseTimeoutInterval else { return }
-    await endRoute()
+          let route = route,
+          let pauseStartedAt = route.pauseStartedAt,
+          Date().timeIntervalSince(pauseStartedAt) >= kPauseTimeoutInterval else { return }
+    endRoute()
   }
 
   func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
     guard networkMonitorService.isConnected else { return }
-    let cutoff = Date().addingTimeInterval(-86400)
+    let cutoff = Date().addingTimeInterval(kRouteAgeCutoff)
+    let finishedStatus = Route.RouteStatus.finished
     let descriptor = FetchDescriptor<Route>(
-      predicate: #Predicate<Route> { $0.startedAt >= cutoff }
+      predicate: #Predicate<Route> { route in
+        route.startedAt >= cutoff && route.status == finishedStatus
+      }
     )
     guard let candidates = try? modelContext.fetch(descriptor) else { return }
-    let needsRetry = candidates.filter {
-      $0.status == .finished && ($0.startPlaceName == nil || $0.endPlaceName == nil)
-    }
+    let needsRetry = candidates.filter { $0.startPlaceName == nil || $0.endPlaceName == nil }
     guard !needsRetry.isEmpty else { return }
     for finishedRoute in needsRetry {
       if finishedRoute.startPlaceName == nil, let first = finishedRoute.orderedPositions.first {
@@ -173,12 +182,24 @@ final class RouteService {
 
   private func schedulePauseTimeout() {
     let request = BGAppRefreshTaskRequest(identifier: Self.pauseTimeoutTaskIdentifier)
-    request.earliestBeginDate = Date().addingTimeInterval(Self.pauseTimeoutInterval)
-    try? BGTaskScheduler.shared.submit(request)
+    request.earliestBeginDate = Date().addingTimeInterval(kPauseTimeoutInterval)
+    do {
+      try BGTaskScheduler.shared.submit(request)
+    } catch {
+      Log.lifecycle.error("Failed to schedule pause timeout background task: \(error)")
+    }
+
+    pauseTimeoutTimer = Timer.scheduledTimer(withTimeInterval: kPauseTimeoutInterval, repeats: false) { [weak self] _ in
+      Task { @MainActor [weak self] in
+        self?.checkAndAutoFinishIfTimedOut()
+      }
+    }
   }
 
   private func cancelPauseTimeout() {
     BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.pauseTimeoutTaskIdentifier)
+    pauseTimeoutTimer?.invalidate()
+    pauseTimeoutTimer = nil
   }
 
   private func routeNameForCurrentTime() -> String {
@@ -192,6 +213,6 @@ final class RouteService {
   }
 
   private func saveModelContext() {
-    modelContext.safeSave { Log.ui.error("Failed to save model context: \($0.localizedDescription)") }
+    modelContext.safeSave(onFailure: { Log.ui.error("Failed to save model context: \($0.localizedDescription)") })
   }
 }

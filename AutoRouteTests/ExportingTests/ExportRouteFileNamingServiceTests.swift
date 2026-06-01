@@ -38,6 +38,18 @@ final class ExportRouteFileNamingServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func formatterProducesEnglishMonthAbbreviationRegardlessOfSystemLocale() {
+    let route = makeRoute()
+    let germanFormatter = DateFormatter()
+    germanFormatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
+    germanFormatter.timeZone = .current
+    germanFormatter.locale = Locale(identifier: "de_DE")
+    #expect(germanFormatter.string(from: route.startedAt).contains("Mai"))
+    let formatted = ExportRouteFileNamingService.startedAtFormatter.string(from: route.startedAt)
+    #expect(formatted.contains("May"))
+  }
+
+  @Test
   func filenamesForSameRouteDifferOnlyByExtension() {
     let route = makeRoute()
     let gpxURL = ExportRouteFileNamingService.fileURL(for: route, type: .gpx)

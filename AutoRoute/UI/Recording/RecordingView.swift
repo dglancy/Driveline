@@ -12,8 +12,14 @@ struct RecordingView: View {
 
   // MARK: - Properties
 
-  var viewModel: RecordingViewModel
+  @State private var viewModel: RecordingViewModel
   @Environment(\.dismiss) private var dismiss
+
+  // MARK: - Lifecycle
+
+  init(routeService: RouteService) {
+    _viewModel = State(initialValue: RecordingViewModel(routeService: routeService))
+  }
 
   // MARK: - Body
 
@@ -35,7 +41,7 @@ struct RecordingView: View {
       heroSection
       Spacer()
       batteryNote
-      triggerLine
+      Spacer()
       controlButtons
     }
   }
@@ -46,12 +52,13 @@ struct RecordingView: View {
         ZStack {
           Circle().fill(Color(.systemFill))
           Image(systemName: "chevron.down")
-            .font(.system(size: 17, weight: .semibold))
+            .font(.body.weight(.semibold))
             .foregroundStyle(Color(.secondaryLabel))
         }
         .frame(width: 36, height: 36)
       }
       .buttonStyle(.plain)
+      .accessibilityLabel(String(localized: "Minimise recording screen", comment: "Dismiss button accessibility label"))
 
       Spacer()
       recordingBadge
@@ -74,9 +81,14 @@ struct RecordingView: View {
       }
       let statusKey: LocalizedStringKey = viewModel.isPaused ? "PAUSED" : "RECORDING"
       Text(statusKey)
-        .font(.system(size: 13, weight: .bold))
+        .font(.footnote.weight(.bold))
         .foregroundStyle(viewModel.accentColour)
         .tracking(1.4)
+        .accessibilityLabel(
+          viewModel.isPaused
+            ? String(localized: "Recording paused", comment: "Status badge accessibility label")
+            : String(localized: "Recording in progress", comment: "Status badge accessibility label")
+        )
     }
     .padding(.vertical, 7)
     .padding(.horizontal, 14)
@@ -87,26 +99,31 @@ struct RecordingView: View {
   private var heroSection: some View {
     VStack(spacing: 0) {
       Text("Elapsed")
-        .font(.system(size: 14, weight: .semibold))
+        .font(.subheadline.weight(.semibold))
         .foregroundStyle(Color(.secondaryLabel))
         .tracking(1)
         .textCase(.uppercase)
         .padding(.bottom, 6)
+        .accessibilityHidden(true)
 
-      Text(TimeInterval(viewModel.elapsedSeconds).elapsedTimeString())
-        .font(.system(size: 74, weight: .semibold))
-        .monospacedDigit()
+      Text(viewModel.elapsedDisplay)
+        .font(.system(size: 74, weight: .semibold, design: .default).monospacedDigit())
+        .lineLimit(1)
+        .minimumScaleFactor(0.6)
+        .dynamicTypeSize(.large ... .accessibility3)
         .foregroundStyle(Color(.label))
         .opacity(viewModel.isPaused ? 0.5 : 1)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isPaused)
+        .accessibilityLabel(String(localized: "Elapsed time", comment: "Timer accessibility label"))
+        .accessibilityValue(viewModel.elapsedSpeechValue)
 
       VStack(spacing: -6) {
-        Text(viewModel.distanceMetres.localizedDistanceValueString())
-          .font(.system(size: 52, weight: .semibold))
+        Text(viewModel.distanceValue)
+          .font(.largeTitle.weight(.semibold))
           .monospacedDigit()
           .foregroundStyle(viewModel.accentColour)
-        Text(viewModel.distanceMetres.localizedDistanceUnitSymbol())
-          .font(.system(size: 22, weight: .medium))
+        Text(viewModel.distanceUnit)
+          .font(.title2.weight(.medium))
           .foregroundStyle(Color(.secondaryLabel))
       }
       .padding(.top, 22)
@@ -118,7 +135,7 @@ struct RecordingView: View {
 
   private var secondaryStats: some View {
     HStack(spacing: 0) {
-      StatColumn(value: viewModel.speedValue, label: LocalizedStringKey(viewModel.speedUnit))
+      StatColumn(value: viewModel.speedValue, label: viewModel.speedUnit)
       Divider().frame(height: 36)
       StatColumn(value: viewModel.formattedPositionCount, label: "logged")
       Divider().frame(height: 36)
@@ -130,10 +147,10 @@ struct RecordingView: View {
   private var batteryNote: some View {
     HStack(spacing: 11) {
       Image(systemName: "battery.75percent")
-        .font(.system(size: 22))
+        .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
       Text("Running in the background to save battery. Your full route map appears here when the drive ends.")
-        .font(.system(size: 13.5))
+        .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
         .fixedSize(horizontal: false, vertical: true)
@@ -144,18 +161,6 @@ struct RecordingView: View {
     .clipShape(RoundedRectangle(cornerRadius: 14))
     .padding(.horizontal, 20)
     .padding(.bottom, 18)
-  }
-
-  private var triggerLine: some View {
-    HStack(spacing: 6) {
-      Image(systemName: viewModel.triggerIconName)
-        .font(.system(size: 14))
-        .foregroundStyle(Color(.tertiaryLabel))
-      Text(viewModel.triggerDisplayName)
-        .font(.system(size: 13))
-        .foregroundStyle(Color(.tertiaryLabel))
-    }
-    .padding(.bottom, 16)
   }
 
   private var controlButtons: some View {
@@ -169,37 +174,41 @@ struct RecordingView: View {
               .fill(Color(.systemFill))
               .overlay(Circle().stroke(Color(.separator), lineWidth: 2))
             Image(systemName: viewModel.pauseResumeIconName)
-              .font(.system(size: 28))
+              .font(.title)
               .foregroundStyle(Color(.label))
           }
           .frame(width: 76, height: 76)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(viewModel.pauseResumeLabel)
 
         Text(viewModel.pauseResumeLabel)
-          .font(.system(size: 13))
+          .font(.footnote)
           .foregroundStyle(Color(.secondaryLabel))
+          .accessibilityHidden(true)
       }
 
       VStack(spacing: 9) {
         Button {
-          Task { await viewModel.endRoute() }
+          viewModel.endRoute()
         } label: {
           ZStack {
             Circle()
               .fill(.red)
               .shadow(color: .red.opacity(0.35), radius: 10, y: 6)
             Image(systemName: "stop.fill")
-              .font(.system(size: 28))
+              .font(.title)
               .foregroundStyle(.white)
           }
           .frame(width: 76, height: 76)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "End Drive", comment: "End drive button accessibility label"))
 
         Text("End Drive")
-          .font(.system(size: 13))
+          .font(.footnote)
           .foregroundStyle(Color(.secondaryLabel))
+          .accessibilityHidden(true)
       }
     }
     .padding(.bottom, 42)
@@ -214,18 +223,18 @@ private struct StatColumn: View {
   // MARK: - Properties
 
   let value: String
-  let label: LocalizedStringKey
+  let label: String
 
   // MARK: - Body
 
   var body: some View {
     VStack(spacing: 2) {
       Text(value)
-        .font(.system(size: 21, weight: .semibold))
+        .font(.title3.weight(.semibold))
         .monospacedDigit()
         .foregroundStyle(Color(.label))
       Text(label)
-        .font(.system(size: 12))
+        .font(.caption)
         .foregroundStyle(Color(.secondaryLabel))
     }
     .frame(maxWidth: .infinity)
@@ -246,7 +255,6 @@ private struct StatColumn: View {
     locationDataRecorder: locationDataRecorder,
     initialRoute: route
   )
-  let viewModel = RecordingViewModel(routeService: routeService)
-  RecordingView(viewModel: viewModel)
+  RecordingView(routeService: routeService)
     .modelContainer(container)
 }

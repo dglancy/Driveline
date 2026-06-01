@@ -41,11 +41,27 @@ final class HomeViewModel {
   private(set) var isSelectMode: Bool = false
   private(set) var selectedRouteIDs: Set<UUID> = []
   var showingDeleteConfirmation: Bool = false
+  var showingStartRouteError: Bool = false
+  private(set) var startRouteErrorMessage: String?
 
   // MARK: - Computed Properties
 
   var canMerge: Bool { selectedRouteIDs.count == 2 }
   var canDelete: Bool { !selectedRouteIDs.isEmpty }
+
+  var deleteConfirmationMessage: String {
+    if selectedRouteIDs.count == 1 {
+      return String(
+        localized: "This route and all its data will be permanently deleted.",
+        comment: "Delete single route confirmation message"
+      )
+    } else {
+      return String(
+        localized: "These \(selectedRouteIDs.count) routes and all their data will be permanently deleted.",
+        comment: "Delete multiple routes confirmation message"
+      )
+    }
+  }
 
   var selectionCountText: String {
     if selectedRouteIDs.isEmpty {
@@ -58,6 +74,15 @@ final class HomeViewModel {
   }
 
   // MARK: - Methods
+
+  func startRoute(trigger: Route.RecordingTrigger = .manual, using routeService: RouteService) {
+    do {
+      try routeService.startRoute(trigger: trigger)
+    } catch {
+      startRouteErrorMessage = error.localizedDescription
+      showingStartRouteError = true
+    }
+  }
 
   func enterSelectMode() {
     isSelectMode = true
@@ -138,10 +163,11 @@ final class HomeViewModel {
 
   private func makeDisplay(for route: Route) -> RouteRowDisplay {
     let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedDurationString() : nil
+    let distance = Measurement(value: route.distanceMetres, unit: UnitLength.meters)
     return RouteRowDisplay(
       name: route.name,
-      dateTimeLabel: route.startTimeLabel,
-      formattedDistance: "\(route.distanceMetres.localizedDistanceValueString()) \(route.distanceMetres.localizedDistanceUnitSymbol())",
+      dateTimeLabel: RouteStatsPresenter(route: route).startTimeLabel,
+      formattedDistance: "\(distance.localizedDistanceValueString()) \(distance.localizedDistanceUnitSymbol())",
       formattedDuration: duration
     )
   }
@@ -152,7 +178,7 @@ final class HomeViewModel {
     guard !recent.isEmpty else { return nil }
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
     let count = recent.count
-    let distance = totalMetres.localizedDistanceString()
+    let distance = Measurement(value: totalMetres, unit: UnitLength.meters).localizedDistanceString()
     if count == 1 {
       return String(
         localized: "\(count) route · \(distance) in the last 30 days",
@@ -176,9 +202,9 @@ final class HomeViewModel {
     case 1:
       return String(localized: "Yesterday")
     case 2...6:
-      return date.formatted(.dateTime.weekday(.wide))
+      return date.weekdayName()
     default:
-      return date.formatted(.dateTime.month(.wide).year())
+      return date.monthAndYear()
     }
   }
 }

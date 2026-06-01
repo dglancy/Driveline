@@ -55,10 +55,8 @@ struct AutoRouteApp: App {
         .environment(routeService)
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }
-          Task {
-            await routeService.checkAndAutoFinishIfTimedOut()
-            await routeService.checkAndRetryNilPlaceNamesForFinishedRoutes()
-          }
+          routeService.checkAndAutoFinishIfTimedOut()
+          Task { await routeService.checkAndRetryNilPlaceNamesForFinishedRoutes() }
         }
     }
     .modelContainer(modelContainer)
@@ -121,7 +119,7 @@ struct AutoRouteApp: App {
     ) { task in
       task.expirationHandler = { task.setTaskCompleted(success: false) }
       Task { @MainActor in
-        await routeService.checkAndAutoFinishIfTimedOut()
+        routeService.checkAndAutoFinishIfTimedOut()
         task.setTaskCompleted(success: true)
       }
     }

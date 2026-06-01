@@ -42,9 +42,7 @@ final class RouteDetailViewModel {
 
   var name: String { route.name }
 
-  var dateString: String {
-    route.startedAt.formatted(.dateTime.weekday(.wide).month(.wide).day())
-  }
+  var dateString: String { route.startedAt.longDateString() }
 
   var distanceValue: String { stats.distanceValue }
   var distanceUnit: String { stats.distanceUnit }
@@ -55,16 +53,12 @@ final class RouteDetailViewModel {
   var startPlace: String? { route.startPlaceName }
   var endPlace: String? { route.endPlaceName }
 
-  var departureTime: String { route.startedAt.formatted(.dateTime.hour().minute()) }
-  var arrivalTime: String? { route.endedAt?.formatted(.dateTime.hour().minute()) }
+  var departureTime: String { route.startedAt.clockTime() }
+  var arrivalTime: String? { route.endedAt?.clockTime() }
 
-  var topSpeed: String { route.maxSpeedMetresPerSecond.localizedSpeedString() }
+  var topSpeed: String { Measurement(value: route.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
   var trackPoints: String { route.positions.count.formatted() }
   var triggerDisplayName: String { route.trigger.displayName }
-  var gpxFileSize: String {
-    let kb = max(1, route.positions.count * 180 / 1024)
-    return String(localized: "\(kb) KB", comment: "File size in kilobytes")
-  }
 
   var coordinates: [CLLocationCoordinate2D] {
     route.orderedPositions.map {

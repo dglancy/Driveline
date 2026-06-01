@@ -23,28 +23,30 @@ final class NetworkMonitorService {
     connectivityRestoredSubject.eraseToAnyPublisher()
   }
 
-  @ObservationIgnored private let monitor = NWPathMonitor()
+  @ObservationIgnored private let pathMonitor: any PathMonitoring
   @ObservationIgnored private let queue = DispatchQueue(
     label: "com.targatrips.AutoRoute.network-monitor",
     qos: .utility
   )
-  @ObservationIgnored private var isInitialUpdate = true
+  @ObservationIgnored private var hasSeenDisconnection = false
 
   // MARK: - Lifecycle
 
-  init() {
-    monitor.pathUpdateHandler = { [weak self] path in
-      let connected = path.status == .satisfied
+  init(pathMonitor: any PathMonitoring = NWPathMonitorAdapter()) {
+    self.pathMonitor = pathMonitor
+    pathMonitor.onPathUpdate = { [weak self] connected in
       Task { @MainActor [weak self] in
         guard let self else { return }
         let wasConnected = self.isConnected
         self.isConnected = connected
-        if !self.isInitialUpdate && connected && !wasConnected {
+        if !connected {
+          self.hasSeenDisconnection = true
+        }
+        if connected && !wasConnected && self.hasSeenDisconnection {
           self.connectivityRestoredSubject.send()
         }
-        self.isInitialUpdate = false
       }
     }
-    monitor.start(queue: queue)
+    pathMonitor.start(queue: queue)
   }
 }

@@ -10,29 +10,19 @@ import MapKit
 import UIKit
 import os.log
 
-// MARK: - PNG export error
-
-enum ExportRoutePNGError: LocalizedError {
-  case snapshotFailure(String)
-  case dataPreparationFailure
-  case fileWriteFailure(String)
-
-  var errorDescription: String? {
-    switch self {
-    case .snapshotFailure(let message):
-      return String(localized: "Failed to create PNG. Please try again.\n\nDetails: \(message)", comment: "Export error: map snapshot failed")
-    case .dataPreparationFailure:
-      return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
-    case .fileWriteFailure(let message):
-      return String(localized: "Failed to save PNG. Please try again.\n\nDetails: \(message)",
-                    comment: "Export error: writing PNG file to disk failed")
-    }
-  }
-}
-
 // MARK: - PNG export service
 
 final class ExportRoutePNG: ExportingRoute {
+
+  // MARK: - Properties
+
+  private let preferences: UserPreferences
+
+  // MARK: - Lifecycle
+
+  init(preferences: UserPreferences = UserPreferences()) {
+    self.preferences = preferences
+  }
 
   // MARK: - Actions
 
@@ -40,13 +30,13 @@ final class ExportRoutePNG: ExportingRoute {
     Log.ui.info("A route was selected for PNG export: \(route.startedAt)")
 
     let coordinates = try validatedCoordinates(for: route)
-    let mapSize = exportMapSizeFromSettings()
+    let mapSize = preferences.exportMapSize
 
     let options = MKMapSnapshotter.Options()
-    options.region = .fitting(coordinates, mapSize: mapSize)
+    options.region = .fitting(coordinates, aspectRatio: mapSize.width / max(mapSize.height, 0.0001))
     options.size = mapSize
     options.scale = UITraitCollection.current.displayScale
-    if exportMapAlwaysUseLightAppearanceFromSettings() {
+    if preferences.alwaysUseLightMapAppearance {
       options.traitCollection = UITraitCollection(userInterfaceStyle: .light)
     }
     options.pointOfInterestFilter = .excludingAll
@@ -55,7 +45,7 @@ final class ExportRoutePNG: ExportingRoute {
     let image = renderSnapshotImage(snapshot, coordinates: coordinates)
 
     guard let pngData = image.pngData() else {
-      throw ExportRoutePNGError.dataPreparationFailure
+      throw ExportError.pngDataPreparationFailure
     }
 
     let fileURL = ExportRouteFileNamingService.fileURL(for: route, type: .png)
@@ -65,7 +55,7 @@ final class ExportRoutePNG: ExportingRoute {
       return fileURL
     } catch {
       Log.ui.error("Failed to write PNG for route: \(route.startedAt) — error: \(error.localizedDescription)")
-      throw ExportRoutePNGError.fileWriteFailure(error.localizedDescription)
+      throw ExportError.pngFileWriteFailure
     }
   }
 
@@ -92,17 +82,19 @@ final class ExportRoutePNG: ExportingRoute {
       }
 
       UIColor.systemBlue.setStroke()
-      polylinePath.lineWidth = exportMapRouteWidthFromSettings()
+      polylinePath.lineWidth = preferences.routeWidth
       polylinePath.lineCapStyle = .round
       polylinePath.lineJoinStyle = .round
       polylinePath.stroke()
 
       if let startCoordinate = coordinates.first {
-        drawMarker(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: "house.fill", label: "Start")
+        drawMarker(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: "house.fill",
+                   label: String(localized: "Start", comment: "Export PNG start marker label"))
       }
 
       if let endCoordinate = coordinates.last {
-        drawMarker(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: "flag.pattern.checkered", label: "Finish")
+        drawMarker(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: "flag.pattern.checkered",
+                   label: String(localized: "Finish", comment: "Export PNG finish marker label"))
       }
     }
   }
@@ -168,43 +160,25 @@ final class ExportRoutePNG: ExportingRoute {
   }
 
   private func takeSnapshot(with options: MKMapSnapshotter.Options, route: Route) async throws -> MKMapSnapshotter.Snapshot {
-    try await withCheckedThrowingContinuation { continuation in
+    let box: SnapshotBox = try await withCheckedThrowingContinuation { continuation in
       MKMapSnapshotter(options: options).start { snapshot, error in
         if let error {
           Log.ui.error("Failed to create PNG snapshot for route: \(route.startedAt) — error: \(error.localizedDescription)")
-          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure(error.localizedDescription))
+          continuation.resume(throwing: ExportError.pngSnapshotFailure)
           return
         }
 
         guard let snapshot else {
-          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure("Unknown error"))
+          continuation.resume(throwing: ExportError.pngSnapshotFailure)
           return
         }
 
-        continuation.resume(returning: snapshot)
+        continuation.resume(returning: SnapshotBox(snapshot))
       }
     }
+    return box.snapshot
   }
 
-  private func exportMapSizeFromSettings() -> CGSize {
-    let rawValue = UserDefaults.standard.string(forKey: "ExportMapSize") ?? "high2"
-    let size = MapSize.size(for: rawValue)
-    Log.ui.info("Export map size set to \"\(rawValue)\" from user settings")
-    return size
-  }
-
-  private func exportMapAlwaysUseLightAppearanceFromSettings() -> Bool {
-    let alwaysUseLightAppearance = UserDefaults.standard.bool(forKey: "AlwaysUseLightMapAppearance")
-    Log.ui.info("Always use light map appearance set to \"\(alwaysUseLightAppearance)\" from user settings")
-    return alwaysUseLightAppearance
-  }
-
-  private func exportMapRouteWidthFromSettings() -> CGFloat {
-    let rawValue = UserDefaults.standard.string(forKey: "RouteWidth") ?? "medium"
-    let routeWidth = RouteWidth(from: rawValue) ?? RouteWidth.medium
-    Log.ui.info("Route width set to \"\(routeWidth)\" from user settings")
-    return routeWidth.width
-  }
 }
 
 // MARK: - MapSize enum
@@ -231,9 +205,6 @@ enum MapSize: String {
     self.init(rawValue: key)
   }
 
-  static func size(for string: String, default defaultSize: MapSize = .high2) -> CGSize {
-    MapSize(from: string)?.size ?? defaultSize.size
-  }
 }
 
 // MARK: - RouteWidth enum
@@ -245,9 +216,9 @@ enum RouteWidth: String {
 
   var width: CGFloat {
     switch self {
-    case .thin: return 2.0
+    case .thin: return 3.0
     case .medium: return 6.0
-    case .thick: return 10.0
+    case .thick: return 9.0
     }
   }
 
@@ -257,6 +228,9 @@ enum RouteWidth: String {
   }
 }
 
-// MARK: - MKMapSnapshotter.Snapshot extension
+// MARK: - SnapshotBox
 
-extension MKMapSnapshotter.Snapshot: @unchecked @retroactive Sendable {}
+private final class SnapshotBox: @unchecked Sendable {
+  let snapshot: MKMapSnapshotter.Snapshot
+  init(_ snapshot: MKMapSnapshotter.Snapshot) { self.snapshot = snapshot }
+}
