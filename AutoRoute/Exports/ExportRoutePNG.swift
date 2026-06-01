@@ -108,11 +108,13 @@ final class ExportRoutePNG: ExportingRoute {
       polylinePath.stroke()
 
       if let startCoordinate = coordinates.first {
-        drawMarker(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: "house.fill", label: "Start")
+        drawMarker(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: "house.fill",
+                   label: String(localized: "Start", comment: "Export PNG start marker label"))
       }
 
       if let endCoordinate = coordinates.last {
-        drawMarker(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: "flag.pattern.checkered", label: "Finish")
+        drawMarker(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: "flag.pattern.checkered",
+                   label: String(localized: "Finish", comment: "Export PNG finish marker label"))
       }
     }
   }
