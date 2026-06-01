@@ -44,12 +44,12 @@ struct HomeView: View {
       String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
-      Button(String(localized: "Delete", comment: "Confirm delete routes"), role: .destructive) {
+      Button.delete {
         let selected = viewModel.selectedRoutes(from: viewModel.sections)
         viewModel.exitSelectMode()
         viewModel.deleteRoutes(selected, using: modelContext)
       }
-      Button(String(localized: "Cancel", comment: "Cancel delete routes"), role: .cancel) { }
+      Button.cancel()
     } message: {
       Text(viewModel.deleteConfirmationMessage)
     }
@@ -167,9 +167,7 @@ struct HomeView: View {
   private var toolbarItems: some ToolbarContent {
     ToolbarItem(placement: .topBarLeading) {
       if viewModel.isSelectMode {
-        Button(String(localized: "Cancel", comment: "Exit multiselect mode")) {
-          viewModel.exitSelectMode()
-        }
+        Button.cancel { viewModel.exitSelectMode() }
       } else {
         Button(String(localized: "Select", comment: "Enter multiselect mode")) {
           viewModel.enterSelectMode()
