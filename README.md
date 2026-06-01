@@ -13,6 +13,7 @@ A lightweight iOS app that records your drives in the background, then produces 
 - **GPX export** in standard format, compatible with Strava, Komoot, or any other mapping tool that accepts GPX files.
 - **PNG export** that renders a clean map snapshot with the route drawn on it, suitable for sharing.
 - **Minimal recording screen** showing elapsed time and current speed. There is no live map during recording; see below for why.
+- **Localised** into English, French, German, and Dutch.
 
 ## Why no live map during recording?
 
