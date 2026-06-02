@@ -8,7 +8,7 @@
 import Testing
 import Foundation
 import SwiftUI
-@testable import AutoRoute
+@testable import AutoRoutes
 
 @MainActor
 final class RecordingViewModelTests: SwiftDataBaseTestCase {

@@ -7,7 +7,7 @@
 
 import Testing
 import Foundation
-@testable import AutoRoute
+@testable import AutoRoutes
 
 @Suite("HomeViewModel")
 @MainActor

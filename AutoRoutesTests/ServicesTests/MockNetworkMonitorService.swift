@@ -5,7 +5,7 @@
 //  Created by Damien Glancy on 01/06/2026.
 //
 
-@testable import AutoRoute
+@testable import AutoRoutes
 import Combine
 import Foundation
 

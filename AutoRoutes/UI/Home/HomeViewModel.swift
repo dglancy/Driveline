@@ -33,9 +33,13 @@ final class HomeViewModel {
   private(set) var summaryLine: String?
   private(set) var isSelectMode: Bool = false
   private(set) var selectedRouteIDs: Set<UUID> = []
+  private(set) var startRouteErrorMessage: String?
+  private(set) var routesToMerge: [Route] = []
+
   var showingDeleteConfirmation: Bool = false
   var showingStartRouteError: Bool = false
-  private(set) var startRouteErrorMessage: String?
+  var showingRecordingScreen: Bool = false
+  var showingMergeSheet: Bool = false
 
   // MARK: - Computed Properties
 
@@ -85,6 +89,11 @@ final class HomeViewModel {
   func exitSelectMode() {
     isSelectMode = false
     selectedRouteIDs = []
+  }
+
+  func triggerMerge() {
+    routesToMerge = selectedRoutes(from: sections).sorted { $0.startedAt < $1.startedAt }
+    showingMergeSheet = true
   }
 
   func toggleSelection(for id: UUID) {
