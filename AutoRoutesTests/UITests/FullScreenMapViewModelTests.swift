@@ -9,7 +9,7 @@ import Testing
 import Foundation
 import MapKit
 import SwiftUI
-@testable import AutoRoute
+@testable import AutoRoutes
 
 @Suite("FullScreenMapViewModel")
 @MainActor

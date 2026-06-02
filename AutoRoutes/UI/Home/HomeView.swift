@@ -14,11 +14,10 @@ struct HomeView: View {
 
   @Environment(\.modelContext) private var modelContext
   @Environment(RouteService.self) private var routeService
+
   @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
+
   @State private var viewModel = HomeViewModel()
-  @State private var showingRecordingScreen = false
-  @State private var showingMergeSheet = false
-  @State private var routesToMerge: [Route] = []
 
   // MARK: - Body
 
@@ -36,40 +35,13 @@ struct HomeView: View {
           } else {
             viewModel.update(with: routes)
           }
-          showingRecordingScreen = isRecording
+          viewModel.showingRecordingScreen = isRecording
         }
     }
-    .fullScreenCover(isPresented: $showingRecordingScreen) {
-      RecordingView(routeService: routeService)
-    }
-    .alert(
-      String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
-      isPresented: $viewModel.showingDeleteConfirmation
-    ) {
-      Button.delete {
-        let selected = viewModel.selectedRoutes(from: viewModel.sections)
-        viewModel.exitSelectMode()
-        viewModel.deleteRoutes(selected, using: modelContext)
-      }
-      Button.cancel()
-    } message: {
-      Text(viewModel.deleteConfirmationMessage)
-    }
-    .alert(
-      String(localized: "Couldn't Start Recording", comment: "Start route failure alert title"),
-      isPresented: $viewModel.showingStartRouteError
-    ) {
-      Button(String(localized: "OK", comment: "Dismiss start route error alert"), role: .cancel) { }
-    } message: {
-      Text(viewModel.startRouteErrorMessage ?? "")
-    }
-    .sheet(isPresented: $showingMergeSheet) {
-      if routesToMerge.count == 2 {
-        MergeRoutesView(routes: routesToMerge) { orderedRoutes, mergedName in
-          viewModel.mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName, using: modelContext)
-        }
-      }
-    }
+    .modifier(RecordingScreenModifier(routeService: routeService, viewModel: viewModel))
+    .modifier(DeleteRoutesAlertModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(StartRouteErrorAlertModifier(viewModel: viewModel))
+    .modifier(MergeRoutesSheetModifier(viewModel: viewModel, modelContext: modelContext))
   }
 
   // MARK: - Private Views
@@ -96,7 +68,7 @@ struct HomeView: View {
       List {
         if routeService.isRecording {
           RecordingBannerSection(triggerDisplayName: routeService.route?.trigger.displayName) {
-            showingRecordingScreen = true
+            viewModel.showingRecordingScreen = true
           }
         }
 
@@ -153,9 +125,7 @@ struct HomeView: View {
           canDelete: viewModel.canDelete,
           selectionCountText: viewModel.selectionCountText
         ) {
-          let routes = viewModel.selectedRoutes(from: viewModel.sections)
-          routesToMerge = routes.sorted { $0.startedAt < $1.startedAt }
-          showingMergeSheet = true
+          viewModel.triggerMerge()
         } onDelete: {
           viewModel.showingDeleteConfirmation = true
         }
@@ -182,7 +152,7 @@ struct HomeView: View {
       if !viewModel.isSelectMode {
         Button {
           if routeService.isRecording {
-            showingRecordingScreen = true
+            viewModel.showingRecordingScreen = true
           } else {
             viewModel.startRoute(using: routeService)
           }
@@ -204,9 +174,73 @@ struct HomeView: View {
         .buttonStyle(.plain)
         .accessibilityLabel(
           routeService.isRecording
-            ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
-            : String(localized: "Start a new route", comment: "Record button when idle")
+          ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
+          : String(localized: "Start a new route", comment: "Record button when idle")
         )
+      }
+    }
+  }
+}
+
+// MARK: - Presentation Modifiers
+
+private struct RecordingScreenModifier: ViewModifier {
+  let routeService: RouteService
+  @Bindable var viewModel: HomeViewModel
+
+  func body(content: Content) -> some View {
+    content.fullScreenCover(isPresented: $viewModel.showingRecordingScreen) {
+      RecordingView(routeService: routeService)
+    }
+  }
+}
+
+private struct DeleteRoutesAlertModifier: ViewModifier {
+  @Bindable var viewModel: HomeViewModel
+  let modelContext: ModelContext
+
+  func body(content: Content) -> some View {
+    content.alert(
+      String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
+      isPresented: $viewModel.showingDeleteConfirmation
+    ) {
+      Button.delete {
+        let selected = viewModel.selectedRoutes(from: viewModel.sections)
+        viewModel.exitSelectMode()
+        viewModel.deleteRoutes(selected, using: modelContext)
+      }
+      Button.cancel()
+    } message: {
+      Text(viewModel.deleteConfirmationMessage)
+    }
+  }
+}
+
+private struct StartRouteErrorAlertModifier: ViewModifier {
+  @Bindable var viewModel: HomeViewModel
+
+  func body(content: Content) -> some View {
+    content.alert(
+      String(localized: "Couldn't Start Recording", comment: "Start route failure alert title"),
+      isPresented: $viewModel.showingStartRouteError
+    ) {
+      Button(String(localized: "OK", comment: "Dismiss start route error alert"), role: .cancel) { }
+    } message: {
+      Text(viewModel.startRouteErrorMessage ?? "")
+    }
+  }
+}
+
+private struct MergeRoutesSheetModifier: ViewModifier {
+  @Bindable var viewModel: HomeViewModel
+  let modelContext: ModelContext
+
+  func body(content: Content) -> some View {
+    content.sheet(isPresented: $viewModel.showingMergeSheet) {
+      if viewModel.routesToMerge.count == 2 {
+        MergeRoutesView(routes: viewModel.routesToMerge) { orderedRoutes, mergedName in
+          viewModel.mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName, using: modelContext)
+        }
       }
     }
   }

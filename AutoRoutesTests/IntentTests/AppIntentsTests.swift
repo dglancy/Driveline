@@ -5,7 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
-@testable import AutoRoute
+@testable import AutoRoutes
 import Foundation
 import SwiftData
 import Testing

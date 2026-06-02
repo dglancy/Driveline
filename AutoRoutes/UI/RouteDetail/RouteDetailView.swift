@@ -68,50 +68,12 @@ struct RouteDetailView: View {
       }
     }
     .toolbar(.hidden, for: .navigationBar)
-    .navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
-      FullScreenMapView(route: viewModel.route)
-    }
-    .sheet(item: $viewModel.exportedFile) { file in
-      ActivityViewController(activityItems: [file.url])
-    }
-    .alert(
-      String(localized: "Export Failed", comment: "Export error alert title"),
-      isPresented: Binding(get: { viewModel.exportError != nil }, set: { if !$0 { viewModel.exportError = nil } }),
-      presenting: viewModel.exportError
-    ) { _ in
-      Button(String(localized: "OK", comment: "Dismiss export error alert")) { viewModel.exportError = nil }
-    } message: { error in
-      Text(error)
-    }
-    .alert(
-      String(localized: "Delete Route", comment: "Delete confirmation alert title"),
-      isPresented: $viewModel.showingDeleteConfirmation
-    ) {
-      Button.delete {
-        viewModel.deleteRoute(using: modelContext)
-        dismiss()
-      }
-      Button.cancel()
-    } message: {
-      Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete route confirmation message"))
-    }
-    .sheet(isPresented: $viewModel.showingEditRoute) {
-      EditRouteView(route: viewModel.route)
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
-    }
-    .confirmationDialog(
-      String(localized: "Route Options", comment: "More menu title"),
-      isPresented: $viewModel.showingMoreMenu
-    ) {
-      Button(String(localized: "Edit Route Details", comment: "More menu action")) {
-        viewModel.showingEditRoute = true
-      }
-      Button(String(localized: "Delete Route", comment: "More menu action"), role: .destructive) {
-        viewModel.showingDeleteConfirmation = true
-      }
-      Button.cancel()
-    }
+    .modifier(FullScreenMapModifier(viewModel: viewModel))
+    .modifier(ExportShareSheetModifier(viewModel: viewModel))
+    .modifier(ExportErrorAlertModifier(viewModel: viewModel))
+    .modifier(DeleteRouteAlertModifier(viewModel: viewModel, modelContext: modelContext, dismiss: { dismiss() }))
+    .modifier(EditRouteSheetModifier(viewModel: viewModel))
+    .modifier(RouteOptionsDialogModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
@@ -216,7 +178,96 @@ struct RouteDetailView: View {
       Button.cancel()
     }
   }
+}
 
+// MARK: - Presentation Modifiers
+
+private struct FullScreenMapModifier: ViewModifier {
+  @Bindable var viewModel: RouteDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
+      FullScreenMapView(route: viewModel.route)
+    }
+  }
+}
+
+private struct ExportShareSheetModifier: ViewModifier {
+  @Bindable var viewModel: RouteDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.sheet(item: $viewModel.exportedFile) { file in
+      ActivityViewController(activityItems: [file.url])
+    }
+  }
+}
+
+private struct ExportErrorAlertModifier: ViewModifier {
+  @Bindable var viewModel: RouteDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.alert(
+      String(localized: "Export Failed", comment: "Export error alert title"),
+      isPresented: Binding(get: { viewModel.exportError != nil }, set: { if !$0 { viewModel.exportError = nil } }),
+      presenting: viewModel.exportError
+    ) { _ in
+      Button(String(localized: "OK", comment: "Dismiss export error alert")) { viewModel.exportError = nil }
+    } message: { error in
+      Text(error)
+    }
+  }
+}
+
+private struct DeleteRouteAlertModifier: ViewModifier {
+  @Bindable var viewModel: RouteDetailViewModel
+  let modelContext: ModelContext
+  let dismiss: () -> Void
+
+  func body(content: Content) -> some View {
+    content.alert(
+      String(localized: "Delete Route", comment: "Delete confirmation alert title"),
+      isPresented: $viewModel.showingDeleteConfirmation
+    ) {
+      Button.delete {
+        viewModel.deleteRoute(using: modelContext)
+        dismiss()
+      }
+      Button.cancel()
+    } message: {
+      Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete route confirmation message"))
+    }
+  }
+}
+
+private struct EditRouteSheetModifier: ViewModifier {
+  @Bindable var viewModel: RouteDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.sheet(isPresented: $viewModel.showingEditRoute) {
+      EditRouteView(route: viewModel.route)
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+  }
+}
+
+private struct RouteOptionsDialogModifier: ViewModifier {
+  @Bindable var viewModel: RouteDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.confirmationDialog(
+      String(localized: "Route Options", comment: "More menu title"),
+      isPresented: $viewModel.showingMoreMenu
+    ) {
+      Button(String(localized: "Edit Route Details", comment: "More menu action")) {
+        viewModel.showingEditRoute = true
+      }
+      Button(String(localized: "Delete Route", comment: "More menu action"), role: .destructive) {
+        viewModel.showingDeleteConfirmation = true
+      }
+      Button.cancel()
+    }
+  }
 }
 
 // MARK: - Preview

@@ -5,7 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
-@testable import AutoRoute
+@testable import AutoRoutes
 import Testing
 
 @Suite("Constants")
@@ -15,12 +15,12 @@ struct ConstantsTests {
 
   @Test
   func appBundleIdHasCorrectPrefix() {
-    #expect(kAppBundleId.hasPrefix("com.targatrips.AutoRoute"))
+    #expect(kAppBundleId.hasPrefix("com.targatrips.AutoRoutes"))
   }
 
   @Test
   func gpxCreatorHasCorrectSuffix() {
-    #expect(kGPXCreator.hasSuffix("AutoRoute for iOS"))
+    #expect(kGPXCreator.hasSuffix("AutoRoutes for iOS"))
   }
 
   // MARK: - Testing
