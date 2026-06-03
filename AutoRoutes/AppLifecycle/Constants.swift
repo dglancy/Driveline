@@ -10,8 +10,7 @@ import CoreLocation
 
 // MARK: - App
 
-let kAppName = "AutoRoutes"
-let kAppBundleId = "com.targatrips.AutoRoutes"
+let kAppBundleId = Bundle.main.bundleIdentifier!
 let kGPXCreator = "AutoRoutes for iOS"
 
 // MARK: - Configuration
@@ -23,7 +22,6 @@ let kPauseTimeoutInterval: TimeInterval = 30 * 60
 
 // MARK: - Common strings
 
-let kBlankString = ""
 let kDashString = "—"
 
 // MARK: - Testing
