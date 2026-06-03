@@ -13,7 +13,7 @@ extension TimeInterval {
 
   @MainActor
   func localizedHoursMinutesString(locale: Locale = .current) -> String {
-    Self.hoursMinutesFormatter(locale: locale, overHour: self >= 3600).string(from: self) ?? kBlankString
+    Self.hoursMinutesFormatter(locale: locale, overHour: self >= 3600).string(from: self) ?? ""
   }
 
   @MainActor
