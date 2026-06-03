@@ -2,6 +2,8 @@
 
 # Driveline
 
+[![CI](https://github.com/dglancy/Driveline/actions/workflows/ios.yml/badge.svg)](https://github.com/dglancy/Driveline/actions/workflows/ios.yml)
+
 A lightweight iOS app that records your drives in the background, then produces exportable maps and GPX files from each one. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
 
 ## Background
