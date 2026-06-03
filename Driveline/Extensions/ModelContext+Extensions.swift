@@ -1,0 +1,20 @@
+//
+//  ModelContext+Extensions.swift
+//  Driveline
+//
+//  Created by Damien Glancy on 31/05/2026.
+//
+
+import SwiftData
+
+extension ModelContext {
+
+  func safeSave(onSuccess: (() -> Void)? = nil, onFailure: ((Error) -> Void)? = nil) {
+    do {
+      try save()
+      onSuccess?()
+    } catch {
+      onFailure?(error)
+    }
+  }
+}
