@@ -57,7 +57,7 @@ extension Measurement where UnitType == UnitLength {
   @MainActor
   func localizedDistanceValueString(locale: Locale = .current) -> String {
     let value = self.converted(to: Self.preferredUnit(for: locale)).value
-    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? kBlankString
+    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? ""
   }
 
   func localizedDistanceUnitSymbol(locale: Locale = .current) -> String {

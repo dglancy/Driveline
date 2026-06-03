@@ -48,16 +48,16 @@ extension Measurement where UnitType == UnitSpeed {
 
   @MainActor
   func localizedSpeedString(locale: Locale = .current) -> String {
-    guard self.value >= 0 else { return kBlankString }
+    guard self.value >= 0 else { return "" }
     let converted = self.converted(to: Self.preferredUnit(for: locale))
     return Self.measurementFormatter(for: locale).string(from: converted)
   }
 
   @MainActor
   func localizedSpeedValueString(locale: Locale = .current) -> String {
-    guard self.value >= 0 else { return kBlankString }
+    guard self.value >= 0 else { return "" }
     let value = self.converted(to: Self.preferredUnit(for: locale)).value
-    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? kBlankString
+    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? ""
   }
 
   func localizedSpeedUnitSymbol(locale: Locale = .current) -> String {

@@ -15,7 +15,7 @@ struct ConstantsTests {
 
   @Test
   func appBundleIdHasCorrectPrefix() {
-    #expect(kAppBundleId.hasPrefix("com.targatrips.AutoRoutes"))
+    #expect(kAppBundleId.hasPrefix("com.targatrips.AutoRoute"))
   }
 
   @Test
