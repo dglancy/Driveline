@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "ED8A655D-80E1-451C-8ADD-046F7A3BEC12",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Driveline.xcodeproj",
+        "identifier" : "6D47A51E2FCAD20800E6C7B7",
+        "name" : "DrivelineTests"
+      }
+    }
+  ],
+  "version" : 1
+}
