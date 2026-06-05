@@ -26,7 +26,7 @@ struct RouteEndAnnotation: View {
   // MARK: - Body
 
   var body: some View {
-    Image(systemName: SystemImage.finishFlagCircle)
+    Image(systemName: Icons.finishFlagCircle)
       .font(.title)
       .foregroundStyle(.red, Color(.systemBackground))
       .shadow(color: .black.opacity(0.2), radius: 2, y: 1)

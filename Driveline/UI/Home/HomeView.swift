@@ -164,7 +164,7 @@ struct HomeView: View {
                 .fill(.red)
                 .frame(width: 11, height: 11)
             } else {
-              Image(systemName: SystemImage.recordingActive)
+              Image(systemName: Icons.recordingActive)
                 .font(.title2)
                 .foregroundStyle(.red)
             }

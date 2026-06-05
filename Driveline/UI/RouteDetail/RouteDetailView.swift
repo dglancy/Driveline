@@ -131,7 +131,7 @@ struct RouteDetailView: View {
         subtitle: String(localized: "Arrival", comment: "Endpoint row subtitle"),
         trailing: viewModel.arrivalTime
       ) {
-        Image(systemName: SystemImage.finishFlag)
+        Image(systemName: Icons.finishFlag)
           .font(.body.weight(.medium))
           .foregroundStyle(.red)
       }
@@ -142,19 +142,19 @@ struct RouteDetailView: View {
   private var metadataCard: some View {
     VStack(spacing: 0) {
       IconRow(title: String(localized: "Top Speed", comment: "Metadata row"), trailing: viewModel.topSpeed) {
-        Image(systemName: SystemImage.speed)
+        Image(systemName: Icons.speed)
           .font(.callout)
           .foregroundStyle(.secondary)
       }
       Divider().padding(.leading, 52)
       IconRow(title: String(localized: "Track Points", comment: "Metadata row"), trailing: viewModel.trackPoints) {
-        Image(systemName: SystemImage.location)
+        Image(systemName: Icons.location)
           .font(.callout)
           .foregroundStyle(.secondary)
       }
       Divider().padding(.leading, 52)
       IconRow(title: String(localized: "Started by", comment: "Metadata row"), trailing: viewModel.triggerDisplayName) {
-        Image(systemName: SystemImage.gpsSignal)
+        Image(systemName: Icons.gpsSignal)
           .font(.callout)
           .foregroundStyle(.secondary)
       }

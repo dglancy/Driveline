@@ -77,7 +77,7 @@ struct MergeRoutesView: View {
         viewModel.swapOrder()
       }
     } label: {
-      Image(systemName: SystemImage.reorderRoutes)
+      Image(systemName: Icons.reorderRoutes)
         .font(.callout.weight(.medium))
         .foregroundStyle(.tint)
         .frame(width: 36, height: 36)
