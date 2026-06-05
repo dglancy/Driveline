@@ -58,6 +58,7 @@ struct FullScreenMapView: View {
       Text(viewModel.name)
         .font(.body.weight(.semibold))
         .foregroundStyle(Color(.label))
+        .dynamicTypeSize(.xSmall ... .accessibility1)
 
       HStack(spacing: 0) {
         statChip(value: viewModel.distanceValue, unit: viewModel.distanceUnit)
@@ -76,9 +77,11 @@ struct FullScreenMapView: View {
     VStack(spacing: 1) {
       Text(value)
         .font(.body.weight(.semibold))
+        .dynamicTypeSize(.xSmall ... .xxxLarge)
       Text(unit)
         .font(.caption)
         .foregroundStyle(.secondary)
+        .dynamicTypeSize(.xSmall ... .xxxLarge)
     }
   }
 

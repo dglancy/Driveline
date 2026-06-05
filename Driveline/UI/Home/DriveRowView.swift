@@ -75,6 +75,7 @@ struct DriveRowView: View {
       Image(systemName: Icons.driveBadge)
         .font(.title3)
         .foregroundStyle(.tint)
+        .dynamicTypeSize(.xSmall ... .large)
     }
   }
 
@@ -94,10 +95,12 @@ struct DriveRowView: View {
       Text(display.name)
         .font(nameFont)
         .lineLimit(1)
+        .dynamicTypeSize(.large ... .accessibility1)
       Text(display.dateTimeLabel)
         .font(dateFont)
         .foregroundStyle(.secondary)
         .lineLimit(1)
+        .dynamicTypeSize(.xSmall ... .accessibility1)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
   }
@@ -106,10 +109,12 @@ struct DriveRowView: View {
     VStack(alignment: .trailing, spacing: 1) {
       Text(display.formattedDistance)
         .font(distanceFont)
+        .dynamicTypeSize(.xSmall ... .accessibility1)
       if let duration = display.formattedDuration {
         Text(duration)
           .font(durationFont)
           .foregroundStyle(.tertiary)
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
     }
   }

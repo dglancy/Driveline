@@ -83,9 +83,11 @@ struct DriveDetailView: View {
       Text(viewModel.name)
         .font(.title.weight(.bold))
         .foregroundStyle(Color(.label))
+        .dynamicTypeSize(.xSmall ... .accessibility1)
       Text(viewModel.dateString)
         .font(.callout)
         .foregroundStyle(.secondary)
+        .dynamicTypeSize(.xSmall ... .accessibility1)
     }
   }
 
@@ -125,7 +127,9 @@ struct DriveDetailView: View {
           .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 2))
           .shadow(color: .black.opacity(0.15), radius: 1)
       }
+      
       Divider().padding(.leading, 52)
+      
       IconRow(
         title: viewModel.endPlace ?? String(localized: "Unknown", comment: "Unknown place name"),
         subtitle: String(localized: "Arrival", comment: "Endpoint row subtitle"),
@@ -134,6 +138,7 @@ struct DriveDetailView: View {
         Image(systemName: Icons.finishFlag)
           .font(.body.weight(.medium))
           .foregroundStyle(.red)
+          .dynamicTypeSize(.xSmall ... .xxxLarge)
       }
     }
     .cardBackground(cornerRadius: 16)
@@ -145,18 +150,25 @@ struct DriveDetailView: View {
         Image(systemName: Icons.speed)
           .font(.callout)
           .foregroundStyle(.secondary)
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
+      
       Divider().padding(.leading, 52)
+      
       IconRow(title: String(localized: "Track Points", comment: "Metadata row"), trailing: viewModel.trackPoints) {
         Image(systemName: Icons.location)
           .font(.callout)
           .foregroundStyle(.secondary)
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
+      
       Divider().padding(.leading, 52)
+      
       IconRow(title: String(localized: "Started by", comment: "Metadata row"), trailing: viewModel.triggerDisplayName) {
         Image(systemName: Icons.gpsSignal)
           .font(.callout)
           .foregroundStyle(.secondary)
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
     }
     .cardBackground(cornerRadius: 16)
