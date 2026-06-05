@@ -72,7 +72,7 @@ struct RecordingView: View {
 
   private var recordingBadge: some View {
     HStack(spacing: 8) {
-      PulsingDot(color: .red, size: 9)
+      PulsingDot(color: .red, size: 12)
       Text(String(localized: "RECORDING", comment: "Status badge text — translators may lowercase if appropriate"))
         .font(.footnote.weight(.bold))
         .foregroundStyle(Color.red)
