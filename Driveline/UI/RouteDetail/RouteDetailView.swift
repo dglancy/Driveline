@@ -36,17 +36,17 @@ struct RouteDetailView: View {
         RouteDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
           .frame(height: mapHeight)
           .overlay(alignment: .topLeading) {
-            GlassButton(systemImage: "chevron.left", accessibilityLabel: "Back") { dismiss() }
+            GlassButton(systemImage: Icons.chevronLeft, accessibilityLabel: "Back") { dismiss() }
               .padding(14)
           }
           .overlay(alignment: .topTrailing) {
-            GlassButton(systemImage: "ellipsis", accessibilityLabel: "More options") {
+            GlassButton(systemImage: Icons.ellipsis, accessibilityLabel: "More options") {
               viewModel.showingMoreMenu = true
             }
             .padding(14)
           }
           .overlay(alignment: .bottomTrailing) {
-            GlassButton(systemImage: "viewfinder", accessibilityLabel: "Full screen map") {
+            GlassButton(systemImage: Icons.viewfinder, accessibilityLabel: "Full screen map") {
               viewModel.showingFullScreenMap = true
             }
             .padding(14)
@@ -166,7 +166,7 @@ struct RouteDetailView: View {
     Button {
       viewModel.showSharingDialog = true
     } label: {
-      Label(String(localized: "Share Route", comment: "Share button"), systemImage: "square.and.arrow.up")
+      Label(String(localized: "Share Route", comment: "Share button"), systemImage: Icons.sharing)
         .font(.body.weight(.medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
