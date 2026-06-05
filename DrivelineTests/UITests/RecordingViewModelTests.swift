@@ -13,74 +13,12 @@ import SwiftUI
 @MainActor
 final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
-  // MARK: - isPaused
-
-  @Test
-  func isPausedIsFalseWhenRouteIsRunning() {
-    let vm = makeViewModel()
-    #expect(vm.isPaused == false)
-  }
-
-  @Test
-  func isPausedIsTrueWhenRoutePaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.isPaused == true)
-  }
-
-  // MARK: - accentColour
-
-  @Test
-  func accentColourIsRedWhenRunning() {
-    let vm = makeViewModel()
-    #expect(vm.accentColour == Color.red)
-  }
-
-  @Test
-  func accentColourIsOrangeWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.accentColour == Color.orange)
-  }
-
   // MARK: - speedValue
-
-  @Test
-  func speedValueIsEmDashWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.speedValue == "—")
-  }
 
   @Test
   func speedValueIsEmDashWhenRunningWithNoSpeed() {
     let vm = makeViewModel()
     #expect(vm.speedValue == "—")
-  }
-
-  // MARK: - pauseResumeIconName
-
-  @Test
-  func pauseResumeIconNameIsPauseFillWhenRunning() {
-    let vm = makeViewModel()
-    #expect(vm.pauseResumeIconName == Icons.pause)
-  }
-
-  @Test
-  func pauseResumeIconNameIsPlayFillWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.pauseResumeIconName == Icons.play)
-  }
-
-  // MARK: - pauseResumeLabel
-
-  @Test
-  func pauseResumeLabelIsPauseWhenRunning() {
-    let vm = makeViewModel()
-    #expect(vm.pauseResumeLabel == "Pause")
-  }
-
-  @Test
-  func pauseResumeLabelIsResumeWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.pauseResumeLabel == "Resume")
   }
 
   // MARK: - positionCount
@@ -128,29 +66,12 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     #expect(vm.startedAt != "—")
   }
 
-  // MARK: - pauseOrResume
+  // MARK: - finishRoute
 
   @Test
-  func pauseOrResumeFromRunningPausesService() {
+  func finishRouteStopsRecording() {
     let (service, vm) = makeServiceAndViewModel()
-    vm.pauseOrResume()
-    #expect(service.isPaused == true)
-  }
-
-  @Test
-  func pauseOrResumeFromPausedResumesService() {
-    let (service, vm) = makeServiceAndViewModel()
-    service.pauseRoute()
-    vm.pauseOrResume()
-    #expect(service.isPaused == false)
-  }
-
-  // MARK: - endRoute
-
-  @Test
-  func endRouteStopsRecording() {
-    let (service, vm) = makeServiceAndViewModel()
-    vm.endRoute()
+    vm.finishRoute()
     #expect(service.isRecording == false)
   }
 
@@ -185,10 +106,9 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     return (service, locationService)
   }
 
-  private func makeViewModel(paused: Bool = false) -> RecordingViewModel {
+  private func makeViewModel() -> RecordingViewModel {
     let (service, _) = makeService()
     try! service.startRoute()
-    if paused { service.pauseRoute() }
     return RecordingViewModel(routeService: service)
   }
 
