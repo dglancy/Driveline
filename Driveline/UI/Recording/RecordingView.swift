@@ -79,8 +79,11 @@ struct RecordingView: View {
       } else {
         PulsingDot(color: viewModel.accentColour, size: 9)
       }
-      let statusKey: LocalizedStringKey = viewModel.isPaused ? "PAUSED" : "RECORDING"
-      Text(statusKey)
+      Text(
+        viewModel.isPaused
+          ? String(localized: "PAUSED", comment: "Status badge text — translators may lowercase if appropriate")
+          : String(localized: "RECORDING", comment: "Status badge text — translators may lowercase if appropriate")
+      )
         .font(.footnote.weight(.bold))
         .foregroundStyle(viewModel.accentColour)
         .tracking(1.4)
@@ -98,7 +101,7 @@ struct RecordingView: View {
 
   private var heroSection: some View {
     VStack(spacing: 0) {
-      Text("Elapsed")
+      Text(String(localized: "Elapsed", comment: "Label above the elapsed time timer on the recording screen"))
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(Color(.secondaryLabel))
         .tracking(1)
@@ -151,7 +154,7 @@ struct RecordingView: View {
       Image(systemName: Icons.battery)
         .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
-      Text("Running in the background to save battery. Your full route map appears here when the drive ends.")
+      Text(String(localized: "Running in the background to save battery. Your full route map appears here when the drive ends.", comment: "Battery saving note shown on the recording screen while a drive is in progress"))
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)

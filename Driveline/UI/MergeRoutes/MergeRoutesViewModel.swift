@@ -39,14 +39,14 @@ final class MergeRoutesViewModel {
   init(routes: [Route]) {
     precondition(routes.count == 2, "MergeRoutesViewModel requires exactly 2 routes")
     self.orderedRoutes = routes
-    self.mergedName = "\(routes[0].name) + \(routes[1].name)"
+    self.mergedName = String(localized: "\(routes[0].name) + \(routes[1].name)", comment: "Default name for a merged route, combining two route names with a plus sign")
   }
 
   // MARK: - Methods
 
   func swapOrder() {
     orderedRoutes = [orderedRoutes[1], orderedRoutes[0]]
-    mergedName = "\(orderedRoutes[0].name) + \(orderedRoutes[1].name)"
+    mergedName = String(localized: "\(orderedRoutes[0].name) + \(orderedRoutes[1].name)", comment: "Default name for a merged route, combining two route names with a plus sign")
   }
 
   // MARK: - Private

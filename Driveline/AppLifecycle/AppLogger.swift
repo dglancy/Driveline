@@ -6,6 +6,13 @@
 
 import OSLog
 
+// MARK: - Enum
+
+enum LogPrivacy {
+    case `public`
+    case `private`
+}
+
 // MARK: - App Logger
 
 struct AppLogger {
@@ -17,16 +24,27 @@ struct AppLogger {
     self.category = category
   }
 
-  func info(_ message: String) {
-    logger.info("[\(category)] \(message, privacy: .public)")
+  func info(_ message: String, privacy: LogPrivacy = .public) {
+      log(level: .info, message: message, privacy: privacy)
   }
 
-  func debug(_ message: String) {
-    logger.debug("[\(category)] \(message, privacy: .public)")
+  func debug(_ message: String, privacy: LogPrivacy = .public) {
+      log(level: .debug, message: message, privacy: privacy)
   }
 
-  func error(_ message: String) {
-    logger.error("[\(category)] \(message, privacy: .public)")
+  func error(_ message: String, privacy: LogPrivacy = .public) {
+      log(level: .error, message: message, privacy: privacy)
+  }
+
+  // MARK: - Private functions
+
+  private func log(level: OSLogType, message: String, privacy: LogPrivacy) {
+      switch privacy {
+      case .public:
+          logger.log(level: level, "[\(category)] \(message, privacy: .public)")
+      case .private:
+          logger.log(level: level, "[\(category)] \(message, privacy: .private)")
+      }
   }
 }
 
