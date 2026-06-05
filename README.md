@@ -61,7 +61,6 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`
 - MapKit for route rendering and map snapshots on export
 - AppIntents for the Shortcuts actions (start/resume and pause)
-- BackgroundTasks for scheduling a pause timeout that fires even when the app is suspended
 - Combine for publishing location updates through the service layer
 - Network framework (via `NWPathMonitor`) for detecting connectivity changes used to retry failed reverse geocoding
 
