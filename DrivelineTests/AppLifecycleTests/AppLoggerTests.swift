@@ -54,6 +54,5 @@ struct AppLoggerTests {
     _ = Log.ui
     _ = Log.location
     _ = Log.data
-    _ = Log.intent
   }
 }

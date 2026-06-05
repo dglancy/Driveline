@@ -57,7 +57,7 @@ struct StartOrResumeRouteIntent: AppIntent {
   // MARK: - Actions
 
   func perform() async throws -> some IntentResult {
-    await Log.intent.info("Running perform on StartOrResumeRoute intent")
+    await Log.lifecycle.info("Running perform on StartOrResumeRoute intent")
 
     let routeService = try await resolveRouteService()
     let isPaused = await routeService.isPaused
@@ -84,7 +84,7 @@ struct PauseRouteIntent: AppIntent {
   // MARK: - Actions
 
   func perform() async throws -> some IntentResult {
-    await Log.intent.info("Running perform on PauseRouteIntent intent")
+    await Log.lifecycle.info("Running perform on PauseRouteIntent intent")
 
     let routeService = try await resolveRouteService()
     let isRecording = await routeService.isRecording
