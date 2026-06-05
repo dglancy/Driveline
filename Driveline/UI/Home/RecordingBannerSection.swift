@@ -36,7 +36,7 @@ struct RecordingBannerSection: View {
             }
           }
           Spacer()
-          Image(systemName: SystemImage.chevronRight)
+          Image(systemName: Icons.chevronRight)
             .font(.caption.weight(.semibold))
             .foregroundStyle(Color(.tertiaryLabel))
             .accessibilityHidden(true)

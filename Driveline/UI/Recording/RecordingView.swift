@@ -51,7 +51,7 @@ struct RecordingView: View {
       Button { dismiss() } label: {
         ZStack {
           Circle().fill(Color(.systemFill))
-          Image(systemName: SystemImage.chevronDown)
+          Image(systemName: Icons.chevronDown)
             .font(.body.weight(.semibold))
             .foregroundStyle(Color(.secondaryLabel))
         }
@@ -148,7 +148,7 @@ struct RecordingView: View {
 
   private var batteryNote: some View {
     HStack(spacing: 11) {
-      Image(systemName: SystemImage.battery)
+      Image(systemName: Icons.battery)
         .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
       Text("Running in the background to save battery. Your full route map appears here when the drive ends.")
@@ -176,7 +176,7 @@ struct RecordingView: View {
       )
 
       RecordingControlButton(
-        iconName: SystemImage.stop,
+        iconName: Icons.stop,
         label: String(localized: "End Drive", comment: "End drive button label"),
         background: .red,
         iconColor: .white,

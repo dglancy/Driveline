@@ -60,13 +60,13 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   @Test
   func pauseResumeIconNameIsPauseFillWhenRunning() {
     let vm = makeViewModel()
-    #expect(vm.pauseResumeIconName == SystemImage.pause)
+    #expect(vm.pauseResumeIconName == Icons.pause)
   }
 
   @Test
   func pauseResumeIconNameIsPlayFillWhenPaused() {
     let vm = makeViewModel(paused: true)
-    #expect(vm.pauseResumeIconName == SystemImage.play)
+    #expect(vm.pauseResumeIconName == Icons.play)
   }
 
   // MARK: - pauseResumeLabel

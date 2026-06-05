@@ -5,7 +5,7 @@
 //  Created by Damien Glancy on 01/06/2026.
 //
 
-enum SystemImage {
+enum Icons {
 
   // MARK: - Route
 
@@ -17,7 +17,6 @@ enum SystemImage {
 
   // MARK: - Recording
 
-  static let record = "record.circle"
   static let stop = "stop.fill"
   static let pause = "pause.fill"
   static let play = "play.fill"

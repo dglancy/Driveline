@@ -38,7 +38,7 @@ struct RouteRowView: View {
   private func listBody(isSelected: Bool?) -> some View {
     HStack(spacing: 13) {
       if let isSelected {
-        Image(systemName: isSelected ? SystemImage.selected : SystemImage.deselected)
+        Image(systemName: isSelected ? Icons.selected : Icons.deselected)
           .font(.title2)
           .foregroundStyle(isSelected ? Color.accentColor : Color(.tertiaryLabel))
           .animation(.easeInOut(duration: 0.15), value: isSelected)
@@ -72,7 +72,7 @@ struct RouteRowView: View {
       RoundedRectangle(cornerRadius: 11)
         .fill(.tint.opacity(0.14))
         .frame(width: 38, height: 38)
-      Image(systemName: SystemImage.routeBadge)
+      Image(systemName: Icons.routeBadge)
         .font(.title3)
         .foregroundStyle(.tint)
     }
