@@ -79,8 +79,11 @@ struct RecordingView: View {
       } else {
         PulsingDot(color: viewModel.accentColour, size: 9)
       }
-      let statusKey: LocalizedStringKey = viewModel.isPaused ? "PAUSED" : "RECORDING"
-      Text(statusKey)
+      Text(
+        viewModel.isPaused
+          ? String(localized: "PAUSED", comment: "Status badge text — translators may lowercase if appropriate")
+          : String(localized: "RECORDING", comment: "Status badge text — translators may lowercase if appropriate")
+      )
         .font(.footnote.weight(.bold))
         .foregroundStyle(viewModel.accentColour)
         .tracking(1.4)
