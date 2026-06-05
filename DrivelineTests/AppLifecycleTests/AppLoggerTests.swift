@@ -1,6 +1,6 @@
 //
 //  AppLoggerTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -22,7 +22,7 @@ struct AppLoggerTests {
   @Test
   @MainActor
   func initialisesWithCustomSubsystem() {
-    _ = AppLogger(subsystem: "com.test.app", category: "Test")
+    _ = AppLogger(category: "Test")
   }
 
   // MARK: - Logging

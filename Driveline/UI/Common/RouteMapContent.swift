@@ -1,5 +1,5 @@
 //
-//  RouteMapContent.swift
+//  DriveMapContent.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -9,7 +9,7 @@ import CoreLocation
 import MapKit
 import SwiftUI
 
-struct RouteMapContent: MapContent {
+struct DriveMapContent: MapContent {
 
   // MARK: - Properties
 
@@ -25,13 +25,13 @@ struct RouteMapContent: MapContent {
 
     if let start = coordinates.first {
       Annotation("", coordinate: start, anchor: .center) {
-        RouteStartAnnotation()
+        DriveStartAnnotation()
       }
     }
 
     if let end = coordinates.last, coordinates.count > 1 {
       Annotation("", coordinate: end, anchor: .bottom) {
-        RouteEndAnnotation()
+        DriveEndAnnotation()
       }
     }
   }

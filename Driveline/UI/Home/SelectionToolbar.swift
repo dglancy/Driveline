@@ -23,7 +23,7 @@ struct SelectionToolbar: View {
     HStack {
       Button(action: onMerge) {
         Label(
-          String(localized: "Merge", comment: "Merge selected routes button"),
+          String(localized: "Merge", comment: "Merge selected drives button"),
           systemImage: Icons.merge
         )
         .font(.body.weight(.medium))
@@ -36,7 +36,7 @@ struct SelectionToolbar: View {
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity, alignment: .center)
 
-      Button(String(localized: "Delete", comment: "Delete selected routes button"), action: onDelete)
+      Button(String(localized: "Delete", comment: "Delete selected drives button"), action: onDelete)
         .font(.body.weight(.medium))
         .foregroundStyle(canDelete ? Color.red : Color(.tertiaryLabel))
         .disabled(!canDelete)

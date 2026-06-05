@@ -19,8 +19,8 @@ struct AppLogger {
   private let logger: Logger
   private let category: String
 
-  init(subsystem: String = kAppBundleId, category: String) {
-    self.logger = Logger(subsystem: subsystem, category: category)
+  init(category: String) {
+    self.logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: category)
     self.category = category
   }
 

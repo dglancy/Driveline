@@ -35,7 +35,7 @@ final class NetworkMonitorService: NetworkMonitorServiceProtocol {
 
   @ObservationIgnored private let pathMonitor: any PathMonitoring
   @ObservationIgnored private let queue = DispatchQueue(
-    label: "com.targatrips.AutoRoute.network-monitor",
+    label: "com.targatrips.AutoDrive.network-monitor",
     qos: .utility
   )
   @ObservationIgnored private var hasSeenDisconnection = false

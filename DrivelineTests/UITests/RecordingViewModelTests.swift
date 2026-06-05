@@ -1,6 +1,6 @@
 //
 //  RecordingViewModelTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -13,74 +13,12 @@ import SwiftUI
 @MainActor
 final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
-  // MARK: - isPaused
-
-  @Test
-  func isPausedIsFalseWhenRouteIsRunning() {
-    let vm = makeViewModel()
-    #expect(vm.isPaused == false)
-  }
-
-  @Test
-  func isPausedIsTrueWhenRoutePaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.isPaused == true)
-  }
-
-  // MARK: - accentColour
-
-  @Test
-  func accentColourIsRedWhenRunning() {
-    let vm = makeViewModel()
-    #expect(vm.accentColour == Color.red)
-  }
-
-  @Test
-  func accentColourIsOrangeWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.accentColour == Color.orange)
-  }
-
   // MARK: - speedValue
-
-  @Test
-  func speedValueIsEmDashWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.speedValue == "—")
-  }
 
   @Test
   func speedValueIsEmDashWhenRunningWithNoSpeed() {
     let vm = makeViewModel()
     #expect(vm.speedValue == "—")
-  }
-
-  // MARK: - pauseResumeIconName
-
-  @Test
-  func pauseResumeIconNameIsPauseFillWhenRunning() {
-    let vm = makeViewModel()
-    #expect(vm.pauseResumeIconName == Icons.pause)
-  }
-
-  @Test
-  func pauseResumeIconNameIsPlayFillWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.pauseResumeIconName == Icons.play)
-  }
-
-  // MARK: - pauseResumeLabel
-
-  @Test
-  func pauseResumeLabelIsPauseWhenRunning() {
-    let vm = makeViewModel()
-    #expect(vm.pauseResumeLabel == "Pause")
-  }
-
-  @Test
-  func pauseResumeLabelIsResumeWhenPaused() {
-    let vm = makeViewModel(paused: true)
-    #expect(vm.pauseResumeLabel == "Resume")
   }
 
   // MARK: - positionCount
@@ -123,34 +61,17 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - startedAt
 
   @Test
-  func startedAtReturnsFormattedTimeWhenRouteExists() {
+  func startedAtReturnsFormattedTimeWhenDriveExists() {
     let vm = makeViewModel()
     #expect(vm.startedAt != "—")
   }
 
-  // MARK: - pauseOrResume
+  // MARK: - finishDrive
 
   @Test
-  func pauseOrResumeFromRunningPausesService() {
+  func finishDriveStopsRecording() {
     let (service, vm) = makeServiceAndViewModel()
-    vm.pauseOrResume()
-    #expect(service.isPaused == true)
-  }
-
-  @Test
-  func pauseOrResumeFromPausedResumesService() {
-    let (service, vm) = makeServiceAndViewModel()
-    service.pauseRoute()
-    vm.pauseOrResume()
-    #expect(service.isPaused == false)
-  }
-
-  // MARK: - endRoute
-
-  @Test
-  func endRouteStopsRecording() {
-    let (service, vm) = makeServiceAndViewModel()
-    vm.endRoute()
+    vm.finishDrive()
     #expect(service.isRecording == false)
   }
 
@@ -178,23 +99,22 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeService() -> (RouteService, LocationService) {
+  private func makeService() -> (DriveService, LocationService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
+    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     return (service, locationService)
   }
 
-  private func makeViewModel(paused: Bool = false) -> RecordingViewModel {
+  private func makeViewModel() -> RecordingViewModel {
     let (service, _) = makeService()
-    try! service.startRoute()
-    if paused { service.pauseRoute() }
-    return RecordingViewModel(routeService: service)
+    try! service.startDrive()
+    return RecordingViewModel(driveService: service)
   }
 
-  private func makeServiceAndViewModel() -> (RouteService, RecordingViewModel) {
+  private func makeServiceAndViewModel() -> (DriveService, RecordingViewModel) {
     let (service, _) = makeService()
-    try! service.startRoute()
-    return (service, RecordingViewModel(routeService: service))
+    try! service.startDrive()
+    return (service, RecordingViewModel(driveService: service))
   }
 }

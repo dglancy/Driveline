@@ -13,11 +13,11 @@ enum PreviewSampleData {
   @MainActor
   static func previewContainer() -> ModelContainer {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    return try! ModelContainer(for: Route.self, configurations: config) // swiftlint:disable:this force_try
+    return try! ModelContainer(for: Drive.self, configurations: config) // swiftlint:disable:this force_try
   }
 
   @MainActor
-  static func sampleRoute(in context: ModelContext) -> Route {
+  static func sampleDrive(in context: ModelContext) -> Drive {
     let calendar = Calendar.current
     let now = Date.now
 
@@ -37,13 +37,13 @@ enum PreviewSampleData {
       return pos
     }
 
-    let route = Route(name: "Weekend to Tahoe", trigger: .automatic)
-    route.startedAt = date(daysAgo: 6, hour: 7, minute: 5)
-    route.endedAt = route.startedAt.addingTimeInterval(3 * 3600 + 28 * 60)
-    route.status = .finished
-    route.startPlaceName = "Home · Sunnyvale"
-    route.endPlaceName = "South Lake Tahoe"
-    context.insert(route)
+    let drive = Drive(name: "Weekend to Tahoe", trigger: .automatic)
+    drive.startedAt = date(daysAgo: 6, hour: 7, minute: 5)
+    drive.endedAt = drive.startedAt.addingTimeInterval(3 * 3600 + 28 * 60)
+    drive.status = .finished
+    drive.startPlaceName = "Home · Sunnyvale"
+    drive.endPlaceName = "South Lake Tahoe"
+    context.insert(drive)
 
     let waypoints: [(Double, Double, Double)] = [
       (37.368, -122.036, 10), (37.450, -121.900, 22), (37.560, -121.750, 28),
@@ -52,15 +52,15 @@ enum PreviewSampleData {
     ]
     for (index, (lat, lon, speed)) in waypoints.enumerated() {
       let interval = Double(index) * (3 * 3600 + 28 * 60) / Double(waypoints.count - 1)
-      let timestamp = route.startedAt.addingTimeInterval(interval)
-      route.positions.append(position(lat: lat, lon: lon, at: timestamp, speed: speed))
+      let timestamp = drive.startedAt.addingTimeInterval(interval)
+      drive.positions.append(position(lat: lat, lon: lon, at: timestamp, speed: speed))
     }
 
-    return route
+    return drive
   }
 
   @MainActor
-  static func insertSampleRoutes(in context: ModelContext) {
+  static func insertSampleDrives(in context: ModelContext) {
     let calendar = Calendar.current
     let now = Date.now
 
@@ -96,18 +96,18 @@ enum PreviewSampleData {
     ]
 
     for (name, daysAgo, hour, minute, duration, place, end) in samples {
-      let route = Route(name: name)
-      route.startedAt = date(daysAgo: daysAgo, hour: hour, minute: minute)
-      route.startPlaceName = place
+      let drive = Drive(name: name)
+      drive.startedAt = date(daysAgo: daysAgo, hour: hour, minute: minute)
+      drive.startPlaceName = place
       if let duration {
-        route.endedAt = route.startedAt.addingTimeInterval(duration)
-        route.status = .finished
+        drive.endedAt = drive.startedAt.addingTimeInterval(duration)
+        drive.status = .finished
       }
-      context.insert(route)
-      route.positions.append(pos(lat: home.lat, lon: home.lon, at: route.startedAt))
+      context.insert(drive)
+      drive.positions.append(pos(lat: home.lat, lon: home.lon, at: drive.startedAt))
       if let end {
-        let endTime = route.endedAt ?? route.startedAt.addingTimeInterval(1_800)
-        route.positions.append(pos(lat: end.lat, lon: end.lon, at: endTime))
+        let endTime = drive.endedAt ?? drive.startedAt.addingTimeInterval(1_800)
+        drive.positions.append(pos(lat: end.lat, lon: end.lon, at: endTime))
       }
     }
   }

@@ -1,5 +1,5 @@
 //
-//  RouteDetailMapView.swift
+//  DriveDetailMapView.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -9,7 +9,7 @@ import CoreLocation
 import MapKit
 import SwiftUI
 
-struct RouteDetailMapView: View {
+struct DriveDetailMapView: View {
 
   // MARK: - Properties
 
@@ -20,7 +20,7 @@ struct RouteDetailMapView: View {
 
   var body: some View {
     Map(initialPosition: cameraPosition) {
-      RouteMapContent(coordinates: coordinates)
+      DriveMapContent(coordinates: coordinates)
     }
     .mapStyle(.standard(emphasis: .muted))
   }

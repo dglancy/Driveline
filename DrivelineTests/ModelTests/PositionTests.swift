@@ -1,6 +1,6 @@
 //
 //  PositionTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -43,7 +43,7 @@ final class PositionTests: SwiftDataBaseTestCase {
     #expect(position.courseAccuracy == 5.0)
     #expect(position.speed == 13.8)
     #expect(position.speedAccuracy == 1.0)
-    #expect(position.route == nil)
+    #expect(position.drive == nil)
   }
 
   @Test
@@ -92,9 +92,9 @@ final class PositionTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func associatesWithRoute() throws {
-    let route = Route(name: "Evening Drive", trigger: .automatic)
-    context!.insert(route)
+  func associatesWithDrive() throws {
+    let drive = Drive(name: "Evening Drive", trigger: .automatic)
+    context!.insert(drive)
 
     let position = Position(
       latitude: 51.5,
@@ -108,18 +108,18 @@ final class PositionTests: SwiftDataBaseTestCase {
       speedAccuracy: 1
     )
     context!.insert(position)
-    route.positions.append(position)
+    drive.positions.append(position)
     try context!.save()
 
-    let fetchedRoute = try context!.fetch(FetchDescriptor<Route>()).first!
-    #expect(fetchedRoute.positions.count == 1)
-    #expect(fetchedRoute.positions.first?.latitude == 51.5)
+    let fetchedDrive = try context!.fetch(FetchDescriptor<Drive>()).first!
+    #expect(fetchedDrive.positions.count == 1)
+    #expect(fetchedDrive.positions.first?.latitude == 51.5)
   }
 
   @Test
-  func multiplePositionsAssociateWithOneRoute() throws {
-    let route = Route(name: "Long Drive", trigger: .manual)
-    context!.insert(route)
+  func multiplePositionsAssociateWithOneDrive() throws {
+    let drive = Drive(name: "Long Drive", trigger: .manual)
+    context!.insert(drive)
 
     for i in 0..<5 {
       let position = Position(
@@ -135,12 +135,12 @@ final class PositionTests: SwiftDataBaseTestCase {
         speedAccuracy: 1
       )
       context!.insert(position)
-      route.positions.append(position)
+      drive.positions.append(position)
     }
     try context!.save()
 
-    let fetchedRoute = try context!.fetch(FetchDescriptor<Route>()).first!
-    #expect(fetchedRoute.positions.count == 5)
+    let fetchedDrive = try context!.fetch(FetchDescriptor<Drive>()).first!
+    #expect(fetchedDrive.positions.count == 5)
   }
   
   @Test

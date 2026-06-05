@@ -1,5 +1,5 @@
 //
-//  ExportRouteBase.swift
+//  ExportDriveBase.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -8,18 +8,18 @@
 import Foundation
 import CoreLocation
 
-// MARK: - Exporting route protocol
+// MARK: - Exporting drive protocol
 
-protocol ExportingRoute {
-  func export(route: Route) async throws -> URL
+protocol ExportingDrive {
+  func export(drive: Drive) async throws -> URL
 }
 
 // MARK: - Protocol extension
 
-extension ExportingRoute {
-  func validatedCoordinates(for route: Route) throws -> [CLLocationCoordinate2D] {
-    let coords = route.positionLocationCoordinatesIn2D
-    guard !coords.isEmpty else { throw ExportError.emptyRoute }
+extension ExportingDrive {
+  func validatedCoordinates(for drive: Drive) throws -> [CLLocationCoordinate2D] {
+    let coords = drive.positionLocationCoordinatesIn2D
+    guard !coords.isEmpty else { throw ExportError.emptyDrive }
     return coords
   }
 }
@@ -27,7 +27,7 @@ extension ExportingRoute {
 // MARK: - Export error enum
 
 enum ExportError: LocalizedError, Equatable {
-  case emptyRoute
+  case emptyDrive
   case gpxEncodingFailed
   case pngSnapshotFailure
   case pngDataPreparationFailure
@@ -35,8 +35,8 @@ enum ExportError: LocalizedError, Equatable {
 
   var errorDescription: String? {
     switch self {
-    case .emptyRoute:
-      return String(localized: "Cannot export a route with no coordinates.", comment: "Export error: route has no recorded positions")
+    case .emptyDrive:
+      return String(localized: "Cannot export a drive with no coordinates.", comment: "Export error: drive has no recorded positions")
     case .gpxEncodingFailed:
       return String(localized: "Failed to prepare GPX data for sharing.", comment: "Export error: GPX string could not be encoded as UTF-8")
     case .pngSnapshotFailure:
@@ -49,7 +49,7 @@ enum ExportError: LocalizedError, Equatable {
   }
 }
 
-// MARK: - Export route file types
+// MARK: - Export drive file types
 
 enum ExportFileType {
   case gpx
@@ -65,9 +65,9 @@ enum ExportFileType {
   }
 }
 
-// MARK: - Export route file naming service
+// MARK: - Export drive file naming service
 
-struct ExportRouteFileNamingService {
+struct ExportDriveFileNamingService {
   static let startedAtFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
@@ -76,8 +76,8 @@ struct ExportRouteFileNamingService {
     return formatter
   }()
 
-  static func fileURL(for route: Route, type: ExportFileType) -> URL {
-    let filename = "\(startedAtFormatter.string(from: route.startedAt)).\(type.fileExtension)"
+  static func fileURL(for drive: Drive, type: ExportFileType) -> URL {
+    let filename = "\(startedAtFormatter.string(from: drive.startedAt)).\(type.fileExtension)"
     return FileManager.default.temporaryDirectory.appendingPathComponent(filename)
   }
 }

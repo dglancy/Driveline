@@ -1,5 +1,5 @@
 //
-//  EditRouteView.swift
+//  EditDriveView.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct EditRouteView: View {
+struct EditDriveView: View {
 
   // MARK: - Properties
 
-  @State private var viewModel: EditRouteViewModel
+  @State private var viewModel: EditDriveViewModel
   @Environment(\.dismiss) private var dismiss
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    _viewModel = State(initialValue: EditRouteViewModel(route: route))
+  init(drive: Drive) {
+    _viewModel = State(initialValue: EditDriveViewModel(drive: drive))
   }
 
   // MARK: - Body
@@ -25,28 +25,28 @@ struct EditRouteView: View {
   var body: some View {
     NavigationStack {
       Form {
-        Section(String(localized: "Route Name", comment: "Edit route section header")) {
+        Section(String(localized: "Drive Name", comment: "Edit drive section header")) {
           TextField(
-            String(localized: "Route name", comment: "Route name text field placeholder"),
-            text: $viewModel.routeName
+            String(localized: "Drive name", comment: "Drive name text field placeholder"),
+            text: $viewModel.driveName
           )
         }
 
-        Section(String(localized: "Start Location", comment: "Edit route section header")) {
+        Section(String(localized: "Start Location", comment: "Edit drive section header")) {
           TextField(
             String(localized: "Start location name", comment: "Start location text field placeholder"),
             text: $viewModel.startPlaceName
           )
         }
 
-        Section(String(localized: "End Location", comment: "Edit route section header")) {
+        Section(String(localized: "End Location", comment: "Edit drive section header")) {
           TextField(
             String(localized: "End location name", comment: "End location text field placeholder"),
             text: $viewModel.endPlaceName
           )
         }
       }
-      .navigationTitle(String(localized: "Edit Route", comment: "Edit route sheet title"))
+      .navigationTitle(String(localized: "Edit Drive", comment: "Edit drive sheet title"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {

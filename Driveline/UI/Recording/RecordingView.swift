@@ -17,8 +17,8 @@ struct RecordingView: View {
 
   // MARK: - Lifecycle
 
-  init(routeService: RouteService) {
-    _viewModel = State(initialValue: RecordingViewModel(routeService: routeService))
+  init(driveService: DriveService) {
+    _viewModel = State(initialValue: RecordingViewModel(driveService: driveService))
   }
 
   // MARK: - Body
@@ -72,26 +72,12 @@ struct RecordingView: View {
 
   private var recordingBadge: some View {
     HStack(spacing: 8) {
-      if viewModel.isPaused {
-        RoundedRectangle(cornerRadius: 2)
-          .fill(viewModel.accentColour)
-          .frame(width: 9, height: 9)
-      } else {
-        PulsingDot(color: viewModel.accentColour, size: 9)
-      }
-      Text(
-        viewModel.isPaused
-          ? String(localized: "PAUSED", comment: "Status badge text — translators may lowercase if appropriate")
-          : String(localized: "RECORDING", comment: "Status badge text — translators may lowercase if appropriate")
-      )
+      PulsingDot(color: .red, size: 9)
+      Text(String(localized: "RECORDING", comment: "Status badge text — translators may lowercase if appropriate"))
         .font(.footnote.weight(.bold))
-        .foregroundStyle(viewModel.accentColour)
+        .foregroundStyle(Color.red)
         .tracking(1.4)
-        .accessibilityLabel(
-          viewModel.isPaused
-            ? String(localized: "Recording paused", comment: "Status badge accessibility label")
-            : String(localized: "Recording in progress", comment: "Status badge accessibility label")
-        )
+        .accessibilityLabel(String(localized: "Recording in progress", comment: "Status badge accessibility label"))
     }
     .padding(.vertical, 7)
     .padding(.horizontal, 14)
@@ -115,8 +101,6 @@ struct RecordingView: View {
         .minimumScaleFactor(0.6)
         .dynamicTypeSize(.large ... .accessibility3)
         .foregroundStyle(Color(.label))
-        .opacity(viewModel.isPaused ? 0.5 : 1)
-        .animation(.easeInOut(duration: 0.3), value: viewModel.isPaused)
         .accessibilityLabel(String(localized: "Elapsed time", comment: "Timer accessibility label"))
         .accessibilityValue(viewModel.elapsedSpeechValue)
 
@@ -124,7 +108,7 @@ struct RecordingView: View {
         Text(viewModel.distanceValue)
           .font(.largeTitle.weight(.semibold))
           .monospacedDigit()
-          .foregroundStyle(viewModel.accentColour)
+          .foregroundStyle(Color.red)
         Text(viewModel.distanceUnit)
           .font(.title2.weight(.medium))
           .foregroundStyle(Color(.secondaryLabel))
@@ -154,7 +138,7 @@ struct RecordingView: View {
       Image(systemName: Icons.battery)
         .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
-      Text(String(localized: "Running in the background to save battery. Your full route map appears here when the drive ends.", comment: "Battery saving note shown on the recording screen while a drive is in progress"))
+      Text(String(localized: "Running in the background to save battery. Your full drive map appears here when the drive ends.", comment: "Battery saving note shown on the recording screen while a drive is in progress"))
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
@@ -169,23 +153,13 @@ struct RecordingView: View {
   }
 
   private var controlButtons: some View {
-    HStack(spacing: 60) {
-      RecordingControlButton(
-        iconName: viewModel.pauseResumeIconName,
-        label: viewModel.pauseResumeLabel,
-        background: .fill(Color(.systemFill), stroke: Color(.separator)),
-        iconColor: Color(.label),
-        action: viewModel.pauseOrResume
-      )
-
-      RecordingControlButton(
-        iconName: Icons.stop,
-        label: String(localized: "End Drive", comment: "End drive button label"),
-        background: .red,
-        iconColor: .white,
-        action: viewModel.endRoute
-      )
-    }
+    RecordingControlButton(
+      iconName: Icons.stop,
+      label: String(localized: "Finish Drive", comment: "Finish drive button label"),
+      background: .red,
+      iconColor: .white,
+      action: viewModel.finishDrive
+    )
     .padding(.bottom, 42)
   }
 
@@ -273,13 +247,13 @@ private struct StatColumn: View {
   let container = PreviewSampleData.previewContainer()
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
-  let route = Route(name: "Morning Drive", trigger: .automatic)
-  let routeService = RouteService(
+  let drive = Drive(name: "Morning Drive", trigger: .automatic)
+  let driveService = DriveService(
     modelContext: container.mainContext,
     locationService: locationService,
     locationDataRecorder: locationDataRecorder,
-    initialRoute: route
+    initialDrive: drive
   )
-  RecordingView(routeService: routeService)
+  RecordingView(driveService: driveService)
     .modelContainer(container)
 }

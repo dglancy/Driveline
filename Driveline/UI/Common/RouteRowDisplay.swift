@@ -1,11 +1,11 @@
 //
-//  RouteRowDisplay.swift
+//  DriveRowDisplay.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 01/06/2026.
 //
 
-struct RouteRowDisplay {
+struct DriveRowDisplay {
   let name: String
   let dateTimeLabel: String
   let formattedDistance: String

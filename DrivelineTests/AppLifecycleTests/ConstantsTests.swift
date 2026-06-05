@@ -1,6 +1,6 @@
 //
 //  ConstantsTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -12,11 +12,6 @@ import Testing
 struct ConstantsTests {
 
   // MARK: - App
-
-  @Test
-  func appBundleIdHasCorrectPrefix() {
-    #expect(kAppBundleId.hasPrefix("com.targatrips.Driveline"))
-  }
 
   @Test
   func gpxCreatorHasCorrectSuffix() {

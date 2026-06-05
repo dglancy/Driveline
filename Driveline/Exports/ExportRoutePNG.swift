@@ -1,5 +1,5 @@
 //
-//  ExportRoutePNG.swift
+//  ExportDrivePNG.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -11,7 +11,7 @@ import UIKit
 
 // MARK: - PNG export service
 
-final class ExportRoutePNG: ExportingRoute {
+final class ExportDrivePNG: ExportingDrive {
 
   // MARK: - Properties
 
@@ -25,10 +25,10 @@ final class ExportRoutePNG: ExportingRoute {
 
   // MARK: - Actions
 
-  func export(route: Route) async throws -> URL {
-    Log.ui.info("A route was selected for PNG export: \(route.startedAt)")
+  func export(drive: Drive) async throws -> URL {
+    Log.ui.info("A drive was selected for PNG export: \(drive.startedAt)")
 
-    let coordinates = try validatedCoordinates(for: route)
+    let coordinates = try validatedCoordinates(for: drive)
     let mapSize = preferences.exportMapSize
 
     let options = MKMapSnapshotter.Options()
@@ -40,20 +40,20 @@ final class ExportRoutePNG: ExportingRoute {
     }
     options.pointOfInterestFilter = .excludingAll
 
-    let snapshot = try await takeSnapshot(with: options, route: route)
+    let snapshot = try await takeSnapshot(with: options, drive: drive)
     let image = renderSnapshotImage(snapshot, coordinates: coordinates)
 
     guard let pngData = image.pngData() else {
       throw ExportError.pngDataPreparationFailure
     }
 
-    let fileURL = ExportRouteFileNamingService.fileURL(for: route, type: .png)
+    let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: .png)
 
     do {
       try pngData.write(to: fileURL, options: .atomic)
       return fileURL
     } catch {
-      Log.ui.error("Failed to write PNG for route: \(route.startedAt) — error: \(error.localizedDescription)")
+      Log.ui.error("Failed to write PNG for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
       throw ExportError.pngFileWriteFailure
     }
   }
@@ -81,7 +81,7 @@ final class ExportRoutePNG: ExportingRoute {
       }
 
       UIColor.systemBlue.setStroke()
-      polylinePath.lineWidth = preferences.routeWidth
+      polylinePath.lineWidth = preferences.driveWidth
       polylinePath.lineCapStyle = .round
       polylinePath.lineJoinStyle = .round
       polylinePath.stroke()
@@ -158,11 +158,11 @@ final class ExportRoutePNG: ExportingRoute {
     (text as NSString).draw(at: textOrigin, withAttributes: attributes)
   }
 
-  private func takeSnapshot(with options: MKMapSnapshotter.Options, route: Route) async throws -> MKMapSnapshotter.Snapshot {
+  private func takeSnapshot(with options: MKMapSnapshotter.Options, drive: Drive) async throws -> MKMapSnapshotter.Snapshot {
     let box: SnapshotBox = try await withCheckedThrowingContinuation { continuation in
       MKMapSnapshotter(options: options).start { snapshot, error in
         if let error {
-          Log.ui.error("Failed to create PNG snapshot for route: \(route.startedAt) — error: \(error.localizedDescription)")
+          Log.ui.error("Failed to create PNG snapshot for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
           continuation.resume(throwing: ExportError.pngSnapshotFailure)
           return
         }
@@ -206,9 +206,9 @@ enum MapSize: String {
 
 }
 
-// MARK: - RouteWidth enum
+// MARK: - DriveWidth enum
 
-enum RouteWidth: String {
+enum DriveWidth: String {
   case thin
   case medium
   case thick

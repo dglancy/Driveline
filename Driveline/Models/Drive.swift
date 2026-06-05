@@ -1,5 +1,5 @@
 //
-//  Route.swift
+//  Drive.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -10,13 +10,12 @@ import Foundation
 import SwiftData
 
 @Model
-final class Route {
+final class Drive {
 
   // MARK: - Types
 
-  enum RouteStatus: String, Codable {
+  enum DriveStatus: String, Codable {
     case recording
-    case paused
     case finished
   }
 
@@ -47,18 +46,14 @@ final class Route {
   var endPlaceName: String?
 
   var trigger: RecordingTrigger
-  var status: RouteStatus
+  var status: DriveStatus
 
-  var pausedDurationSeconds: Double
-  var pauseStartedAt: Date?
-
-  @Relationship(deleteRule: .cascade, inverse: \Position.route)
+  @Relationship(deleteRule: .cascade, inverse: \Position.drive)
   var positions: [Position]
 
   // MARK: - Computed Properties
 
   var isRecording: Bool { status != .finished }
-  var isPaused: Bool { status == .paused }
 
   var orderedPositions: [Position] {
     return positions
@@ -79,9 +74,7 @@ final class Route {
   }
 
   var activeDurationSeconds: Double {
-    let reference = endedAt ?? .now
-    let currentPause = isPaused ? Date.now.timeIntervalSince(pauseStartedAt ?? .now) : 0
-    return max(0, reference.timeIntervalSince(startedAt) - pausedDurationSeconds - currentPause)
+    max(0, (endedAt ?? .now).timeIntervalSince(startedAt))
   }
 
   var avgSpeedMetresPerSecond: CLLocationSpeed {
@@ -104,8 +97,6 @@ final class Route {
     self.endPlaceName = nil
     self.trigger = trigger
     self.status = .recording
-    self.pausedDurationSeconds = 0
-    self.pauseStartedAt = nil
     self.positions = []
   }
 }

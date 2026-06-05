@@ -17,12 +17,12 @@ final class FullScreenMapViewModel {
 
   // MARK: - Properties
 
-  @ObservationIgnored let route: Route
-  @ObservationIgnored private let stats: RouteStatsPresenter
+  @ObservationIgnored let drive: Drive
+  @ObservationIgnored private let stats: DriveStatsPresenter
 
   // MARK: - Computed Properties
 
-  var name: String { route.name }
+  var name: String { drive.name }
 
   var distanceValue: String { stats.distanceValue }
   var distanceUnit: String { stats.distanceUnit }
@@ -32,7 +32,7 @@ final class FullScreenMapViewModel {
   var avgSpeedUnit: String { stats.avgSpeedUnit }
 
   var coordinates: [CLLocationCoordinate2D] {
-    route.orderedPositions.map {
+    drive.orderedPositions.map {
       CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
     }
   }
@@ -43,8 +43,8 @@ final class FullScreenMapViewModel {
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    self.route = route
-    self.stats = RouteStatsPresenter(route: route)
+  init(drive: Drive) {
+    self.drive = drive
+    self.stats = DriveStatsPresenter(drive: drive)
   }
 }

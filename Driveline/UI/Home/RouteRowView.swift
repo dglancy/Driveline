@@ -1,5 +1,5 @@
 //
-//  RouteRowView.swift
+//  DriveRowView.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RouteRowView: View {
+struct DriveRowView: View {
 
   // MARK: - Types
 
@@ -18,7 +18,7 @@ struct RouteRowView: View {
 
   // MARK: - Properties
 
-  let display: RouteRowDisplay
+  let display: DriveRowDisplay
   var style: Style = .list()
 
   // MARK: - Body
@@ -44,7 +44,7 @@ struct RouteRowView: View {
           .animation(.easeInOut(duration: 0.15), value: isSelected)
           .accessibilityHidden(true)
       }
-      routeBadge
+      driveBadge
       textContent(nameFont: .body.weight(.semibold), dateFont: .subheadline)
       statsContent(distanceFont: .callout, durationFont: .footnote)
     }
@@ -67,12 +67,12 @@ struct RouteRowView: View {
     .accessibilityLabel("\(index). \(ListFormatter.localizedString(byJoining: [display.name, display.formattedDistance, display.dateTimeLabel]))")
   }
 
-  private var routeBadge: some View {
+  private var driveBadge: some View {
     ZStack {
       RoundedRectangle(cornerRadius: 11)
         .fill(.tint.opacity(0.14))
         .frame(width: 38, height: 38)
-      Image(systemName: Icons.routeBadge)
+      Image(systemName: Icons.driveBadge)
         .font(.title3)
         .foregroundStyle(.tint)
     }

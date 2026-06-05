@@ -15,14 +15,12 @@ final class RecordingViewModel {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let routeService: RouteService
+  @ObservationIgnored private let driveService: DriveService
 
   // MARK: - Computed Properties
 
-  var isPaused: Bool { routeService.isPaused }
-  var accentColour: Color { routeService.isPaused ? .orange : .red }
-  var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
-  var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
+  var elapsedSeconds: Int { Int(driveService.drive?.activeDurationSeconds ?? 0) }
+  var distanceMetres: Double { driveService.drive?.distanceMetres ?? 0.0 }
 
   var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
 
@@ -41,30 +39,22 @@ final class RecordingViewModel {
   }
 
   var speedValue: String {
-    guard !routeService.isPaused else { return kDashString }
-    guard let ms = routeService.currentSpeedMs else { return kDashString }
+    guard let ms = driveService.currentSpeedMs else { return kDashString }
     return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
 
   var speedUnit: String {
-    Measurement(value: routeService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+    Measurement(value: driveService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
   }
-  var positionCount: Int { routeService.route?.positions.count ?? 0 }
+  var positionCount: Int { driveService.drive?.positions.count ?? 0 }
 
   var formattedPositionCount: String {
     Self.formattedCount(positionCount)
   }
 
   var startedAt: String {
-    guard let date = routeService.route?.startedAt else { return kDashString }
+    guard let date = driveService.drive?.startedAt else { return kDashString }
     return date.clockString()
-  }
-
-  var pauseResumeIconName: String { routeService.isPaused ? Icons.play : Icons.pause }
-  var pauseResumeLabel: String {
-    routeService.isPaused ?
-    String(localized: "Resume", comment: "Resume a paused drive") :
-    String(localized: "Pause", comment: "Pause an active drive")
   }
 
   // MARK: - Formatting
@@ -84,21 +74,13 @@ final class RecordingViewModel {
 
   // MARK: - Lifecycle
 
-  init(routeService: RouteService) {
-    self.routeService = routeService
+  init(driveService: DriveService) {
+    self.driveService = driveService
   }
 
   // MARK: - Actions
 
-  func pauseOrResume() {
-    if routeService.isPaused {
-      routeService.resumeRoute()
-    } else {
-      routeService.pauseRoute()
-    }
-  }
-
-  func endRoute() {
-    routeService.endRoute()
+  func finishDrive() {
+    driveService.finishDrive()
   }
 }

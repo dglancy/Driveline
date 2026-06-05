@@ -1,6 +1,6 @@
 //
-//  ExportRouteGPXTests.swift
-//  AutoRouteTests
+//  ExportDriveGPXTests.swift
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 31/05/2026.
 //
@@ -9,16 +9,16 @@
 import Foundation
 import Testing
 
-@Suite("ExportRouteGPX")
+@Suite("ExportDriveGPX")
 @MainActor
-final class ExportRouteGPXTests: SwiftDataBaseTestCase {
+final class ExportDriveGPXTests: SwiftDataBaseTestCase {
 
   // MARK: - Error descriptions
 
   @Test
-  func emptyRouteErrorHasUserFacingDescription() {
-    #expect(ExportError.emptyRoute.errorDescription != nil)
-    #expect(ExportError.emptyRoute.errorDescription?.isEmpty == false)
+  func emptyDriveErrorHasUserFacingDescription() {
+    #expect(ExportError.emptyDrive.errorDescription != nil)
+    #expect(ExportError.emptyDrive.errorDescription?.isEmpty == false)
   }
 
   @Test
@@ -27,14 +27,14 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
     #expect(ExportError.gpxEncodingFailed.errorDescription?.isEmpty == false)
   }
 
-  // MARK: - Empty route
+  // MARK: - Empty drive
 
   @Test
-  func throwsEmptyRouteErrorWhenRouteHasNoPositions() async {
-    let route = Route(name: "Empty Route")
+  func throwsEmptyDriveErrorWhenDriveHasNoPositions() async {
+    let drive = Drive(name: "Empty Drive")
 
-    await #expect(throws: ExportError.emptyRoute) {
-      _ = try await ExportRouteGPX().export(route: route)
+    await #expect(throws: ExportError.emptyDrive) {
+      _ = try await ExportDriveGPX().export(drive: drive)
     }
   }
 
@@ -42,9 +42,9 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func createsGPXFileAtReturnedURL() async throws {
-    let route = routeWithOnePosition()
+    let drive = driveWithOnePosition()
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     #expect(FileManager.default.fileExists(atPath: outputURL.path))
@@ -52,9 +52,9 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func gpxFileIsNonEmpty() async throws {
-    let route = routeWithOnePosition()
+    let drive = driveWithOnePosition()
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     let data = try Data(contentsOf: outputURL)
@@ -63,9 +63,9 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func gpxFileIsValidXML() async throws {
-    let route = routeWithOnePosition()
+    let drive = driveWithOnePosition()
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     let content = try String(contentsOf: outputURL, encoding: .utf8)
@@ -74,9 +74,9 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func gpxFileContainsTrackPointElements() async throws {
-    let route = routeWithOnePosition()
+    let drive = driveWithOnePosition()
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     let content = try String(contentsOf: outputURL, encoding: .utf8)
@@ -85,7 +85,7 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func gpxFileContainsExpectedCoordinates() async throws {
-    let route = Route(name: "Coordinate Test")
+    let drive = Drive(name: "Coordinate Test")
     let position = Position(
       timestamp: .now,
       latitude: 53.3498,
@@ -98,9 +98,9 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
       speed: 8,
       speedAccuracy: 1
     )
-    route.positions.append(position)
+    drive.positions.append(position)
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     let content = try String(contentsOf: outputURL, encoding: .utf8)
@@ -110,7 +110,7 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func gpxFilePreservesAllPositions() async throws {
-    let route = Route(name: "Multi-point")
+    let drive = Drive(name: "Multi-point")
     let base = Date(timeIntervalSinceReferenceDate: 0)
     for i in 0..<5 {
       let position = Position(
@@ -125,10 +125,10 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
         speed: 10,
         speedAccuracy: 1
       )
-      route.positions.append(position)
+      drive.positions.append(position)
     }
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     let content = try String(contentsOf: outputURL, encoding: .utf8)
@@ -138,9 +138,9 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func gpxURLExtensionIsGpx() async throws {
-    let route = routeWithOnePosition()
+    let drive = driveWithOnePosition()
 
-    let outputURL = try await ExportRouteGPX().export(route: route)
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
 
     #expect(outputURL.pathExtension == "gpx")
@@ -148,11 +148,11 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   @Test
   func subsequentExportsOverwritePreviousFile() async throws {
-    let route = routeWithOnePosition()
-    let service = ExportRouteGPX()
+    let drive = driveWithOnePosition()
+    let service = ExportDriveGPX()
 
-    let firstURL = try await service.export(route: route)
-    let secondURL = try await service.export(route: route)
+    let firstURL = try await service.export(drive: drive)
+    let secondURL = try await service.export(drive: drive)
     defer {
       try? FileManager.default.removeItem(at: firstURL)
     }
@@ -163,8 +163,8 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func routeWithOnePosition() -> Route {
-    let route = Route(name: "Test Route")
+  private func driveWithOnePosition() -> Drive {
+    let drive = Drive(name: "Test Drive")
     let position = Position(
       latitude: 51.5074,
       longitude: -0.1278,
@@ -176,7 +176,7 @@ final class ExportRouteGPXTests: SwiftDataBaseTestCase {
       speed: 14,
       speedAccuracy: 1
     )
-    route.positions.append(position)
-    return route
+    drive.positions.append(position)
+    return drive
   }
 }

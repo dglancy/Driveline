@@ -42,10 +42,10 @@ struct UserPreferences {
     return value
   }
 
-  var routeWidth: CGFloat {
-    let rawValue = defaults.string(forKey: Keys.routeWidth) ?? "medium"
-    Log.settings.info("Route width set to \"\(rawValue)\" from user settings")
-    return (RouteWidth(from: rawValue) ?? .medium).width
+  var driveWidth: CGFloat {
+    let rawValue = defaults.string(forKey: Keys.driveWidth) ?? "medium"
+    Log.settings.info("Drive width set to \"\(rawValue)\" from user settings")
+    return (DriveWidth(from: rawValue) ?? .medium).width
   }
 }
 
@@ -56,6 +56,6 @@ private extension UserPreferences {
     static let activityType = "ActivityType"
     static let exportMapSize = "ExportMapSize"
     static let alwaysUseLightMapAppearance = "AlwaysUseLightMapAppearance"
-    static let routeWidth = "RouteWidth"
+    static let driveWidth = "DriveWidth"
   }
 }
