@@ -54,6 +54,7 @@ struct RecordingView: View {
           Image(systemName: Icons.chevronDown)
             .font(.body.weight(.semibold))
             .foregroundStyle(Color(.secondaryLabel))
+            .dynamicTypeSize(.large ... .xxxLarge)
         }
         .frame(width: 36, height: 36)
       }
@@ -78,6 +79,7 @@ struct RecordingView: View {
         .foregroundStyle(Color.red)
         .tracking(1.4)
         .accessibilityLabel(String(localized: "Recording in progress", comment: "Status badge accessibility label"))
+        .dynamicTypeSize(.large ... .xxxLarge)
     }
     .padding(.vertical, 7)
     .padding(.horizontal, 14)
@@ -142,6 +144,7 @@ struct RecordingView: View {
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
+        .dynamicTypeSize(.xSmall ... .accessibility1)
         .fixedSize(horizontal: false, vertical: true)
     }
     .padding(.horizontal, 15)
@@ -183,9 +186,9 @@ private struct RecordingControlButton: View {
   let background: Background
   let iconColor: Color
   let action: () -> Void
-
+  
   // MARK: - Body
-
+  
   var body: some View {
     VStack(spacing: 9) {
       Button(action: action) {
@@ -208,11 +211,13 @@ private struct RecordingControlButton: View {
       }
       .buttonStyle(.plain)
       .accessibilityLabel(label)
-
+      .dynamicTypeSize(.large ... .xxxLarge)
+      
       Text(label)
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .accessibilityHidden(true)
+        .dynamicTypeSize(.large ... .accessibility2)
     }
   }
 
@@ -233,9 +238,11 @@ private struct StatColumn: View {
         .font(.title3.weight(.semibold))
         .monospacedDigit()
         .foregroundStyle(Color(.label))
+        .dynamicTypeSize(.large ... .xLarge)
       Text(label)
         .font(.caption)
         .foregroundStyle(Color(.secondaryLabel))
+        .dynamicTypeSize(.large ... .xxxLarge)
     }
     .frame(maxWidth: .infinity)
   }
