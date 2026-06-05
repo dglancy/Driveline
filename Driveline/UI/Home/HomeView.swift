@@ -59,7 +59,7 @@ struct HomeView: View {
     ContentUnavailableView(
       "No Routes",
       systemImage: Icons.car,
-      description: Text("Your recorded routes will appear here.")
+      description: Text(String(localized: "Your recorded routes will appear here.", comment: "Empty state description shown on the home screen when no routes have been recorded yet"))
     )
   }
 

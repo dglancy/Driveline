@@ -98,7 +98,7 @@ struct RecordingView: View {
 
   private var heroSection: some View {
     VStack(spacing: 0) {
-      Text("Elapsed")
+      Text(String(localized: "Elapsed", comment: "Label above the elapsed time timer on the recording screen"))
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(Color(.secondaryLabel))
         .tracking(1)
@@ -151,7 +151,7 @@ struct RecordingView: View {
       Image(systemName: Icons.battery)
         .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
-      Text("Running in the background to save battery. Your full route map appears here when the drive ends.")
+      Text(String(localized: "Running in the background to save battery. Your full route map appears here when the drive ends.", comment: "Battery saving note shown on the recording screen while a drive is in progress"))
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
