@@ -37,7 +37,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     IntentDependencyResolver.provider = nil
 
     await #expect(throws: AppIntentDependencyError.self) {
-      try await StartOrResumeRouteIntent().perform()
+      try await StartDriveIntent().perform()
     }
   }
 
@@ -46,67 +46,43 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     IntentDependencyResolver.provider = { nil }
 
     await #expect(throws: AppIntentDependencyError.self) {
-      try await StartOrResumeRouteIntent().perform()
+      try await StartDriveIntent().perform()
     }
   }
 
-  // MARK: - StartOrResumeRouteIntent
+  // MARK: - StartDriveIntent
 
   @Test
-  func startOrResumeIntentStartsRouteWhenStopped() async throws {
-    _ = try await StartOrResumeRouteIntent().perform()
+  func startDriveIntentStartsDriveWhenStopped() async throws {
+    _ = try await StartDriveIntent().perform()
 
     #expect(routeService.isRecording)
-    #expect(!routeService.isPaused)
   }
 
   @Test
-  func startOrResumeIntentResumesRouteWhenPaused() async throws {
+  func startDriveIntentIsNoOpWhenAlreadyRecording() async throws {
     try routeService.startRoute()
-    routeService.pauseRoute()
 
-    _ = try await StartOrResumeRouteIntent().perform()
+    _ = try await StartDriveIntent().perform()
 
     #expect(routeService.isRecording)
-    #expect(!routeService.isPaused)
   }
 
+  // MARK: - FinishDriveIntent
+
   @Test
-  func startOrResumeIntentIsNoOpWhenAlreadyStarted() async throws {
+  func finishDriveIntentFinishesDriveWhenRecording() async throws {
     try routeService.startRoute()
 
-    _ = try await StartOrResumeRouteIntent().perform()
-
-    #expect(routeService.isRecording)
-    #expect(!routeService.isPaused)
-  }
-
-  // MARK: - PauseRouteIntent
-
-  @Test
-  func pauseIntentPausesRouteWhenStarted() async throws {
-    try routeService.startRoute()
-
-    _ = try await PauseRouteIntent().perform()
-
-    #expect(routeService.isPaused)
-  }
-
-  @Test
-  func pauseIntentIsNoOpWhenAlreadyPaused() async throws {
-    try routeService.startRoute()
-    routeService.pauseRoute()
-
-    _ = try await PauseRouteIntent().perform()
-
-    #expect(routeService.isPaused)
-  }
-
-  @Test
-  func pauseIntentIsNoOpWhenStopped() async throws {
-    _ = try await PauseRouteIntent().perform()
+    _ = try await FinishDriveIntent().perform()
 
     #expect(!routeService.isRecording)
-    #expect(!routeService.isPaused)
+  }
+
+  @Test
+  func finishDriveIntentIsNoOpWhenStopped() async throws {
+    _ = try await FinishDriveIntent().perform()
+
+    #expect(!routeService.isRecording)
   }
 }

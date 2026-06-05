@@ -16,7 +16,6 @@ final class Route {
 
   enum RouteStatus: String, Codable {
     case recording
-    case paused
     case finished
   }
 
@@ -49,16 +48,12 @@ final class Route {
   var trigger: RecordingTrigger
   var status: RouteStatus
 
-  var pausedDurationSeconds: Double
-  var pauseStartedAt: Date?
-
   @Relationship(deleteRule: .cascade, inverse: \Position.route)
   var positions: [Position]
 
   // MARK: - Computed Properties
 
   var isRecording: Bool { status != .finished }
-  var isPaused: Bool { status == .paused }
 
   var orderedPositions: [Position] {
     return positions
@@ -79,9 +74,7 @@ final class Route {
   }
 
   var activeDurationSeconds: Double {
-    let reference = endedAt ?? .now
-    let currentPause = isPaused ? Date.now.timeIntervalSince(pauseStartedAt ?? .now) : 0
-    return max(0, reference.timeIntervalSince(startedAt) - pausedDurationSeconds - currentPause)
+    max(0, (endedAt ?? .now).timeIntervalSince(startedAt))
   }
 
   var avgSpeedMetresPerSecond: CLLocationSpeed {
@@ -104,8 +97,6 @@ final class Route {
     self.endPlaceName = nil
     self.trigger = trigger
     self.status = .recording
-    self.pausedDurationSeconds = 0
-    self.pauseStartedAt = nil
     self.positions = []
   }
 }

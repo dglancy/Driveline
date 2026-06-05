@@ -26,9 +26,6 @@ final class RouteTests: SwiftDataBaseTestCase {
     #expect(route.startPlaceName == nil)
     #expect(route.endPlaceName == nil)
     #expect(route.isRecording == true)
-    #expect(route.isPaused == false)
-    #expect(route.pausedDurationSeconds == 0)
-    #expect(route.pauseStartedAt == nil)
     #expect(route.positions.isEmpty)
   }
 
@@ -75,7 +72,7 @@ final class RouteTests: SwiftDataBaseTestCase {
   // MARK: - activeDurationSeconds
 
   @Test
-  func activeDurationWhenRecordingAndNotPaused() throws {
+  func activeDurationWhenRecording() throws {
     let route = Route(name: "Test", trigger: .automatic)
     #expect(route.activeDurationSeconds >= 0)
     #expect(route.activeDurationSeconds < 2)
@@ -88,34 +85,6 @@ final class RouteTests: SwiftDataBaseTestCase {
     route.endedAt = route.startedAt.addingTimeInterval(600)
 
     #expect(route.activeDurationSeconds == 600)
-  }
-
-  @Test
-  func activeDurationSubtractsPausedTime() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.status = .finished
-    route.endedAt = route.startedAt.addingTimeInterval(600)
-    route.pausedDurationSeconds = 60
-
-    #expect(route.activeDurationSeconds == 540)
-  }
-
-  @Test
-  func activeDurationSubtractsActivePausePeriod() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.status = .paused
-    route.pauseStartedAt = Date.now.addingTimeInterval(-30)
-    route.endedAt = route.startedAt.addingTimeInterval(600)
-
-    #expect(route.activeDurationSeconds < 575)
-    #expect(route.activeDurationSeconds >= 0)
-  }
-
-  @Test
-  func activeDurationIsNeverNegative() throws {
-    let route = Route(name: "Test", trigger: .automatic)
-    route.pausedDurationSeconds = 99999
-    #expect(route.activeDurationSeconds == 0)
   }
 
   // MARK: - Persistence

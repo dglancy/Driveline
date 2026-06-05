@@ -21,7 +21,6 @@ final class RouteService {
   private(set) var currentSpeedMs: Double?
 
   var isRecording: Bool { route?.isRecording ?? false }
-  var isPaused: Bool { route?.isPaused ?? false }
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService
@@ -87,7 +86,7 @@ final class RouteService {
       }
   }
 
-  func endRoute() {
+  func finishRoute() {
     speedCancellable = nil
     startGeocodeCancellable = nil
     locationService.stop()
@@ -110,21 +109,6 @@ final class RouteService {
 
     currentSpeedMs = nil
     self.route = nil
-  }
-
-  func pauseRoute() {
-    locationService.pause()
-    route?.status = .paused
-    route?.pauseStartedAt = Date()
-  }
-
-  func resumeRoute() {
-    if let route, let pauseStart = route.pauseStartedAt {
-      route.pausedDurationSeconds += Date().timeIntervalSince(pauseStart)
-      route.pauseStartedAt = nil
-    }
-    route?.status = .recording
-    locationService.resume()
   }
 
   func checkAndRetryNilPlaceNamesForFinishedRoutes() async {

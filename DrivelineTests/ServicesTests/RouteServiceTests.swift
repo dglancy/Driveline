@@ -39,15 +39,6 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func startRouteSetsIsPausedToFalse() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-
-    #expect(service.isPaused == false)
-  }
-
-  @Test
   func startRouteResetsCurrentSpeedMs() async throws {
     let (service, _, _) = makeServices()
 
@@ -66,15 +57,15 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     #expect(validNames.contains(service.route!.name))
   }
 
-  // MARK: - endRoute
+  // MARK: - finishRoute
 
   @Test
-  func endRouteStopsRecordingAndPersists() async throws {
+  func finishRouteStopsRecordingAndPersists() async throws {
     let (service, locationService, recorder) = makeServices()
 
     try service.startRoute()
     let startedRoute = service.route!
-    service.endRoute()
+    service.finishRoute()
 
     #expect(locationService.status == .stopped)
     #expect(startedRoute.isRecording == false)
@@ -86,40 +77,17 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func endRouteSetsIsRecordingToFalse() async throws {
+  func finishRouteSetsIsRecordingToFalse() async throws {
     let (service, _, _) = makeServices()
 
     try service.startRoute()
-    service.endRoute()
+    service.finishRoute()
 
     #expect(service.isRecording == false)
   }
 
   @Test
-  func endRouteSetsIsPausedToFalse() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    service.endRoute()
-
-    #expect(service.isPaused == false)
-  }
-
-  @Test
-  func endRouteSetsIsPausedToFalseOnRouteModel() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    let route = service.route!
-    service.endRoute()
-
-    #expect(route.isPaused == false)
-  }
-
-  @Test
-  func endRouteResetsCurrentSpeedMs() async throws {
+  func finishRouteResetsCurrentSpeedMs() async throws {
     let (service, locationService, _) = makeServices()
 
     try service.startRoute()
@@ -129,117 +97,18 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    service.endRoute()
+    service.finishRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
 
   @Test
-  func endRouteWithNoActiveRouteDoesNothing() async throws {
+  func finishRouteWithNoActiveRouteDoesNothing() async throws {
     let (service, _, _) = makeServices()
 
-    service.endRoute()
+    service.finishRoute()
 
     #expect(service.route == nil)
-  }
-
-  // MARK: - pauseRoute
-
-  @Test
-  func pauseRoutePausesLocationService() async throws {
-    let (service, locationService, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-
-    #expect(locationService.status == .paused)
-  }
-
-  @Test
-  func pauseRouteSetsIsPausedToTrue() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-
-    #expect(service.isPaused == true)
-  }
-
-  @Test
-  func pauseRouteSetsIsPausedOnRouteModel() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-
-    #expect(service.route?.isPaused == true)
-  }
-
-  @Test
-  func pauseRouteSetsPauseStartedAtOnRouteModel() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-
-    #expect(service.route?.pauseStartedAt != nil)
-  }
-
-  // MARK: - resumeRoute
-
-  @Test
-  func resumeRouteResumesLocationService() async throws {
-    let (service, locationService, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    service.resumeRoute()
-
-    #expect(locationService.status == .started)
-  }
-
-  @Test
-  func resumeRouteSetsIsPausedToFalse() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    service.resumeRoute()
-
-    #expect(service.isPaused == false)
-  }
-
-  @Test
-  func resumeRouteSetsIsPausedToFalseOnRouteModel() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    service.resumeRoute()
-
-    #expect(service.route?.isPaused == false)
-  }
-
-  @Test
-  func resumeRouteClearsPauseStartedAtOnRouteModel() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    service.resumeRoute()
-
-    #expect(service.route?.pauseStartedAt == nil)
-  }
-
-  @Test
-  func resumeRouteAccumulatesPausedDurationSeconds() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startRoute()
-    service.pauseRoute()
-    service.resumeRoute()
-
-    #expect(service.route?.pausedDurationSeconds ?? -1 >= 0)
   }
 
   // MARK: - currentSpeedMs
@@ -284,7 +153,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func currentSpeedMsIsNilAfterEndRoute() async throws {
+  func currentSpeedMsIsNilAfterFinishRoute() async throws {
     let (service, locationService, _) = makeServices()
 
     try service.startRoute()
@@ -294,7 +163,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    service.endRoute()
+    service.finishRoute()
 
     #expect(service.currentSpeedMs == nil)
   }
@@ -331,28 +200,6 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
 
     #expect(service.isRecording == false)
-  }
-
-  @Test
-  func initialRouteWithIsPausedTrueSetsIsPausedToTrue() async throws {
-    let locationService = LocationService()
-    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let route = Route(name: "Test")
-    route.status = .paused
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
-
-    #expect(service.isPaused == true)
-  }
-
-  @Test
-  func initialRouteWithIsPausedFalseSetsIsPausedToFalse() async throws {
-    let locationService = LocationService()
-    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let route = Route(name: "Test")
-    route.status = .recording
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
-
-    #expect(service.isPaused == false)
   }
 
   // MARK: - startRoute geocoding accuracy

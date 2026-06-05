@@ -19,8 +19,6 @@ final class RecordingViewModel {
 
   // MARK: - Computed Properties
 
-  var isPaused: Bool { routeService.isPaused }
-  var accentColour: Color { routeService.isPaused ? .orange : .red }
   var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
   var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
 
@@ -41,7 +39,6 @@ final class RecordingViewModel {
   }
 
   var speedValue: String {
-    guard !routeService.isPaused else { return kDashString }
     guard let ms = routeService.currentSpeedMs else { return kDashString }
     return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
@@ -58,13 +55,6 @@ final class RecordingViewModel {
   var startedAt: String {
     guard let date = routeService.route?.startedAt else { return kDashString }
     return date.clockString()
-  }
-
-  var pauseResumeIconName: String { routeService.isPaused ? Icons.play : Icons.pause }
-  var pauseResumeLabel: String {
-    routeService.isPaused ?
-    String(localized: "Resume", comment: "Resume a paused drive") :
-    String(localized: "Pause", comment: "Pause an active drive")
   }
 
   // MARK: - Formatting
@@ -90,15 +80,7 @@ final class RecordingViewModel {
 
   // MARK: - Actions
 
-  func pauseOrResume() {
-    if routeService.isPaused {
-      routeService.resumeRoute()
-    } else {
-      routeService.pauseRoute()
-    }
-  }
-
-  func endRoute() {
-    routeService.endRoute()
+  func finishRoute() {
+    routeService.finishRoute()
   }
 }

@@ -20,78 +20,68 @@ struct AutoRouteShortcuts: AppShortcutsProvider {
   @AppShortcutsBuilder
   static var appShortcuts: [AppShortcut] {
     AppShortcut(
-      intent: StartOrResumeRouteIntent(),
+      intent: StartDriveIntent(),
       phrases: [
-        "Start recording a route with \(.applicationName)",
-        "Start a route in \(.applicationName)",
-        "Start my route in \(.applicationName)",
-        "Resume route with \(.applicationName)",
-        "Resume my route with \(.applicationName)"
+        "Start recording a drive with \(.applicationName)",
+        "Start a drive in \(.applicationName)",
+        "Start my drive in \(.applicationName)"
       ],
-      shortTitle: "Start/Resume Route",
+      shortTitle: "Start Drive",
       systemImageName: "record.circle"
     )
 
     AppShortcut(
-      intent: PauseRouteIntent(),
+      intent: FinishDriveIntent(),
       phrases: [
-        "Pause recording a route with \(.applicationName)",
-        "Pause a route in \(.applicationName)",
-        "Pause my route in \(.applicationName)"
+        "Finish recording a drive with \(.applicationName)",
+        "Finish a drive in \(.applicationName)",
+        "Finish my drive in \(.applicationName)"
       ],
-      shortTitle: "Pause Route",
-      systemImageName: "pause.circle"
+      shortTitle: "Finish Drive",
+      systemImageName: "stop.circle"
     )
   }
 }
 
-// MARK: - Start Or Resume Route Intent
+// MARK: - Start Drive Intent
 
-struct StartOrResumeRouteIntent: AppIntent {
+struct StartDriveIntent: AppIntent {
 
   // MARK: - Properties
 
-  static var title: LocalizedStringResource { "Start or resume route" }
-  static let description: IntentDescription = .init("Start or resume recording a route.", categoryName: "Route")
+  static var title: LocalizedStringResource { "Start drive" }
+  static let description: IntentDescription = .init("Start recording a drive.", categoryName: "Drive")
 
   // MARK: - Actions
 
   func perform() async throws -> some IntentResult {
-    await Log.lifecycle.info("Running perform on StartOrResumeRoute intent")
+    await Log.lifecycle.info("Running perform on StartDriveIntent intent")
 
     let routeService = try await resolveRouteService()
-    let isPaused = await routeService.isPaused
-    let isRecording = await routeService.isRecording
-
-    if isPaused {
-      await routeService.resumeRoute()
-    } else if !isRecording {
+    if await !routeService.isRecording {
       try await routeService.startRoute(trigger: .automatic)
     }
     return .result()
   }
 }
 
-// MARK: - Pause Route Intent
+// MARK: - Finish Drive Intent
 
-struct PauseRouteIntent: AppIntent {
+struct FinishDriveIntent: AppIntent {
 
   // MARK: - Properties
 
-  static var title: LocalizedStringResource { "Pause route" }
-  static let description: IntentDescription = .init("Pause recording a route.", categoryName: "Route")
+  static var title: LocalizedStringResource { "Finish drive" }
+  static let description: IntentDescription = .init("Finish recording a drive.", categoryName: "Drive")
 
   // MARK: - Actions
 
   func perform() async throws -> some IntentResult {
-    await Log.lifecycle.info("Running perform on PauseRouteIntent intent")
+    await Log.lifecycle.info("Running perform on FinishDriveIntent intent")
 
     let routeService = try await resolveRouteService()
-    let isRecording = await routeService.isRecording
-    let isPaused = await routeService.isPaused
-
-    if isRecording, !isPaused {
-      await routeService.pauseRoute()
+    if await routeService.isRecording {
+      await routeService.finishRoute()
     }
     return .result()
   }

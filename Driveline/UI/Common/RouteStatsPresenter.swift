@@ -28,7 +28,7 @@ struct RouteStatsPresenter {
     Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
   }
   var durationValue: String { route.activeDurationSeconds.localizedHoursMinutesString() }
-  var durationUnit: String { String(localized: "active", comment: "Active duration (not including pauses)") }
+  var durationUnit: String { String(localized: "active", comment: "Label for the active driving duration stat") }
   var avgSpeedValue: String {
     Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
