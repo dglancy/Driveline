@@ -22,3 +22,4 @@ large_tuple:
 
 disabled_rules:
   - file_length
+  - trailing_whitespace

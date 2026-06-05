@@ -67,7 +67,7 @@ struct HomeView: View {
     ZStack(alignment: .bottom) {
       List {
         if routeService.isRecording {
-          RecordingBannerSection(triggerDisplayName: routeService.route?.trigger.displayName) {
+          RecordingBannerSection {
             viewModel.showingRecordingScreen = true
           }
         }
