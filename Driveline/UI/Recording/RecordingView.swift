@@ -96,6 +96,7 @@ struct RecordingView: View {
         .textCase(.uppercase)
         .padding(.bottom, 6)
         .accessibilityHidden(true)
+        .dynamicTypeSize(.large ... .accessibility2)
 
       Text(viewModel.elapsedDisplay)
         .font(.system(size: 74, weight: .semibold, design: .default).monospacedDigit())
@@ -114,6 +115,7 @@ struct RecordingView: View {
         Text(viewModel.distanceUnit)
           .font(.title2.weight(.medium))
           .foregroundStyle(Color(.secondaryLabel))
+          .dynamicTypeSize(.large ... .accessibility3)
       }
       .padding(.top, 22)
 
@@ -144,7 +146,7 @@ struct RecordingView: View {
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
-        .dynamicTypeSize(.xSmall ... .accessibility1)
+        .dynamicTypeSize(.xSmall ... .xxLarge)
         .fixedSize(horizontal: false, vertical: true)
     }
     .padding(.horizontal, 15)
