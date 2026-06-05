@@ -40,19 +40,22 @@ struct IconRow<LeadingIcon: View>: View {
       VStack(alignment: .leading, spacing: 1) {
         Text(title)
           .font(.callout)
+          .dynamicTypeSize(.xSmall ... .large)
         if let subtitle {
           Text(subtitle)
             .font(.footnote)
             .foregroundStyle(.secondary)
+            .dynamicTypeSize(.xSmall ... .large)
         }
       }
-
+      
       Spacer()
-
+      
       if let trailing {
         Text(trailing)
           .font(.callout)
           .foregroundStyle(.secondary)
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
     }
     .padding(.horizontal, 16)

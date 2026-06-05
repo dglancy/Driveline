@@ -79,6 +79,7 @@ struct HomeView: View {
               .foregroundStyle(.secondary)
               .listRowBackground(Color.clear)
               .frame(maxWidth: .infinity, alignment: .center)
+              .dynamicTypeSize(.large ... .xxLarge)
           }
           .listSectionSpacing(0)
         }

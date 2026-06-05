@@ -24,9 +24,11 @@ struct DriveStatTile: View {
         Image(systemName: icon)
           .font(.caption.weight(.medium))
           .foregroundStyle(.tint)
+          .dynamicTypeSize(.xSmall ... .xxLarge)
         Text(label)
           .font(.caption.weight(.medium))
           .foregroundStyle(.secondary)
+          .dynamicTypeSize(.xSmall ... .large)
       }
 
       Text(value)
@@ -34,10 +36,12 @@ struct DriveStatTile: View {
         .foregroundStyle(.primary)
         .minimumScaleFactor(0.7)
         .lineLimit(1)
+        .dynamicTypeSize(.xSmall ... .large)
 
       Text(unit)
         .font(.caption)
         .foregroundStyle(.secondary)
+        .dynamicTypeSize(.xSmall ... .large)
     }
     .padding(14)
     .frame(maxWidth: .infinity, alignment: .leading)
