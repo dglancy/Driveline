@@ -39,6 +39,6 @@ struct RouteStatsPresenter {
   var startTimeLabel: String {
     let datePart = route.startedAt.abbreviatedMonthAndDay()
     let timePart = route.startedAt.clockString()
-    return "\(datePart) · \(timePart)"
+    return String(localized: "\(datePart) · \(timePart)", comment: "Route start date and time, e.g. '5 Jun · 09:41'. Translators may change the separator.")
   }
 }

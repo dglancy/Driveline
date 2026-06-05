@@ -168,7 +168,7 @@ final class HomeViewModel {
     return RouteRowDisplay(
       name: route.name,
       dateTimeLabel: RouteStatsPresenter(route: route).startTimeLabel,
-      formattedDistance: "\(distance.localizedDistanceValueString()) \(distance.localizedDistanceUnitSymbol())",
+      formattedDistance: distance.localizedDistanceString(),
       formattedDuration: duration
     )
   }
