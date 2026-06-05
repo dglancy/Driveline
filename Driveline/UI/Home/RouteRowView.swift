@@ -49,7 +49,7 @@ struct RouteRowView: View {
       statsContent(distanceFont: .callout, durationFont: .footnote)
     }
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("\(display.name), \(display.formattedDistance), \(display.dateTimeLabel)")
+    .accessibilityLabel(ListFormatter.localizedString(byJoining: [display.name, display.formattedDistance, display.dateTimeLabel]))
     .accessibilityAddTraits(isSelected == true ? .isSelected : [])
   }
 
@@ -64,7 +64,7 @@ struct RouteRowView: View {
     .padding(.vertical, 13)
     .cardBackground()
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("\(index). \(display.name), \(display.formattedDistance), \(display.dateTimeLabel)")
+    .accessibilityLabel("\(index). \(ListFormatter.localizedString(byJoining: [display.name, display.formattedDistance, display.dateTimeLabel]))")
   }
 
   private var routeBadge: some View {
