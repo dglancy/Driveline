@@ -18,8 +18,6 @@ enum Icons {
   // MARK: - Recording
 
   static let stop = "stop.fill"
-  static let pause = "pause.fill"
-  static let play = "play.fill"
   static let battery = "battery.75percent"
 
   // MARK: - Stats
