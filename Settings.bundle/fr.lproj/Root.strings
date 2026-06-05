@@ -1,0 +1,29 @@
+/* Group title */
+"Activity Type" = "Type d'activité";
+
+/* Picker title */
+"Activity" = "Activité";
+
+/* Picker options */
+"Automatic" = "Automatique";
+"Automotive" = "Automobile";
+"Fitness" = "Fitness";
+"Flight" = "Vol";
+"Other" = "Autre";
+
+/* Export map size */
+"Export Map Size" = "Taille de la carte exportée";
+"Low (800×600)" = "Faible (800×600)";
+"Medium (1024×768)" = "Moyen (1024×768)";
+"High (1600×1200)" = "Élevé (1600×1200)";
+"Full HD (1920×1080)" = "Full HD (1920×1080)";
+"Highest (2400×1800)" = "Maximum (2400×1800)";
+
+/* Map appearance */
+"Always Use Light Map Appearance" = "Toujours utiliser l'apparence claire de la carte";
+
+/* Export route width */
+"Export Route Width" = "Largeur du tracé exporté";
+"Thin" = "Fin";
+"Medium" = "Moyen";
+"Thick" = "Épais";

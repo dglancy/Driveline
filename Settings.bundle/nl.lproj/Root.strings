@@ -1,0 +1,29 @@
+/* Group title */
+"Activity Type" = "Activiteitstype";
+
+/* Picker title */
+"Activity" = "Activiteit";
+
+/* Picker options */
+"Automatic" = "Automatisch";
+"Automotive" = "Voertuig";
+"Fitness" = "Fitness";
+"Flight" = "Vlucht";
+"Other" = "Anders";
+
+/* Export map size */
+"Export Map Size" = "Kaartgrootte exporteren";
+"Low (800×600)" = "Laag (800×600)";
+"Medium (1024×768)" = "Gemiddeld (1024×768)";
+"High (1600×1200)" = "Hoog (1600×1200)";
+"Full HD (1920×1080)" = "Full HD (1920×1080)";
+"Highest (2400×1800)" = "Hoogste (2400×1800)";
+
+/* Map appearance */
+"Always Use Light Map Appearance" = "Altijd lichte kaartweergave gebruiken";
+
+/* Export route width */
+"Export Route Width" = "Routebreedte exporteren";
+"Thin" = "Dun";
+"Medium" = "Gemiddeld";
+"Thick" = "Dik";
