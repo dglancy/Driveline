@@ -19,7 +19,7 @@ struct DriveDetailMapView: View {
   // MARK: - Body
 
   var body: some View {
-    Map(initialPosition: cameraPosition) {
+    Map(initialPosition: cameraPosition, interactionModes: []) {
       DriveMapContent(coordinates: coordinates)
     }
     .mapStyle(.standard(emphasis: .muted))
