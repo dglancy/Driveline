@@ -58,8 +58,8 @@ struct HomeView: View {
   private var emptyState: some View {
     ContentUnavailableView(
       "No Routes",
-      systemImage: "car.fill",
-      description: Text("Your recorded routes will appear here.")
+      systemImage: Icons.car,
+      description: Text(String(localized: "Your recorded routes will appear here.", comment: "Empty state description shown on the home screen when no routes have been recorded yet"))
     )
   }
 
@@ -67,7 +67,7 @@ struct HomeView: View {
     ZStack(alignment: .bottom) {
       List {
         if routeService.isRecording {
-          RecordingBannerSection(triggerDisplayName: routeService.route?.trigger.displayName) {
+          RecordingBannerSection {
             viewModel.showingRecordingScreen = true
           }
         }

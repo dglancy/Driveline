@@ -80,7 +80,7 @@ final class LocationDataRecorderService {
   // MARK: - Private functions
 
   private func persist(_ location: CLLocation) {
-    Log.data.info("Saving a new location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+    Log.data.info("Saving a new location: \(location.coordinate.latitude), \(location.coordinate.longitude)", privacy: .private)
 
     guard let route else { return }
 
@@ -99,7 +99,7 @@ final class LocationDataRecorderService {
 
     route.positions.append(position)
     hasPendingPositions = true
-    Log.data.info("Queued new location: \(position.latitude), \(position.longitude)")
+    Log.data.info("Queued new location: \(position.latitude), \(position.longitude)", privacy: .private)
   }
 
   private func saveIfNeeded() {

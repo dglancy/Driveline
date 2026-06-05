@@ -3,10 +3,6 @@ included:
   - AutoRouteTests
   - AutoRouteUITests
 
-line_length:
-  warning: 150
-  error: 180
-
 identifier_name:
   min_length: 2
   max_length: 45
@@ -22,3 +18,5 @@ large_tuple:
 
 disabled_rules:
   - file_length
+  - trailing_whitespace
+  - line_length

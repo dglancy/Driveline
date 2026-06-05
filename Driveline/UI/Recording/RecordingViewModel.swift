@@ -77,7 +77,7 @@ final class RecordingViewModel {
 
   static func formattedCount(_ count: Int) -> String {
     if count < 100_000 {
-      return positionCountFormatter.string(from: NSNumber(value: count)) ?? "\(count)"
+      return positionCountFormatter.string(from: NSNumber(value: count)) ?? count.formatted()
     }
     return count.formatted(.number.notation(.compactName))
   }
