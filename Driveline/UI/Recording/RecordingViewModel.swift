@@ -15,12 +15,12 @@ final class RecordingViewModel {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let routeService: RouteService
+  @ObservationIgnored private let driveService: DriveService
 
   // MARK: - Computed Properties
 
-  var elapsedSeconds: Int { Int(routeService.route?.activeDurationSeconds ?? 0) }
-  var distanceMetres: Double { routeService.route?.distanceMetres ?? 0.0 }
+  var elapsedSeconds: Int { Int(driveService.drive?.activeDurationSeconds ?? 0) }
+  var distanceMetres: Double { driveService.drive?.distanceMetres ?? 0.0 }
 
   var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
 
@@ -39,21 +39,21 @@ final class RecordingViewModel {
   }
 
   var speedValue: String {
-    guard let ms = routeService.currentSpeedMs else { return kDashString }
+    guard let ms = driveService.currentSpeedMs else { return kDashString }
     return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
 
   var speedUnit: String {
-    Measurement(value: routeService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+    Measurement(value: driveService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
   }
-  var positionCount: Int { routeService.route?.positions.count ?? 0 }
+  var positionCount: Int { driveService.drive?.positions.count ?? 0 }
 
   var formattedPositionCount: String {
     Self.formattedCount(positionCount)
   }
 
   var startedAt: String {
-    guard let date = routeService.route?.startedAt else { return kDashString }
+    guard let date = driveService.drive?.startedAt else { return kDashString }
     return date.clockString()
   }
 
@@ -74,13 +74,13 @@ final class RecordingViewModel {
 
   // MARK: - Lifecycle
 
-  init(routeService: RouteService) {
-    self.routeService = routeService
+  init(driveService: DriveService) {
+    self.driveService = driveService
   }
 
   // MARK: - Actions
 
-  func finishRoute() {
-    routeService.finishRoute()
+  func finishDrive() {
+    driveService.finishDrive()
   }
 }

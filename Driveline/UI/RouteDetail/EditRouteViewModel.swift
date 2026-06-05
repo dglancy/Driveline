@@ -1,5 +1,5 @@
 //
-//  EditRouteViewModel.swift
+//  EditDriveViewModel.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -10,37 +10,37 @@ import Observation
 
 @MainActor
 @Observable
-final class EditRouteViewModel {
+final class EditDriveViewModel {
 
   // MARK: - Properties
 
-  var routeName: String
+  var driveName: String
   var startPlaceName: String
   var endPlaceName: String
 
-  var isSaveDisabled: Bool { routeName.trimmingCharacters(in: .whitespaces).isEmpty }
+  var isSaveDisabled: Bool { driveName.trimmingCharacters(in: .whitespaces).isEmpty }
 
-  @ObservationIgnored private let route: Route
+  @ObservationIgnored private let drive: Drive
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    self.route = route
-    self.routeName = route.name
-    self.startPlaceName = route.startPlaceName ?? ""
-    self.endPlaceName = route.endPlaceName ?? ""
+  init(drive: Drive) {
+    self.drive = drive
+    self.driveName = drive.name
+    self.startPlaceName = drive.startPlaceName ?? ""
+    self.endPlaceName = drive.endPlaceName ?? ""
   }
 
   // MARK: - Actions
 
   func save() {
-    let trimmedName = routeName.trimmingCharacters(in: .whitespaces)
+    let trimmedName = driveName.trimmingCharacters(in: .whitespaces)
     if !trimmedName.isEmpty {
-      route.name = trimmedName
+      drive.name = trimmedName
     }
     let trimmedStart = startPlaceName.trimmingCharacters(in: .whitespaces)
-    route.startPlaceName = trimmedStart.isEmpty ? nil : trimmedStart
+    drive.startPlaceName = trimmedStart.isEmpty ? nil : trimmedStart
     let trimmedEnd = endPlaceName.trimmingCharacters(in: .whitespaces)
-    route.endPlaceName = trimmedEnd.isEmpty ? nil : trimmedEnd
+    drive.endPlaceName = trimmedEnd.isEmpty ? nil : trimmedEnd
   }
 }

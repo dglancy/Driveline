@@ -10,12 +10,12 @@ import AppIntents
 // MARK: - Intent Dependency Resolver
 
 enum IntentDependencyResolver {
-  static var provider: (() -> RouteService?)?
+  static var provider: (() -> DriveService?)?
 }
 
 // MARK: - App Intent Shortcuts
 
-struct AutoRouteShortcuts: AppShortcutsProvider {
+struct AutoDriveShortcuts: AppShortcutsProvider {
 
   @AppShortcutsBuilder
   static var appShortcuts: [AppShortcut] {
@@ -57,9 +57,9 @@ struct StartDriveIntent: AppIntent {
   func perform() async throws -> some IntentResult {
     await Log.lifecycle.info("Running perform on StartDriveIntent intent")
 
-    let routeService = try await resolveRouteService()
-    if await !routeService.isRecording {
-      try await routeService.startRoute(trigger: .automatic)
+    let driveService = try await resolveDriveService()
+    if await !driveService.isRecording {
+      try await driveService.startDrive(trigger: .automatic)
     }
     return .result()
   }
@@ -79,9 +79,9 @@ struct FinishDriveIntent: AppIntent {
   func perform() async throws -> some IntentResult {
     await Log.lifecycle.info("Running perform on FinishDriveIntent intent")
 
-    let routeService = try await resolveRouteService()
-    if await routeService.isRecording {
-      await routeService.finishRoute()
+    let driveService = try await resolveDriveService()
+    if await driveService.isRecording {
+      await driveService.finishDrive()
     }
     return .result()
   }
@@ -95,16 +95,16 @@ enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
   var localizedStringResource: LocalizedStringResource {
     switch self {
     case .notReady:
-      return "AutoRoute isn't ready to start recording."
+      return "AutoDrive isn't ready to start recording."
     }
   }
 }
 
 // MARK: - Private helpers
 
-private func resolveRouteService() async throws -> RouteService {
-  guard let routeService = await MainActor.run(body: { IntentDependencyResolver.provider?() }) else {
+private func resolveDriveService() async throws -> DriveService {
+  guard let driveService = await MainActor.run(body: { IntentDependencyResolver.provider?() }) else {
     throw AppIntentDependencyError.notReady
   }
-  return routeService
+  return driveService
 }

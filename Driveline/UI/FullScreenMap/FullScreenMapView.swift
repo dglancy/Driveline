@@ -19,8 +19,8 @@ struct FullScreenMapView: View {
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    _viewModel = State(initialValue: FullScreenMapViewModel(route: route))
+  init(drive: Drive) {
+    _viewModel = State(initialValue: FullScreenMapViewModel(drive: drive))
   }
 
   // MARK: - Body
@@ -28,7 +28,7 @@ struct FullScreenMapView: View {
   var body: some View {
     ZStack {
       Map(initialPosition: viewModel.cameraPosition) {
-        RouteMapContent(coordinates: viewModel.coordinates)
+        DriveMapContent(coordinates: viewModel.coordinates)
       }
       .mapStyle(.standard(emphasis: .muted))
       .ignoresSafeArea()
@@ -88,9 +88,9 @@ struct FullScreenMapView: View {
 
 #Preview {
   let container = PreviewSampleData.previewContainer()
-  let route = PreviewSampleData.sampleRoute(in: container.mainContext)
+  let drive = PreviewSampleData.sampleDrive(in: container.mainContext)
   return NavigationStack {
-    FullScreenMapView(route: route)
+    FullScreenMapView(drive: drive)
   }
   .modelContainer(container)
 }

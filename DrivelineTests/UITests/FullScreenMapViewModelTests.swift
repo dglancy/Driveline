@@ -1,6 +1,6 @@
 //
 //  FullScreenMapViewModelTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 31/05/2026.
 //
@@ -18,8 +18,8 @@ struct FullScreenMapViewModelTests {
   // MARK: - name
 
   @Test
-  func nameReturnsRouteName() {
-    let vm = FullScreenMapViewModel(route: makeRoute(name: "Morning Commute"))
+  func nameReturnsDriveName() {
+    let vm = FullScreenMapViewModel(drive: makeDrive(name: "Morning Commute"))
     #expect(vm.name == "Morning Commute")
   }
 
@@ -27,24 +27,24 @@ struct FullScreenMapViewModelTests {
 
   @Test
   func coordinatesAreEmptyWithNoPositions() {
-    let vm = FullScreenMapViewModel(route: makeRoute())
+    let vm = FullScreenMapViewModel(drive: makeDrive())
     #expect(vm.coordinates.isEmpty)
   }
 
   @Test
   func coordinatesCountMatchesPositionCount() {
-    let route = makeRoute()
-    route.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
-    route.positions.append(makePosition(latitude: 38.0, longitude: -121.0))
-    let vm = FullScreenMapViewModel(route: route)
+    let drive = makeDrive()
+    drive.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
+    drive.positions.append(makePosition(latitude: 38.0, longitude: -121.0))
+    let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.coordinates.count == 2)
   }
 
   @Test
   func coordinatesPreserveLatitudeAndLongitude() {
-    let route = makeRoute()
-    route.positions.append(makePosition(latitude: 37.5, longitude: -122.4))
-    let vm = FullScreenMapViewModel(route: route)
+    let drive = makeDrive()
+    drive.positions.append(makePosition(latitude: 37.5, longitude: -122.4))
+    let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.coordinates[0].latitude == 37.5)
     #expect(vm.coordinates[0].longitude == -122.4)
   }
@@ -53,71 +53,71 @@ struct FullScreenMapViewModelTests {
 
   @Test
   func cameraPositionIsAutomaticWithNoPositions() {
-    let vm = FullScreenMapViewModel(route: makeRoute())
+    let vm = FullScreenMapViewModel(drive: makeDrive())
     #expect(vm.cameraPosition == .automatic)
   }
 
   @Test
   func cameraPositionIsNotAutomaticWithSinglePosition() {
-    let route = makeRoute()
-    route.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
-    let vm = FullScreenMapViewModel(route: route)
+    let drive = makeDrive()
+    drive.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
+    let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.cameraPosition != .automatic)
   }
 
   @Test
   func cameraPositionIsNotAutomaticWithMultiplePositions() {
-    let route = makeRoute()
-    route.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
-    route.positions.append(makePosition(latitude: 38.0, longitude: -121.0))
-    let vm = FullScreenMapViewModel(route: route)
+    let drive = makeDrive()
+    drive.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
+    drive.positions.append(makePosition(latitude: 38.0, longitude: -121.0))
+    let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.cameraPosition != .automatic)
   }
 
   // MARK: - distanceValue / distanceUnit
 
   @Test
-  func distanceValueMatchesRouteFormatting() {
-    let route = makeRoute()
-    let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.distanceValue == Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString())
+  func distanceValueMatchesDriveFormatting() {
+    let drive = makeDrive()
+    let vm = FullScreenMapViewModel(drive: drive)
+    #expect(vm.distanceValue == Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString())
   }
 
   @Test
-  func distanceUnitMatchesRouteFormatting() {
-    let route = makeRoute()
-    let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.distanceUnit == Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol())
+  func distanceUnitMatchesDriveFormatting() {
+    let drive = makeDrive()
+    let vm = FullScreenMapViewModel(drive: drive)
+    #expect(vm.distanceUnit == Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol())
   }
 
   // MARK: - durationValue
 
   @Test
-  func durationValueMatchesRouteFormatting() {
-    let route = makeRoute()
-    let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.durationValue == route.activeDurationSeconds.localizedHoursMinutesString())
+  func durationValueMatchesDriveFormatting() {
+    let drive = makeDrive()
+    let vm = FullScreenMapViewModel(drive: drive)
+    #expect(vm.durationValue == drive.activeDurationSeconds.localizedHoursMinutesString())
   }
 
   // MARK: - avgSpeedValue / avgSpeedUnit
 
   @Test
-  func avgSpeedValueMatchesRouteFormatting() {
-    let route = makeRoute()
-    let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.avgSpeedValue == Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString())
+  func avgSpeedValueMatchesDriveFormatting() {
+    let drive = makeDrive()
+    let vm = FullScreenMapViewModel(drive: drive)
+    #expect(vm.avgSpeedValue == Measurement(value: drive.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString())
   }
 
   @Test
-  func avgSpeedUnitMatchesRouteFormatting() {
-    let route = makeRoute()
-    let vm = FullScreenMapViewModel(route: route)
-    #expect(vm.avgSpeedUnit == Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol())
+  func avgSpeedUnitMatchesDriveFormatting() {
+    let drive = makeDrive()
+    let vm = FullScreenMapViewModel(drive: drive)
+    #expect(vm.avgSpeedUnit == Measurement(value: drive.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol())
   }
 }
 
 // MARK: - Helpers
 
-private func makeRoute(name: String = "Test Route") -> Route {
-  Route(name: name)
+private func makeDrive(name: String = "Test Drive") -> Drive {
+  Drive(name: name)
 }

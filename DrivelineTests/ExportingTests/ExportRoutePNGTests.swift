@@ -1,6 +1,6 @@
 //
-//  ExportRoutePNGTests.swift
-//  AutoRouteTests
+//  ExportDrivePNGTests.swift
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 31/05/2026.
 //
@@ -9,9 +9,9 @@
 import Foundation
 import Testing
 
-@Suite("ExportRoutePNG")
+@Suite("ExportDrivePNG")
 @MainActor
-final class ExportRoutePNGTests: SwiftDataBaseTestCase {
+final class ExportDrivePNGTests: SwiftDataBaseTestCase {
 
   // MARK: - Error descriptions
 
@@ -93,50 +93,50 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
     #expect(MapSize(from: "") == nil)
   }
 
-  // MARK: - RouteWidth values
+  // MARK: - DriveWidth values
 
   @Test
-  func routeWidthValuesAreCorrect() {
-    #expect(RouteWidth.thin.width == 3.0)
-    #expect(RouteWidth.medium.width == 6.0)
-    #expect(RouteWidth.thick.width == 9.0)
+  func driveWidthValuesAreCorrect() {
+    #expect(DriveWidth.thin.width == 3.0)
+    #expect(DriveWidth.medium.width == 6.0)
+    #expect(DriveWidth.thick.width == 9.0)
   }
 
-  // MARK: - RouteWidth initialiser
+  // MARK: - DriveWidth initialiser
 
   @Test
-  func routeWidthInitialisesFromValidLowercaseString() {
-    #expect(RouteWidth(from: "thin") == .thin)
-    #expect(RouteWidth(from: "medium") == .medium)
-    #expect(RouteWidth(from: "thick") == .thick)
-  }
-
-  @Test
-  func routeWidthInitialisesFromMixedCaseString() {
-    #expect(RouteWidth(from: "THIN") == .thin)
-    #expect(RouteWidth(from: "Medium") == .medium)
-    #expect(RouteWidth(from: "THICK") == .thick)
+  func driveWidthInitialisesFromValidLowercaseString() {
+    #expect(DriveWidth(from: "thin") == .thin)
+    #expect(DriveWidth(from: "medium") == .medium)
+    #expect(DriveWidth(from: "thick") == .thick)
   }
 
   @Test
-  func routeWidthInitialisesFromStringWithSurroundingWhitespace() {
-    #expect(RouteWidth(from: "  thin  ") == .thin)
+  func driveWidthInitialisesFromMixedCaseString() {
+    #expect(DriveWidth(from: "THIN") == .thin)
+    #expect(DriveWidth(from: "Medium") == .medium)
+    #expect(DriveWidth(from: "THICK") == .thick)
   }
 
   @Test
-  func routeWidthReturnsNilForInvalidString() {
-    #expect(RouteWidth(from: "ultrawide") == nil)
-    #expect(RouteWidth(from: "") == nil)
+  func driveWidthInitialisesFromStringWithSurroundingWhitespace() {
+    #expect(DriveWidth(from: "  thin  ") == .thin)
   }
 
-  // MARK: - Empty route
+  @Test
+  func driveWidthReturnsNilForInvalidString() {
+    #expect(DriveWidth(from: "ultrawide") == nil)
+    #expect(DriveWidth(from: "") == nil)
+  }
+
+  // MARK: - Empty drive
 
   @Test
-  func throwsEmptyRouteErrorWhenRouteHasNoPositions() async {
-    let route = Route(name: "Empty Route")
+  func throwsEmptyDriveErrorWhenDriveHasNoPositions() async {
+    let drive = Drive(name: "Empty Drive")
 
-    await #expect(throws: ExportError.emptyRoute) {
-      _ = try await ExportRoutePNG().export(route: route)
+    await #expect(throws: ExportError.emptyDrive) {
+      _ = try await ExportDrivePNG().export(drive: drive)
     }
   }
 }

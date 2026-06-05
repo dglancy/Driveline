@@ -1,6 +1,6 @@
 //
-//  ExportRouteFileNamingServiceTests.swift
-//  AutoRouteTests
+//  ExportDriveFileNamingServiceTests.swift
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 31/05/2026.
 //
@@ -9,21 +9,21 @@
 import Foundation
 import Testing
 
-@Suite("ExportRouteFileNamingService")
+@Suite("ExportDriveFileNamingService")
 @MainActor
-final class ExportRouteFileNamingServiceTests: SwiftDataBaseTestCase {
+final class ExportDriveFileNamingServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - File extension
 
   @Test
   func gpxFileURLHasCorrectExtension() {
-    let url = ExportRouteFileNamingService.fileURL(for: makeRoute(), type: .gpx)
+    let url = ExportDriveFileNamingService.fileURL(for: makeDrive(), type: .gpx)
     #expect(url.pathExtension == "gpx")
   }
 
   @Test
   func pngFileURLHasCorrectExtension() {
-    let url = ExportRouteFileNamingService.fileURL(for: makeRoute(), type: .png)
+    let url = ExportDriveFileNamingService.fileURL(for: makeDrive(), type: .png)
     #expect(url.pathExtension == "png")
   }
 
@@ -31,29 +31,29 @@ final class ExportRouteFileNamingServiceTests: SwiftDataBaseTestCase {
 
   @Test
   func filenamePrefixMatchesFormattedStartedAt() {
-    let route = makeRoute()
-    let expectedPrefix = ExportRouteFileNamingService.startedAtFormatter.string(from: route.startedAt)
-    let url = ExportRouteFileNamingService.fileURL(for: route, type: .gpx)
+    let drive = makeDrive()
+    let expectedPrefix = ExportDriveFileNamingService.startedAtFormatter.string(from: drive.startedAt)
+    let url = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
     #expect(url.lastPathComponent.hasPrefix(expectedPrefix))
   }
 
   @Test
   func formatterProducesEnglishMonthAbbreviationRegardlessOfSystemLocale() {
-    let route = makeRoute()
+    let drive = makeDrive()
     let germanFormatter = DateFormatter()
     germanFormatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
     germanFormatter.timeZone = .current
     germanFormatter.locale = Locale(identifier: "de_DE")
-    #expect(germanFormatter.string(from: route.startedAt).contains("Mai"))
-    let formatted = ExportRouteFileNamingService.startedAtFormatter.string(from: route.startedAt)
+    #expect(germanFormatter.string(from: drive.startedAt).contains("Mai"))
+    let formatted = ExportDriveFileNamingService.startedAtFormatter.string(from: drive.startedAt)
     #expect(formatted.contains("May"))
   }
 
   @Test
-  func filenamesForSameRouteDifferOnlyByExtension() {
-    let route = makeRoute()
-    let gpxURL = ExportRouteFileNamingService.fileURL(for: route, type: .gpx)
-    let pngURL = ExportRouteFileNamingService.fileURL(for: route, type: .png)
+  func filenamesForSameDriveDifferOnlyByExtension() {
+    let drive = makeDrive()
+    let gpxURL = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
+    let pngURL = ExportDriveFileNamingService.fileURL(for: drive, type: .png)
     #expect(gpxURL.deletingPathExtension().lastPathComponent == pngURL.deletingPathExtension().lastPathComponent)
   }
 
@@ -61,14 +61,14 @@ final class ExportRouteFileNamingServiceTests: SwiftDataBaseTestCase {
 
   @Test
   func fileURLIsInTemporaryDirectory() {
-    let url = ExportRouteFileNamingService.fileURL(for: makeRoute(), type: .gpx)
+    let url = ExportDriveFileNamingService.fileURL(for: makeDrive(), type: .gpx)
     #expect(url.path.hasPrefix(FileManager.default.temporaryDirectory.path))
   }
 
   // MARK: - Helpers
 
-  private func makeRoute() -> Route {
-    let route = Route(name: "Test Route")
+  private func makeDrive() -> Drive {
+    let drive = Drive(name: "Test Drive")
     var components = DateComponents()
     components.year = 2026
     components.month = 5
@@ -76,7 +76,7 @@ final class ExportRouteFileNamingServiceTests: SwiftDataBaseTestCase {
     components.hour = 10
     components.minute = 30
     components.timeZone = .current
-    route.startedAt = Calendar.current.date(from: components) ?? .now
-    return route
+    drive.startedAt = Calendar.current.date(from: components) ?? .now
+    return drive
   }
 }

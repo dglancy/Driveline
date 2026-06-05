@@ -1,6 +1,6 @@
 //
 //  RecordingViewModelTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -61,17 +61,17 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - startedAt
 
   @Test
-  func startedAtReturnsFormattedTimeWhenRouteExists() {
+  func startedAtReturnsFormattedTimeWhenDriveExists() {
     let vm = makeViewModel()
     #expect(vm.startedAt != "—")
   }
 
-  // MARK: - finishRoute
+  // MARK: - finishDrive
 
   @Test
-  func finishRouteStopsRecording() {
+  func finishDriveStopsRecording() {
     let (service, vm) = makeServiceAndViewModel()
-    vm.finishRoute()
+    vm.finishDrive()
     #expect(service.isRecording == false)
   }
 
@@ -99,22 +99,22 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeService() -> (RouteService, LocationService) {
+  private func makeService() -> (DriveService, LocationService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
+    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     return (service, locationService)
   }
 
   private func makeViewModel() -> RecordingViewModel {
     let (service, _) = makeService()
-    try! service.startRoute()
-    return RecordingViewModel(routeService: service)
+    try! service.startDrive()
+    return RecordingViewModel(driveService: service)
   }
 
-  private func makeServiceAndViewModel() -> (RouteService, RecordingViewModel) {
+  private func makeServiceAndViewModel() -> (DriveService, RecordingViewModel) {
     let (service, _) = makeService()
-    try! service.startRoute()
-    return (service, RecordingViewModel(routeService: service))
+    try! service.startDrive()
+    return (service, RecordingViewModel(driveService: service))
   }
 }

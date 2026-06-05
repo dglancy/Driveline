@@ -1,6 +1,6 @@
 //
-//  RouteServiceTests.swift
-//  AutoRouteTests
+//  DriveServiceTests.swift
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -13,102 +13,102 @@ import SwiftData
 import Testing
 
 @MainActor
-final class RouteServiceTests: SwiftDataBaseTestCase {
+final class DriveServiceTests: SwiftDataBaseTestCase {
 
-  // MARK: - startRoute
+  // MARK: - startDrive
 
   @Test
-  func startRouteCreatesRecordingRoute() async throws {
+  func startDriveCreatesRecordingDrive() async throws {
     let (service, locationService, recorder) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
 
-    #expect(service.route != nil)
-    #expect(service.route!.isRecording == true)
+    #expect(service.drive != nil)
+    #expect(service.drive!.isRecording == true)
     #expect(locationService.status == .started)
-    #expect(recorder.route != nil)
+    #expect(recorder.drive != nil)
   }
 
   @Test
-  func startRouteSetsIsRecordingToTrue() async throws {
+  func startDriveSetsIsRecordingToTrue() async throws {
     let (service, _, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
 
     #expect(service.isRecording == true)
   }
 
   @Test
-  func startRouteResetsCurrentSpeedMs() async throws {
+  func startDriveResetsCurrentSpeedMs() async throws {
     let (service, _, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
 
     #expect(service.currentSpeedMs == nil)
   }
 
   @Test
-  func startRouteGeneratesTimeBasedName() async throws {
+  func startDriveGeneratesTimeBasedName() async throws {
     let (service, _, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
 
     let validNames = ["Morning Drive", "Afternoon Drive", "Evening Drive", "Night Drive"]
-    #expect(validNames.contains(service.route!.name))
+    #expect(validNames.contains(service.drive!.name))
   }
 
-  // MARK: - finishRoute
+  // MARK: - finishDrive
 
   @Test
-  func finishRouteStopsRecordingAndPersists() async throws {
+  func finishDriveStopsRecordingAndPersists() async throws {
     let (service, locationService, recorder) = makeServices()
 
-    try service.startRoute()
-    let startedRoute = service.route!
-    service.finishRoute()
+    try service.startDrive()
+    let startedDrive = service.drive!
+    service.finishDrive()
 
     #expect(locationService.status == .stopped)
-    #expect(startedRoute.isRecording == false)
-    #expect(startedRoute.endedAt != nil)
-    #expect(recorder.route == nil)
+    #expect(startedDrive.isRecording == false)
+    #expect(startedDrive.endedAt != nil)
+    #expect(recorder.drive == nil)
 
-    let persistedCount = try! count(where: #Predicate<Route> { _ in true })
+    let persistedCount = try! count(where: #Predicate<Drive> { _ in true })
     #expect(persistedCount == 1)
   }
 
   @Test
-  func finishRouteSetsIsRecordingToFalse() async throws {
+  func finishDriveSetsIsRecordingToFalse() async throws {
     let (service, _, _) = makeServices()
 
-    try service.startRoute()
-    service.finishRoute()
+    try service.startDrive()
+    service.finishDrive()
 
     #expect(service.isRecording == false)
   }
 
   @Test
-  func finishRouteResetsCurrentSpeedMs() async throws {
+  func finishDriveResetsCurrentSpeedMs() async throws {
     let (service, locationService, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    service.finishRoute()
+    service.finishDrive()
 
     #expect(service.currentSpeedMs == nil)
   }
 
   @Test
-  func finishRouteWithNoActiveRouteDoesNothing() async throws {
+  func finishDriveWithNoActiveDriveDoesNothing() async throws {
     let (service, _, _) = makeServices()
 
-    service.finishRoute()
+    service.finishDrive()
 
-    #expect(service.route == nil)
+    #expect(service.drive == nil)
   }
 
   // MARK: - currentSpeedMs
@@ -124,7 +124,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func currentSpeedMsUpdatesWhenLocationPublished() async throws {
     let (service, locationService, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -140,7 +140,7 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   func currentSpeedMsIsNilForInvalidLocationSpeed() async throws {
     let (service, locationService, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -153,63 +153,63 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func currentSpeedMsIsNilAfterFinishRoute() async throws {
+  func currentSpeedMsIsNilAfterFinishDrive() async throws {
     let (service, locationService, _) = makeServices()
 
-    try service.startRoute()
+    try service.startDrive()
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
     )
     locationService.locationPublisher.send(location)
-    service.finishRoute()
+    service.finishDrive()
 
     #expect(service.currentSpeedMs == nil)
   }
 
-  // MARK: - initialRoute
+  // MARK: - initialDrive
 
   @Test
-  func initialRouteIsSetOnInit() async throws {
+  func initialDriveIsSetOnInit() async throws {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let existingRoute = Route(name: "Existing route")
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: existingRoute)
+    let existingDrive = Drive(name: "Existing drive")
+    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: existingDrive)
 
-    #expect(service.route?.id == existingRoute.id)
+    #expect(service.drive?.id == existingDrive.id)
   }
 
   @Test
-  func initialRouteWithIsRecordingTrueSetsIsRecordingToTrue() async throws {
+  func initialDriveWithIsRecordingTrueSetsIsRecordingToTrue() async throws {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let route = Route(name: "Test")
-    route.status = .recording
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
+    let drive = Drive(name: "Test")
+    drive.status = .recording
+    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
 
     #expect(service.isRecording == true)
   }
 
   @Test
-  func initialRouteWithIsRecordingFalseSetsIsRecordingToFalse() async throws {
+  func initialDriveWithIsRecordingFalseSetsIsRecordingToFalse() async throws {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let route = Route(name: "Test")
-    route.status = .finished
-    let service = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialRoute: route)
+    let drive = Drive(name: "Test")
+    drive.status = .finished
+    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
 
     #expect(service.isRecording == false)
   }
 
-  // MARK: - startRoute geocoding accuracy
+  // MARK: - startDrive geocoding accuracy
 
   @Test
-  func startRouteSetsStartPlaceNameFromAccurateLocation() async throws {
+  func startDriveSetsStartPlaceNameFromAccurateLocation() async throws {
     let mockGeocoding = MockGeocodingService()
     let (service, locationService, _) = makeServices(geocodingService: mockGeocoding)
 
-    try service.startRoute()
+    try service.startDrive()
 
     let goodLocation = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -221,15 +221,15 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
     await Task.yield()
     await Task.yield()
 
-    #expect(service.route?.startPlaceName == "Test Place")
+    #expect(service.drive?.startPlaceName == "Test Place")
   }
 
   @Test
-  func startRouteGeocodesOnlyOnceEvenWithMultipleGoodLocations() async throws {
+  func startDriveGeocodesOnlyOnceEvenWithMultipleGoodLocations() async throws {
     let mockGeocoding = MockGeocodingService()
     let (service, locationService, _) = makeServices(geocodingService: mockGeocoding)
 
-    try service.startRoute()
+    try service.startDrive()
 
     let firstGood = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -253,10 +253,10 @@ final class RouteServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil) -> (RouteService, LocationService, LocationDataRecorderService) {
+  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil) -> (DriveService, LocationService, LocationDataRecorderService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = RouteService(
+    let service = DriveService(
       modelContext: context!,
       locationService: locationService,
       locationDataRecorder: recorder,

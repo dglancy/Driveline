@@ -1,6 +1,6 @@
 //
 //  SwiftDataBaseTestCase.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -19,7 +19,7 @@ class SwiftDataBaseTestCase {
   // MARK: - Common lifecycle
 
   init() async throws {
-    let schema = Schema([Route.self, Position.self])
+    let schema = Schema([Drive.self, Position.self])
     let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: [configuration])
     context = ModelContext(container)

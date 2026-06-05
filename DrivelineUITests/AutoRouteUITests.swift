@@ -1,13 +1,13 @@
 //
-//  AutoRouteUITests.swift
-//  AutoRouteUITests
+//  AutoDriveUITests.swift
+//  AutoDriveUITests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
 
 import XCTest
 
-final class AutoRouteUITests: BaseXCTestCase {
+final class AutoDriveUITests: BaseXCTestCase {
 
   @MainActor
   func testExample() throws {

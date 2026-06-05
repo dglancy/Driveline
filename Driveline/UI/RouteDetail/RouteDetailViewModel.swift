@@ -1,5 +1,5 @@
 //
-//  RouteDetailViewModel.swift
+//  DriveDetailViewModel.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -19,11 +19,11 @@ struct ExportedFile: Identifiable {
   let url: URL
 }
 
-// MARK: - RouteDetailViewModel
+// MARK: - DriveDetailViewModel
 
 @MainActor
 @Observable
-final class RouteDetailViewModel {
+final class DriveDetailViewModel {
 
   // MARK: - Properties
 
@@ -31,18 +31,18 @@ final class RouteDetailViewModel {
   var showingFullScreenMap = false
   var showingMoreMenu = false
   var showingDeleteConfirmation = false
-  var showingEditRoute = false
+  var showingEditDrive = false
   var exportedFile: ExportedFile?
   var exportError: String?
 
-  @ObservationIgnored let route: Route
-  @ObservationIgnored private let stats: RouteStatsPresenter
+  @ObservationIgnored let drive: Drive
+  @ObservationIgnored private let stats: DriveStatsPresenter
 
   // MARK: - Computed Properties
 
-  var name: String { route.name }
+  var name: String { drive.name }
 
-  var dateString: String { route.startedAt.longDateString() }
+  var dateString: String { drive.startedAt.longDateString() }
 
   var distanceValue: String { stats.distanceValue }
   var distanceUnit: String { stats.distanceUnit }
@@ -51,18 +51,18 @@ final class RouteDetailViewModel {
   var avgSpeedValue: String { stats.avgSpeedValue }
   var avgSpeedUnit: String { stats.avgSpeedUnit }
 
-  var startPlace: String? { route.startPlaceName }
-  var endPlace: String? { route.endPlaceName }
+  var startPlace: String? { drive.startPlaceName }
+  var endPlace: String? { drive.endPlaceName }
 
-  var departureTime: String { route.startedAt.clockString() }
-  var arrivalTime: String? { route.endedAt?.clockString() }
+  var departureTime: String { drive.startedAt.clockString() }
+  var arrivalTime: String? { drive.endedAt?.clockString() }
 
-  var topSpeed: String { Measurement(value: route.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
-  var trackPoints: String { route.positions.count.formatted() }
-  var triggerDisplayName: String { route.trigger.displayName }
+  var topSpeed: String { Measurement(value: drive.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
+  var trackPoints: String { drive.positions.count.formatted() }
+  var triggerDisplayName: String { drive.trigger.displayName }
 
   var coordinates: [CLLocationCoordinate2D] {
-    route.orderedPositions.map {
+    drive.orderedPositions.map {
       CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
     }
   }
@@ -73,21 +73,21 @@ final class RouteDetailViewModel {
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    self.route = route
-    self.stats = RouteStatsPresenter(route: route)
+  init(drive: Drive) {
+    self.drive = drive
+    self.stats = DriveStatsPresenter(drive: drive)
   }
 
   // MARK: - Actions
 
-  func deleteRoute(using context: ModelContext) {
-    context.delete(route)
+  func deleteDrive(using context: ModelContext) {
+    context.delete(drive)
   }
 
-  func shareRouteGPX() {
+  func shareDriveGPX() {
     Task {
       do {
-        let url = try await ExportRouteGPX().export(route: route)
+        let url = try await ExportDriveGPX().export(drive: drive)
         exportedFile = ExportedFile(url: url)
       } catch {
         exportError = error.localizedDescription
@@ -95,10 +95,10 @@ final class RouteDetailViewModel {
     }
   }
 
-  func shareRoutePNG() {
+  func shareDrivePNG() {
     Task {
       do {
-        let url = try await ExportRoutePNG().export(route: route)
+        let url = try await ExportDrivePNG().export(drive: drive)
         exportedFile = ExportedFile(url: url)
       } catch {
         exportError = error.localizedDescription

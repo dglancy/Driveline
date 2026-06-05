@@ -7,13 +7,13 @@
 
 enum Icons {
 
-  // MARK: - Route
+  // MARK: - Drive
 
-  static let routeBadge = "point.bottomleft.forward.to.point.topright.scurvepath"
+  static let driveBadge = "point.bottomleft.forward.to.point.topright.scurvepath"
   static let startMarker = "house.fill"
   static let finishFlag = "flag.pattern.checkered"
   static let finishFlagCircle = "flag.pattern.checkered.circle.fill"
-  static let reorderRoutes = "arrow.up.arrow.down"
+  static let reorderDrives = "arrow.up.arrow.down"
 
   // MARK: - Recording
 

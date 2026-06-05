@@ -1,5 +1,5 @@
 //
-//  RouteDetailView.swift
+//  DriveDetailView.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -9,11 +9,11 @@ import MapKit
 import SwiftData
 import SwiftUI
 
-struct RouteDetailView: View {
+struct DriveDetailView: View {
 
   // MARK: - Properties
 
-  @State private var viewModel: RouteDetailViewModel
+  @State private var viewModel: DriveDetailViewModel
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
 
@@ -21,8 +21,8 @@ struct RouteDetailView: View {
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    _viewModel = State(initialValue: RouteDetailViewModel(route: route))
+  init(drive: Drive) {
+    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive))
   }
 
   // MARK: - Body
@@ -33,20 +33,20 @@ struct RouteDetailView: View {
         .ignoresSafeArea()
 
       VStack(spacing: 0) {
-        RouteDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
+        DriveDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
           .frame(height: mapHeight)
           .overlay(alignment: .topLeading) {
-            GlassButton(systemImage: Icons.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the route detail screen")) { dismiss() }
+            GlassButton(systemImage: Icons.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
               .padding(14)
           }
           .overlay(alignment: .topTrailing) {
-            GlassButton(systemImage: Icons.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the route detail screen")) {
+            GlassButton(systemImage: Icons.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
               viewModel.showingMoreMenu = true
             }
             .padding(14)
           }
           .overlay(alignment: .bottomTrailing) {
-            GlassButton(systemImage: Icons.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the route detail screen")) {
+            GlassButton(systemImage: Icons.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
               viewModel.showingFullScreenMap = true
             }
             .padding(14)
@@ -54,11 +54,11 @@ struct RouteDetailView: View {
 
         ScrollView {
           VStack(alignment: .leading, spacing: 14) {
-            routeHeader
+            driveHeader
             statTiles
             endpointsCard
             metadataCard
-            shareRouteButton
+            shareDriveButton
           }
           .padding(.horizontal, 16)
           .padding(.bottom, 24)
@@ -71,14 +71,14 @@ struct RouteDetailView: View {
     .modifier(FullScreenMapModifier(viewModel: viewModel))
     .modifier(ExportShareSheetModifier(viewModel: viewModel))
     .modifier(ExportErrorAlertModifier(viewModel: viewModel))
-    .modifier(DeleteRouteAlertModifier(viewModel: viewModel, modelContext: modelContext, dismiss: { dismiss() }))
-    .modifier(EditRouteSheetModifier(viewModel: viewModel))
-    .modifier(RouteOptionsDialogModifier(viewModel: viewModel))
+    .modifier(DeleteDriveAlertModifier(viewModel: viewModel, modelContext: modelContext, dismiss: { dismiss() }))
+    .modifier(EditDriveSheetModifier(viewModel: viewModel))
+    .modifier(DriveOptionsDialogModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
 
-  private var routeHeader: some View {
+  private var driveHeader: some View {
     VStack(alignment: .leading, spacing: 3) {
       Text(viewModel.name)
         .font(.title.weight(.bold))
@@ -91,19 +91,19 @@ struct RouteDetailView: View {
 
   private var statTiles: some View {
     HStack(spacing: 10) {
-      RouteStatTile(
+      DriveStatTile(
         icon: "ruler",
         label: String(localized: "Distance", comment: "Stat tile label"),
         value: viewModel.distanceValue,
         unit: viewModel.distanceUnit
       )
-      RouteStatTile(
+      DriveStatTile(
         icon: "clock",
         label: String(localized: "Duration", comment: "Stat tile label"),
         value: viewModel.durationValue,
         unit: viewModel.durationUnit
       )
-      RouteStatTile(
+      DriveStatTile(
         icon: "speedometer",
         label: String(localized: "Avg Speed", comment: "Stat tile label"),
         value: viewModel.avgSpeedValue,
@@ -162,19 +162,19 @@ struct RouteDetailView: View {
     .cardBackground(cornerRadius: 16)
   }
 
-  private var shareRouteButton: some View {
+  private var shareDriveButton: some View {
     Button {
       viewModel.showSharingDialog = true
     } label: {
-      Label(String(localized: "Share Route", comment: "Share button"), systemImage: Icons.sharing)
+      Label(String(localized: "Share Drive", comment: "Share button"), systemImage: Icons.sharing)
         .font(.body.weight(.medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
     }
     .cardBackground(cornerRadius: 16)
-    .alert(String(localized: "Share Route", comment: "Share route alert title"), isPresented: $viewModel.showSharingDialog) {
-      Button(String(localized: "Share GPX", comment: "Share route as GPX")) { viewModel.shareRouteGPX() }
-      Button(String(localized: "Share PNG", comment: "Share route as PNG")) { viewModel.shareRoutePNG() }
+    .alert(String(localized: "Share Drive", comment: "Share drive alert title"), isPresented: $viewModel.showSharingDialog) {
+      Button(String(localized: "Share GPX", comment: "Share drive as GPX")) { viewModel.shareDriveGPX() }
+      Button(String(localized: "Share PNG", comment: "Share drive as PNG")) { viewModel.shareDrivePNG() }
       Button.cancel()
     }
   }
@@ -183,17 +183,17 @@ struct RouteDetailView: View {
 // MARK: - Presentation Modifiers
 
 private struct FullScreenMapModifier: ViewModifier {
-  @Bindable var viewModel: RouteDetailViewModel
+  @Bindable var viewModel: DriveDetailViewModel
 
   func body(content: Content) -> some View {
     content.navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
-      FullScreenMapView(route: viewModel.route)
+      FullScreenMapView(drive: viewModel.drive)
     }
   }
 }
 
 private struct ExportShareSheetModifier: ViewModifier {
-  @Bindable var viewModel: RouteDetailViewModel
+  @Bindable var viewModel: DriveDetailViewModel
 
   func body(content: Content) -> some View {
     content.sheet(item: $viewModel.exportedFile) { file in
@@ -203,7 +203,7 @@ private struct ExportShareSheetModifier: ViewModifier {
 }
 
 private struct ExportErrorAlertModifier: ViewModifier {
-  @Bindable var viewModel: RouteDetailViewModel
+  @Bindable var viewModel: DriveDetailViewModel
 
   func body(content: Content) -> some View {
     content.alert(
@@ -218,51 +218,51 @@ private struct ExportErrorAlertModifier: ViewModifier {
   }
 }
 
-private struct DeleteRouteAlertModifier: ViewModifier {
-  @Bindable var viewModel: RouteDetailViewModel
+private struct DeleteDriveAlertModifier: ViewModifier {
+  @Bindable var viewModel: DriveDetailViewModel
   let modelContext: ModelContext
   let dismiss: () -> Void
 
   func body(content: Content) -> some View {
     content.alert(
-      String(localized: "Delete Route", comment: "Delete confirmation alert title"),
+      String(localized: "Delete Drive", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
       Button.delete {
-        viewModel.deleteRoute(using: modelContext)
+        viewModel.deleteDrive(using: modelContext)
         dismiss()
       }
       Button.cancel()
     } message: {
-      Text(String(localized: "This route and all its data will be permanently deleted.", comment: "Delete route confirmation message"))
+      Text(String(localized: "This drive and all its data will be permanently deleted.", comment: "Delete drive confirmation message"))
     }
   }
 }
 
-private struct EditRouteSheetModifier: ViewModifier {
-  @Bindable var viewModel: RouteDetailViewModel
+private struct EditDriveSheetModifier: ViewModifier {
+  @Bindable var viewModel: DriveDetailViewModel
 
   func body(content: Content) -> some View {
-    content.sheet(isPresented: $viewModel.showingEditRoute) {
-      EditRouteView(route: viewModel.route)
+    content.sheet(isPresented: $viewModel.showingEditDrive) {
+      EditDriveView(drive: viewModel.drive)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
   }
 }
 
-private struct RouteOptionsDialogModifier: ViewModifier {
-  @Bindable var viewModel: RouteDetailViewModel
+private struct DriveOptionsDialogModifier: ViewModifier {
+  @Bindable var viewModel: DriveDetailViewModel
 
   func body(content: Content) -> some View {
     content.confirmationDialog(
-      String(localized: "Route Options", comment: "More menu title"),
+      String(localized: "Drive Options", comment: "More menu title"),
       isPresented: $viewModel.showingMoreMenu
     ) {
-      Button(String(localized: "Edit Route Details", comment: "More menu action")) {
-        viewModel.showingEditRoute = true
+      Button(String(localized: "Edit Drive Details", comment: "More menu action")) {
+        viewModel.showingEditDrive = true
       }
-      Button(String(localized: "Delete Route", comment: "More menu action"), role: .destructive) {
+      Button(String(localized: "Delete Drive", comment: "More menu action"), role: .destructive) {
         viewModel.showingDeleteConfirmation = true
       }
       Button.cancel()
@@ -274,9 +274,9 @@ private struct RouteOptionsDialogModifier: ViewModifier {
 
 #Preview {
   let container = PreviewSampleData.previewContainer()
-  let route = PreviewSampleData.sampleRoute(in: container.mainContext)
+  let drive = PreviewSampleData.sampleDrive(in: container.mainContext)
   return NavigationStack {
-    RouteDetailView(route: route)
+    DriveDetailView(drive: drive)
   }
   .modelContainer(container)
 }

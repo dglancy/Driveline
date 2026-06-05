@@ -1,5 +1,5 @@
 //
-//  RouteAnnotations.swift
+//  DriveAnnotations.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RouteStartAnnotation: View {
+struct DriveStartAnnotation: View {
 
   // MARK: - Body
 
@@ -21,7 +21,7 @@ struct RouteStartAnnotation: View {
   }
 }
 
-struct RouteEndAnnotation: View {
+struct DriveEndAnnotation: View {
 
   // MARK: - Body
 

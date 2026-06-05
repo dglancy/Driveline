@@ -1,6 +1,6 @@
 //
-//  RouteDetailViewModelTests.swift
-//  AutoRouteTests
+//  DriveDetailViewModelTests.swift
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 31/05/2026.
 //
@@ -9,120 +9,120 @@
 import Foundation
 import Testing
 
-@Suite("RouteDetailViewModel")
+@Suite("DriveDetailViewModel")
 @MainActor
-struct RouteDetailViewModelTests {
+struct DriveDetailViewModelTests {
 
   // MARK: - Initial State
 
   @Test
   func showSharingDialogIsFalseByDefault() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.showSharingDialog == false)
   }
 
   @Test
   func showingFullScreenMapIsFalseByDefault() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.showingFullScreenMap == false)
   }
 
   @Test
   func exportedFileIsNilByDefault() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.exportedFile == nil)
   }
 
   @Test
   func exportErrorIsNilByDefault() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.exportError == nil)
   }
 
   // MARK: - Computed Properties
 
   @Test
-  func nameReturnsRouteName() {
-    let vm = RouteDetailViewModel(route: makeRoute(name: "Dublin to Cork"))
+  func nameReturnsDriveName() {
+    let vm = DriveDetailViewModel(drive: makeDrive(name: "Dublin to Cork"))
     #expect(vm.name == "Dublin to Cork")
   }
 
   @Test
-  func startPlaceReturnsRouteStartPlaceName() {
-    let route = makeRoute()
-    route.startPlaceName = "Home"
-    let vm = RouteDetailViewModel(route: route)
+  func startPlaceReturnsDriveStartPlaceName() {
+    let drive = makeDrive()
+    drive.startPlaceName = "Home"
+    let vm = DriveDetailViewModel(drive: drive)
     #expect(vm.startPlace == "Home")
   }
 
   @Test
-  func endPlaceReturnsRouteEndPlaceName() {
-    let route = makeRoute()
-    route.endPlaceName = "Office"
-    let vm = RouteDetailViewModel(route: route)
+  func endPlaceReturnsDriveEndPlaceName() {
+    let drive = makeDrive()
+    drive.endPlaceName = "Office"
+    let vm = DriveDetailViewModel(drive: drive)
     #expect(vm.endPlace == "Office")
   }
 
   @Test
   func startPlaceIsNilWhenNotSet() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.startPlace == nil)
   }
 
   @Test
   func endPlaceIsNilWhenNotSet() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.endPlace == nil)
   }
 
   @Test
-  func arrivalTimeIsNilWhenRouteHasNoEndDate() {
-    let route = makeRoute()
-    route.endedAt = nil
-    let vm = RouteDetailViewModel(route: route)
+  func arrivalTimeIsNilWhenDriveHasNoEndDate() {
+    let drive = makeDrive()
+    drive.endedAt = nil
+    let vm = DriveDetailViewModel(drive: drive)
     #expect(vm.arrivalTime == nil)
   }
 
   @Test
-  func arrivalTimeIsNonNilWhenRouteHasEndDate() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+  func arrivalTimeIsNonNilWhenDriveHasEndDate() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.arrivalTime != nil)
   }
 
   @Test
   func trackPointsReflectsZeroPositionCount() {
-    let vm = RouteDetailViewModel(route: makeRoute())
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.trackPoints == "0")
   }
 
   @Test
-  func triggerDisplayNameMatchesRouteTrigger() {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    #expect(vm.triggerDisplayName == Route.RecordingTrigger.manual.displayName)
+  func triggerDisplayNameMatchesDriveTrigger() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
   }
 
-  // MARK: - shareRouteGPX
+  // MARK: - shareDriveGPX
 
   @Test
-  func shareRouteGPXWithEmptyRouteSetsExportError() async {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    vm.shareRouteGPX()
+  func shareDriveGPXWithEmptyDriveSetsExportError() async {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    vm.shareDriveGPX()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportError != nil)
   }
 
   @Test
-  func shareRouteGPXWithEmptyRouteDoesNotSetExportedFile() async {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    vm.shareRouteGPX()
+  func shareDriveGPXWithEmptyDriveDoesNotSetExportedFile() async {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    vm.shareDriveGPX()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportedFile == nil)
   }
 
   @Test
-  func shareRouteGPXWithPositionsSetsExportedFile() async throws {
-    let vm = RouteDetailViewModel(route: routeWithOnePosition())
-    vm.shareRouteGPX()
+  func shareDriveGPXWithPositionsSetsExportedFile() async throws {
+    let vm = DriveDetailViewModel(drive: driveWithOnePosition())
+    vm.shareDriveGPX()
     for _ in 0..<20 { await Task.yield() }
     let file = try #require(vm.exportedFile)
     defer { try? FileManager.default.removeItem(at: file.url) }
@@ -131,20 +131,20 @@ struct RouteDetailViewModelTests {
     #expect(FileManager.default.fileExists(atPath: file.url.path))
   }
 
-  // MARK: - shareRoutePNG
+  // MARK: - shareDrivePNG
 
   @Test
-  func shareRoutePNGWithEmptyRouteSetsExportError() async {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    vm.shareRoutePNG()
+  func shareDrivePNGWithEmptyDriveSetsExportError() async {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    vm.shareDrivePNG()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportError != nil)
   }
 
   @Test
-  func shareRoutePNGWithEmptyRouteDoesNotSetExportedFile() async {
-    let vm = RouteDetailViewModel(route: makeRoute())
-    vm.shareRoutePNG()
+  func shareDrivePNGWithEmptyDriveDoesNotSetExportedFile() async {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    vm.shareDrivePNG()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportedFile == nil)
   }
@@ -168,16 +168,16 @@ struct RouteDetailViewModelTests {
 
   // MARK: - Helpers
 
-  private func makeRoute(name: String = "Test Route") -> Route {
-    let route = Route(name: name)
-    route.startedAt = Date(timeIntervalSinceReferenceDate: 0)
-    route.endedAt = Date(timeIntervalSinceReferenceDate: 3600)
-    return route
+  private func makeDrive(name: String = "Test Drive") -> Drive {
+    let drive = Drive(name: name)
+    drive.startedAt = Date(timeIntervalSinceReferenceDate: 0)
+    drive.endedAt = Date(timeIntervalSinceReferenceDate: 3600)
+    return drive
   }
 
-  private func routeWithOnePosition() -> Route {
-    let route = makeRoute()
-    route.positions.append(
+  private func driveWithOnePosition() -> Drive {
+    let drive = makeDrive()
+    drive.positions.append(
       Position(
         latitude: 51.5074,
         longitude: -0.1278,
@@ -190,6 +190,6 @@ struct RouteDetailViewModelTests {
         speedAccuracy: 1
       )
     )
-    return route
+    return drive
   }
 }
