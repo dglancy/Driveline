@@ -43,6 +43,6 @@ struct RouteStatTile: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .cardBackground()
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("\(label): \(value) \(unit)")
+    .accessibilityLabel(Text("\(label): \(value) \(unit)"))
   }
 }
