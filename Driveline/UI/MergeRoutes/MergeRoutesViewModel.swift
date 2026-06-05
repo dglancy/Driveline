@@ -1,5 +1,5 @@
 //
-//  MergeRoutesViewModel.swift
+//  MergeDrivesViewModel.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -10,54 +10,54 @@ import Observation
 
 @MainActor
 @Observable
-final class MergeRoutesViewModel {
+final class MergeDrivesViewModel {
 
   // MARK: - Properties
 
-  private(set) var orderedRoutes: [Route]
+  private(set) var orderedDrives: [Drive]
   var mergedName: String
 
   // MARK: - Computed Properties
 
-  var firstDisplay: RouteRowDisplay { makeDisplay(for: orderedRoutes[0]) }
-  var secondDisplay: RouteRowDisplay { makeDisplay(for: orderedRoutes[1]) }
+  var firstDisplay: DriveRowDisplay { makeDisplay(for: orderedDrives[0]) }
+  var secondDisplay: DriveRowDisplay { makeDisplay(for: orderedDrives[1]) }
 
   var formattedTotalDistance: String {
-    Measurement(value: orderedRoutes[0].distanceMetres + orderedRoutes[1].distanceMetres, unit: UnitLength.meters).localizedDistanceString()
+    Measurement(value: orderedDrives[0].distanceMetres + orderedDrives[1].distanceMetres, unit: UnitLength.meters).localizedDistanceString()
   }
 
   var formattedTotalDuration: String {
-    (orderedRoutes[0].activeDurationSeconds + orderedRoutes[1].activeDurationSeconds).localizedHoursMinutesString()
+    (orderedDrives[0].activeDurationSeconds + orderedDrives[1].activeDurationSeconds).localizedHoursMinutesString()
   }
 
   var formattedTotalPositionCount: String {
-    (orderedRoutes[0].positions.count + orderedRoutes[1].positions.count).formatted()
+    (orderedDrives[0].positions.count + orderedDrives[1].positions.count).formatted()
   }
 
   // MARK: - Lifecycle
 
-  init(routes: [Route]) {
-    precondition(routes.count == 2, "MergeRoutesViewModel requires exactly 2 routes")
-    self.orderedRoutes = routes
-    self.mergedName = String(localized: "\(routes[0].name) + \(routes[1].name)", comment: "Default name for a merged route, combining two route names with a plus sign")
+  init(drives: [Drive]) {
+    precondition(drives.count == 2, "MergeDrivesViewModel requires exactly 2 drives")
+    self.orderedDrives = drives
+    self.mergedName = String(localized: "\(drives[0].name) + \(drives[1].name)", comment: "Default name for a merged drive, combining two drive names with a plus sign")
   }
 
   // MARK: - Methods
 
   func swapOrder() {
-    orderedRoutes = [orderedRoutes[1], orderedRoutes[0]]
-    mergedName = String(localized: "\(orderedRoutes[0].name) + \(orderedRoutes[1].name)", comment: "Default name for a merged route, combining two route names with a plus sign")
+    orderedDrives = [orderedDrives[1], orderedDrives[0]]
+    mergedName = String(localized: "\(orderedDrives[0].name) + \(orderedDrives[1].name)", comment: "Default name for a merged drive, combining two drive names with a plus sign")
   }
 
   // MARK: - Private
 
-  private func makeDisplay(for route: Route) -> RouteRowDisplay {
-    let parts: [String?] = [RouteStatsPresenter(route: route).startTimeLabel, route.startPlaceName]
-    return RouteRowDisplay(
-      name: route.name,
+  private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
+    let parts: [String?] = [DriveStatsPresenter(drive: drive).startTimeLabel, drive.startPlaceName]
+    return DriveRowDisplay(
+      name: drive.name,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
-      formattedDistance: Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
-      formattedDuration: route.activeDurationSeconds.localizedHoursMinutesString()
+      formattedDistance: Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
+      formattedDuration: drive.activeDurationSeconds.localizedHoursMinutesString()
     )
   }
 }

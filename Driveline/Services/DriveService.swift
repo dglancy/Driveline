@@ -1,5 +1,5 @@
 //
-//  RouteService.swift
+//  DriveService.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -13,14 +13,14 @@ import Combine
 
 @MainActor
 @Observable
-final class RouteService {
+final class DriveService {
 
   // MARK: - Properties
 
-  private(set) var route: Route?
+  private(set) var drive: Drive?
   private(set) var currentSpeedMs: Double?
 
-  var isRecording: Bool { route?.isRecording ?? false }
+  var isRecording: Bool { drive?.isRecording ?? false }
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService
@@ -38,13 +38,13 @@ final class RouteService {
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        networkMonitorService: any NetworkMonitorServiceProtocol = NetworkMonitorService(),
-       initialRoute: Route? = nil) {
+       initialDrive: Drive? = nil) {
     self.modelContext = modelContext
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
     self.networkMonitorService = networkMonitorService
-    self.route = initialRoute
+    self.drive = initialDrive
 
     networkCancellable = networkMonitorService.connectivityRestoredPublisher
       .sink { [weak self] in
@@ -57,15 +57,15 @@ final class RouteService {
 
   // MARK: - Actions
 
-  func startRoute(trigger: Route.RecordingTrigger = .manual) throws {
-    let route = Route(name: routeNameForCurrentTime(), trigger: trigger)
-    self.route = route
+  func startDrive(trigger: Drive.RecordingTrigger = .manual) throws {
+    let drive = Drive(name: driveNameForCurrentTime(), trigger: trigger)
+    self.drive = drive
     currentSpeedMs = nil
 
     do {
-      try locationDataRecorder.startRecording(with: route)
+      try locationDataRecorder.startRecording(with: drive)
     } catch {
-      self.route = nil
+      self.drive = nil
       throw error
     }
     locationService.start()
@@ -79,58 +79,58 @@ final class RouteService {
       .first()
       .sink { [weak self] location in
         Task { [weak self] in
-          guard let self, let route = self.route else { return }
-          route.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
+          guard let self, let drive = self.drive else { return }
+          drive.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
           self.saveModelContext()
         }
       }
   }
 
-  func finishRoute() {
+  func finishDrive() {
     speedCancellable = nil
     startGeocodeCancellable = nil
     locationService.stop()
 
-    if let route {
-      route.endedAt = Date()
-      route.status = .finished
+    if let drive {
+      drive.endedAt = Date()
+      drive.status = .finished
       locationDataRecorder.stopRecording()
       saveModelContext()
 
-      if let last = route.orderedPositions.last {
+      if let last = drive.orderedPositions.last {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
         Task { [weak self] in
           guard let self else { return }
-          route.endPlaceName = await geocodingService.reverseGeocode(location: location)
+          drive.endPlaceName = await geocodingService.reverseGeocode(location: location)
           saveModelContext()
         }
       }
     }
 
     currentSpeedMs = nil
-    self.route = nil
+    self.drive = nil
   }
 
-  func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
+  func checkAndRetryNilPlaceNamesForFinishedDrives() async {
     guard networkMonitorService.isConnected else { return }
-    let cutoff = Date().addingTimeInterval(kRouteAgeCutoff)
-    let finishedStatus = Route.RouteStatus.finished
-    let descriptor = FetchDescriptor<Route>(
-      predicate: #Predicate<Route> { route in
-        route.startedAt >= cutoff && route.status == finishedStatus
+    let cutoff = Date().addingTimeInterval(kDriveAgeCutoff)
+    let finishedStatus = Drive.DriveStatus.finished
+    let descriptor = FetchDescriptor<Drive>(
+      predicate: #Predicate<Drive> { drive in
+        drive.startedAt >= cutoff && drive.status == finishedStatus
       }
     )
     guard let candidates = try? modelContext.fetch(descriptor) else { return }
     let needsRetry = candidates.filter { $0.startPlaceName == nil || $0.endPlaceName == nil }
     guard !needsRetry.isEmpty else { return }
-    for finishedRoute in needsRetry {
-      if finishedRoute.startPlaceName == nil, let first = finishedRoute.orderedPositions.first {
+    for finishedDrive in needsRetry {
+      if finishedDrive.startPlaceName == nil, let first = finishedDrive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
-        finishedRoute.startPlaceName = await geocodingService.reverseGeocode(location: location)
+        finishedDrive.startPlaceName = await geocodingService.reverseGeocode(location: location)
       }
-      if finishedRoute.endPlaceName == nil, let last = finishedRoute.orderedPositions.last {
+      if finishedDrive.endPlaceName == nil, let last = finishedDrive.orderedPositions.last {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        finishedRoute.endPlaceName = await geocodingService.reverseGeocode(location: location)
+        finishedDrive.endPlaceName = await geocodingService.reverseGeocode(location: location)
       }
       saveModelContext()
     }
@@ -139,22 +139,22 @@ final class RouteService {
   // MARK: - Private
 
   private func retryNilPlaceNamesOnConnectivity() async {
-    if let activeRoute = route, activeRoute.startPlaceName == nil,
-       let first = activeRoute.orderedPositions.first {
+    if let activeDrive = drive, activeDrive.startPlaceName == nil,
+       let first = activeDrive.orderedPositions.first {
       let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
-      activeRoute.startPlaceName = await geocodingService.reverseGeocode(location: location)
+      activeDrive.startPlaceName = await geocodingService.reverseGeocode(location: location)
       saveModelContext()
     }
-    await checkAndRetryNilPlaceNamesForFinishedRoutes()
+    await checkAndRetryNilPlaceNamesForFinishedDrives()
   }
 
-  private func routeNameForCurrentTime() -> String {
+  private func driveNameForCurrentTime() -> String {
     let hour = Calendar.current.component(.hour, from: Date())
     switch hour {
-    case 5..<12: return String(localized: "Morning Drive", comment: "Default route name for routes started between 05:00 and 11:59")
-    case 12..<17: return String(localized: "Afternoon Drive", comment: "Default route name for routes started between 12:00 and 16:59")
-    case 17..<21: return String(localized: "Evening Drive", comment: "Default route name for routes started between 17:00 and 20:59")
-    default: return String(localized: "Night Drive", comment: "Default route name for routes started between 21:00 and 04:59")
+    case 5..<12: return String(localized: "Morning Drive", comment: "Default drive name for drives started between 05:00 and 11:59")
+    case 12..<17: return String(localized: "Afternoon Drive", comment: "Default drive name for drives started between 12:00 and 16:59")
+    case 17..<21: return String(localized: "Evening Drive", comment: "Default drive name for drives started between 17:00 and 20:59")
+    default: return String(localized: "Night Drive", comment: "Default drive name for drives started between 21:00 and 04:59")
     }
   }
 

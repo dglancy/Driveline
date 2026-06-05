@@ -15,110 +15,110 @@ final class HomeViewModel {
 
   // MARK: - Types
 
-  struct RouteRow: Identifiable {
-    let route: Route
-    let display: RouteRowDisplay
-    var id: UUID { route.id }
+  struct DriveRow: Identifiable {
+    let drive: Drive
+    let display: DriveRowDisplay
+    var id: UUID { drive.id }
   }
 
-  struct RouteSection: Identifiable {
+  struct DriveSection: Identifiable {
     var id: String { title }
     let title: String
-    let rows: [RouteRow]
+    let rows: [DriveRow]
   }
 
   // MARK: - Properties
 
-  private(set) var sections: [RouteSection] = []
+  private(set) var sections: [DriveSection] = []
   private(set) var summaryLine: String?
   private(set) var isSelectMode: Bool = false
-  private(set) var selectedRouteIDs: Set<UUID> = []
-  private(set) var startRouteErrorMessage: String?
-  private(set) var routesToMerge: [Route] = []
+  private(set) var selectedDriveIDs: Set<UUID> = []
+  private(set) var startDriveErrorMessage: String?
+  private(set) var drivesToMerge: [Drive] = []
 
   var showingDeleteConfirmation: Bool = false
-  var showingStartRouteError: Bool = false
+  var showingStartDriveError: Bool = false
   var showingRecordingScreen: Bool = false
   var showingMergeSheet: Bool = false
 
   // MARK: - Computed Properties
 
-  var canMerge: Bool { selectedRouteIDs.count == 2 }
-  var canDelete: Bool { !selectedRouteIDs.isEmpty }
+  var canMerge: Bool { selectedDriveIDs.count == 2 }
+  var canDelete: Bool { !selectedDriveIDs.isEmpty }
 
   var deleteConfirmationMessage: String {
-    String(localized: "\(selectedRouteIDs.count) routes and all their data will be permanently deleted.")
+    String(localized: "\(selectedDriveIDs.count) drives and all their data will be permanently deleted.")
   }
 
   var selectionCountText: String {
-    if selectedRouteIDs.isEmpty {
-      return String(localized: "Select 2 routes to merge", comment: "Multiselect placeholder when nothing is selected")
+    if selectedDriveIDs.isEmpty {
+      return String(localized: "Select 2 drives to merge", comment: "Multiselect placeholder when nothing is selected")
     }
     return String(
-      localized: "\(selectedRouteIDs.count) selected",
-      comment: "Multiselect count of selected routes"
+      localized: "\(selectedDriveIDs.count) selected",
+      comment: "Multiselect count of selected drives"
     )
   }
 
   // MARK: - Methods
 
-  func startRoute(trigger: Route.RecordingTrigger = .manual, using routeService: RouteService) {
+  func startDrive(trigger: Drive.RecordingTrigger = .manual, using driveService: DriveService) {
     do {
-      try routeService.startRoute(trigger: trigger)
+      try driveService.startDrive(trigger: trigger)
     } catch {
-      startRouteErrorMessage = error.localizedDescription
-      showingStartRouteError = true
+      startDriveErrorMessage = error.localizedDescription
+      showingStartDriveError = true
     }
   }
 
   func enterSelectMode() {
     isSelectMode = true
-    selectedRouteIDs = []
+    selectedDriveIDs = []
   }
 
   func exitSelectMode() {
     isSelectMode = false
-    selectedRouteIDs = []
+    selectedDriveIDs = []
   }
 
   func triggerMerge() {
-    routesToMerge = selectedRoutes(from: sections).sorted { $0.startedAt < $1.startedAt }
+    drivesToMerge = selectedDrives(from: sections).sorted { $0.startedAt < $1.startedAt }
     showingMergeSheet = true
   }
 
   func toggleSelection(for id: UUID) {
-    if selectedRouteIDs.contains(id) {
-      selectedRouteIDs.remove(id)
+    if selectedDriveIDs.contains(id) {
+      selectedDriveIDs.remove(id)
     } else {
-      selectedRouteIDs.insert(id)
+      selectedDriveIDs.insert(id)
     }
   }
 
-  func selectedRoutes(from sections: [RouteSection]) -> [Route] {
-    sections.flatMap(\.rows).map(\.route).filter { selectedRouteIDs.contains($0.id) }
+  func selectedDrives(from sections: [DriveSection]) -> [Drive] {
+    sections.flatMap(\.rows).map(\.drive).filter { selectedDriveIDs.contains($0.id) }
   }
 
-  func update(with routes: [Route]) {
-    sections = buildSections(from: routes)
-    summaryLine = buildSummaryLine(from: routes)
+  func update(with drives: [Drive]) {
+    sections = buildSections(from: drives)
+    summaryLine = buildSummaryLine(from: drives)
   }
 
-  func deleteRoutes(_ routes: [Route], using context: ModelContext) {
-    for route in routes {
-      context.delete(route)
+  func deleteDrives(_ drives: [Drive], using context: ModelContext) {
+    for drive in drives {
+      context.delete(drive)
     }
   }
 
-  func deleteRoutes(at indexSet: IndexSet, in section: RouteSection, using context: ModelContext) {
-    deleteRoutes(indexSet.map { section.rows[$0].route }, using: context)
+  func deleteDrives(at indexSet: IndexSet, in section: DriveSection, using context: ModelContext) {
+    deleteDrives(indexSet.map { section.rows[$0].drive }, using: context)
   }
 
-  func mergeRoutes(orderedRoutes: [Route], mergedName: String, using context: ModelContext) {
-    guard orderedRoutes.count == 2 else { return }
-    let first = orderedRoutes[0]
-    let second = orderedRoutes[1]
+  func mergeDrives(orderedDrives: [Drive], mergedName: String, using context: ModelContext) {
+    guard orderedDrives.count == 2 else { return }
+    let first = orderedDrives[0]
+    let second = orderedDrives[1]
 
-    let merged = Route(name: mergedName)
+    let merged = Drive(name: mergedName)
     merged.startedAt = first.startedAt
     merged.endedAt = second.endedAt ?? first.endedAt
     merged.status = .finished
@@ -133,15 +133,15 @@ final class HomeViewModel {
 
   // MARK: - Private
 
-  private func buildSections(from routes: [Route]) -> [RouteSection] {
+  private func buildSections(from drives: [Drive]) -> [DriveSection] {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: .now)
 
-    var groupMap: [(key: String, rows: [RouteRow])] = []
+    var groupMap: [(key: String, rows: [DriveRow])] = []
 
-    for route in routes.sorted(by: { $0.startedAt > $1.startedAt }) {
-      let key = sectionTitle(for: route.startedAt, today: today, calendar: calendar)
-      let row = RouteRow(route: route, display: makeDisplay(for: route))
+    for drive in drives.sorted(by: { $0.startedAt > $1.startedAt }) {
+      let key = sectionTitle(for: drive.startedAt, today: today, calendar: calendar)
+      let row = DriveRow(drive: drive, display: makeDisplay(for: drive))
       if let index = groupMap.firstIndex(where: { $0.key == key }) {
         groupMap[index].rows.append(row)
       } else {
@@ -149,33 +149,33 @@ final class HomeViewModel {
       }
     }
 
-    return groupMap.map { RouteSection(title: $0.key, rows: $0.rows) }
+    return groupMap.map { DriveSection(title: $0.key, rows: $0.rows) }
   }
 
-  private func makeDisplay(for route: Route) -> RouteRowDisplay {
-    let duration = route.endedAt != nil ? route.activeDurationSeconds.localizedHoursMinutesString() : nil
-    let distance = Measurement(value: route.distanceMetres, unit: UnitLength.meters)
-    return RouteRowDisplay(
-      name: route.name,
-      dateTimeLabel: RouteStatsPresenter(route: route).startTimeLabel,
+  private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
+    let duration = drive.endedAt != nil ? drive.activeDurationSeconds.localizedHoursMinutesString() : nil
+    let distance = Measurement(value: drive.distanceMetres, unit: UnitLength.meters)
+    return DriveRowDisplay(
+      name: drive.name,
+      dateTimeLabel: DriveStatsPresenter(drive: drive).startTimeLabel,
       formattedDistance: distance.localizedDistanceString(),
       formattedDuration: duration
     )
   }
 
-  private func buildSummaryLine(from routes: [Route]) -> String? {
+  private func buildSummaryLine(from drives: [Drive]) -> String? {
     let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now)!
-    let recent = routes.filter { $0.startedAt >= cutoff }
+    let recent = drives.filter { $0.startedAt >= cutoff }
     guard !recent.isEmpty else { return nil }
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
     let count = recent.count
     let distance = Measurement(value: totalMetres, unit: UnitLength.meters).localizedDistanceString()
-    return String(localized: "\(count) routes · \(distance) in the last 30 days")
+    return String(localized: "\(count) drives · \(distance) in the last 30 days")
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {
-    let routeDay = calendar.startOfDay(for: date)
-    let daysDiff = calendar.dateComponents([.day], from: routeDay, to: today).day ?? 0
+    let driveDay = calendar.startOfDay(for: date)
+    let daysDiff = calendar.dateComponents([.day], from: driveDay, to: today).day ?? 0
 
     switch daysDiff {
     case 0:

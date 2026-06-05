@@ -1,5 +1,5 @@
 //
-//  RouteStatTile.swift
+//  DriveStatTile.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RouteStatTile: View {
+struct DriveStatTile: View {
 
   // MARK: - Properties
 

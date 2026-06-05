@@ -13,9 +13,9 @@ struct HomeView: View {
   // MARK: - Properties
 
   @Environment(\.modelContext) private var modelContext
-  @Environment(RouteService.self) private var routeService
+  @Environment(DriveService.self) private var driveService
 
-  @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
+  @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
   @State private var viewModel = HomeViewModel()
 
@@ -24,49 +24,49 @@ struct HomeView: View {
   var body: some View {
     NavigationStack {
       content
-        .navigationTitle("Routes")
+        .navigationTitle("Drives")
         .toolbar { toolbarItems }
-        .onChange(of: routes, initial: true) { _, newRoutes in
-          viewModel.update(with: newRoutes)
+        .onChange(of: drives, initial: true) { _, newDrives in
+          viewModel.update(with: newDrives)
         }
-        .onChange(of: routeService.isRecording, initial: true) { _, isRecording in
+        .onChange(of: driveService.isRecording, initial: true) { _, isRecording in
           if isRecording {
             viewModel.exitSelectMode()
           } else {
-            viewModel.update(with: routes)
+            viewModel.update(with: drives)
           }
           viewModel.showingRecordingScreen = isRecording
         }
     }
-    .modifier(RecordingScreenModifier(routeService: routeService, viewModel: viewModel))
-    .modifier(DeleteRoutesAlertModifier(viewModel: viewModel, modelContext: modelContext))
-    .modifier(StartRouteErrorAlertModifier(viewModel: viewModel))
-    .modifier(MergeRoutesSheetModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(RecordingScreenModifier(driveService: driveService, viewModel: viewModel))
+    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(StartDriveErrorAlertModifier(viewModel: viewModel))
+    .modifier(MergeDrivesSheetModifier(viewModel: viewModel, modelContext: modelContext))
   }
 
   // MARK: - Private Views
 
   @ViewBuilder
   private var content: some View {
-    if viewModel.sections.isEmpty && !routeService.isRecording {
+    if viewModel.sections.isEmpty && !driveService.isRecording {
       emptyState
     } else {
-      routeList
+      driveList
     }
   }
 
   private var emptyState: some View {
     ContentUnavailableView(
-      "No Routes",
+      "No Drives",
       systemImage: Icons.car,
-      description: Text(String(localized: "Your recorded routes will appear here.", comment: "Empty state description shown on the home screen when no routes have been recorded yet"))
+      description: Text(String(localized: "Your recorded drives will appear here.", comment: "Empty state description shown on the home screen when no drives have been recorded yet"))
     )
   }
 
-  private var routeList: some View {
+  private var driveList: some View {
     ZStack(alignment: .bottom) {
       List {
-        if routeService.isRecording {
+        if driveService.isRecording {
           RecordingBannerSection {
             viewModel.showingRecordingScreen = true
           }
@@ -88,21 +88,21 @@ struct HomeView: View {
             ForEach(section.rows) { row in
               if viewModel.isSelectMode {
                 Button {
-                  viewModel.toggleSelection(for: row.route.id)
+                  viewModel.toggleSelection(for: row.drive.id)
                 } label: {
-                  RouteRowView(display: row.display, style: .list(isSelected: viewModel.selectedRouteIDs.contains(row.route.id)))
+                  DriveRowView(display: row.display, style: .list(isSelected: viewModel.selectedDriveIDs.contains(row.drive.id)))
                 }
                 .buttonStyle(.plain)
               } else {
-                NavigationLink(value: row.route) {
-                  RouteRowView(display: row.display)
-                    .opacity(routeService.isRecording ? 0.4 : 1)
+                NavigationLink(value: row.drive) {
+                  DriveRowView(display: row.display)
+                    .opacity(driveService.isRecording ? 0.4 : 1)
                 }
-                .disabled(routeService.isRecording)
+                .disabled(driveService.isRecording)
               }
             }
             .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
-              viewModel.deleteRoutes(at: indexSet, in: section, using: modelContext)
+              viewModel.deleteDrives(at: indexSet, in: section, using: modelContext)
             })
           }
         }
@@ -115,8 +115,8 @@ struct HomeView: View {
         }
       }
       .contentMargins(.top, 0, for: .scrollContent)
-      .navigationDestination(for: Route.self) { route in
-        RouteDetailView(route: route)
+      .navigationDestination(for: Drive.self) { drive in
+        DriveDetailView(drive: drive)
       }
 
       if viewModel.isSelectMode {
@@ -144,22 +144,22 @@ struct HomeView: View {
         Button(String(localized: "Select", comment: "Enter multiselect mode")) {
           viewModel.enterSelectMode()
         }
-        .disabled(routeService.isRecording)
+        .disabled(driveService.isRecording)
       }
     }
 
     ToolbarItem(placement: .topBarTrailing) {
       if !viewModel.isSelectMode {
         Button {
-          if routeService.isRecording {
+          if driveService.isRecording {
             viewModel.showingRecordingScreen = true
           } else {
-            viewModel.startRoute(using: routeService)
+            viewModel.startDrive(using: driveService)
           }
         } label: {
           ZStack {
             Circle().fill(Color(.systemFill))
-            if routeService.isRecording {
+            if driveService.isRecording {
               RoundedRectangle(cornerRadius: 3)
                 .fill(.red)
                 .frame(width: 11, height: 11)
@@ -173,9 +173,9 @@ struct HomeView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(
-          routeService.isRecording
+          driveService.isRecording
           ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
-          : String(localized: "Start a new route", comment: "Record button when idle")
+          : String(localized: "Start a new drive", comment: "Record button when idle")
         )
       }
     }
@@ -185,29 +185,29 @@ struct HomeView: View {
 // MARK: - Presentation Modifiers
 
 private struct RecordingScreenModifier: ViewModifier {
-  let routeService: RouteService
+  let driveService: DriveService
   @Bindable var viewModel: HomeViewModel
 
   func body(content: Content) -> some View {
     content.fullScreenCover(isPresented: $viewModel.showingRecordingScreen) {
-      RecordingView(routeService: routeService)
+      RecordingView(driveService: driveService)
     }
   }
 }
 
-private struct DeleteRoutesAlertModifier: ViewModifier {
+private struct DeleteDrivesAlertModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
   let modelContext: ModelContext
 
   func body(content: Content) -> some View {
     content.alert(
-      String(localized: "Delete Routes", comment: "Delete confirmation alert title"),
+      String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
       Button.delete {
-        let selected = viewModel.selectedRoutes(from: viewModel.sections)
+        let selected = viewModel.selectedDrives(from: viewModel.sections)
         viewModel.exitSelectMode()
-        viewModel.deleteRoutes(selected, using: modelContext)
+        viewModel.deleteDrives(selected, using: modelContext)
       }
       Button.cancel()
     } message: {
@@ -216,30 +216,30 @@ private struct DeleteRoutesAlertModifier: ViewModifier {
   }
 }
 
-private struct StartRouteErrorAlertModifier: ViewModifier {
+private struct StartDriveErrorAlertModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
 
   func body(content: Content) -> some View {
     content.alert(
-      String(localized: "Couldn't Start Recording", comment: "Start route failure alert title"),
-      isPresented: $viewModel.showingStartRouteError
+      String(localized: "Couldn't Start Recording", comment: "Start drive failure alert title"),
+      isPresented: $viewModel.showingStartDriveError
     ) {
-      Button(String(localized: "OK", comment: "Dismiss start route error alert"), role: .cancel) { }
+      Button(String(localized: "OK", comment: "Dismiss start drive error alert"), role: .cancel) { }
     } message: {
-      Text(viewModel.startRouteErrorMessage ?? "")
+      Text(viewModel.startDriveErrorMessage ?? "")
     }
   }
 }
 
-private struct MergeRoutesSheetModifier: ViewModifier {
+private struct MergeDrivesSheetModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
   let modelContext: ModelContext
 
   func body(content: Content) -> some View {
     content.sheet(isPresented: $viewModel.showingMergeSheet) {
-      if viewModel.routesToMerge.count == 2 {
-        MergeRoutesView(routes: viewModel.routesToMerge) { orderedRoutes, mergedName in
-          viewModel.mergeRoutes(orderedRoutes: orderedRoutes, mergedName: mergedName, using: modelContext)
+      if viewModel.drivesToMerge.count == 2 {
+        MergeDrivesView(drives: viewModel.drivesToMerge) { orderedDrives, mergedName in
+          viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName, using: modelContext)
         }
       }
     }
@@ -250,13 +250,13 @@ private struct MergeRoutesSheetModifier: ViewModifier {
 
 #Preview {
   let container = PreviewSampleData.previewContainer()
-  PreviewSampleData.insertSampleRoutes(in: container.mainContext)
+  PreviewSampleData.insertSampleDrives(in: container.mainContext)
 
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
-  let routeService = RouteService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
+  let driveService = DriveService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
   return HomeView()
     .modelContainer(container)
-    .environment(routeService)
+    .environment(driveService)
 }

@@ -1,5 +1,5 @@
 //
-//  MergeRoutesView.swift
+//  MergeDrivesView.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct MergeRoutesView: View {
+struct MergeDrivesView: View {
 
   // MARK: - Properties
 
   @Environment(\.dismiss) private var dismiss
-  @State private var viewModel: MergeRoutesViewModel
-  let onConfirm: ([Route], String) -> Void
+  @State private var viewModel: MergeDrivesViewModel
+  let onConfirm: ([Drive], String) -> Void
 
   // MARK: - Lifecycle
 
-  init(routes: [Route], onConfirm: @escaping ([Route], String) -> Void) {
-    _viewModel = State(initialValue: MergeRoutesViewModel(routes: routes))
+  init(drives: [Drive], onConfirm: @escaping ([Drive], String) -> Void) {
+    _viewModel = State(initialValue: MergeDrivesViewModel(drives: drives))
     self.onConfirm = onConfirm
   }
 
@@ -36,15 +36,15 @@ struct MergeRoutesView: View {
         .padding(.bottom, 20)
       }
       .background(Color(.systemGroupedBackground))
-      .navigationTitle(String(localized: "Merge Routes", comment: "Merge sheet navigation title"))
+      .navigationTitle(String(localized: "Merge Drives", comment: "Merge sheet navigation title"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button.cancel { dismiss() }
         }
         ToolbarItem(placement: .confirmationAction) {
-          Button(String(localized: "Merge", comment: "Confirm route merge")) {
-            onConfirm(viewModel.orderedRoutes, viewModel.mergedName)
+          Button(String(localized: "Merge", comment: "Confirm drive merge")) {
+            onConfirm(viewModel.orderedDrives, viewModel.mergedName)
             dismiss()
           }
           .fontWeight(.semibold)
@@ -60,8 +60,8 @@ struct MergeRoutesView: View {
       sectionHeader(String(localized: "Order", comment: "Merge order section header"))
       ZStack(alignment: .trailing) {
         VStack(spacing: 8) {
-          RouteRowView(display: viewModel.firstDisplay, style: .card(index: 1))
-          RouteRowView(display: viewModel.secondDisplay, style: .card(index: 2))
+          DriveRowView(display: viewModel.firstDisplay, style: .card(index: 1))
+          DriveRowView(display: viewModel.secondDisplay, style: .card(index: 2))
         }
         swapButton
           .padding(.trailing, 14)
@@ -77,7 +77,7 @@ struct MergeRoutesView: View {
         viewModel.swapOrder()
       }
     } label: {
-      Image(systemName: Icons.reorderRoutes)
+      Image(systemName: Icons.reorderDrives)
         .font(.callout.weight(.medium))
         .foregroundStyle(.tint)
         .frame(width: 36, height: 36)
@@ -91,9 +91,9 @@ struct MergeRoutesView: View {
 
   private var nameSection: some View {
     VStack(alignment: .leading, spacing: 0) {
-      sectionHeader(String(localized: "Merged Route Name", comment: "Merge name section header"))
+      sectionHeader(String(localized: "Merged Drive Name", comment: "Merge name section header"))
       TextField(
-        String(localized: "Route name", comment: "Merge name text field placeholder"),
+        String(localized: "Drive name", comment: "Merge name text field placeholder"),
         text: $viewModel.mergedName
       )
       .font(.body)
@@ -134,7 +134,7 @@ struct MergeRoutesView: View {
 
   private var disclaimerText: some View {
     Text(
-      "The two routes are joined end-to-end in this order. The original routes are removed and can't be restored.",
+      "The two drives are joined end-to-end in this order. The original drives are removed and can't be restored.",
       comment: "Merge disclaimer about track joining and deletion"
     )
     .font(.footnote)

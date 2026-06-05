@@ -25,7 +25,7 @@ final class LocationDataRecorderService {
   @ObservationIgnored private var locationCancellable: AnyCancellable?
   @ObservationIgnored private var saveCancellable: AnyCancellable?
   @ObservationIgnored private var hasPendingPositions = false
-  private(set) var route: Route?
+  private(set) var drive: Drive?
 
   // MARK: - Lifecycle
 
@@ -37,21 +37,21 @@ final class LocationDataRecorderService {
 
   // MARK: - Actions
 
-  func startRecording(with route: Route) throws {
-    guard self.route == nil else {
+  func startRecording(with drive: Drive) throws {
+    guard self.drive == nil else {
       Log.data.error("startRecording called while already recording; ignoring.")
       return
     }
     Log.data.info("Starting recording locations")
-    self.route = route
-    modelContext.insert(route)
+    self.drive = drive
+    modelContext.insert(drive)
 
     do {
       try modelContext.save()
       Log.data.info("Saved starting recording locations")
     } catch {
-      modelContext.delete(route)
-      self.route = nil
+      modelContext.delete(drive)
+      self.drive = nil
       Log.data.error("Failed to save starting recording locations: \(error)")
       throw error
     }
@@ -73,7 +73,7 @@ final class LocationDataRecorderService {
     locationCancellable = nil
     saveCancellable = nil
     saveIfNeeded()
-    self.route = nil
+    self.drive = nil
     Log.data.info("Stopped recording locations")
   }
 
@@ -82,7 +82,7 @@ final class LocationDataRecorderService {
   private func persist(_ location: CLLocation) {
     Log.data.info("Saving a new location: \(location.coordinate.latitude), \(location.coordinate.longitude)", privacy: .private)
 
-    guard let route else { return }
+    guard let drive else { return }
 
     let position = Position(
       timestamp: location.timestamp,
@@ -97,7 +97,7 @@ final class LocationDataRecorderService {
       speedAccuracy: location.speedAccuracy
     )
 
-    route.positions.append(position)
+    drive.positions.append(position)
     hasPendingPositions = true
     Log.data.info("Queued new location: \(position.latitude), \(position.longitude)", privacy: .private)
   }

@@ -1,5 +1,5 @@
 //
-//  Route.swift
+//  Drive.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -10,11 +10,11 @@ import Foundation
 import SwiftData
 
 @Model
-final class Route {
+final class Drive {
 
   // MARK: - Types
 
-  enum RouteStatus: String, Codable {
+  enum DriveStatus: String, Codable {
     case recording
     case finished
   }
@@ -46,9 +46,9 @@ final class Route {
   var endPlaceName: String?
 
   var trigger: RecordingTrigger
-  var status: RouteStatus
+  var status: DriveStatus
 
-  @Relationship(deleteRule: .cascade, inverse: \Position.route)
+  @Relationship(deleteRule: .cascade, inverse: \Position.drive)
   var positions: [Position]
 
   // MARK: - Computed Properties

@@ -1,6 +1,6 @@
 //
 //  AppIntentsTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -16,7 +16,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   // MARK: - Properties
 
-  private var routeService: RouteService!
+  private var driveService: DriveService!
 
   // MARK: - Lifecycle
 
@@ -24,9 +24,9 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     try await super.init()
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    routeService = RouteService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
+    driveService = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     IntentDependencyResolver.provider = { [weak self] in
-      self?.routeService
+      self?.driveService
     }
   }
 
@@ -56,33 +56,33 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
   func startDriveIntentStartsDriveWhenStopped() async throws {
     _ = try await StartDriveIntent().perform()
 
-    #expect(routeService.isRecording)
+    #expect(driveService.isRecording)
   }
 
   @Test
   func startDriveIntentIsNoOpWhenAlreadyRecording() async throws {
-    try routeService.startRoute()
+    try driveService.startDrive()
 
     _ = try await StartDriveIntent().perform()
 
-    #expect(routeService.isRecording)
+    #expect(driveService.isRecording)
   }
 
   // MARK: - FinishDriveIntent
 
   @Test
   func finishDriveIntentFinishesDriveWhenRecording() async throws {
-    try routeService.startRoute()
+    try driveService.startDrive()
 
     _ = try await FinishDriveIntent().perform()
 
-    #expect(!routeService.isRecording)
+    #expect(!driveService.isRecording)
   }
 
   @Test
   func finishDriveIntentIsNoOpWhenStopped() async throws {
     _ = try await FinishDriveIntent().perform()
 
-    #expect(!routeService.isRecording)
+    #expect(!driveService.isRecording)
   }
 }

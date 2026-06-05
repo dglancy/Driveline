@@ -1,6 +1,6 @@
 //
 //  LocationDataRecorderServiceTests.swift
-//  AutoRouteTests
+//  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
@@ -18,31 +18,31 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
   // MARK: - Tests
 
   @Test
-  func startCreatesRoute() async throws {
-    let route = Route(name: "Test route")
+  func startCreatesDrive() async throws {
+    let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: route)
+    try recorder.startRecording(with: drive)
 
-    #expect(recorder.route != nil)
+    #expect(recorder.drive != nil)
   }
 
   @Test
   func persistingLocationsAppendsPositions() async throws {
-    let route = Route(name: "Test route")
+    let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: route)
+    try recorder.startRecording(with: drive)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date())
     locationService.locationPublisher.send(location)
 
-    let routePositions = recorder.route!.orderedPositions.count
-    #expect(routePositions == 1)
+    let drivePositions = recorder.drive!.orderedPositions.count
+    #expect(drivePositions == 1)
 
     let persistedPositions = try! count(where: #Predicate<Position> { _ in true })
     #expect(persistedPositions == 1)
@@ -62,24 +62,24 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func stopEndsRecordingRoute() async throws {
-    let route = Route(name: "Test route")
+  func stopEndsRecordingDrive() async throws {
+    let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: route)
+    try recorder.startRecording(with: drive)
     recorder.stopRecording()
 
-    #expect(recorder.route == nil)
+    #expect(recorder.drive == nil)
   }
 
   @Test
   func flushesPositionsOnStop() async throws {
-    let route = Route(name: "Test route")
+    let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: route)
+    try recorder.startRecording(with: drive)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -93,11 +93,11 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
 
   @Test
   func flushesPositionsOnTimerInterval() async throws {
-    let route = Route(name: "Test route")
+    let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!, saveInterval: 0.1)
 
-    try recorder.startRecording(with: route)
+    try recorder.startRecording(with: drive)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -112,11 +112,11 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
 
   @Test
   func doesNotPersistLocationsAfterRecordingStops() async throws {
-    let route = Route(name: "Test route")
+    let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: route)
+    try recorder.startRecording(with: drive)
     recorder.stopRecording()
 
     let location = CLLocation(

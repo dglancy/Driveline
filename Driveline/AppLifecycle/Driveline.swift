@@ -13,7 +13,7 @@ struct Driveline: App {
 
   // MARK: - Properties
 
-  @State private var routeService: RouteService
+  @State private var driveService: DriveService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -29,15 +29,15 @@ struct Driveline: App {
     let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService,
                                                                      modelContext: modelContainer.mainContext)
     let networkMonitorService = NetworkMonitorService()
-    let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext,
+    let driveService = Self.setupDriveService(modelContext: modelContainer.mainContext,
                                               locationService: locationService,
                                               locationDataRecorder: locationDataRecorder,
                                               networkMonitorService: networkMonitorService)
 
     self.modelContainer = modelContainer
-    _routeService = State(initialValue: routeService)
+    _driveService = State(initialValue: driveService)
 
-    Self.registerIntentDependencies(routeService: routeService)
+    Self.registerIntentDependencies(driveService: driveService)
 
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
@@ -50,10 +50,10 @@ struct Driveline: App {
   var body: some Scene {
     WindowGroup {
       HomeView()
-        .environment(routeService)
+        .environment(driveService)
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }
-          Task { await routeService.checkAndRetryNilPlaceNamesForFinishedRoutes() }
+          Task { await driveService.checkAndRetryNilPlaceNamesForFinishedDrives() }
         }
     }
     .modelContainer(modelContainer)
@@ -64,7 +64,7 @@ struct Driveline: App {
   private static func createModelContainer(inMemoryOnly: Bool) -> ModelContainer {
     Log.lifecycle.info("Setting up data model and container")
     let schema = Schema([
-      Route.self,
+      Drive.self,
       Position.self
     ])
 
@@ -90,29 +90,29 @@ struct Driveline: App {
     return LocationDataRecorderService(locationService: locationService, modelContext: modelContext)
   }
 
-  private static func setupRouteService(
+  private static func setupDriveService(
     modelContext: ModelContext,
     locationService: LocationService,
     locationDataRecorder: LocationDataRecorderService,
     networkMonitorService: any NetworkMonitorServiceProtocol
-  ) -> RouteService {
-    Log.lifecycle.info("Setting up route service")
-    var descriptor = FetchDescriptor<Route>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
+  ) -> DriveService {
+    Log.lifecycle.info("Setting up drive service")
+    var descriptor = FetchDescriptor<Drive>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
     descriptor.fetchLimit = 1
-    let activeRoute = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
-    return RouteService(modelContext: modelContext, locationService: locationService,
+    let activeDrive = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
+    return DriveService(modelContext: modelContext, locationService: locationService,
                         locationDataRecorder: locationDataRecorder,
                         networkMonitorService: networkMonitorService,
-                        initialRoute: activeRoute)
+                        initialDrive: activeDrive)
   }
 
   // MARK: - App Intents
 
   private static func registerIntentDependencies(
-    routeService: RouteService
+    driveService: DriveService
   ) {
     Log.lifecycle.info("Registering dependencies for App Intents")
-    IntentDependencyResolver.provider = { routeService }
+    IntentDependencyResolver.provider = { driveService }
   }
 
   // MARK: - Private functions

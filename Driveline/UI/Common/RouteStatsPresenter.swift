@@ -1,5 +1,5 @@
 //
-//  RouteStatsPresenter.swift
+//  DriveStatsPresenter.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 31/05/2026.
@@ -7,38 +7,38 @@
 
 import Foundation
 
-struct RouteStatsPresenter {
+struct DriveStatsPresenter {
 
   // MARK: - Properties
 
-  private let route: Route
+  private let drive: Drive
 
   // MARK: - Lifecycle
 
-  init(route: Route) {
-    self.route = route
+  init(drive: Drive) {
+    self.drive = drive
   }
 
   // MARK: - Computed Properties
 
   var distanceValue: String {
-    Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
+    Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
   }
   var distanceUnit: String {
-    Measurement(value: route.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
+    Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
   }
-  var durationValue: String { route.activeDurationSeconds.localizedHoursMinutesString() }
+  var durationValue: String { drive.activeDurationSeconds.localizedHoursMinutesString() }
   var durationUnit: String { String(localized: "active", comment: "Label for the active driving duration stat") }
   var avgSpeedValue: String {
-    Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
+    Measurement(value: drive.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
   var avgSpeedUnit: String {
-    Measurement(value: route.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+    Measurement(value: drive.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
   }
 
   var startTimeLabel: String {
-    let datePart = route.startedAt.abbreviatedMonthAndDay()
-    let timePart = route.startedAt.clockString()
-    return String(localized: "\(datePart) · \(timePart)", comment: "Route start date and time, e.g. '5 Jun · 09:41'. Translators may change the separator.")
+    let datePart = drive.startedAt.abbreviatedMonthAndDay()
+    let timePart = drive.startedAt.clockString()
+    return String(localized: "\(datePart) · \(timePart)", comment: "Drive start date and time, e.g. '5 Jun · 09:41'. Translators may change the separator.")
   }
 }

@@ -17,8 +17,8 @@ struct RecordingView: View {
 
   // MARK: - Lifecycle
 
-  init(routeService: RouteService) {
-    _viewModel = State(initialValue: RecordingViewModel(routeService: routeService))
+  init(driveService: DriveService) {
+    _viewModel = State(initialValue: RecordingViewModel(driveService: driveService))
   }
 
   // MARK: - Body
@@ -138,7 +138,7 @@ struct RecordingView: View {
       Image(systemName: Icons.battery)
         .font(.title2)
         .foregroundStyle(Color(.secondaryLabel))
-      Text(String(localized: "Running in the background to save battery. Your full route map appears here when the drive ends.", comment: "Battery saving note shown on the recording screen while a drive is in progress"))
+      Text(String(localized: "Running in the background to save battery. Your full drive map appears here when the drive ends.", comment: "Battery saving note shown on the recording screen while a drive is in progress"))
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
@@ -158,7 +158,7 @@ struct RecordingView: View {
       label: String(localized: "Finish Drive", comment: "Finish drive button label"),
       background: .red,
       iconColor: .white,
-      action: viewModel.finishRoute
+      action: viewModel.finishDrive
     )
     .padding(.bottom, 42)
   }
@@ -247,13 +247,13 @@ private struct StatColumn: View {
   let container = PreviewSampleData.previewContainer()
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
-  let route = Route(name: "Morning Drive", trigger: .automatic)
-  let routeService = RouteService(
+  let drive = Drive(name: "Morning Drive", trigger: .automatic)
+  let driveService = DriveService(
     modelContext: container.mainContext,
     locationService: locationService,
     locationDataRecorder: locationDataRecorder,
-    initialRoute: route
+    initialDrive: drive
   )
-  RecordingView(routeService: routeService)
+  RecordingView(driveService: driveService)
     .modelContainer(container)
 }

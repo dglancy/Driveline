@@ -25,7 +25,7 @@ final class Position {
   var speed: CLLocationSpeed
   var speedAccuracy: CLLocationSpeedAccuracy
 
-  var route: Route?
+  var drive: Drive?
 
   // MARK: - Computed Property
 
