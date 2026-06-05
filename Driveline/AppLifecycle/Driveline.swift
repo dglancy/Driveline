@@ -1,5 +1,5 @@
 //
-//  AutoRouteApp.swift
+//  Driveline.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct AutoRouteApp: App {
+struct Driveline: App {
 
   // MARK: - Properties
 
