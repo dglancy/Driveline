@@ -24,7 +24,7 @@ struct SelectionToolbar: View {
       Button(action: onMerge) {
         Label(
           String(localized: "Merge", comment: "Merge selected routes button"),
-          systemImage: "arrow.triangle.merge"
+          systemImage: Icons.merge
         )
         .font(.body.weight(.medium))
       }

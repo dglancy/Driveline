@@ -58,7 +58,7 @@ struct HomeView: View {
   private var emptyState: some View {
     ContentUnavailableView(
       "No Routes",
-      systemImage: "car.fill",
+      systemImage: Icons.car,
       description: Text("Your recorded routes will appear here.")
     )
   }

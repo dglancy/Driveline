@@ -32,10 +32,25 @@ enum Icons {
 
   static let chevronDown = "chevron.down"
   static let chevronRight = "chevron.right"
+  static let chevronLeft = "chevron.left"
+
+  // MARK: - Options
+
+  static let ellipsis = "ellipsis"
+  static let viewfinder = "viewfinder"
+  static let sharing = "square.and.arrow.up"
 
   // MARK: - Selection
 
   static let selected = "checkmark.circle.fill"
   static let deselected = "circle"
   static let recordingActive = "circle.inset.filled"
+
+  // MARK: - Merging
+
+  static let merge = "arrow.triangle.merge"
+
+  // MARK: - On-boarding
+
+  static let car = "car.fill"
 }
