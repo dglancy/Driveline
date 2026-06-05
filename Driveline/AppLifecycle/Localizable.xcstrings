@@ -129,60 +129,156 @@
       },
       "shouldTranslate" : false
     },
-    "%lld route · %@ in the last 30 days" : {
-      "comment" : "Home screen summary (singular): one route and total distance over the last 30 days",
+    "%lld routes · %@ in the last 30 days" : {
+      "comment" : "Home screen summary: number of routes and total distance over the last 30 days",
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld Route · %2$@ in den letzten 30 Tagen"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld Route · %2$@ in den letzten 30 Tagen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld Routen · %2$@ in den letzten 30 Tagen"
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld route · %2$@ in the last 30 days"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%1$lld route · %2$@ in the last 30 days"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%1$lld routes · %2$@ in the last 30 days"
+                }
+              }
+            }
           }
         },
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld trajet · %2$@ au cours des 30 derniers jours"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld trajet · %2$@ au cours des 30 derniers jours"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld trajets · %2$@ au cours des 30 derniers jours"
+                }
+              }
+            }
           }
         },
         "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld route · %2$@ in de laatste 30 dagen"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld route · %2$@ in de laatste 30 dagen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld routes · %2$@ in de laatste 30 dagen"
+                }
+              }
+            }
           }
         }
       }
     },
-    "%lld routes · %@ in the last 30 days" : {
-      "comment" : "Home screen summary (plural): number of routes and total distance over the last 30 days",
+    "%lld routes and all their data will be permanently deleted." : {
+      "comment" : "Delete route(s) confirmation message",
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld Routen · %2$@ in den letzten 30 Tagen"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Diese Route und alle ihre Daten werden endgültig gelöscht."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Diese %lld Routen und alle ihre Daten werden endgültig gelöscht."
+                }
+              }
+            }
           }
         },
         "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld routes · %2$@ in the last 30 days"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "This route and all its data will be permanently deleted."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld routes and all their data will be permanently deleted."
+                }
+              }
+            }
           }
         },
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld trajets · %2$@ au cours des 30 derniers jours"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ce trajet et toutes ses données seront définitivement supprimés."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ces %lld trajets et toutes leurs données seront définitivement supprimés."
+                }
+              }
+            }
           }
         },
         "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld routes · %2$@ in de laatste 30 dagen"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Deze route en al haar gegevens worden permanent verwijderd."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Deze %lld routes en al hun gegevens worden permanent verwijderd."
+                }
+              }
+            }
           }
         }
       }
@@ -2037,51 +2133,8 @@
         }
       }
     },
-    "These %lld routes and all their data will be permanently deleted." : {
-      "comment" : "Delete multiple routes confirmation message",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese %lld Routen und alle ihre Daten werden endgültig gelöscht."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ces %lld trajets et toutes leurs données seront définitivement supprimés."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deze %lld routes en al hun gegevens worden permanent verwijderd."
-          }
-        }
-      }
-    },
     "This route and all its data will be permanently deleted." : {
-      "comment" : "Delete route confirmation message\nDelete single route confirmation message",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Route und alle ihre Daten werden endgültig gelöscht."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ce trajet et toutes ses données seront définitivement supprimés."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deze route en al haar gegevens worden permanent verwijderd."
-          }
-        }
-      }
+      "comment" : "Delete route confirmation message"
     },
     "Today" : {
       "comment" : "Title of a route section for today.",

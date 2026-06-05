@@ -47,17 +47,7 @@ final class HomeViewModel {
   var canDelete: Bool { !selectedRouteIDs.isEmpty }
 
   var deleteConfirmationMessage: String {
-    if selectedRouteIDs.count == 1 {
-      return String(
-        localized: "This route and all its data will be permanently deleted.",
-        comment: "Delete single route confirmation message"
-      )
-    } else {
-      return String(
-        localized: "These \(selectedRouteIDs.count) routes and all their data will be permanently deleted.",
-        comment: "Delete multiple routes confirmation message"
-      )
-    }
+    String(localized: "\(selectedRouteIDs.count) routes and all their data will be permanently deleted.")
   }
 
   var selectionCountText: String {
@@ -180,17 +170,7 @@ final class HomeViewModel {
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
     let count = recent.count
     let distance = Measurement(value: totalMetres, unit: UnitLength.meters).localizedDistanceString()
-    if count == 1 {
-      return String(
-        localized: "\(count) route · \(distance) in the last 30 days",
-        comment: "Home screen summary (singular): one route and total distance over the last 30 days"
-      )
-    } else {
-      return String(
-        localized: "\(count) routes · \(distance) in the last 30 days",
-        comment: "Home screen summary (plural): number of routes and total distance over the last 30 days"
-      )
-    }
+    return String(localized: "\(count) routes · \(distance) in the last 30 days")
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {
