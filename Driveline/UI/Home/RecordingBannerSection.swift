@@ -19,7 +19,7 @@ struct RecordingBannerSection: View {
     Section {
       Button(action: onTap) {
         HStack(spacing: 12) {
-          PulsingDot(color: .red, size: 10)
+          PulsingDot(color: .red, size: 12)
           VStack(alignment: .leading, spacing: 1) {
             Text("Recording drive…")
               .font(.callout.weight(.semibold))

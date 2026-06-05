@@ -14,6 +14,7 @@ struct PulsingDot: View {
   let color: Color
   let size: CGFloat
   @State private var animating = false
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   // MARK: - Lifecycle
 
@@ -36,8 +37,18 @@ struct PulsingDot: View {
     .frame(width: size, height: size)
     .accessibilityHidden(true)
     .onAppear {
+      guard !reduceMotion else { return }
       withAnimation(.easeOut(duration: 1.6).repeatForever(autoreverses: false)) {
         animating = true
+      }
+    }
+    .onChange(of: reduceMotion) { _, newValue in
+      if newValue {
+        animating = false
+      } else {
+        withAnimation(.easeOut(duration: 1.6).repeatForever(autoreverses: false)) {
+          animating = true
+        }
       }
     }
   }
