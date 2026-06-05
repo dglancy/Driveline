@@ -10,12 +10,11 @@ import SwiftUI
 struct RecordingBannerSection: View {
 
   // MARK: - Properties
-
-  let triggerDisplayName: String?
+  
   let onTap: () -> Void
-
+  
   // MARK: - Body
-
+  
   var body: some View {
     Section {
       Button(action: onTap) {
@@ -25,15 +24,10 @@ struct RecordingBannerSection: View {
             Text("Recording drive…")
               .font(.callout.weight(.semibold))
               .foregroundStyle(Color(.label))
-            if let triggerDisplayName {
-              Text("\(triggerDisplayName) · Tap to view")
-                .font(.footnote)
-                .foregroundStyle(Color(.secondaryLabel))
-            } else {
-              Text("Tap to view")
-                .font(.footnote)
-                .foregroundStyle(Color(.secondaryLabel))
-            }
+            Text("Tap to view")
+              .font(.footnote)
+              .foregroundStyle(Color(.secondaryLabel))
+            
           }
           Spacer()
           Image(systemName: Icons.chevronRight)
