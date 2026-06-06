@@ -72,7 +72,7 @@ struct DriveRowView: View {
       RoundedRectangle(cornerRadius: 11)
         .fill(.tint.opacity(0.14))
         .frame(width: 38, height: 38)
-      Image(systemName: Icons.driveBadge)
+      Image(systemName: display.iconName)
         .font(.title3)
         .foregroundStyle(.tint)
         .dynamicTypeSize(.xSmall ... .large)

@@ -18,15 +18,13 @@ final class EditDriveViewModel {
   var startPlaceName: String
   var endPlaceName: String
 
-  var isSaveDisabled: Bool { driveName.trimmingCharacters(in: .whitespaces).isEmpty }
-
   @ObservationIgnored private let drive: Drive
 
   // MARK: - Lifecycle
 
   init(drive: Drive) {
     self.drive = drive
-    self.driveName = drive.name
+    self.driveName = drive.displayName
     self.startPlaceName = drive.startPlaceName ?? ""
     self.endPlaceName = drive.endPlaceName ?? ""
   }
@@ -35,9 +33,7 @@ final class EditDriveViewModel {
 
   func save() {
     let trimmedName = driveName.trimmingCharacters(in: .whitespaces)
-    if !trimmedName.isEmpty {
-      drive.name = trimmedName
-    }
+    drive.name = trimmedName.isEmpty ? nil : trimmedName
     let trimmedStart = startPlaceName.trimmingCharacters(in: .whitespaces)
     drive.startPlaceName = trimmedStart.isEmpty ? nil : trimmedStart
     let trimmedEnd = endPlaceName.trimmingCharacters(in: .whitespaces)

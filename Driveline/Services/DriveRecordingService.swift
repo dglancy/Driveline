@@ -58,7 +58,7 @@ final class DriveRecordingService {
   // MARK: - Actions
 
   func startDrive(trigger: Drive.RecordingTrigger = .manual) throws {
-    let drive = Drive(name: driveNameForCurrentTime(), trigger: trigger)
+    let drive = Drive(trigger: trigger)
     self.drive = drive
     currentSpeedMs = nil
 
@@ -146,16 +146,6 @@ final class DriveRecordingService {
       saveModelContext()
     }
     await checkAndRetryNilPlaceNamesForFinishedDrives()
-  }
-
-  private func driveNameForCurrentTime() -> String {
-    let hour = Calendar.current.component(.hour, from: Date())
-    switch hour {
-    case 5..<12: return String(localized: "Morning Drive", comment: "Default drive name for drives started between 05:00 and 11:59")
-    case 12..<17: return String(localized: "Afternoon Drive", comment: "Default drive name for drives started between 12:00 and 16:59")
-    case 17..<21: return String(localized: "Evening Drive", comment: "Default drive name for drives started between 17:00 and 20:59")
-    default: return String(localized: "Night Drive", comment: "Default drive name for drives started between 21:00 and 04:59")
-    }
   }
 
   private func saveModelContext() {

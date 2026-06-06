@@ -57,7 +57,6 @@ struct EditDriveView: View {
             viewModel.save()
             dismiss()
           }
-          .disabled(viewModel.isSaveDisabled)
           .fontWeight(.semibold)
         }
       }

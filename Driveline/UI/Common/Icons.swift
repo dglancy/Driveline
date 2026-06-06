@@ -10,6 +10,13 @@ enum Icons {
   // MARK: - Drive
 
   static let driveBadge = "point.bottomleft.forward.to.point.topright.scurvepath"
+
+  // MARK: - Drive (time of day)
+
+  static let morningDrive = "sunrise.fill"
+  static let afternoonDrive = "sun.max.fill"
+  static let eveningDrive = "sunset.fill"
+  static let nightDrive = "moon.stars.fill"
   static let startMarker = "house.fill"
   static let finishFlag = "flag.pattern.checkered"
   static let finishFlagCircle = "flag.pattern.checkered.circle.fill"

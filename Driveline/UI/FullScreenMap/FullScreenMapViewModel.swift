@@ -22,7 +22,7 @@ final class FullScreenMapViewModel {
 
   // MARK: - Computed Properties
 
-  var name: String { drive.name }
+  var name: String { drive.displayName }
 
   var distanceValue: String { stats.distanceValue }
   var distanceUnit: String { stats.distanceUnit }

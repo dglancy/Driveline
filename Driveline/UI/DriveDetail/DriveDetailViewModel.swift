@@ -41,7 +41,7 @@ final class DriveDetailViewModel {
 
   // MARK: - Computed Properties
 
-  var name: String { drive.name }
+  var name: String { drive.displayName }
 
   var dateString: String { drive.startedAt.longDateString() }
 
