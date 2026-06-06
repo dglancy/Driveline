@@ -19,7 +19,8 @@ Driveline grew out of a personal need. I run [Targa Trips](https://www.targatrip
 - **Merge routes** to join two drives end-to-end into a single route, useful when you forget to start recording and pick it up partway through.
 - **GPX export** in standard format, compatible with Strava, Komoot, or any other mapping tool that accepts GPX files.
 - **PNG export** that renders a clean map snapshot with the route drawn on it, suitable for sharing.
-- **Minimal recording screen** showing elapsed time and current speed. There is no live map during recording; see below for why.
+- **Minimal recording screen** showing elapsed time. There is no live map during recording; see below for why.
+- **Live Activity** on the Lock Screen and Dynamic Island showing elapsed time while a drive is in progress.
 - **Localised** into English, French, German, and Dutch.
 
 ## Philosophy
@@ -45,6 +46,8 @@ If your car supports both Bluetooth and CarPlay, you can set up all four automat
 
 If you stop the car and forget to end the route, Driveline will automatically finish it after a timeout period once it detects it has been paused long enough.
 
+You can also enable an option in the Settings app that automatically reopens a recently finished route if driving resumes within a short period — useful if you are briefly interrupted and want to keep the drive as a single continuous record.
+
 
 ## Why no live map during recording?
 
@@ -61,6 +64,8 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`
 - MapKit for route rendering and map snapshots on export
 - AppIntents for the Shortcuts actions (start/resume and pause)
+- ActivityKit for the Live Activity shown on the Lock Screen and Dynamic Island during recording
+- CloudKit for iCloud sync of drives across devices
 - Combine for publishing location updates through the service layer
 - Network framework (via `NWPathMonitor`) for detecting connectivity changes used to retry failed reverse geocoding
 
