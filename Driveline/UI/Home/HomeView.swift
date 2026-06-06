@@ -29,7 +29,7 @@ struct HomeView: View {
         .onChange(of: drives, initial: true) { _, newDrives in
           viewModel.update(with: newDrives)
         }
-        .onChange(of: driveService.isRecording, initial: true) { _, isRecording in
+        .onChange(of: driveService.isRecording) { _, isRecording in
           if isRecording {
             viewModel.exitSelectMode()
           } else {
@@ -37,7 +37,10 @@ struct HomeView: View {
           }
           viewModel.showingRecordingScreen = isRecording
         }
-        .onAppear { viewModel.modelContext = modelContext }
+        .onAppear {
+          viewModel.modelContext = modelContext
+          viewModel.showingRecordingScreen = driveService.isRecording
+        }
     }
     .modifier(RecordingScreenModifier(driveService: driveService, viewModel: viewModel))
     .modifier(DeleteDrivesAlertModifier(viewModel: viewModel))
