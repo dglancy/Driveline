@@ -29,12 +29,12 @@ struct DriveActivityWidget: Widget {
         }
       } compactLeading: {
         Image(systemName: Icons.car)
-          .foregroundStyle(.red)
+          .foregroundStyle(Color.brand)
       } compactTrailing: {
         DriveActivityCompactTrailingView(context: context)
       } minimal: {
         Image(systemName: Icons.car)
-          .foregroundStyle(.red)
+          .foregroundStyle(Color.brand)
       }
     }
   }
@@ -60,7 +60,7 @@ private struct DriveActivityLockScreenView: View {
   private var headerRow: some View {
     HStack(spacing: 8) {
       Image(systemName: Icons.car)
-        .foregroundStyle(.red)
+        .foregroundStyle(Color.brand)
       Text(String(localized: "Recording Drive", comment: "Live Activity title"))
         .font(.headline.weight(.semibold))
       Spacer()
@@ -93,7 +93,7 @@ private struct DriveActivityLockScreenView: View {
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 9)
-        .background(.red)
+        .background(Color.brand)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
   }
@@ -173,7 +173,7 @@ private struct DriveActivityExpandedBottomView: View {
           .foregroundStyle(.white)
           .padding(.horizontal, 12)
           .padding(.vertical, 6)
-          .background(.red)
+          .background(Color.brand)
           .clipShape(Capsule())
       }
     }
@@ -237,6 +237,12 @@ private struct RecordingPulsingDot: View {
       .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: pulsing)
       .onAppear { pulsing = true }
   }
+}
+
+// MARK: - Brand Colour
+
+private extension Color {
+  static let brand = Color(red: 60 / 255, green: 134 / 255, blue: 92 / 255)
 }
 
 // MARK: - Formatting Helpers

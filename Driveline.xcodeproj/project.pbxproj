@@ -101,6 +101,7 @@
 		6D6161302FD4482100F6F3A7 /* Exceptions for "Driveline" folder in "WidgetExtensionExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Assets.xcassets,
 				LiveActivity/DriveActivityAttributes.swift,
 				UI/Common/Icons.swift,
 			);
