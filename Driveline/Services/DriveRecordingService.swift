@@ -27,7 +27,7 @@ final class DriveRecordingService {
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let networkMonitorService: any NetworkMonitorServiceProtocol
   @ObservationIgnored private var userPreferences: UserPreferences
-  @ObservationIgnored private var speedCancellable: AnyCancellable?
+  @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
   #if os(iOS)
@@ -83,7 +83,7 @@ final class DriveRecordingService {
     }
     locationService.start()
 
-    speedCancellable = locationService.locationPublisher
+    liveActivityCancellable = locationService.locationPublisher
       .sink { [weak self] _ in
         self?.updateLiveActivity()
       }
@@ -114,7 +114,7 @@ final class DriveRecordingService {
     try? locationDataRecorder.startRecording(with: drive)
     locationService.start()
 
-    speedCancellable = locationService.locationPublisher
+    liveActivityCancellable = locationService.locationPublisher
       .sink { [weak self] _ in
         self?.updateLiveActivity()
       }
@@ -137,7 +137,7 @@ final class DriveRecordingService {
   }
 
   func finishDrive() {
-    speedCancellable = nil
+    liveActivityCancellable = nil
     startGeocodeCancellable = nil
     locationService.stop()
 
