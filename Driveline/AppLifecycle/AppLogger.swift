@@ -24,15 +24,15 @@ struct AppLogger {
     self.category = category
   }
 
-  func info(_ message: String, privacy: LogPrivacy = .public) {
+  func info(_ message: String, privacy: LogPrivacy = .private) {
       log(level: .info, message: message, privacy: privacy)
   }
 
-  func debug(_ message: String, privacy: LogPrivacy = .public) {
+  func debug(_ message: String, privacy: LogPrivacy = .private) {
       log(level: .debug, message: message, privacy: privacy)
   }
 
-  func error(_ message: String, privacy: LogPrivacy = .public) {
+  func error(_ message: String, privacy: LogPrivacy = .private) {
       log(level: .error, message: message, privacy: privacy)
   }
 
