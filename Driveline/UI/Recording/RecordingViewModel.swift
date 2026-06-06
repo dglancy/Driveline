@@ -19,7 +19,7 @@ final class RecordingViewModel {
   // MARK: - Computed Properties
 
   var elapsedSeconds: Int { Int(driveService.drive?.activeDurationSeconds ?? 0) }
-  var distanceMetres: Double { driveService.drive?.distanceMetres ?? 0.0 }
+  var distanceMetres: Double { driveService.drive?.accumulatedDistanceMetres ?? 0.0 }
 
   var elapsedDisplay: String { TimeInterval(elapsedSeconds).elapsedTimeString() }
 

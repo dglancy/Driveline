@@ -97,6 +97,11 @@ final class LocationDataRecorderService {
       speedAccuracy: location.speedAccuracy
     )
 
+    if let previous = drive.positions.last {
+      let from = CLLocation(latitude: previous.latitude, longitude: previous.longitude)
+      let to = CLLocation(latitude: position.latitude, longitude: position.longitude)
+      drive.accumulatedDistanceMetres += from.distance(from: to)
+    }
     drive.positions.append(position)
     hasPendingPositions = true
     Log.data.info("Queued new location: \(position.latitude), \(position.longitude)", privacy: .private)
