@@ -16,7 +16,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - speedValue
 
   @Test
-  func speedValueIsEmDashWhenRunningWithNoSpeed() {
+  func speedValueIsEmDashWhenNoDistanceTravelled() {
     let vm = makeViewModel()
     #expect(vm.speedValue == "—")
   }

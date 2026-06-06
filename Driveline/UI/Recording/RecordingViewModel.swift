@@ -38,12 +38,16 @@ final class RecordingViewModel {
   }
 
   var speedValue: String {
-    guard let ms = driveService.currentSpeedMs else { return kDashString }
-    return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
+    guard let drive = driveService.drive,
+          drive.activeDurationSeconds > 0,
+          drive.accumulatedDistanceMetres > 0 else { return kDashString }
+    let avgMs = drive.accumulatedDistanceMetres / drive.activeDurationSeconds
+    return Measurement(value: avgMs, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
 
   var speedUnit: String {
-    Measurement(value: driveService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+    let unit = Measurement(value: 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+    return String(localized: "avg \(unit)", comment: "Average speed unit label on the recording screen, e.g. 'avg km/h'")
   }
   var positionCount: Int { driveService.drive?.positions?.count ?? 0 }
 

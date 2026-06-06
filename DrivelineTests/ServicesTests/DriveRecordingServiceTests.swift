@@ -38,15 +38,6 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(service.isRecording == true)
   }
 
-  @Test
-  func startDriveResetsCurrentSpeedMs() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startDrive()
-
-    #expect(service.currentSpeedMs == nil)
-  }
-
   // MARK: - finishDrive
 
   @Test
@@ -77,85 +68,12 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func finishDriveResetsCurrentSpeedMs() async throws {
-    let (service, locationService, _) = makeServices()
-
-    try service.startDrive()
-    let location = CLLocation(
-      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
-      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
-      course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
-    )
-    locationService.locationPublisher.send(location)
-    service.finishDrive()
-
-    #expect(service.currentSpeedMs == nil)
-  }
-
-  @Test
   func finishDriveWithNoActiveDriveDoesNothing() async throws {
     let (service, _, _) = makeServices()
 
     service.finishDrive()
 
     #expect(service.drive == nil)
-  }
-
-  // MARK: - currentSpeedMs
-
-  @Test
-  func currentSpeedMsIsNilInitially() async throws {
-    let (service, _, _) = makeServices()
-
-    #expect(service.currentSpeedMs == nil)
-  }
-
-  @Test
-  func currentSpeedMsUpdatesWhenLocationPublished() async throws {
-    let (service, locationService, _) = makeServices()
-
-    try service.startDrive()
-
-    let location = CLLocation(
-      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
-      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
-      course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
-    )
-    locationService.locationPublisher.send(location)
-
-    #expect(service.currentSpeedMs == 14.0)
-  }
-
-  @Test
-  func currentSpeedMsIsNilForInvalidLocationSpeed() async throws {
-    let (service, locationService, _) = makeServices()
-
-    try service.startDrive()
-
-    let location = CLLocation(
-      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
-      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
-      course: 0, courseAccuracy: 1, speed: -1, speedAccuracy: 0.5, timestamp: Date()
-    )
-    locationService.locationPublisher.send(location)
-
-    #expect(service.currentSpeedMs == nil)
-  }
-
-  @Test
-  func currentSpeedMsIsNilAfterFinishDrive() async throws {
-    let (service, locationService, _) = makeServices()
-
-    try service.startDrive()
-    let location = CLLocation(
-      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
-      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
-      course: 0, courseAccuracy: 1, speed: 14.0, speedAccuracy: 0.5, timestamp: Date()
-    )
-    locationService.locationPublisher.send(location)
-    service.finishDrive()
-
-    #expect(service.currentSpeedMs == nil)
   }
 
   // MARK: - initialDrive
