@@ -37,21 +37,21 @@ final class Drive {
 
   // MARK: - Properties
 
-  @Attribute(.unique) var id: UUID
+  var id: UUID = UUID()
   var name: String?
-  var startedAt: Date
+  var startedAt: Date = Date()
   var endedAt: Date?
 
   var startPlaceName: String?
   var endPlaceName: String?
 
-  var trigger: RecordingTrigger
-  var status: DriveStatus
+  var trigger: RecordingTrigger = RecordingTrigger.manual
+  var status: DriveStatus = DriveStatus.recording
 
   @Relationship(deleteRule: .cascade, inverse: \Position.drive)
-  var positions: [Position]
+  var positions: [Position]?
 
-  var accumulatedDistanceMetres: Double
+  var accumulatedDistanceMetres: Double = 0
 
   // MARK: - Computed Properties
 
@@ -69,8 +69,8 @@ final class Drive {
   var isRecording: Bool { status != .finished }
 
   var orderedPositions: [Position] {
-    return positions
-      .sorted(by: { $0.timestamp < $1.timestamp})
+    guard let positions else { return [] }
+    return positions.sorted(by: { $0.timestamp < $1.timestamp })
   }
 
   var positionLocationCoordinatesIn2D: [CLLocationCoordinate2D] {
@@ -96,7 +96,9 @@ final class Drive {
   }
 
   var maxSpeedMetresPerSecond: CLLocationSpeed {
-    positions.compactMap { $0.speed >= 0 ? $0.speed : nil }.max() ?? 0
+    guard let positions else { return 0 }
+    let speeds = positions.compactMap { $0.speed >= 0 ? $0.speed : nil }
+    return speeds.max() ?? 0
   }
 
   // MARK: - Lifecycle
@@ -110,7 +112,7 @@ final class Drive {
     self.endPlaceName = nil
     self.trigger = trigger
     self.status = .recording
-    self.positions = []
+    self.positions = nil
     self.accumulatedDistanceMetres = 0
   }
 

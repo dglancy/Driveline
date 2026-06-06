@@ -34,8 +34,7 @@ struct FullScreenMapViewModelTests {
   @Test
   func coordinatesCountMatchesPositionCount() {
     let drive = makeDrive()
-    drive.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
-    drive.positions.append(makePosition(latitude: 38.0, longitude: -121.0))
+    drive.positions = [makePosition(latitude: 37.0, longitude: -122.0), makePosition(latitude: 38.0, longitude: -121.0)]
     let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.coordinates.count == 2)
   }
@@ -43,7 +42,7 @@ struct FullScreenMapViewModelTests {
   @Test
   func coordinatesPreserveLatitudeAndLongitude() {
     let drive = makeDrive()
-    drive.positions.append(makePosition(latitude: 37.5, longitude: -122.4))
+    drive.positions = [makePosition(latitude: 37.5, longitude: -122.4)]
     let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.coordinates[0].latitude == 37.5)
     #expect(vm.coordinates[0].longitude == -122.4)
@@ -60,7 +59,7 @@ struct FullScreenMapViewModelTests {
   @Test
   func cameraPositionIsNotAutomaticWithSinglePosition() {
     let drive = makeDrive()
-    drive.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
+    drive.positions = [makePosition(latitude: 37.0, longitude: -122.0)]
     let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.cameraPosition != .automatic)
   }
@@ -68,8 +67,7 @@ struct FullScreenMapViewModelTests {
   @Test
   func cameraPositionIsNotAutomaticWithMultiplePositions() {
     let drive = makeDrive()
-    drive.positions.append(makePosition(latitude: 37.0, longitude: -122.0))
-    drive.positions.append(makePosition(latitude: 38.0, longitude: -121.0))
+    drive.positions = [makePosition(latitude: 37.0, longitude: -122.0), makePosition(latitude: 38.0, longitude: -121.0)]
     let vm = FullScreenMapViewModel(drive: drive)
     #expect(vm.cameraPosition != .automatic)
   }

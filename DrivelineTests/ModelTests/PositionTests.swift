@@ -108,12 +108,12 @@ final class PositionTests: SwiftDataBaseTestCase {
       speedAccuracy: 1
     )
     context!.insert(position)
-    drive.positions.append(position)
+    drive.positions = (drive.positions ?? []) + [position]
     try context!.save()
 
     let fetchedDrive = try context!.fetch(FetchDescriptor<Drive>()).first!
-    #expect(fetchedDrive.positions.count == 1)
-    #expect(fetchedDrive.positions.first?.latitude == 51.5)
+    #expect(fetchedDrive.positions?.count == 1)
+    #expect(fetchedDrive.positions?.first?.latitude == 51.5)
   }
 
   @Test
@@ -135,12 +135,12 @@ final class PositionTests: SwiftDataBaseTestCase {
         speedAccuracy: 1
       )
       context!.insert(position)
-      drive.positions.append(position)
+      drive.positions = (drive.positions ?? []) + [position]
     }
     try context!.save()
 
     let fetchedDrive = try context!.fetch(FetchDescriptor<Drive>()).first!
-    #expect(fetchedDrive.positions.count == 5)
+    #expect(fetchedDrive.positions?.count == 5)
   }
   
   @Test

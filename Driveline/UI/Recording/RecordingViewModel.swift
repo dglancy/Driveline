@@ -45,7 +45,7 @@ final class RecordingViewModel {
   var speedUnit: String {
     Measurement(value: driveService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
   }
-  var positionCount: Int { driveService.drive?.positions.count ?? 0 }
+  var positionCount: Int { driveService.drive?.positions?.count ?? 0 }
 
   var formattedPositionCount: String {
     Self.formattedCount(positionCount)

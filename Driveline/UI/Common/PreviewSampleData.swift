@@ -34,7 +34,7 @@ enum PreviewSampleData {
     for (index, (lat, lon, speed)) in waypoints.enumerated() {
       let interval = Double(index) * (3 * 3600 + 28 * 60) / Double(waypoints.count - 1)
       let timestamp = drive.startedAt.addingTimeInterval(interval)
-      drive.positions.append(position(lat: lat, lon: lon, at: timestamp, speed: speed, in: context))
+      drive.positions = (drive.positions ?? []) + [position(lat: lat, lon: lon, at: timestamp, speed: speed, in: context)]
     }
 
     return drive
@@ -66,10 +66,10 @@ enum PreviewSampleData {
         drive.status = .finished
       }
       context.insert(drive)
-      drive.positions.append(position(lat: home.lat, lon: home.lon, at: drive.startedAt, in: context))
+      drive.positions = (drive.positions ?? []) + [position(lat: home.lat, lon: home.lon, at: drive.startedAt, in: context)]
       if let end {
         let endTime = drive.endedAt ?? drive.startedAt.addingTimeInterval(1_800)
-        drive.positions.append(position(lat: end.lat, lon: end.lon, at: endTime, in: context))
+        drive.positions = (drive.positions ?? []) + [position(lat: end.lat, lon: end.lon, at: endTime, in: context)]
       }
     }
   }
