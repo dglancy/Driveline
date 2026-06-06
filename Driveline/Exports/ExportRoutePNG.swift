@@ -41,7 +41,7 @@ final class ExportDrivePNG: ExportingDrive {
     options.pointOfInterestFilter = .excludingAll
 
     let snapshot = try await takeSnapshot(with: options, drive: drive)
-    let image = renderSnapshotImage(snapshot, coordinates: coordinates)
+    let image = renderSnapshotImage(snapshot, coordinates: coordinates, drive: drive)
 
     guard let pngData = image.pngData() else {
       throw ExportError.pngDataPreparationFailure
@@ -60,7 +60,7 @@ final class ExportDrivePNG: ExportingDrive {
 
   // MARK: - Private functions
 
-  private func renderSnapshotImage(_ snapshot: MKMapSnapshotter.Snapshot, coordinates: [CLLocationCoordinate2D]) -> UIImage {
+  private func renderSnapshotImage(_ snapshot: MKMapSnapshotter.Snapshot, coordinates: [CLLocationCoordinate2D], drive: Drive) -> UIImage {
     let image = snapshot.image
     let format = UIGraphicsImageRendererFormat()
     format.scale = image.scale
@@ -89,12 +89,12 @@ final class ExportDrivePNG: ExportingDrive {
       let markerRenderer = MarkerRenderer()
       if let startCoordinate = coordinates.first {
         markerRenderer.draw(at: snapshot.point(for: startCoordinate), color: .systemGreen, systemName: Icons.startMarker,
-                            label: String(localized: "Start", comment: "Export PNG start marker label"))
+                            label: drive.startPlaceName ?? String(localized: "Start", comment: "Export PNG start marker label"))
       }
 
       if let endCoordinate = coordinates.last {
         markerRenderer.draw(at: snapshot.point(for: endCoordinate), color: .systemBlue, systemName: Icons.finishFlag,
-                            label: String(localized: "Finish", comment: "Export PNG finish marker label"))
+                            label: drive.endPlaceName ?? String(localized: "Finish", comment: "Export PNG finish marker label"))
       }
     }
   }
