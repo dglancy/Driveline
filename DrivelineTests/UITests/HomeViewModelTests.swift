@@ -138,8 +138,8 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let afternoon = makeDrive(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
     #expect(viewModel.sections.count == 1)
-    #expect(viewModel.sections[0].rows[0].display.name == "Afternoon")
-    #expect(viewModel.sections[0].rows[1].display.name == "Morning")
+    #expect(viewModel.sections[0].rows[0].drive.displayName == "Afternoon")
+    #expect(viewModel.sections[0].rows[1].drive.displayName == "Morning")
   }
 
   // MARK: - Summary Line
@@ -213,7 +213,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0)])
     viewModel.update(with: [makeDrive(name: "B", daysAgo: 0), makeDrive(name: "C", daysAgo: 1)])
     #expect(viewModel.sections.count == 2)
-    #expect(viewModel.sections[0].rows[0].display.name == "B")
+    #expect(viewModel.sections[0].rows[0].drive.displayName == "B")
   }
 
   // MARK: - Select Mode

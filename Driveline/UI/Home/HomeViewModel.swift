@@ -146,7 +146,6 @@ final class HomeViewModel {
     let duration = drive.endedAt != nil ? drive.activeDurationSeconds.localizedHoursMinutesString() : nil
     let distance = Measurement(value: drive.distanceMetres, unit: UnitLength.meters)
     return DriveRowDisplay(
-      name: drive.displayName,
       dateTimeLabel: DriveStatsPresenter(drive: drive).startTimeLabel,
       formattedDistance: distance.localizedDistanceString(),
       formattedDuration: duration,

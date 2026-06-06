@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import CoreLocation
-import GPXKit
 
 // MARK: - GPX export service
 
@@ -19,37 +17,42 @@ final class ExportDriveGPX: ExportingDrive {
     let positions = drive.orderedPositions
     guard !positions.isEmpty else { throw ExportError.emptyDrive }
 
-    let track = try buildTrack(positions: positions, startedAt: drive.startedAt)
-    let gpxExport = GPXExporter(track: track, shouldExportDate: true, creatorName: kGPXCreator).xmlString
+    let title = ExportDriveFileNamingService.startedAtFormatter.string(from: drive.startedAt)
+    let xml = xmlString(title: title, positions: positions)
     let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
 
-    guard let gpxExportData = gpxExport.data(using: .utf8) else {
+    guard let data = xml.data(using: .utf8) else {
       throw ExportError.gpxEncodingFailed
     }
 
-    try gpxExportData.write(to: fileURL, options: .atomic)
+    try data.write(to: fileURL, options: .atomic)
     return fileURL
   }
 
   // MARK: - Private
 
-  private func buildTrack(positions: [Position], startedAt: Date) throws -> GPXTrack {
-    let trackPoints = buildTrackPoints(from: positions)
-    return try GPXTrack(
-      title: ExportDriveFileNamingService.startedAtFormatter.string(from: startedAt),
-      trackPoints: trackPoints,
-      keywords: [],
-      elevationSmoothing: .none
-    )
-  }
+  private func xmlString(title: String, positions: [Position]) -> String {
+    let iso = ISO8601DateFormatter()
+    let trkpts = positions.map { pos in
+      """
+            <trkpt lat="\(pos.latitude)" lon="\(pos.longitude)">
+              <ele>\(pos.altitude)</ele>
+              <time>\(iso.string(from: pos.timestamp))</time>
+              <extensions><speed>\(pos.speed)</speed></extensions>
+            </trkpt>
+      """
+    }.joined(separator: "\n")
 
-  private func buildTrackPoints(from positions: [Position]) -> [TrackPoint] {
-    positions.map { position in
-      TrackPoint(
-        coordinate: Coordinate(latitude: position.latitude, longitude: position.longitude, elevation: position.altitude),
-        date: position.timestamp,
-        speed: Measurement(value: position.speed, unit: UnitSpeed.metersPerSecond)
-      )
-    }
+    return """
+    <?xml version="1.0" encoding="UTF-8"?>
+    <gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="\(kGPXCreator)">
+      <trk>
+        <name>\(title)</name>
+        <trkseg>
+    \(trkpts)
+        </trkseg>
+      </trk>
+    </gpx>
+    """
   }
 }
