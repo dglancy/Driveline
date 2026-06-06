@@ -29,7 +29,7 @@ final class HomeViewModel {
 
   // MARK: - Properties
 
-  @ObservationIgnored var modelContext: ModelContext!
+  @ObservationIgnored var modelContext: ModelContext?
 
   private(set) var sections: [DriveSection] = []
   private(set) var summaryLine: String?
@@ -107,6 +107,7 @@ final class HomeViewModel {
 
   func deleteDrives(_ drives: [Drive]) {
     for drive in drives {
+      guard let modelContext else { return }
       modelContext.delete(drive)
     }
   }
@@ -116,6 +117,7 @@ final class HomeViewModel {
   }
 
   func mergeDrives(orderedDrives: [Drive], mergedName: String) {
+    guard let modelContext else { return }
     DriveMergeService(modelContext: modelContext).merge(orderedDrives: orderedDrives, mergedName: mergedName)
   }
 

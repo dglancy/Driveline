@@ -37,7 +37,7 @@ final class DriveDetailViewModel {
 
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
-  @ObservationIgnored var modelContext: ModelContext!
+  @ObservationIgnored var modelContext: ModelContext?
 
   // MARK: - Computed Properties
 
@@ -82,6 +82,7 @@ final class DriveDetailViewModel {
   // MARK: - Actions
 
   func deleteDrive() {
+    guard let modelContext else { return }
     modelContext.delete(drive)
   }
 
