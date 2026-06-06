@@ -1581,7 +1581,7 @@
       }
     },
     "Share Drive" : {
-      "comment" : "Share button\nShare drive alert title",
+      "comment" : "Share button\nShare drive dialog title",
       "localizations" : {
         "de" : {
           "stringUnit" : {
