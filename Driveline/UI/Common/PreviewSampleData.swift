@@ -18,7 +18,7 @@ enum PreviewSampleData {
 
   @MainActor
   static func sampleDrive(in context: ModelContext) -> Drive {
-    let drive = Drive(name: "Weekend to Tahoe", trigger: .automatic)
+    let drive = Drive(name: "My happy long weekend to Tahoe in California", trigger: .automatic)
     drive.startedAt = date(daysAgo: 6, hour: 7, minute: 5)
     drive.endedAt = drive.startedAt.addingTimeInterval(3 * 3600 + 28 * 60)
     drive.status = .finished
@@ -52,7 +52,7 @@ enum PreviewSampleData {
       ("Evening Errand", 1, 18, 45, 1_200, "Tesco Extra", (51.452, -0.091)),
       ("Lunch Drive", 3, 12, 20, 2_100, nil, (51.459, -0.119)),
       ("School Run", 3, 8, 10, 840, "School", (51.549, -0.122)),
-      ("Weekend Road Trip", 6, 10, 0, 14_400, "Brighton", (50.820, -0.142)),
+      ("My happy long weekend to Tahoe in California", 6, 10, 0, 14_400, "Brighton", (50.820, -0.142)),
       ("City Centre Visit", 32, 11, 30, 2_700, "Manchester", (53.480, -2.244)),
       ("Mountain Drive", 68, 9, 0, 10_800, "Snowdonia", (53.120, -4.131))
     ]

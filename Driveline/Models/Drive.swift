@@ -59,7 +59,7 @@ final class Drive {
     if let name { return name }
     let timeWord = Self.timeOfDayWord(for: startedAt)
     switch (startPlaceName, endPlaceName) {
-    case (let start?, let end?): return "\(start) \u{2013}> \(end)"
+    case (let start?, let end?): return "\(start) \u{2192} \(end)"
     case (let start?, nil): return String(localized: "\(timeWord) drive from \(start)", comment: "Drive name with known start location only")
     case (nil, let end?): return String(localized: "\(timeWord) drive to \(end)", comment: "Drive name with known end location only")
     case (nil, nil): return Self.timeOfDayDriveName(for: startedAt)
