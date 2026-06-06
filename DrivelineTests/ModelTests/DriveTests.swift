@@ -26,7 +26,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     #expect(drive.startPlaceName == nil)
     #expect(drive.endPlaceName == nil)
     #expect(drive.isRecording == true)
-    #expect(drive.positions.isEmpty)
+    #expect(drive.positions == nil || drive.positions!.isEmpty)
   }
 
   @Test
@@ -43,7 +43,7 @@ final class DriveTests: SwiftDataBaseTestCase {
   }
 
   // MARK: - Positions
-  
+
   @Test
   func positions() async {
     let drive = Drive(name: "School Run")
@@ -57,9 +57,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     let p3 = Position(timestamp: base.addingTimeInterval(2), latitude: 1.0, longitude: 1.0, altitude: 1.0,
                       horizontalAccuracy: 1.0, verticalAccuracy: 1.0, course: 1.0, courseAccuracy: 1.0,
                       speed: 1.0, speedAccuracy: 1.0)
-    drive.positions.append(p1)
-    drive.positions.append(p2)
-    drive.positions.append(p3)
+    drive.positions = [p1, p2, p3]
 
     let positions = drive.orderedPositions
     #expect(positions.count == 3)
@@ -68,7 +66,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     #expect(positions[2] === p3)
   }
 
-  
+
   // MARK: - activeDurationSeconds
 
   @Test
@@ -97,7 +95,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     #expect(count == 0)
   }
 
-  
+
   @Test
   func persistsAndFetchesDrive() throws {
     let drive = Drive(name: "Coastal Drive", trigger: .automatic)
@@ -123,7 +121,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     context!.insert(drive)
     let p = makePosition(latitude: 51.5, longitude: -0.1)
     context!.insert(p)
-    drive.positions.append(p)
+    drive.positions = (drive.positions ?? []) + [p]
     #expect(drive.distanceMetres == 0)
   }
 
@@ -136,8 +134,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
     context!.insert(p1)
     context!.insert(p2)
-    drive.positions.append(p1)
-    drive.positions.append(p2)
+    drive.positions = [p1, p2]
     #expect(drive.distanceMetres > 11_000)
     #expect(drive.distanceMetres < 11_500)
   }
@@ -152,8 +149,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: t2)
     context!.insert(p1)
     context!.insert(p2)
-    drive.positions.append(p2)
-    drive.positions.append(p1)
+    drive.positions = [p2, p1]
     #expect(drive.distanceMetres > 11_000)
     #expect(drive.distanceMetres < 11_500)
   }
@@ -177,7 +173,7 @@ final class DriveTests: SwiftDataBaseTestCase {
       speedAccuracy: 1
     )
     context!.insert(position)
-    drive.positions.append(position)
+    drive.positions = (drive.positions ?? []) + [position]
     try context!.save()
 
     context!.delete(drive)

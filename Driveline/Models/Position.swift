@@ -14,16 +14,16 @@ final class Position {
 
   // MARK: - Properties
 
-  var timestamp: Date
-  var latitude: CLLocationDegrees
-  var longitude: CLLocationDegrees
-  var altitude: CLLocationDistance
-  var horizontalAccuracy: CLLocationAccuracy
-  var verticalAccuracy: CLLocationAccuracy
-  var course: CLLocationDirection
-  var courseAccuracy: CLLocationDirectionAccuracy
-  var speed: CLLocationSpeed
-  var speedAccuracy: CLLocationSpeedAccuracy
+  var timestamp: Date = Date()
+  var latitude: CLLocationDegrees = 0
+  var longitude: CLLocationDegrees = 0
+  var altitude: CLLocationDistance = 0
+  var horizontalAccuracy: CLLocationAccuracy = 0
+  var verticalAccuracy: CLLocationAccuracy = 0
+  var course: CLLocationDirection = 0
+  var courseAccuracy: CLLocationDirectionAccuracy = 0
+  var speed: CLLocationSpeed = 0
+  var speedAccuracy: CLLocationSpeedAccuracy = 0
 
   var drive: Drive?
 

@@ -177,19 +177,17 @@ struct DriveDetailViewModelTests {
 
   private func driveWithOnePosition() -> Drive {
     let drive = makeDrive()
-    drive.positions.append(
-      Position(
-        latitude: 51.5074,
-        longitude: -0.1278,
-        altitude: 11,
-        horizontalAccuracy: 5,
-        verticalAccuracy: 3,
-        course: 270,
-        courseAccuracy: 5,
-        speed: 14,
-        speedAccuracy: 1
-      )
-    )
+    drive.positions = (drive.positions ?? []) + [Position(
+      latitude: 51.5074,
+      longitude: -0.1278,
+      altitude: 11,
+      horizontalAccuracy: 5,
+      verticalAccuracy: 3,
+      course: 270,
+      courseAccuracy: 5,
+      speed: 14,
+      speedAccuracy: 1
+    )]
     return drive
   }
 }

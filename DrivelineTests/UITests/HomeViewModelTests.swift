@@ -442,7 +442,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     viewModel.modelContext = context!
     viewModel.mergeDrives(orderedDrives: [first, second], mergedName: "Merged")
     let drives = try context!.fetch(FetchDescriptor<Drive>())
-    #expect(drives[0].positions.count == 3)
+    #expect(drives[0].positions?.count == 3)
   }
 
   @Test
@@ -503,7 +503,7 @@ struct DriveDisplayNameTests {
 
   @Test func bothPlaceNamesFormatted() {
     let drive = makeDrive(hour: 9, start: "Home", end: "Office")
-    #expect(drive.displayName == "Home \u{2013}> Office")
+    #expect(drive.displayName == "Home \u{2192} Office")
   }
 
   @Test func startOnlyMorning() {

@@ -98,7 +98,7 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
       speed: 8,
       speedAccuracy: 1
     )
-    drive.positions.append(position)
+    drive.positions = (drive.positions ?? []) + [position]
 
     let outputURL = try await ExportDriveGPX().export(drive: drive)
     defer { try? FileManager.default.removeItem(at: outputURL) }
@@ -125,7 +125,7 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
         speed: 10,
         speedAccuracy: 1
       )
-      drive.positions.append(position)
+      drive.positions = (drive.positions ?? []) + [position]
     }
 
     let outputURL = try await ExportDriveGPX().export(drive: drive)
@@ -176,7 +176,7 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
       speed: 14,
       speedAccuracy: 1
     )
-    drive.positions.append(position)
+    drive.positions = (drive.positions ?? []) + [position]
     return drive
   }
 }
