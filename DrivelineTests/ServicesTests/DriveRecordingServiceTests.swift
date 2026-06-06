@@ -159,6 +159,72 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(mockGeocoding.geocodedLocations.count == 1)
   }
 
+  // MARK: - finishDrive geocoding
+
+  @Test
+  func finishDriveSetsEndPlaceNameWhenGeocodingSucceeds() async throws {
+    let mockGeocoding = MockGeocodingService()
+    let (service, _, _) = makeServices(geocodingService: mockGeocoding)
+
+    try service.startDrive()
+    let drive = service.drive!
+    let position = makePosition()
+    context!.insert(position)
+    drive.positions = [position]
+
+    service.finishDrive()
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(drive.endPlaceName == "Test Place")
+  }
+
+  @Test
+  func finishDriveDoesNotOverwriteEndPlaceNameWhenGeocodingFails() async throws {
+    let mockGeocoding = MockGeocodingService()
+    mockGeocoding.result = nil
+    let (service, _, _) = makeServices(geocodingService: mockGeocoding)
+
+    try service.startDrive()
+    let drive = service.drive!
+    let position = makePosition()
+    context!.insert(position)
+    drive.positions = [position]
+
+    service.finishDrive()
+
+    drive.endPlaceName = "Retry Result"
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(drive.endPlaceName == "Retry Result")
+  }
+
+  @Test
+  func startDriveDoesNotOverwriteStartPlaceNameWhenGeocodingFails() async throws {
+    let mockGeocoding = MockGeocodingService()
+    mockGeocoding.result = nil
+    let (service, locationService, _) = makeServices(geocodingService: mockGeocoding)
+
+    try service.startDrive()
+    let drive = service.drive!
+    drive.startPlaceName = "Retry Result"
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(drive.startPlaceName == "Retry Result")
+  }
+
   // MARK: - Continue drive if recently finished
 
   @Test
@@ -235,6 +301,10 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)
+  }
+
+  private func makePosition(latitude: CLLocationDegrees = 51.5, longitude: CLLocationDegrees = -0.1) -> Position {
+    Position(latitude: latitude, longitude: longitude, altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: 0, speedAccuracy: 0)
   }
 
   @discardableResult

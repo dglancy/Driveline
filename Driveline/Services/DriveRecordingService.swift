@@ -93,9 +93,11 @@ final class DriveRecordingService {
       .sink { [weak self] location in
         Task { [weak self] in
           guard let self, let drive = self.drive else { return }
-          drive.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
-          self.saveModelContext()
-          self.updateLiveActivity()
+          if let placeName = await self.geocodingService.reverseGeocode(location: location) {
+            drive.startPlaceName = placeName
+            self.saveModelContext()
+            self.updateLiveActivity()
+          }
         }
       }
 
@@ -151,8 +153,10 @@ final class DriveRecordingService {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
         Task { [weak self] in
           guard let self else { return }
-          drive.endPlaceName = await geocodingService.reverseGeocode(location: location)
-          saveModelContext()
+          if let placeName = await geocodingService.reverseGeocode(location: location) {
+            drive.endPlaceName = placeName
+            saveModelContext()
+          }
         }
       }
     }
