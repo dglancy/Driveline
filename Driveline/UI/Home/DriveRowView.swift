@@ -18,6 +18,7 @@ struct DriveRowView: View {
 
   // MARK: - Properties
 
+  let drive: Drive
   let display: DriveRowDisplay
   var style: Style = .list()
 
@@ -49,7 +50,7 @@ struct DriveRowView: View {
       statsContent(distanceFont: .callout, durationFont: .footnote)
     }
     .accessibilityElement(children: .combine)
-    .accessibilityLabel(ListFormatter.localizedString(byJoining: [display.name, display.formattedDistance, display.dateTimeLabel]))
+    .accessibilityLabel(ListFormatter.localizedString(byJoining: [drive.displayName, display.formattedDistance, display.dateTimeLabel]))
     .accessibilityAddTraits(isSelected == true ? .isSelected : [])
   }
 
@@ -64,7 +65,7 @@ struct DriveRowView: View {
     .padding(.vertical, 13)
     .cardBackground()
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("\(index). \(ListFormatter.localizedString(byJoining: [display.name, display.formattedDistance, display.dateTimeLabel]))")
+    .accessibilityLabel("\(index). \(ListFormatter.localizedString(byJoining: [drive.displayName, display.formattedDistance, display.dateTimeLabel]))")
   }
 
   private var driveBadge: some View {
@@ -92,7 +93,7 @@ struct DriveRowView: View {
 
   private func textContent(nameFont: Font, dateFont: Font) -> some View {
     VStack(alignment: .leading, spacing: 1) {
-      Text(display.name)
+      Text(drive.displayName)
         .font(nameFont)
         .lineLimit(2)
         .dynamicTypeSize(.xSmall ... .accessibility1)

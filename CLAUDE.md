@@ -55,3 +55,7 @@ Every screen-level View **must** have a paired ViewModel:
 - Use `@Environment` for dependency injection
 - Prefer `NavigationStack` over deprecated `NavigationView`
 - Use `@Bindable` for bindings to @Observable objects
+
+
+### Running builds and tests
+- Use a destination of 'platform=iOS Simulator,name=iPhone 17' if running builds or tests via xcodebuild

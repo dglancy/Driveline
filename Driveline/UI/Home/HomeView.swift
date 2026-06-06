@@ -96,12 +96,12 @@ struct HomeView: View {
                 Button {
                   viewModel.toggleSelection(for: row.drive.id)
                 } label: {
-                  DriveRowView(display: row.display, style: .list(isSelected: viewModel.selectedDriveIDs.contains(row.drive.id)))
+                  DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: viewModel.selectedDriveIDs.contains(row.drive.id)))
                 }
                 .buttonStyle(.plain)
               } else {
                 NavigationLink(value: row.drive) {
-                  DriveRowView(display: row.display)
+                  DriveRowView(drive: row.drive, display: row.display)
                     .opacity(driveService.isRecording ? 0.4 : 1)
                 }
                 .disabled(driveService.isRecording)

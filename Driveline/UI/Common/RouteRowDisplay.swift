@@ -8,7 +8,6 @@
 import Foundation
 
 struct DriveRowDisplay {
-  let name: String
   let dateTimeLabel: String
   let formattedDistance: String
   let formattedDuration: String?
