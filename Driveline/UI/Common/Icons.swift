@@ -58,4 +58,8 @@ enum Icons {
   // MARK: - On-boarding
 
   static let car = "car.fill"
+  
+  // MARK: - Widgets
+  
+  static let timer = "timer"
 }
