@@ -15,7 +15,7 @@ enum IntentDependencyResolver {
 
 // MARK: - App Intent Shortcuts
 
-struct AutoDriveShortcuts: AppShortcutsProvider {
+struct DrivelineShortcuts: AppShortcutsProvider {
 
   @AppShortcutsBuilder
   static var appShortcuts: [AppShortcut] {
@@ -95,7 +95,7 @@ enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
   var localizedStringResource: LocalizedStringResource {
     switch self {
     case .notReady:
-      return "AutoDrive isn't ready to start recording."
+      return "Driveline isn't ready to start recording."
     }
   }
 }

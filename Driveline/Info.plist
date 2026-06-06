@@ -15,11 +15,7 @@
 			</array>
 		</dict>
 	</array>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>com.targatrips.AutoRoute.pause-timeout</string>
-	</array>
-	<key>INIntentsSupported</key>
+<key>INIntentsSupported</key>
 	<array>
 		<string>Intent</string>
 	</array>

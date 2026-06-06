@@ -1,13 +1,13 @@
 //
-//  AutoDriveUITestsLaunchTests.swift
-//  AutoDriveUITests
+//  DrivelineUITestsLaunchTests.swift
+//  DrivelineUITests
 //
 //  Created by Damien Glancy on 30/05/2026.
 //
 
 import XCTest
 
-final class AutoDriveUITestsLaunchTests: BaseXCTestCase {
+final class DrivelineUITestsLaunchTests: BaseXCTestCase {
 
   override class var runsForEachTargetApplicationUIConfiguration: Bool {
     true

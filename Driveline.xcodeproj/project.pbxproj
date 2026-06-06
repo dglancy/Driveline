@@ -20,14 +20,14 @@
 			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
-			remoteInfo = AutoRoute;
+			remoteInfo = Driveline;
 		};
 		6D47A52A2FCAD20800E6C7B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
-			remoteInfo = AutoRoute;
+			remoteInfo = Driveline;
 		};
 		6D6161272FD447E800F6F3A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -247,7 +247,7 @@
 			name = Driveline;
 			packageProductDependencies = (
 			);
-			productName = AutoRoute;
+			productName = Driveline;
 			productReference = 6D47A5102FCAD20600E6C7B7 /* Driveline.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -270,7 +270,7 @@
 			name = DrivelineTests;
 			packageProductDependencies = (
 			);
-			productName = AutoRouteTests;
+			productName = DrivelineTests;
 			productReference = 6D47A51F2FCAD20800E6C7B7 /* DrivelineTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -293,7 +293,7 @@
 			name = DrivelineUITests;
 			packageProductDependencies = (
 			);
-			productName = AutoRouteUITests;
+			productName = DrivelineUITests;
 			productReference = 6D47A5292FCAD20800E6C7B7 /* DrivelineUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -692,7 +692,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.DrivelineTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -718,7 +718,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoutesTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.DrivelineTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -743,7 +743,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRouteUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.DrivelineUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -755,7 +755,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = AutoRoute;
+				TEST_TARGET_NAME = Driveline;
 			};
 			name = Debug;
 		};
@@ -768,7 +768,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.AutoRoutesUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.DrivelineUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -780,7 +780,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = AutoRoute;
+				TEST_TARGET_NAME = Driveline;
 			};
 			name = Release;
 		};
