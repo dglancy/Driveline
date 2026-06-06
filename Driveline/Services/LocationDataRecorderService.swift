@@ -104,12 +104,12 @@ final class LocationDataRecorderService {
 
   private func saveIfNeeded() {
     guard hasPendingPositions else { return }
-    modelContext.safeSave(
-      onSuccess: { [weak self] in
-        self?.hasPendingPositions = false
-        Log.data.info("Saved pending positions")
-      },
-      onFailure: { Log.data.error("Failed to save positions: \($0)") }
-    )
+    do {
+      try modelContext.save()
+      hasPendingPositions = false
+      Log.data.info("Saved pending positions")
+    } catch {
+      Log.data.error("Failed to save positions: \(error)")
+    }
   }
 }
