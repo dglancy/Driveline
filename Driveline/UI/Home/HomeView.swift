@@ -22,6 +22,7 @@ struct HomeView: View {
   // MARK: - Body
 
   var body: some View {
+    @Bindable var viewModel = viewModel
     NavigationStack {
       content
         .navigationTitle("Drives")
@@ -42,10 +43,10 @@ struct HomeView: View {
           viewModel.showingRecordingScreen = driveService.isRecording
         }
     }
-    .modifier(RecordingScreenModifier(driveService: driveService, viewModel: viewModel))
-    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel))
-    .modifier(StartDriveErrorAlertModifier(viewModel: viewModel))
-    .modifier(MergeDrivesSheetModifier(viewModel: viewModel))
+    .modifier(RecordingScreenModifier(driveService: driveService, isPresented: $viewModel.showingRecordingScreen))
+    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingDeleteConfirmation))
+    .modifier(StartDriveErrorAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingStartDriveError))
+    .modifier(MergeDrivesSheetModifier(viewModel: viewModel, isPresented: $viewModel.showingMergeSheet))
   }
 
   // MARK: - Private Views
@@ -191,22 +192,23 @@ struct HomeView: View {
 
 private struct RecordingScreenModifier: ViewModifier {
   let driveService: DriveRecordingService
-  @Bindable var viewModel: HomeViewModel
+  var isPresented: Binding<Bool>
 
   func body(content: Content) -> some View {
-    content.fullScreenCover(isPresented: $viewModel.showingRecordingScreen) {
+    content.fullScreenCover(isPresented: isPresented) {
       RecordingView(driveService: driveService)
     }
   }
 }
 
 private struct DeleteDrivesAlertModifier: ViewModifier {
-  @Bindable var viewModel: HomeViewModel
+  let viewModel: HomeViewModel
+  var isPresented: Binding<Bool>
 
   func body(content: Content) -> some View {
     content.alert(
       String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
-      isPresented: $viewModel.showingDeleteConfirmation
+      isPresented: isPresented
     ) {
       Button.delete {
         let selected = viewModel.selectedDrives(from: viewModel.sections)
@@ -221,12 +223,13 @@ private struct DeleteDrivesAlertModifier: ViewModifier {
 }
 
 private struct StartDriveErrorAlertModifier: ViewModifier {
-  @Bindable var viewModel: HomeViewModel
+  let viewModel: HomeViewModel
+  var isPresented: Binding<Bool>
 
   func body(content: Content) -> some View {
     content.alert(
       String(localized: "Couldn't Start Recording", comment: "Start drive failure alert title"),
-      isPresented: $viewModel.showingStartDriveError
+      isPresented: isPresented
     ) {
       Button(String(localized: "OK", comment: "Dismiss start drive error alert"), role: .cancel) { }
     } message: {
@@ -236,10 +239,11 @@ private struct StartDriveErrorAlertModifier: ViewModifier {
 }
 
 private struct MergeDrivesSheetModifier: ViewModifier {
-  @Bindable var viewModel: HomeViewModel
+  let viewModel: HomeViewModel
+  var isPresented: Binding<Bool>
 
   func body(content: Content) -> some View {
-    content.sheet(isPresented: $viewModel.showingMergeSheet) {
+    content.sheet(isPresented: isPresented) {
       if viewModel.drivesToMerge.count == 2 {
         MergeDrivesView(drives: viewModel.drivesToMerge) { orderedDrives, mergedName in
           viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName)
