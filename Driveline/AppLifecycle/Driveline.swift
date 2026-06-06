@@ -36,6 +36,10 @@ struct Driveline: App {
           guard newPhase == .active else { return }
           Task { await driveService.checkAndRetryNilPlaceNamesForFinishedDrives() }
         }
+        .onOpenURL { url in
+          guard url.scheme == "driveline", url.host == "finish" else { return }
+          driveService.finishDrive()
+        }
     }
     .modelContainer(modelContainer)
   }
