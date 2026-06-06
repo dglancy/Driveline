@@ -126,8 +126,6 @@ struct RecordingView: View {
 
   private var secondaryStats: some View {
     HStack(spacing: 0) {
-      StatColumn(value: viewModel.speedValue, label: viewModel.speedUnit)
-      Divider().frame(height: 36)
       StatColumn(value: viewModel.formattedPositionCount,
                  label: String(localized: "logged",
                                comment: "Label for the count of GPS positions logged during a drive"))

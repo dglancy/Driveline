@@ -359,35 +359,6 @@
         }
       }
     },
-    "avg %@" : {
-      "comment" : "Average speed unit label on the recording screen, e.g. 'avg km/h'",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ø %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "avg %@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "moy. %@"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gem. %@"
-          }
-        }
-      }
-    },
     "Avg Speed" : {
       "comment" : "Stat tile label",
       "localizations" : {
