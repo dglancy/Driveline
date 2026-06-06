@@ -214,6 +214,7 @@ private struct LiveActivityTimerColumn: View {
       Text(startedAt, style: .timer)
         .font(.title3.weight(.semibold))
         .monospacedDigit()
+        .multilineTextAlignment(.center)
         .foregroundStyle(.primary)
         .frame(maxWidth: .infinity, alignment: .center)
       Text(String(localized: "Duration", comment: "Live Activity duration label"))
