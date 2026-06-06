@@ -1,7 +1,7 @@
 included:
-  - AutoRoute
-  - AutoRouteTests
-  - AutoRouteUITests
+  - Driveline
+  - DrivelineTests
+  - DrivelineUITests
 
 identifier_name:
   min_length: 2
