@@ -7,6 +7,7 @@
 
 @testable import Driveline
 import Foundation
+import SwiftData
 import Testing
 
 @Suite("ExportDrivePNG")
@@ -138,5 +139,59 @@ final class ExportDrivePNGTests: SwiftDataBaseTestCase {
     await #expect(throws: ExportError.emptyDrive) {
       _ = try await ExportDrivePNG().export(drive: drive)
     }
+  }
+
+  // MARK: - Marker labels
+
+  @Test
+  func exportProducesPNGFileWhenDriveHasPositionsAndNoPlaceNames() async throws {
+    let drive = Drive()
+    let position = makePosition(latitude: 51.5074, longitude: -0.1278)
+    context!.insert(drive)
+    context!.insert(position)
+    position.drive = drive
+
+    let url = try await ExportDrivePNG().export(drive: drive)
+    #expect(FileManager.default.fileExists(atPath: url.path))
+  }
+
+  @Test
+  func exportProducesPNGFileWhenDriveHasBothPlaceNames() async throws {
+    let drive = Drive()
+    drive.startPlaceName = "Home"
+    drive.endPlaceName = "Work"
+    let position = makePosition(latitude: 51.5074, longitude: -0.1278)
+    context!.insert(drive)
+    context!.insert(position)
+    position.drive = drive
+
+    let url = try await ExportDrivePNG().export(drive: drive)
+    #expect(FileManager.default.fileExists(atPath: url.path))
+  }
+
+  @Test
+  func exportProducesPNGFileWhenDriveHasOnlyStartPlaceName() async throws {
+    let drive = Drive()
+    drive.startPlaceName = "Home"
+    let position = makePosition(latitude: 51.5074, longitude: -0.1278)
+    context!.insert(drive)
+    context!.insert(position)
+    position.drive = drive
+
+    let url = try await ExportDrivePNG().export(drive: drive)
+    #expect(FileManager.default.fileExists(atPath: url.path))
+  }
+
+  @Test
+  func exportProducesPNGFileWhenDriveHasOnlyEndPlaceName() async throws {
+    let drive = Drive()
+    drive.endPlaceName = "Work"
+    let position = makePosition(latitude: 51.5074, longitude: -0.1278)
+    context!.insert(drive)
+    context!.insert(position)
+    position.drive = drive
+
+    let url = try await ExportDrivePNG().export(drive: drive)
+    #expect(FileManager.default.fileExists(atPath: url.path))
   }
 }
