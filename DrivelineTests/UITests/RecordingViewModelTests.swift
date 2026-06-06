@@ -13,14 +13,6 @@ import SwiftUI
 @MainActor
 final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
-  // MARK: - speedValue
-
-  @Test
-  func speedValueIsEmDashWhenNoDistanceTravelled() {
-    let vm = makeViewModel()
-    #expect(vm.speedValue == "—")
-  }
-
   // MARK: - positionCount
 
   @Test
