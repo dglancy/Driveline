@@ -9,8 +9,9 @@ import Foundation
 
 @MainActor
 private enum SpeedFormatterCache {
-  static var measurements: [String: MeasurementFormatter] = [:]
-  static var numbers: [String: NumberFormatter] = [:]
+  static var localeIdentifier: String = ""
+  static var measurement: MeasurementFormatter?
+  static var number: NumberFormatter?
 }
 
 extension Measurement where UnitType == UnitSpeed {
@@ -23,24 +24,32 @@ extension Measurement where UnitType == UnitSpeed {
 
   @MainActor
   private static func measurementFormatter(for locale: Locale) -> MeasurementFormatter {
-    let key = locale.identifier
-    if let cached = SpeedFormatterCache.measurements[key] { return cached }
+    if SpeedFormatterCache.localeIdentifier == locale.identifier,
+       let cached = SpeedFormatterCache.measurement { return cached }
     let formatter = MeasurementFormatter()
     formatter.locale = locale
     formatter.unitOptions = .providedUnit
     formatter.numberFormatter.maximumFractionDigits = 0
-    SpeedFormatterCache.measurements[key] = formatter
+    if SpeedFormatterCache.localeIdentifier != locale.identifier {
+      SpeedFormatterCache.localeIdentifier = locale.identifier
+      SpeedFormatterCache.number = nil
+    }
+    SpeedFormatterCache.measurement = formatter
     return formatter
   }
 
   @MainActor
   private static func numberFormatter(for locale: Locale) -> NumberFormatter {
-    let key = locale.identifier
-    if let cached = SpeedFormatterCache.numbers[key] { return cached }
+    if SpeedFormatterCache.localeIdentifier == locale.identifier,
+       let cached = SpeedFormatterCache.number { return cached }
     let formatter = NumberFormatter()
     formatter.locale = locale
     formatter.maximumFractionDigits = 0
-    SpeedFormatterCache.numbers[key] = formatter
+    if SpeedFormatterCache.localeIdentifier != locale.identifier {
+      SpeedFormatterCache.localeIdentifier = locale.identifier
+      SpeedFormatterCache.measurement = nil
+    }
+    SpeedFormatterCache.number = formatter
     return formatter
   }
 
