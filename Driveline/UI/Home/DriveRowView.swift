@@ -95,7 +95,7 @@ struct DriveRowView: View {
       Text(display.name)
         .font(nameFont)
         .lineLimit(1)
-        .dynamicTypeSize(.large ... .accessibility1)
+        .dynamicTypeSize(.xSmall ... .accessibility1)
       Text(display.dateTimeLabel)
         .font(dateFont)
         .foregroundStyle(.secondary)

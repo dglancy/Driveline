@@ -85,6 +85,8 @@ struct DriveDetailView: View {
       Text(viewModel.name)
         .font(.title.weight(.bold))
         .foregroundStyle(Color(.label))
+        .lineLimit(2)
+        .minimumScaleFactor(0.1)
         .dynamicTypeSize(.xSmall ... .accessibility1)
       Text(viewModel.dateString)
         .font(.callout)
