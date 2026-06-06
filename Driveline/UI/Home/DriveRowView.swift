@@ -94,7 +94,7 @@ struct DriveRowView: View {
     VStack(alignment: .leading, spacing: 1) {
       Text(display.name)
         .font(nameFont)
-        .lineLimit(1)
+        .lineLimit(2)
         .dynamicTypeSize(.xSmall ... .accessibility1)
       Text(display.dateTimeLabel)
         .font(dateFont)

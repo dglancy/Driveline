@@ -54,11 +54,14 @@ struct FullScreenMapView: View {
   // MARK: - Private Views
 
   private var infoCard: some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(spacing: 10) {
       Text(viewModel.name)
         .font(.body.weight(.semibold))
         .foregroundStyle(Color(.label))
         .dynamicTypeSize(.xSmall ... .accessibility1)
+        .lineLimit(2)
+        .minimumScaleFactor(0.7)
+        .multilineTextAlignment(.center)
 
       HStack(spacing: 0) {
         statChip(value: viewModel.distanceValue, unit: viewModel.distanceUnit)
