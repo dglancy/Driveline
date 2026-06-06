@@ -1,5 +1,5 @@
 //
-//  DriveService.swift
+//  DriveRecordingService.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -13,7 +13,7 @@ import Combine
 
 @MainActor
 @Observable
-final class DriveService {
+final class DriveRecordingService {
 
   // MARK: - Properties
 

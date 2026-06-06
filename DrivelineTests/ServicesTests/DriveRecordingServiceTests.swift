@@ -1,5 +1,5 @@
 //
-//  DriveServiceTests.swift
+//  DriveRecordingServiceTests.swift
 //  AutoDriveTests
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -13,7 +13,7 @@ import SwiftData
 import Testing
 
 @MainActor
-final class DriveServiceTests: SwiftDataBaseTestCase {
+final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - startDrive
 
@@ -175,7 +175,7 @@ final class DriveServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let existingDrive = Drive(name: "Existing drive")
-    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: existingDrive)
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: existingDrive)
 
     #expect(service.drive?.id == existingDrive.id)
   }
@@ -186,7 +186,7 @@ final class DriveServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let drive = Drive(name: "Test")
     drive.status = .recording
-    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
 
     #expect(service.isRecording == true)
   }
@@ -197,7 +197,7 @@ final class DriveServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let drive = Drive(name: "Test")
     drive.status = .finished
-    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
 
     #expect(service.isRecording == false)
   }
@@ -253,10 +253,10 @@ final class DriveServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil) -> (DriveService, LocationService, LocationDataRecorderService) {
+  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = DriveService(
+    let service = DriveRecordingService(
       modelContext: context!,
       locationService: locationService,
       locationDataRecorder: recorder,

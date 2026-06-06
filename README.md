@@ -55,7 +55,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 **Language and frameworks**
 - Swift 6.3 with strict concurrency throughout
 - SwiftUI on iOS 26+
-- SwiftData for persistence (two model types: `Route` and `Position`)
+- SwiftData for persistence (two model types: `Drive` and `Position`)
 
 **Apple frameworks**
 - CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`

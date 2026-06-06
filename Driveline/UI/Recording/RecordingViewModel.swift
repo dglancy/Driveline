@@ -15,7 +15,7 @@ final class RecordingViewModel {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let driveService: DriveService
+  @ObservationIgnored private let driveService: DriveRecordingService
 
   // MARK: - Computed Properties
 
@@ -74,7 +74,7 @@ final class RecordingViewModel {
 
   // MARK: - Lifecycle
 
-  init(driveService: DriveService) {
+  init(driveService: DriveRecordingService) {
     self.driveService = driveService
   }
 

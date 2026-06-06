@@ -16,7 +16,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   // MARK: - Properties
 
-  private var driveService: DriveService!
+  private var driveService: DriveRecordingService!
 
   // MARK: - Lifecycle
 
@@ -24,7 +24,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     try await super.init()
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    driveService = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
+    driveService = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     IntentDependencyResolver.provider = { [weak self] in
       self?.driveService
     }

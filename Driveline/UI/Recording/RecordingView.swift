@@ -17,7 +17,7 @@ struct RecordingView: View {
 
   // MARK: - Lifecycle
 
-  init(driveService: DriveService) {
+  init(driveService: DriveRecordingService) {
     _viewModel = State(initialValue: RecordingViewModel(driveService: driveService))
   }
 
@@ -257,7 +257,7 @@ private struct StatColumn: View {
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let drive = Drive(name: "Morning Drive", trigger: .automatic)
-  let driveService = DriveService(
+  let driveService = DriveRecordingService(
     modelContext: container.mainContext,
     locationService: locationService,
     locationDataRecorder: locationDataRecorder,

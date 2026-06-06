@@ -13,7 +13,7 @@ struct HomeView: View {
   // MARK: - Properties
 
   @Environment(\.modelContext) private var modelContext
-  @Environment(DriveService.self) private var driveService
+  @Environment(DriveRecordingService.self) private var driveService
 
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
@@ -190,7 +190,7 @@ struct HomeView: View {
 // MARK: - Presentation Modifiers
 
 private struct RecordingScreenModifier: ViewModifier {
-  let driveService: DriveService
+  let driveService: DriveRecordingService
   @Bindable var viewModel: HomeViewModel
 
   func body(content: Content) -> some View {
@@ -257,7 +257,7 @@ private struct MergeDrivesSheetModifier: ViewModifier {
 
   let locationService = LocationService()
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
-  let driveService = DriveService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
+  let driveService = DriveRecordingService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
   return HomeView()
     .modelContainer(container)

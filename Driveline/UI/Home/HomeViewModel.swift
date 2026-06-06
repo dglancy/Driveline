@@ -64,7 +64,7 @@ final class HomeViewModel {
 
   // MARK: - Methods
 
-  func startDrive(trigger: Drive.RecordingTrigger = .manual, using driveService: DriveService) {
+  func startDrive(trigger: Drive.RecordingTrigger = .manual, using driveService: DriveRecordingService) {
     do {
       try driveService.startDrive(trigger: trigger)
     } catch {
@@ -116,21 +116,7 @@ final class HomeViewModel {
   }
 
   func mergeDrives(orderedDrives: [Drive], mergedName: String) {
-    guard orderedDrives.count == 2 else { return }
-    let first = orderedDrives[0]
-    let second = orderedDrives[1]
-
-    let merged = Drive(name: mergedName)
-    merged.startedAt = first.startedAt
-    merged.endedAt = second.endedAt ?? first.endedAt
-    merged.status = .finished
-    merged.startPlaceName = first.startPlaceName
-    merged.endPlaceName = second.endPlaceName
-    merged.positions = first.positions + second.positions
-
-    modelContext.insert(merged)
-    modelContext.delete(first)
-    modelContext.delete(second)
+    DriveMergeService(modelContext: modelContext).merge(orderedDrives: orderedDrives, mergedName: mergedName)
   }
 
   // MARK: - Private
