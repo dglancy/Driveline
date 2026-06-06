@@ -46,7 +46,11 @@ enum AppBootstrap {
       Drive.self,
       Position.self
     ])
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemoryOnly)
+    let modelConfiguration = ModelConfiguration(
+      schema: schema,
+      isStoredInMemoryOnly: inMemoryOnly,
+      cloudKitDatabase: inMemoryOnly ? .none : .automatic
+    )
     do {
       return try ModelContainer(for: schema, configurations: [modelConfiguration])
     } catch {

@@ -31,7 +31,7 @@ final class MergeDrivesViewModel {
   }
 
   var formattedTotalPositionCount: String {
-    (orderedDrives[0].positions.count + orderedDrives[1].positions.count).formatted()
+    ((orderedDrives[0].positions?.count ?? 0) + (orderedDrives[1].positions?.count ?? 0)).formatted()
   }
 
   // MARK: - Lifecycle

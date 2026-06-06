@@ -39,5 +39,4 @@ struct Driveline: App {
     }
     .modelContainer(modelContainer)
   }
-
 }
