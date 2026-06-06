@@ -48,7 +48,7 @@ final class DriveRecordingService {
 
     networkCancellable = networkMonitorService.connectivityRestoredPublisher
       .sink { [weak self] in
-        Task { [weak self] in
+        Task { 
           guard let self else { return }
           await self.retryNilPlaceNamesOnConnectivity()
         }
