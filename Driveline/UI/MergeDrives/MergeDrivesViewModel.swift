@@ -58,7 +58,6 @@ final class MergeDrivesViewModel {
   private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
     let parts: [String?] = [DriveStatsPresenter(drive: drive).startTimeLabel, drive.startPlaceName]
     return DriveRowDisplay(
-      name: drive.displayName,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
       formattedDistance: Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
       formattedDuration: drive.activeDurationSeconds.localizedHoursMinutesString(),

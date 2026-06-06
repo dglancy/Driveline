@@ -60,8 +60,8 @@ struct MergeDrivesView: View {
       sectionHeader(String(localized: "Order", comment: "Merge order section header"))
       ZStack(alignment: .trailing) {
         VStack(spacing: 8) {
-          DriveRowView(display: viewModel.firstDisplay, style: .card(index: 1))
-          DriveRowView(display: viewModel.secondDisplay, style: .card(index: 2))
+          DriveRowView(drive: viewModel.orderedDrives[0], display: viewModel.firstDisplay, style: .card(index: 1))
+          DriveRowView(drive: viewModel.orderedDrives[1], display: viewModel.secondDisplay, style: .card(index: 2))
         }
         swapButton
           .padding(.trailing, 14)
