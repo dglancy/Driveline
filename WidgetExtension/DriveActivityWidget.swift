@@ -63,8 +63,6 @@ private struct DriveActivityLockScreenView: View {
         .foregroundStyle(Color.brand)
       Text(String(localized: "Recording Drive", comment: "Live Activity title"))
         .font(.headline.weight(.semibold))
-      Spacer()
-      RecordingPulsingDot()
     }
   }
 
@@ -222,20 +220,6 @@ private struct LiveActivityTimerColumn: View {
         .foregroundStyle(.secondary)
         .frame(maxWidth: .infinity, alignment: .center)
     }
-  }
-}
-
-private struct RecordingPulsingDot: View {
-
-  @State private var pulsing = false
-
-  var body: some View {
-    Circle()
-      .fill(.red)
-      .frame(width: 8, height: 8)
-      .opacity(pulsing ? 0.3 : 1.0)
-      .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: pulsing)
-      .onAppear { pulsing = true }
   }
 }
 
