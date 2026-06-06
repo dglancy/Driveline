@@ -125,19 +125,21 @@ final class HomeViewModel {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: .now)
 
-    var groupMap: [(key: String, rows: [DriveRow])] = []
+    var groupMap: [String: [DriveRow]] = [:]
+    var orderedKeys: [String] = []
 
     for drive in drives.sorted(by: { $0.startedAt > $1.startedAt }) {
       let key = sectionTitle(for: drive.startedAt, today: today, calendar: calendar)
       let row = DriveRow(drive: drive, display: makeDisplay(for: drive))
-      if let index = groupMap.firstIndex(where: { $0.key == key }) {
-        groupMap[index].rows.append(row)
+      if groupMap[key] != nil {
+        groupMap[key]!.append(row)
       } else {
-        groupMap.append((key: key, rows: [row]))
+        groupMap[key] = [row]
+        orderedKeys.append(key)
       }
     }
 
-    return groupMap.map { DriveSection(title: $0.key, rows: $0.rows) }
+    return orderedKeys.map { DriveSection(title: $0, rows: groupMap[$0]!) }
   }
 
   private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
