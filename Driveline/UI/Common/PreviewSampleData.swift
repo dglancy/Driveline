@@ -18,25 +18,6 @@ enum PreviewSampleData {
 
   @MainActor
   static func sampleDrive(in context: ModelContext) -> Drive {
-    let calendar = Calendar.current
-    let now = Date.now
-
-    func date(daysAgo: Int, hour: Int, minute: Int = 0) -> Date {
-      let day = calendar.date(byAdding: .day, value: -daysAgo, to: now)!
-      return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day)!
-    }
-
-    func position(lat: Double, lon: Double, at timestamp: Date, speed: Double = 14) -> Position {
-      let pos = Position(
-        timestamp: timestamp,
-        latitude: lat, longitude: lon,
-        altitude: 50, horizontalAccuracy: 5, verticalAccuracy: 3,
-        course: 0, courseAccuracy: 5, speed: speed, speedAccuracy: 1
-      )
-      context.insert(pos)
-      return pos
-    }
-
     let drive = Drive(name: "Weekend to Tahoe", trigger: .automatic)
     drive.startedAt = date(daysAgo: 6, hour: 7, minute: 5)
     drive.endedAt = drive.startedAt.addingTimeInterval(3 * 3600 + 28 * 60)
@@ -53,7 +34,7 @@ enum PreviewSampleData {
     for (index, (lat, lon, speed)) in waypoints.enumerated() {
       let interval = Double(index) * (3 * 3600 + 28 * 60) / Double(waypoints.count - 1)
       let timestamp = drive.startedAt.addingTimeInterval(interval)
-      drive.positions.append(position(lat: lat, lon: lon, at: timestamp, speed: speed))
+      drive.positions.append(position(lat: lat, lon: lon, at: timestamp, speed: speed, in: context))
     }
 
     return drive
@@ -61,25 +42,6 @@ enum PreviewSampleData {
 
   @MainActor
   static func insertSampleDrives(in context: ModelContext) {
-    let calendar = Calendar.current
-    let now = Date.now
-
-    func date(daysAgo: Int, hour: Int, minute: Int = 0) -> Date {
-      let day = calendar.date(byAdding: .day, value: -daysAgo, to: now)!
-      return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day)!
-    }
-
-    func pos(lat: Double, lon: Double, at timestamp: Date) -> Position {
-      let position = Position(
-        timestamp: timestamp,
-        latitude: lat, longitude: lon,
-        altitude: 50, horizontalAccuracy: 5, verticalAccuracy: 3,
-        course: 0, courseAccuracy: 5, speed: 14, speedAccuracy: 1
-      )
-      context.insert(position)
-      return position
-    }
-
     typealias Coords = (lat: Double, lon: Double)
     let home: Coords = (51.440, -0.102)
 
@@ -104,11 +66,34 @@ enum PreviewSampleData {
         drive.status = .finished
       }
       context.insert(drive)
-      drive.positions.append(pos(lat: home.lat, lon: home.lon, at: drive.startedAt))
+      drive.positions.append(position(lat: home.lat, lon: home.lon, at: drive.startedAt, in: context))
       if let end {
         let endTime = drive.endedAt ?? drive.startedAt.addingTimeInterval(1_800)
-        drive.positions.append(pos(lat: end.lat, lon: end.lon, at: endTime))
+        drive.positions.append(position(lat: end.lat, lon: end.lon, at: endTime, in: context))
       }
     }
+  }
+
+  // MARK: - Helpers
+
+  private static func date(daysAgo: Int, hour: Int, minute: Int = 0) -> Date {
+    let calendar = Calendar.current
+    let now = Date.now
+    let day = calendar.date(byAdding: .day, value: -daysAgo, to: now) ?? now
+    return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) ?? now
+  }
+
+  @MainActor
+  private static func position(
+    lat: Double, lon: Double, at timestamp: Date, speed: Double = 14, in context: ModelContext
+  ) -> Position {
+    let pos = Position(
+      timestamp: timestamp,
+      latitude: lat, longitude: lon,
+      altitude: 50, horizontalAccuracy: 5, verticalAccuracy: 3,
+      course: 0, courseAccuracy: 5, speed: speed, speedAccuracy: 1
+    )
+    context.insert(pos)
+    return pos
   }
 }

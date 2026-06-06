@@ -26,25 +26,25 @@ struct UserPreferences {
 
   var activityType: CLActivityType {
     let rawValue = defaults.string(forKey: Keys.activityType) ?? ActivityTypeSetting.default.rawValue
-    Log.settings.info("Location activity type set to \"\(rawValue)\" from user settings")
+    Log.settings.debug("Location activity type set to \"\(rawValue)\" from user settings")
     return CLActivityType(fromSettings: rawValue)
   }
 
   var exportMapSize: CGSize {
     let rawValue = defaults.string(forKey: Keys.exportMapSize) ?? "high2"
-    Log.settings.info("Export map size set to \"\(rawValue)\" from user settings")
+    Log.settings.debug("Export map size set to \"\(rawValue)\" from user settings")
     return (MapSize(from: rawValue) ?? .high2).size
   }
 
   var alwaysUseLightMapAppearance: Bool {
     let value = defaults.bool(forKey: Keys.alwaysUseLightMapAppearance)
-    Log.settings.info("Always use light map appearance set to \"\(value)\" from user settings")
+    Log.settings.debug("Always use light map appearance set to \"\(value)\" from user settings")
     return value
   }
 
   var driveWidth: CGFloat {
     let rawValue = defaults.string(forKey: Keys.driveWidth) ?? "medium"
-    Log.settings.info("Drive width set to \"\(rawValue)\" from user settings")
+    Log.settings.debug("Drive width set to \"\(rawValue)\" from user settings")
     return (DriveWidth(from: rawValue) ?? .medium).width
   }
 }

@@ -38,12 +38,11 @@ final class GeocodingService: GeocodingServiceProtocol {
     guard let request = MKReverseGeocodingRequest(location: location),
           let mapItem = try? await request.mapItems.first else { return nil }
 
-    // Safe dynamic lookup to bypass the rigid compile-time warning
-    let placemark = mapItem.value(forKey: "placemark") as? CLPlacemark
+    let placemark = (mapItem as LegacyMapItemPlacemark).deprecatedPlacemark
 
     let components = PlaceNameComponents(
-      subLocality: placemark?.subLocality,
-      locality: placemark?.locality,
+      subLocality: placemark.subLocality,
+      locality: placemark.locality,
       cityWithContext: mapItem.addressRepresentations?.cityWithContext,
       cityName: mapItem.addressRepresentations?.cityName,
       shortAddress: mapItem.address?.shortAddress,
@@ -65,4 +64,19 @@ final class GeocodingService: GeocodingServiceProtocol {
     if let cityName = components.cityName { return cityName }
     return components.shortAddress ?? components.name
   }
+}
+
+// MARK: - Legacy Placemark Bridge
+
+// MKAddressRepresentations / MKAddress (iOS 26) do not expose sub-locality.
+// The only public property that does is the deprecated MKMapItem.placemark.
+// Routing access through this protocol silences the deprecation warning at
+// the call site without resorting to KVC.
+private protocol LegacyMapItemPlacemark {
+  var deprecatedPlacemark: CLPlacemark { get }
+}
+
+extension MKMapItem: LegacyMapItemPlacemark {
+  @available(*, deprecated)
+  fileprivate var deprecatedPlacemark: CLPlacemark { placemark }
 }
