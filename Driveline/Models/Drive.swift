@@ -51,6 +51,8 @@ final class Drive {
   @Relationship(deleteRule: .cascade, inverse: \Position.drive)
   var positions: [Position]
 
+  var accumulatedDistanceMetres: Double
+
   // MARK: - Computed Properties
 
   var isRecording: Bool { status != .finished }
@@ -65,7 +67,7 @@ final class Drive {
   }
 
   var distanceMetres: Double {
-    let sorted = positions.sorted { $0.timestamp < $1.timestamp }
+    let sorted = orderedPositions
     return zip(sorted, sorted.dropFirst()).reduce(0.0) { total, pair in
       let from = CLLocation(latitude: pair.0.latitude, longitude: pair.0.longitude)
       let to = CLLocation(latitude: pair.1.latitude, longitude: pair.1.longitude)
@@ -98,5 +100,6 @@ final class Drive {
     self.trigger = trigger
     self.status = .recording
     self.positions = []
+    self.accumulatedDistanceMetres = 0
   }
 }
