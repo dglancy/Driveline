@@ -30,6 +30,7 @@ struct EditDriveView: View {
             String(localized: "Drive name", comment: "Drive name text field placeholder"),
             text: $viewModel.driveName
           )
+          .clearable($viewModel.driveName)
         }
 
         Section(String(localized: "Start Location", comment: "Edit drive section header")) {
@@ -37,6 +38,7 @@ struct EditDriveView: View {
             String(localized: "Start location name", comment: "Start location text field placeholder"),
             text: $viewModel.startPlaceName
           )
+          .clearable($viewModel.startPlaceName)
         }
 
         Section(String(localized: "End Location", comment: "Edit drive section header")) {
@@ -44,6 +46,7 @@ struct EditDriveView: View {
             String(localized: "End location name", comment: "End location text field placeholder"),
             text: $viewModel.endPlaceName
           )
+          .clearable($viewModel.endPlaceName)
         }
       }
       .navigationTitle(String(localized: "Edit Drive", comment: "Edit drive sheet title"))
