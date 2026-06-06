@@ -18,7 +18,6 @@ final class DriveRecordingService {
   // MARK: - Properties
 
   private(set) var drive: Drive?
-  private(set) var currentSpeedMs: Double?
 
   var isRecording: Bool { drive?.isRecording ?? false }
 
@@ -75,7 +74,6 @@ final class DriveRecordingService {
   private func createNewDrive(trigger: Drive.RecordingTrigger) throws {
     let drive = Drive(trigger: trigger)
     self.drive = drive
-    currentSpeedMs = nil
 
     do {
       try locationDataRecorder.startRecording(with: drive)
@@ -86,8 +84,7 @@ final class DriveRecordingService {
     locationService.start()
 
     speedCancellable = locationService.locationPublisher
-      .sink { [weak self] location in
-        self?.currentSpeedMs = location.speed >= 0 ? location.speed : nil
+      .sink { [weak self] _ in
         self?.updateLiveActivity()
       }
 
@@ -112,15 +109,13 @@ final class DriveRecordingService {
     drive.endedAt = nil
     drive.endPlaceName = nil
     self.drive = drive
-    currentSpeedMs = nil
     saveModelContext()
 
     try? locationDataRecorder.startRecording(with: drive)
     locationService.start()
 
     speedCancellable = locationService.locationPublisher
-      .sink { [weak self] location in
-        self?.currentSpeedMs = location.speed >= 0 ? location.speed : nil
+      .sink { [weak self] _ in
         self?.updateLiveActivity()
       }
 
@@ -162,7 +157,6 @@ final class DriveRecordingService {
       }
     }
 
-    currentSpeedMs = nil
     self.drive = nil
 
     #if os(iOS)
