@@ -12,12 +12,19 @@ struct HomeView: View {
 
   // MARK: - Properties
 
-  @Environment(\.modelContext) private var modelContext
   @Environment(DriveService.self) private var driveService
 
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
-  @State private var viewModel = HomeViewModel()
+  @State private var viewModel: HomeViewModel
+  private let modelContext: ModelContext
+
+  // MARK: - Lifecycle
+
+  init(modelContext: ModelContext) {
+    self.modelContext = modelContext
+    _viewModel = State(initialValue: HomeViewModel(modelContext: modelContext))
+  }
 
   // MARK: - Body
 
@@ -39,9 +46,9 @@ struct HomeView: View {
         }
     }
     .modifier(RecordingScreenModifier(driveService: driveService, viewModel: viewModel))
-    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel))
     .modifier(StartDriveErrorAlertModifier(viewModel: viewModel))
-    .modifier(MergeDrivesSheetModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(MergeDrivesSheetModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
@@ -103,7 +110,7 @@ struct HomeView: View {
               }
             }
             .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
-              viewModel.deleteDrives(at: indexSet, in: section, using: modelContext)
+              viewModel.deleteDrives(at: indexSet, in: section)
             })
           }
         }
@@ -117,7 +124,7 @@ struct HomeView: View {
       }
       .contentMargins(.top, 0, for: .scrollContent)
       .navigationDestination(for: Drive.self) { drive in
-        DriveDetailView(drive: drive)
+        DriveDetailView(drive: drive, modelContext: modelContext)
       }
 
       if viewModel.isSelectMode {
@@ -198,7 +205,6 @@ private struct RecordingScreenModifier: ViewModifier {
 
 private struct DeleteDrivesAlertModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
-  let modelContext: ModelContext
 
   func body(content: Content) -> some View {
     content.alert(
@@ -208,7 +214,7 @@ private struct DeleteDrivesAlertModifier: ViewModifier {
       Button.delete {
         let selected = viewModel.selectedDrives(from: viewModel.sections)
         viewModel.exitSelectMode()
-        viewModel.deleteDrives(selected, using: modelContext)
+        viewModel.deleteDrives(selected)
       }
       Button.cancel()
     } message: {
@@ -234,13 +240,12 @@ private struct StartDriveErrorAlertModifier: ViewModifier {
 
 private struct MergeDrivesSheetModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
-  let modelContext: ModelContext
 
   func body(content: Content) -> some View {
     content.sheet(isPresented: $viewModel.showingMergeSheet) {
       if viewModel.drivesToMerge.count == 2 {
         MergeDrivesView(drives: viewModel.drivesToMerge) { orderedDrives, mergedName in
-          viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName, using: modelContext)
+          viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName)
         }
       }
     }
@@ -257,7 +262,7 @@ private struct MergeDrivesSheetModifier: ViewModifier {
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let driveService = DriveService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
-  return HomeView()
+  return HomeView(modelContext: container.mainContext)
     .modelContainer(container)
     .environment(driveService)
 }
