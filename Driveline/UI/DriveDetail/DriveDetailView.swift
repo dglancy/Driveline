@@ -15,13 +15,14 @@ struct DriveDetailView: View {
 
   @State private var viewModel: DriveDetailViewModel
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
 
   private let mapHeight: CGFloat = 280
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, modelContext: ModelContext) {
-    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive, modelContext: modelContext))
+  init(drive: Drive) {
+    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive))
   }
 
   // MARK: - Body
@@ -67,6 +68,7 @@ struct DriveDetailView: View {
       }
     }
     .toolbar(.hidden, for: .navigationBar)
+    .onAppear { viewModel.modelContext = modelContext }
     .modifier(FullScreenMapModifier(viewModel: viewModel))
     .modifier(ExportShareSheetModifier(viewModel: viewModel))
     .modifier(ExportErrorAlertModifier(viewModel: viewModel))
@@ -286,7 +288,7 @@ private struct DriveOptionsDialogModifier: ViewModifier {
   let container = PreviewSampleData.previewContainer()
   let drive = PreviewSampleData.sampleDrive(in: container.mainContext)
   return NavigationStack {
-    DriveDetailView(drive: drive, modelContext: container.mainContext)
+    DriveDetailView(drive: drive)
   }
   .modelContainer(container)
 }

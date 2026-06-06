@@ -12,19 +12,12 @@ struct HomeView: View {
 
   // MARK: - Properties
 
+  @Environment(\.modelContext) private var modelContext
   @Environment(DriveService.self) private var driveService
 
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
-  @State private var viewModel: HomeViewModel
-  private let modelContext: ModelContext
-
-  // MARK: - Lifecycle
-
-  init(modelContext: ModelContext) {
-    self.modelContext = modelContext
-    _viewModel = State(initialValue: HomeViewModel(modelContext: modelContext))
-  }
+  @State private var viewModel = HomeViewModel()
 
   // MARK: - Body
 
@@ -44,6 +37,7 @@ struct HomeView: View {
           }
           viewModel.showingRecordingScreen = isRecording
         }
+        .onAppear { viewModel.modelContext = modelContext }
     }
     .modifier(RecordingScreenModifier(driveService: driveService, viewModel: viewModel))
     .modifier(DeleteDrivesAlertModifier(viewModel: viewModel))
@@ -124,7 +118,7 @@ struct HomeView: View {
       }
       .contentMargins(.top, 0, for: .scrollContent)
       .navigationDestination(for: Drive.self) { drive in
-        DriveDetailView(drive: drive, modelContext: modelContext)
+        DriveDetailView(drive: drive)
       }
 
       if viewModel.isSelectMode {
@@ -262,7 +256,7 @@ private struct MergeDrivesSheetModifier: ViewModifier {
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let driveService = DriveService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
-  return HomeView(modelContext: container.mainContext)
+  return HomeView()
     .modelContainer(container)
     .environment(driveService)
 }
