@@ -241,9 +241,71 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(mockGeocoding.geocodedLocations.count == 1)
   }
 
+  // MARK: - Continue drive if recently finished
+
+  @Test
+  func startDriveWithToggleOnResumesRecentlyFinishedDrive() async throws {
+    let finishedDrive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: "Work")
+    let (service, locationService, _) = makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
+
+    try service.startDrive(trigger: .automatic)
+
+    #expect(service.drive?.id == finishedDrive.id)
+    #expect(service.drive?.status == .recording)
+    #expect(service.drive?.endedAt == nil)
+    #expect(service.drive?.endPlaceName == nil)
+    #expect(service.drive?.startPlaceName == "Home")
+    #expect(locationService.status == .started)
+  }
+
+  @Test
+  func startDriveWithToggleOnCreatesNewDriveIfNoneRecentlyFinished() async throws {
+    let (service, _, _) = makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
+
+    try service.startDrive(trigger: .automatic)
+
+    #expect(service.drive != nil)
+    let driveCount = try count(where: #Predicate<Drive> { _ in true })
+    #expect(driveCount == 1)
+  }
+
+  @Test
+  func startDriveWithToggleOnCreatesNewDriveIfFinishedDriveIsOlderThan30Minutes() async throws {
+    let oldDrive = try insertFinishedDrive(endedAt: .now.addingTimeInterval(-3600))
+    let (service, _, _) = makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
+
+    try service.startDrive(trigger: .automatic)
+
+    #expect(service.drive?.id != oldDrive.id)
+    let driveCount = try count(where: #Predicate<Drive> { _ in true })
+    #expect(driveCount == 2)
+  }
+
+  @Test
+  func startDriveWithManualTriggerAlwaysCreatesNewDrive() async throws {
+    try insertFinishedDrive()
+    let (service, _, _) = makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
+
+    try service.startDrive(trigger: .manual)
+
+    let driveCount = try count(where: #Predicate<Drive> { _ in true })
+    #expect(driveCount == 2)
+  }
+
+  @Test
+  func startDriveWithToggleOffAlwaysCreatesNewDrive() async throws {
+    try insertFinishedDrive()
+    let (service, _, _) = makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: false))
+
+    try service.startDrive(trigger: .automatic)
+
+    let driveCount = try count(where: #Predicate<Drive> { _ in true })
+    #expect(driveCount == 2)
+  }
+
   // MARK: - Helpers
 
-  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
+  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil, userPreferences: UserPreferences? = nil) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
@@ -251,8 +313,27 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       locationService: locationService,
       locationDataRecorder: recorder,
       geocodingService: geocodingService ?? MockGeocodingService(),
-      networkMonitorService: MockNetworkMonitorService()
+      networkMonitorService: MockNetworkMonitorService(),
+      userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)
+  }
+
+  @discardableResult
+  private func insertFinishedDrive(endedAt: Date = .now, startPlaceName: String? = nil, endPlaceName: String? = nil) throws -> Drive {
+    let drive = Drive(trigger: .automatic)
+    drive.status = .finished
+    drive.endedAt = endedAt
+    drive.startPlaceName = startPlaceName
+    drive.endPlaceName = endPlaceName
+    context!.insert(drive)
+    try context!.save()
+    return drive
+  }
+
+  private func makePreferences(continueDriveIfRecentlyFinished: Bool) -> UserPreferences {
+    let defaults = UserDefaults(suiteName: UUID().uuidString)!
+    defaults.set(continueDriveIfRecentlyFinished, forKey: "ContinueDriveIfRecentlyFinished")
+    return UserPreferences(defaults: defaults)
   }
 }

@@ -47,6 +47,12 @@ struct UserPreferences {
     Log.settings.debug("Drive width set to \"\(rawValue)\" from user settings")
     return (DriveWidth(from: rawValue) ?? .medium).width
   }
+
+  var continueDriveIfRecentlyFinished: Bool {
+    let value = defaults.bool(forKey: Keys.continueDriveIfRecentlyFinished)
+    Log.settings.debug("Continue drive if recently finished set to \"\(value)\" from user settings")
+    return value
+  }
 }
 
 // MARK: - Keys
@@ -57,5 +63,6 @@ private extension UserPreferences {
     static let exportMapSize = "ExportMapSize"
     static let alwaysUseLightMapAppearance = "AlwaysUseLightMapAppearance"
     static let driveWidth = "DriveWidth"
+    static let continueDriveIfRecentlyFinished = "ContinueDriveIfRecentlyFinished"
   }
 }

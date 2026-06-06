@@ -27,6 +27,7 @@ final class DriveRecordingService {
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let networkMonitorService: any NetworkMonitorServiceProtocol
+  @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
@@ -41,12 +42,14 @@ final class DriveRecordingService {
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        networkMonitorService: any NetworkMonitorServiceProtocol = NetworkMonitorService(),
+       userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
     self.modelContext = modelContext
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
     self.networkMonitorService = networkMonitorService
+    self.userPreferences = userPreferences
     self.drive = initialDrive
 
     networkCancellable = networkMonitorService.connectivityRestoredPublisher
@@ -61,6 +64,15 @@ final class DriveRecordingService {
   // MARK: - Actions
 
   func startDrive(trigger: Drive.RecordingTrigger = .manual) throws {
+    if trigger == .automatic && userPreferences.continueDriveIfRecentlyFinished,
+       let recentDrive = findRecentlyFinishedDrive() {
+      resumeDrive(recentDrive)
+    } else {
+      try createNewDrive(trigger: trigger)
+    }
+  }
+
+  private func createNewDrive(trigger: Drive.RecordingTrigger) throws {
     let drive = Drive(trigger: trigger)
     self.drive = drive
     currentSpeedMs = nil
@@ -93,6 +105,40 @@ final class DriveRecordingService {
     #if os(iOS)
     activityService.startActivity(for: drive)
     #endif
+  }
+
+  private func resumeDrive(_ drive: Drive) {
+    drive.status = .recording
+    drive.endedAt = nil
+    drive.endPlaceName = nil
+    self.drive = drive
+    currentSpeedMs = nil
+    saveModelContext()
+
+    try? locationDataRecorder.startRecording(with: drive)
+    locationService.start()
+
+    speedCancellable = locationService.locationPublisher
+      .sink { [weak self] location in
+        self?.currentSpeedMs = location.speed >= 0 ? location.speed : nil
+        self?.updateLiveActivity()
+      }
+
+    #if os(iOS)
+    activityService.startActivity(for: drive)
+    #endif
+  }
+
+  private func findRecentlyFinishedDrive() -> Drive? {
+    let cutoff = Date().addingTimeInterval(kRecentDriveCutoff)
+    var descriptor = FetchDescriptor<Drive>(
+      sortBy: [SortDescriptor(\Drive.endedAt, order: .reverse)]
+    )
+    descriptor.fetchLimit = 10
+    guard let drives = try? modelContext.fetch(descriptor) else { return nil }
+    return drives.first {
+      $0.status == .finished && ($0.endedAt.map { $0 >= cutoff } ?? false)
+    }
   }
 
   func finishDrive() {

@@ -27,3 +27,6 @@
 "Thin" = "Dun";
 "Medium" = "Gemiddeld";
 "Thick" = "Dik";
+
+/* Recording */
+"Continue Drive If Recently Finished" = "Rit hervatten als recent beëindigd";

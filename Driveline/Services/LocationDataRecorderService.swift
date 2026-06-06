@@ -44,16 +44,18 @@ final class LocationDataRecorderService {
     }
     Log.data.info("Starting recording locations")
     self.drive = drive
-    modelContext.insert(drive)
 
-    do {
-      try modelContext.save()
-      Log.data.info("Saved starting recording locations")
-    } catch {
-      modelContext.delete(drive)
-      self.drive = nil
-      Log.data.error("Failed to save starting recording locations: \(error)")
-      throw error
+    if drive.modelContext == nil {
+      modelContext.insert(drive)
+      do {
+        try modelContext.save()
+        Log.data.info("Saved starting recording locations")
+      } catch {
+        modelContext.delete(drive)
+        self.drive = nil
+        Log.data.error("Failed to save starting recording locations: \(error)")
+        throw error
+      }
     }
 
     locationCancellable = locationService.locationPublisher

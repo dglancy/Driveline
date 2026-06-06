@@ -17,6 +17,7 @@ let kGPXCreator = "Driveline for iOS"
 nonisolated let kMinimumLocationAccuracy: CLLocationAccuracy = 50
 nonisolated let kMaxLocationAge: TimeInterval = 5
 let kDriveAgeCutoff: TimeInterval = -86400
+let kRecentDriveCutoff: TimeInterval = -1800
 
 // MARK: - Common strings
 

@@ -111,6 +111,30 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func startRecordingWithAlreadyPersistedDriveDoesNotDuplicateInStore() async throws {
+    let drive = Drive(name: "Existing drive")
+    let locationService = LocationService()
+    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+
+    context!.insert(drive)
+    try context!.save()
+
+    try recorder.startRecording(with: drive)
+
+    #expect(recorder.drive != nil)
+    let driveCount = try! count(where: #Predicate<Drive> { _ in true })
+    #expect(driveCount == 1)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0),
+      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date())
+    locationService.locationPublisher.send(location)
+
+    #expect(recorder.drive!.orderedPositions.count == 1)
+  }
+
+  @Test
   func doesNotPersistLocationsAfterRecordingStops() async throws {
     let drive = Drive(name: "Test drive")
     let locationService = LocationService()
