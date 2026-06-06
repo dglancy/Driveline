@@ -38,7 +38,7 @@ final class Drive {
   // MARK: - Properties
 
   @Attribute(.unique) var id: UUID
-  var name: String
+  var name: String?
   var startedAt: Date
   var endedAt: Date?
 
@@ -54,6 +54,17 @@ final class Drive {
   var accumulatedDistanceMetres: Double
 
   // MARK: - Computed Properties
+
+  var displayName: String {
+    if let name { return name }
+    let timeWord = Self.timeOfDayWord(for: startedAt)
+    switch (startPlaceName, endPlaceName) {
+    case (let start?, let end?): return "\(start) \u{2013}> \(end)"
+    case (let start?, nil): return String(localized: "\(timeWord) drive from \(start)", comment: "Drive name with known start location only")
+    case (nil, let end?): return String(localized: "\(timeWord) drive to \(end)", comment: "Drive name with known end location only")
+    case (nil, nil): return Self.timeOfDayDriveName(for: startedAt)
+    }
+  }
 
   var isRecording: Bool { status != .finished }
 
@@ -90,7 +101,7 @@ final class Drive {
 
   // MARK: - Lifecycle
 
-  init(name: String, trigger: RecordingTrigger = .manual) {
+  init(name: String? = nil, trigger: RecordingTrigger = .manual) {
     self.id = UUID()
     self.name = name
     self.startedAt = .now
@@ -101,5 +112,27 @@ final class Drive {
     self.status = .recording
     self.positions = []
     self.accumulatedDistanceMetres = 0
+  }
+
+  // MARK: - Private
+
+  private static func timeOfDayDriveName(for date: Date) -> String {
+    let hour = Calendar.current.component(.hour, from: date)
+    switch hour {
+    case 5..<12: return String(localized: "Morning Drive", comment: "Auto drive name — morning")
+    case 12..<17: return String(localized: "Afternoon Drive", comment: "Auto drive name — afternoon")
+    case 17..<21: return String(localized: "Evening Drive", comment: "Auto drive name — evening")
+    default: return String(localized: "Night Drive", comment: "Auto drive name — night")
+    }
+  }
+
+  private static func timeOfDayWord(for date: Date) -> String {
+    let hour = Calendar.current.component(.hour, from: date)
+    switch hour {
+    case 5..<12: return String(localized: "Morning", comment: "Time-of-day word in drive name")
+    case 12..<17: return String(localized: "Afternoon", comment: "Time-of-day word in drive name")
+    case 17..<21: return String(localized: "Evening", comment: "Time-of-day word in drive name")
+    default: return String(localized: "Night", comment: "Time-of-day word in drive name")
+    }
   }
 }

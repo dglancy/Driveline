@@ -47,16 +47,6 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(service.currentSpeedMs == nil)
   }
 
-  @Test
-  func startDriveGeneratesTimeBasedName() async throws {
-    let (service, _, _) = makeServices()
-
-    try service.startDrive()
-
-    let validNames = ["Morning Drive", "Afternoon Drive", "Evening Drive", "Night Drive"]
-    #expect(validNames.contains(service.drive!.name))
-  }
-
   // MARK: - finishDrive
 
   @Test

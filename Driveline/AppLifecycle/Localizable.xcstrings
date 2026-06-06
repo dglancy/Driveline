@@ -59,6 +59,28 @@
         }
       }
     },
+    "%@ drive from %@" : {
+      "comment" : "Drive name with known start location only",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ drive from %2$@"
+          }
+        }
+      }
+    },
+    "%@ drive to %@" : {
+      "comment" : "Drive name with known end location only",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ drive to %2$@"
+          }
+        }
+      }
+    },
     "%@: %@ %@" : {
       "comment" : "Accessibility label for a drive stat tile: label, value, and unit — e.g. 'Avg Speed: 45 km/h'. Translators may adjust punctuation (e.g. space before colon in French).",
       "localizations" : {
@@ -241,8 +263,11 @@
         }
       }
     },
+    "Afternoon" : {
+      "comment" : "Time-of-day word in drive name"
+    },
     "Afternoon Drive" : {
-      "comment" : "Default drive name for drives started between 12:00 and 16:59",
+      "comment" : "Auto drive name — afternoon",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -888,8 +913,11 @@
         }
       }
     },
+    "Evening" : {
+      "comment" : "Time-of-day word in drive name"
+    },
     "Evening Drive" : {
-      "comment" : "Default drive name for drives started between 17:00 and 20:59",
+      "comment" : "Auto drive name — evening",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1051,6 +1079,7 @@
     },
     "Finish a drive in ${applicationName}" : {
       "comment" : "Siri shortcut phrase to finish a drive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1121,6 +1150,7 @@
     },
     "Finish my drive in ${applicationName}" : {
       "comment" : "Siri shortcut phrase to finish my drive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1144,6 +1174,7 @@
     },
     "Finish recording a drive with ${applicationName}" : {
       "comment" : "Siri shortcut phrase to finish recording a drive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1373,8 +1404,11 @@
         }
       }
     },
+    "Morning" : {
+      "comment" : "Time-of-day word in drive name"
+    },
     "Morning Drive" : {
-      "comment" : "Default drive name for drives started between 05:00 and 11:59",
+      "comment" : "Auto drive name — morning",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1396,8 +1430,11 @@
         }
       }
     },
+    "Night" : {
+      "comment" : "Time-of-day word in drive name"
+    },
     "Night Drive" : {
-      "comment" : "Default drive name for drives started between 21:00 and 04:59",
+      "comment" : "Auto drive name — night",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1743,6 +1780,7 @@
     },
     "Start a drive in ${applicationName}" : {
       "comment" : "Siri shortcut phrase to start a drive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1883,6 +1921,7 @@
     },
     "Start my drive in ${applicationName}" : {
       "comment" : "Siri shortcut phrase to start my drive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1906,6 +1945,7 @@
     },
     "Start recording a drive with ${applicationName}" : {
       "comment" : "Siri shortcut phrase to start recording a drive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

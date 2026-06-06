@@ -39,25 +39,30 @@ final class MergeDrivesViewModel {
   init(drives: [Drive]) {
     precondition(drives.count == 2, "MergeDrivesViewModel requires exactly 2 drives")
     self.orderedDrives = drives
-    self.mergedName = String(localized: "\(drives[0].name) + \(drives[1].name)", comment: "Default name for a merged drive, combining two drive names with a plus sign")
+    self.mergedName = Self.defaultMergedName(for: drives)
   }
 
   // MARK: - Methods
 
   func swapOrder() {
     orderedDrives = [orderedDrives[1], orderedDrives[0]]
-    mergedName = String(localized: "\(orderedDrives[0].name) + \(orderedDrives[1].name)", comment: "Default name for a merged drive, combining two drive names with a plus sign")
+    mergedName = Self.defaultMergedName(for: orderedDrives)
   }
 
   // MARK: - Private
 
+  private static func defaultMergedName(for drives: [Drive]) -> String {
+    String(localized: "\(drives[0].displayName) + \(drives[1].displayName)", comment: "Default name for a merged drive, combining two drive names with a plus sign")
+  }
+
   private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
     let parts: [String?] = [DriveStatsPresenter(drive: drive).startTimeLabel, drive.startPlaceName]
     return DriveRowDisplay(
-      name: drive.name,
+      name: drive.displayName,
       dateTimeLabel: parts.compactMap { $0 }.joined(separator: " · "),
       formattedDistance: Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceString(),
-      formattedDuration: drive.activeDurationSeconds.localizedHoursMinutesString()
+      formattedDuration: drive.activeDurationSeconds.localizedHoursMinutesString(),
+      iconName: DriveRowDisplay.iconName(for: drive.startedAt)
     )
   }
 }
