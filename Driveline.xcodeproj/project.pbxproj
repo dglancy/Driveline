@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */; };
 		6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */; };
-		6DFE8AFF2FCC31D900DC88CB /* GPXKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFE8AFE2FCC31D900DC88CB /* GPXKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,7 +101,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */,
-				6DFE8AFF2FCC31D900DC88CB /* GPXKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,7 +179,6 @@
 			);
 			name = Driveline;
 			packageProductDependencies = (
-				6DFE8AFE2FCC31D900DC88CB /* GPXKit */,
 			);
 			productName = AutoRoute;
 			productReference = 6D47A5102FCAD20600E6C7B7 /* Driveline.app */;
@@ -270,7 +267,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */,
-				6DFE8AFD2FCC31D900DC88CB /* XCRemoteSwiftPackageReference "GPXKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6D47A5112FCAD20600E6C7B7 /* Products */;
@@ -726,14 +722,6 @@
 				minimumVersion = 0.63.3;
 			};
 		};
-		6DFE8AFD2FCC31D900DC88CB /* XCRemoteSwiftPackageReference "GPXKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://codeberg.org/mmllr/GPXKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.4.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -741,11 +729,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
-		};
-		6DFE8AFE2FCC31D900DC88CB /* GPXKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DFE8AFD2FCC31D900DC88CB /* XCRemoteSwiftPackageReference "GPXKit" */;
-			productName = GPXKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

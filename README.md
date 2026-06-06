@@ -65,7 +65,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - Network framework (via `NWPathMonitor`) for detecting connectivity changes used to retry failed reverse geocoding
 
 **Third-party packages (Swift Package Manager)**
-- [GPXKit](https://codeberg.org/mmllr/GPXKit) for building and exporting GPX tracks
+- None by design.
 
 **Development tooling**
 - SwiftLint for style enforcement
