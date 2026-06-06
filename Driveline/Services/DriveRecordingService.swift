@@ -30,6 +30,9 @@ final class DriveRecordingService {
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
+  #if os(iOS)
+  @ObservationIgnored private let activityService = DriveActivityService()
+  #endif
 
   // MARK: - Lifecycle
 
@@ -73,6 +76,7 @@ final class DriveRecordingService {
     speedCancellable = locationService.locationPublisher
       .sink { [weak self] location in
         self?.currentSpeedMs = location.speed >= 0 ? location.speed : nil
+        self?.updateLiveActivity()
       }
 
     startGeocodeCancellable = locationService.locationPublisher
@@ -82,8 +86,13 @@ final class DriveRecordingService {
           guard let self, let drive = self.drive else { return }
           drive.startPlaceName = await self.geocodingService.reverseGeocode(location: location)
           self.saveModelContext()
+          self.updateLiveActivity()
         }
       }
+
+    #if os(iOS)
+    activityService.startActivity(for: drive)
+    #endif
   }
 
   func finishDrive() {
@@ -109,6 +118,10 @@ final class DriveRecordingService {
 
     currentSpeedMs = nil
     self.drive = nil
+
+    #if os(iOS)
+    Task { await activityService.endActivity() }
+    #endif
   }
 
   func checkAndRetryNilPlaceNamesForFinishedDrives() async {
@@ -137,6 +150,23 @@ final class DriveRecordingService {
   }
 
   // MARK: - Private
+
+  private func updateLiveActivity() {
+    #if os(iOS)
+    guard let drive else { return }
+    let elapsed = drive.activeDurationSeconds
+    let avgSpeed = elapsed > 0 ? drive.accumulatedDistanceMetres / elapsed : 0
+    let placeName = drive.startPlaceName
+    let distance = drive.accumulatedDistanceMetres
+    Task {
+      await activityService.updateActivity(
+        startPlaceName: placeName,
+        distanceMetres: distance,
+        avgSpeedMetresPerSecond: avgSpeed
+      )
+    }
+    #endif
+  }
 
   private func retryNilPlaceNamesOnConnectivity() async {
     if let activeDrive = drive, activeDrive.startPlaceName == nil,
