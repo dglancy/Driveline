@@ -49,7 +49,7 @@ struct Driveline: App {
 
   var body: some Scene {
     WindowGroup {
-      HomeView(modelContext: modelContainer.mainContext)
+      HomeView()
         .environment(driveService)
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }

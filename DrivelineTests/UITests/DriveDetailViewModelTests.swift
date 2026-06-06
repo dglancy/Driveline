@@ -10,31 +10,32 @@ import Foundation
 import Testing
 
 @Suite("DriveDetailViewModel")
-final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
+@MainActor
+struct DriveDetailViewModelTests {
 
   // MARK: - Initial State
 
   @Test
   func showSharingDialogIsFalseByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.showSharingDialog == false)
   }
 
   @Test
   func showingFullScreenMapIsFalseByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.showingFullScreenMap == false)
   }
 
   @Test
   func exportedFileIsNilByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.exportedFile == nil)
   }
 
   @Test
   func exportErrorIsNilByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.exportError == nil)
   }
 
@@ -42,7 +43,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func nameReturnsDriveName() {
-    let vm = DriveDetailViewModel(drive: makeDrive(name: "Dublin to Cork"), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive(name: "Dublin to Cork"))
     #expect(vm.name == "Dublin to Cork")
   }
 
@@ -50,7 +51,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
   func startPlaceReturnsDriveStartPlaceName() {
     let drive = makeDrive()
     drive.startPlaceName = "Home"
-    let vm = DriveDetailViewModel(drive: drive, modelContext: context!)
+    let vm = DriveDetailViewModel(drive: drive)
     #expect(vm.startPlace == "Home")
   }
 
@@ -58,19 +59,19 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
   func endPlaceReturnsDriveEndPlaceName() {
     let drive = makeDrive()
     drive.endPlaceName = "Office"
-    let vm = DriveDetailViewModel(drive: drive, modelContext: context!)
+    let vm = DriveDetailViewModel(drive: drive)
     #expect(vm.endPlace == "Office")
   }
 
   @Test
   func startPlaceIsNilWhenNotSet() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.startPlace == nil)
   }
 
   @Test
   func endPlaceIsNilWhenNotSet() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.endPlace == nil)
   }
 
@@ -78,25 +79,25 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
   func arrivalTimeIsNilWhenDriveHasNoEndDate() {
     let drive = makeDrive()
     drive.endedAt = nil
-    let vm = DriveDetailViewModel(drive: drive, modelContext: context!)
+    let vm = DriveDetailViewModel(drive: drive)
     #expect(vm.arrivalTime == nil)
   }
 
   @Test
   func arrivalTimeIsNonNilWhenDriveHasEndDate() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.arrivalTime != nil)
   }
 
   @Test
   func trackPointsReflectsZeroPositionCount() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.trackPoints == "0")
   }
 
   @Test
   func triggerDisplayNameMatchesDriveTrigger() {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
   }
 
@@ -104,7 +105,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func shareDriveGPXWithEmptyDriveSetsExportError() async {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     vm.shareDriveGPX()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportError != nil)
@@ -112,7 +113,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func shareDriveGPXWithEmptyDriveDoesNotSetExportedFile() async {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     vm.shareDriveGPX()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportedFile == nil)
@@ -120,7 +121,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func shareDriveGPXWithPositionsSetsExportedFile() async throws {
-    let vm = DriveDetailViewModel(drive: driveWithOnePosition(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: driveWithOnePosition())
     vm.shareDriveGPX()
     for _ in 0..<20 { await Task.yield() }
     let file = try #require(vm.exportedFile)
@@ -134,7 +135,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func shareDrivePNGWithEmptyDriveSetsExportError() async {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     vm.shareDrivePNG()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportError != nil)
@@ -142,7 +143,7 @@ final class DriveDetailViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func shareDrivePNGWithEmptyDriveDoesNotSetExportedFile() async {
-    let vm = DriveDetailViewModel(drive: makeDrive(), modelContext: context!)
+    let vm = DriveDetailViewModel(drive: makeDrive())
     vm.shareDrivePNG()
     for _ in 0..<10 { await Task.yield() }
     #expect(vm.exportedFile == nil)

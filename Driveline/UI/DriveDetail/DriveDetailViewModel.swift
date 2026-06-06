@@ -37,7 +37,7 @@ final class DriveDetailViewModel {
 
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
-  @ObservationIgnored private let modelContext: ModelContext
+  @ObservationIgnored var modelContext: ModelContext!
 
   // MARK: - Computed Properties
 
@@ -74,9 +74,8 @@ final class DriveDetailViewModel {
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, modelContext: ModelContext) {
+  init(drive: Drive) {
     self.drive = drive
-    self.modelContext = modelContext
     self.stats = DriveStatsPresenter(drive: drive)
   }
 

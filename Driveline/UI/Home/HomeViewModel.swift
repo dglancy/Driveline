@@ -29,7 +29,7 @@ final class HomeViewModel {
 
   // MARK: - Properties
 
-  private let modelContext: ModelContext
+  @ObservationIgnored var modelContext: ModelContext!
 
   private(set) var sections: [DriveSection] = []
   private(set) var summaryLine: String?
@@ -42,12 +42,6 @@ final class HomeViewModel {
   var showingStartDriveError: Bool = false
   var showingRecordingScreen: Bool = false
   var showingMergeSheet: Bool = false
-
-  // MARK: - Lifecycle
-
-  init(modelContext: ModelContext) {
-    self.modelContext = modelContext
-  }
 
   // MARK: - Computed Properties
 
