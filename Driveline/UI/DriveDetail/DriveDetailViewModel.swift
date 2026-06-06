@@ -37,6 +37,7 @@ final class DriveDetailViewModel {
 
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
+  @ObservationIgnored private let modelContext: ModelContext
 
   // MARK: - Computed Properties
 
@@ -73,15 +74,16 @@ final class DriveDetailViewModel {
 
   // MARK: - Lifecycle
 
-  init(drive: Drive) {
+  init(drive: Drive, modelContext: ModelContext) {
     self.drive = drive
+    self.modelContext = modelContext
     self.stats = DriveStatsPresenter(drive: drive)
   }
 
   // MARK: - Actions
 
-  func deleteDrive(using context: ModelContext) {
-    context.delete(drive)
+  func deleteDrive() {
+    modelContext.delete(drive)
   }
 
   func shareDriveGPX() {

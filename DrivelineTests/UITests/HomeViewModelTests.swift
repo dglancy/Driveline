@@ -10,14 +10,13 @@ import Foundation
 @testable import Driveline
 
 @Suite("HomeViewModel")
-@MainActor
-struct HomeViewModelTests {
+final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   // MARK: - Empty State
 
   @Test
   func emptyDrivesProducesNoSections() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [])
     #expect(viewModel.sections.isEmpty)
   }
@@ -26,7 +25,7 @@ struct HomeViewModelTests {
 
   @Test
   func todayDriveCreatesTodaySection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
     #expect(viewModel.sections[0].title == "Today")
@@ -34,7 +33,7 @@ struct HomeViewModelTests {
 
   @Test
   func yesterdayDriveCreatesYesterdaySection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 1)])
     #expect(viewModel.sections.count == 1)
     #expect(viewModel.sections[0].title == "Yesterday")
@@ -42,7 +41,7 @@ struct HomeViewModelTests {
 
   @Test
   func routeTwoDaysAgoCreatesDayNameSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let drive = makeDrive(daysAgo: 2)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.weekday(.wide))
@@ -52,7 +51,7 @@ struct HomeViewModelTests {
 
   @Test
   func routeSixDaysAgoStillCreatesDayNameSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let drive = makeDrive(daysAgo: 6)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.weekday(.wide))
@@ -62,7 +61,7 @@ struct HomeViewModelTests {
 
   @Test
   func routeSevenDaysAgoCreatesMonthYearSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let drive = makeDrive(daysAgo: 7)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.month(.wide).year())
@@ -72,7 +71,7 @@ struct HomeViewModelTests {
 
   @Test
   func routeThirtyDaysAgoCreatesMonthYearSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let drive = makeDrive(daysAgo: 30)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.month(.wide).year())
@@ -84,7 +83,7 @@ struct HomeViewModelTests {
 
   @Test
   func drivesOnSameDayAreGroupedIntoOneSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let morning = makeDrive(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeDrive(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
@@ -94,7 +93,7 @@ struct HomeViewModelTests {
 
   @Test
   func drivesOnDifferentDaysProduceSeparateSections() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let today = makeDrive(name: "Today", daysAgo: 0)
     let yesterday = makeDrive(name: "Yesterday", daysAgo: 1)
     let older = makeDrive(name: "Older", daysAgo: 10)
@@ -104,7 +103,7 @@ struct HomeViewModelTests {
 
   @Test
   func drivesFromSameOlderMonthAreGroupedIntoOneSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let a = makeDrive(name: "Drive A", daysAgo: 30, hour: 8)
     let b = makeDrive(name: "Drive B", daysAgo: 30, hour: 14)
     viewModel.update(with: [a, b])
@@ -122,7 +121,7 @@ struct HomeViewModelTests {
 
   @Test
   func sectionsAreOrderedNewestFirst() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let today = makeDrive(name: "Today", daysAgo: 0)
     let yesterday = makeDrive(name: "Yesterday", daysAgo: 1)
     let lastWeek = makeDrive(name: "Last Week", daysAgo: 5)
@@ -133,7 +132,7 @@ struct HomeViewModelTests {
 
   @Test
   func drivesWithinSectionAreOrderedNewestFirst() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     let morning = makeDrive(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeDrive(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
@@ -146,21 +145,21 @@ struct HomeViewModelTests {
 
   @Test
   func summaryLineIsNilWhenNoDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [])
     #expect(viewModel.summaryLine == nil)
   }
 
   @Test
   func summaryLineIsNilWhenAllDrivesOlderThan30Days() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 31), makeDrive(daysAgo: 60)])
     #expect(viewModel.summaryLine == nil)
   }
 
   @Test
   func summaryLineIncludesCountOfDrivesInWindow() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [
       makeDrive(daysAgo: 0),
       makeDrive(daysAgo: 5),
@@ -172,7 +171,7 @@ struct HomeViewModelTests {
 
   @Test
   func summaryLineUsesSingularForOneDrive() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
     #expect(summary.hasPrefix("1 drive"))
@@ -180,7 +179,7 @@ struct HomeViewModelTests {
 
   @Test
   func summaryLineContainsLocalisedDistance() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
     let expectedUnit = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
@@ -189,7 +188,7 @@ struct HomeViewModelTests {
 
   @Test
   func summaryLineIsNilAfterUpdateWithNoRecentDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     #expect(viewModel.summaryLine != nil)
     viewModel.update(with: [makeDrive(daysAgo: 60)])
@@ -200,7 +199,7 @@ struct HomeViewModelTests {
 
   @Test
   func callingUpdateReplacesPreviousSections() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
     viewModel.update(with: [])
@@ -209,7 +208,7 @@ struct HomeViewModelTests {
 
   @Test
   func sectionsReflectLatestDriveSet() {
-    let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel(modelContext: context!)
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0)])
     viewModel.update(with: [makeDrive(name: "B", daysAgo: 0), makeDrive(name: "C", daysAgo: 1)])
     #expect(viewModel.sections.count == 2)
