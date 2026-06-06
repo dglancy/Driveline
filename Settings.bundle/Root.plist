@@ -90,6 +90,16 @@
 			<key>DefaultValue</key>
 			<string>medium</string>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Continue Drive If Recently Finished</string>
+			<key>Key</key>
+			<string>ContinueDriveIfRecentlyFinished</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
 	</array>
 </dict>
 </plist>

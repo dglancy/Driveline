@@ -27,3 +27,6 @@
 "Thin" = "Fin";
 "Medium" = "Moyen";
 "Thick" = "Épais";
+
+/* Recording */
+"Continue Drive If Recently Finished" = "Continuer le trajet si récemment terminé";
