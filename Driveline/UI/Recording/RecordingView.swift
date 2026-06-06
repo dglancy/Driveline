@@ -111,7 +111,7 @@ struct RecordingView: View {
         Text(viewModel.distanceValue)
           .font(.largeTitle.weight(.semibold))
           .monospacedDigit()
-          .foregroundStyle(Color.red)
+          .foregroundStyle(.primary)
         Text(viewModel.distanceUnit)
           .font(.title2.weight(.medium))
           .foregroundStyle(Color(.secondaryLabel))
