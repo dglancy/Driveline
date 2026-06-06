@@ -75,6 +75,7 @@ struct DriveDetailView: View {
     .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))
     .modifier(DriveOptionsDialogModifier(viewModel: viewModel))
+    .modifier(ShareDriveDialogModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
@@ -185,11 +186,6 @@ struct DriveDetailView: View {
         .padding(.vertical, 14)
     }
     .cardBackground(cornerRadius: 16)
-    .alert(String(localized: "Share Drive", comment: "Share drive alert title"), isPresented: $viewModel.showSharingDialog) {
-      Button(String(localized: "Share GPX", comment: "Share drive as GPX")) { viewModel.shareDriveGPX() }
-      Button(String(localized: "Share PNG", comment: "Share drive as PNG")) { viewModel.shareDrivePNG() }
-      Button.cancel()
-    }
   }
 }
 
@@ -259,6 +255,21 @@ private struct EditDriveSheetModifier: ViewModifier {
       EditDriveView(drive: viewModel.drive)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
+    }
+  }
+}
+
+private struct ShareDriveDialogModifier: ViewModifier {
+  @Bindable var viewModel: DriveDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.confirmationDialog(
+      String(localized: "Share Drive", comment: "Share drive dialog title"),
+      isPresented: $viewModel.showSharingDialog
+    ) {
+      Button(String(localized: "Share GPX", comment: "Share drive as GPX")) { viewModel.shareDriveGPX() }
+      Button(String(localized: "Share PNG", comment: "Share drive as PNG")) { viewModel.shareDrivePNG() }
+      Button.cancel()
     }
   }
 }
