@@ -49,7 +49,7 @@ struct Driveline: App {
 
   var body: some Scene {
     WindowGroup {
-      HomeView()
+      HomeView(modelContext: modelContainer.mainContext)
         .environment(driveService)
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }
@@ -59,7 +59,7 @@ struct Driveline: App {
     .modelContainer(modelContainer)
   }
 
-  // MARK: - Factories
+  // MARK: - Setup
 
   private static func createModelContainer(inMemoryOnly: Bool) -> ModelContainer {
     Log.lifecycle.info("Setting up data model and container")

@@ -15,14 +15,13 @@ struct DriveDetailView: View {
 
   @State private var viewModel: DriveDetailViewModel
   @Environment(\.dismiss) private var dismiss
-  @Environment(\.modelContext) private var modelContext
 
   private let mapHeight: CGFloat = 280
 
   // MARK: - Lifecycle
 
-  init(drive: Drive) {
-    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive))
+  init(drive: Drive, modelContext: ModelContext) {
+    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive, modelContext: modelContext))
   }
 
   // MARK: - Body
@@ -71,7 +70,7 @@ struct DriveDetailView: View {
     .modifier(FullScreenMapModifier(viewModel: viewModel))
     .modifier(ExportShareSheetModifier(viewModel: viewModel))
     .modifier(ExportErrorAlertModifier(viewModel: viewModel))
-    .modifier(DeleteDriveAlertModifier(viewModel: viewModel, modelContext: modelContext, dismiss: { dismiss() }))
+    .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))
     .modifier(DriveOptionsDialogModifier(viewModel: viewModel))
   }
@@ -232,7 +231,6 @@ private struct ExportErrorAlertModifier: ViewModifier {
 
 private struct DeleteDriveAlertModifier: ViewModifier {
   @Bindable var viewModel: DriveDetailViewModel
-  let modelContext: ModelContext
   let dismiss: () -> Void
 
   func body(content: Content) -> some View {
@@ -241,7 +239,7 @@ private struct DeleteDriveAlertModifier: ViewModifier {
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
       Button.delete {
-        viewModel.deleteDrive(using: modelContext)
+        viewModel.deleteDrive()
         dismiss()
       }
       Button.cancel()
@@ -288,7 +286,7 @@ private struct DriveOptionsDialogModifier: ViewModifier {
   let container = PreviewSampleData.previewContainer()
   let drive = PreviewSampleData.sampleDrive(in: container.mainContext)
   return NavigationStack {
-    DriveDetailView(drive: drive)
+    DriveDetailView(drive: drive, modelContext: container.mainContext)
   }
   .modelContainer(container)
 }

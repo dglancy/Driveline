@@ -29,6 +29,8 @@ final class HomeViewModel {
 
   // MARK: - Properties
 
+  private let modelContext: ModelContext
+
   private(set) var sections: [DriveSection] = []
   private(set) var summaryLine: String?
   private(set) var isSelectMode: Bool = false
@@ -40,6 +42,12 @@ final class HomeViewModel {
   var showingStartDriveError: Bool = false
   var showingRecordingScreen: Bool = false
   var showingMergeSheet: Bool = false
+
+  // MARK: - Lifecycle
+
+  init(modelContext: ModelContext) {
+    self.modelContext = modelContext
+  }
 
   // MARK: - Computed Properties
 
@@ -103,17 +111,17 @@ final class HomeViewModel {
     summaryLine = buildSummaryLine(from: drives)
   }
 
-  func deleteDrives(_ drives: [Drive], using context: ModelContext) {
+  func deleteDrives(_ drives: [Drive]) {
     for drive in drives {
-      context.delete(drive)
+      modelContext.delete(drive)
     }
   }
 
-  func deleteDrives(at indexSet: IndexSet, in section: DriveSection, using context: ModelContext) {
-    deleteDrives(indexSet.map { section.rows[$0].drive }, using: context)
+  func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
+    deleteDrives(indexSet.map { section.rows[$0].drive })
   }
 
-  func mergeDrives(orderedDrives: [Drive], mergedName: String, using context: ModelContext) {
+  func mergeDrives(orderedDrives: [Drive], mergedName: String) {
     guard orderedDrives.count == 2 else { return }
     let first = orderedDrives[0]
     let second = orderedDrives[1]
@@ -126,9 +134,9 @@ final class HomeViewModel {
     merged.endPlaceName = second.endPlaceName
     merged.positions = first.positions + second.positions
 
-    context.insert(merged)
-    context.delete(first)
-    context.delete(second)
+    modelContext.insert(merged)
+    modelContext.delete(first)
+    modelContext.delete(second)
   }
 
   // MARK: - Private
