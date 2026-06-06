@@ -33,32 +33,47 @@ extension TimeInterval {
 
   // MARK: - Private
 
-  @MainActor private static var hoursMinutesFormatters: [String: DateComponentsFormatter] = [:]
-  @MainActor private static var elapsedTimeNumberFormatters: [String: NumberFormatter] = [:]
+  @MainActor private static var cachedLocale: String = ""
+  @MainActor private static var hoursMinutesFormatterOverHour: DateComponentsFormatter?
+  @MainActor private static var hoursMinutesFormatterUnderHour: DateComponentsFormatter?
+  @MainActor private static var elapsedNumberFormatterPadded: NumberFormatter?
+  @MainActor private static var elapsedNumberFormatterUnpadded: NumberFormatter?
+
+  @MainActor
+  private static func invalidateCacheIfNeeded(for locale: Locale) {
+    guard cachedLocale != locale.identifier else { return }
+    cachedLocale = locale.identifier
+    hoursMinutesFormatterOverHour = nil
+    hoursMinutesFormatterUnderHour = nil
+    elapsedNumberFormatterPadded = nil
+    elapsedNumberFormatterUnpadded = nil
+  }
 
   @MainActor
   private static func hoursMinutesFormatter(locale: Locale, overHour: Bool) -> DateComponentsFormatter {
-    let key = "\(locale.identifier)-\(overHour)"
-    if let cached = hoursMinutesFormatters[key] { return cached }
+    invalidateCacheIfNeeded(for: locale)
+    if overHour, let cached = hoursMinutesFormatterOverHour { return cached }
+    if !overHour, let cached = hoursMinutesFormatterUnderHour { return cached }
     let formatter = DateComponentsFormatter()
     formatter.allowedUnits = overHour ? [.hour, .minute] : [.minute]
     formatter.unitsStyle = .abbreviated
     formatter.zeroFormattingBehavior = .pad
     formatter.calendar = Calendar(identifier: .gregorian)
     formatter.calendar?.locale = locale
-    hoursMinutesFormatters[key] = formatter
+    if overHour { hoursMinutesFormatterOverHour = formatter } else { hoursMinutesFormatterUnderHour = formatter }
     return formatter
   }
 
   @MainActor
   private static func elapsedTimeNumberFormatter(locale: Locale, padded: Bool) -> NumberFormatter {
-    let key = "\(locale.identifier)-\(padded)"
-    if let cached = elapsedTimeNumberFormatters[key] { return cached }
+    invalidateCacheIfNeeded(for: locale)
+    if padded, let cached = elapsedNumberFormatterPadded { return cached }
+    if !padded, let cached = elapsedNumberFormatterUnpadded { return cached }
     let formatter = NumberFormatter()
     formatter.locale = locale
     formatter.minimumIntegerDigits = padded ? 2 : 1
     formatter.maximumFractionDigits = 0
-    elapsedTimeNumberFormatters[key] = formatter
+    if padded { elapsedNumberFormatterPadded = formatter } else { elapsedNumberFormatterUnpadded = formatter }
     return formatter
   }
 }

@@ -9,8 +9,9 @@ import Foundation
 
 @MainActor
 private enum DistanceFormatterCache {
-  static var measurements: [String: MeasurementFormatter] = [:]
-  static var numbers: [String: NumberFormatter] = [:]
+  static var localeIdentifier: String = ""
+  static var measurement: MeasurementFormatter?
+  static var number: NumberFormatter?
 }
 
 extension Measurement where UnitType == UnitLength {
@@ -23,26 +24,34 @@ extension Measurement where UnitType == UnitLength {
 
   @MainActor
   private static func measurementFormatter(for locale: Locale) -> MeasurementFormatter {
-    let key = locale.identifier
-    if let cached = DistanceFormatterCache.measurements[key] { return cached }
+    if DistanceFormatterCache.localeIdentifier == locale.identifier,
+       let cached = DistanceFormatterCache.measurement { return cached }
     let formatter = MeasurementFormatter()
     formatter.locale = locale
     formatter.unitOptions = .providedUnit
     formatter.numberFormatter.maximumFractionDigits = 1
     formatter.numberFormatter.minimumFractionDigits = 1
-    DistanceFormatterCache.measurements[key] = formatter
+    if DistanceFormatterCache.localeIdentifier != locale.identifier {
+      DistanceFormatterCache.localeIdentifier = locale.identifier
+      DistanceFormatterCache.number = nil
+    }
+    DistanceFormatterCache.measurement = formatter
     return formatter
   }
 
   @MainActor
   private static func numberFormatter(for locale: Locale) -> NumberFormatter {
-    let key = locale.identifier
-    if let cached = DistanceFormatterCache.numbers[key] { return cached }
+    if DistanceFormatterCache.localeIdentifier == locale.identifier,
+       let cached = DistanceFormatterCache.number { return cached }
     let formatter = NumberFormatter()
     formatter.locale = locale
     formatter.maximumFractionDigits = 1
     formatter.minimumFractionDigits = 1
-    DistanceFormatterCache.numbers[key] = formatter
+    if DistanceFormatterCache.localeIdentifier != locale.identifier {
+      DistanceFormatterCache.localeIdentifier = locale.identifier
+      DistanceFormatterCache.measurement = nil
+    }
+    DistanceFormatterCache.number = formatter
     return formatter
   }
 
