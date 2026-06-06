@@ -99,10 +99,10 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeService() -> (DriveService, LocationService) {
+  private func makeService() -> (DriveRecordingService, LocationService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = DriveService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService())
     return (service, locationService)
   }
 
@@ -112,7 +112,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     return RecordingViewModel(driveService: service)
   }
 
-  private func makeServiceAndViewModel() -> (DriveService, RecordingViewModel) {
+  private func makeServiceAndViewModel() -> (DriveRecordingService, RecordingViewModel) {
     let (service, _) = makeService()
     try! service.startDrive()
     return (service, RecordingViewModel(driveService: service))

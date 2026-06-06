@@ -64,7 +64,7 @@ final class HomeViewModel {
 
   // MARK: - Methods
 
-  func startDrive(trigger: Drive.RecordingTrigger = .manual, using driveService: DriveService) {
+  func startDrive(trigger: Drive.RecordingTrigger = .manual, using driveService: DriveRecordingService) {
     do {
       try driveService.startDrive(trigger: trigger)
     } catch {

@@ -13,7 +13,7 @@ struct Driveline: App {
 
   // MARK: - Properties
 
-  @State private var driveService: DriveService
+  @State private var driveService: DriveRecordingService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -29,7 +29,7 @@ struct Driveline: App {
     let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService,
                                                                      modelContext: modelContainer.mainContext)
     let networkMonitorService = NetworkMonitorService()
-    let driveService = Self.setupDriveService(modelContext: modelContainer.mainContext,
+    let driveService = Self.setupDriveRecordingService(modelContext: modelContainer.mainContext,
                                               locationService: locationService,
                                               locationDataRecorder: locationDataRecorder,
                                               networkMonitorService: networkMonitorService)
@@ -90,17 +90,17 @@ struct Driveline: App {
     return LocationDataRecorderService(locationService: locationService, modelContext: modelContext)
   }
 
-  private static func setupDriveService(
+  private static func setupDriveRecordingService(
     modelContext: ModelContext,
     locationService: LocationService,
     locationDataRecorder: LocationDataRecorderService,
     networkMonitorService: any NetworkMonitorServiceProtocol
-  ) -> DriveService {
+  ) -> DriveRecordingService {
     Log.lifecycle.info("Setting up drive service")
     var descriptor = FetchDescriptor<Drive>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
     descriptor.fetchLimit = 1
     let activeDrive = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
-    return DriveService(modelContext: modelContext, locationService: locationService,
+    return DriveRecordingService(modelContext: modelContext, locationService: locationService,
                         locationDataRecorder: locationDataRecorder,
                         networkMonitorService: networkMonitorService,
                         initialDrive: activeDrive)
@@ -109,7 +109,7 @@ struct Driveline: App {
   // MARK: - App Intents
 
   private static func registerIntentDependencies(
-    driveService: DriveService
+    driveService: DriveRecordingService
   ) {
     Log.lifecycle.info("Registering dependencies for App Intents")
     IntentDependencyResolver.provider = { driveService }

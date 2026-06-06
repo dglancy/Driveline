@@ -10,7 +10,7 @@ import AppIntents
 // MARK: - Intent Dependency Resolver
 
 enum IntentDependencyResolver {
-  static var provider: (() -> DriveService?)?
+  static var provider: (() -> DriveRecordingService?)?
 }
 
 // MARK: - App Intent Shortcuts
@@ -57,7 +57,7 @@ struct StartDriveIntent: AppIntent {
   func perform() async throws -> some IntentResult {
     await Log.lifecycle.info("Running perform on StartDriveIntent intent")
 
-    let driveService = try await resolveDriveService()
+    let driveService = try await resolveDriveRecordingService()
     if await !driveService.isRecording {
       try await driveService.startDrive(trigger: .automatic)
     }
@@ -79,7 +79,7 @@ struct FinishDriveIntent: AppIntent {
   func perform() async throws -> some IntentResult {
     await Log.lifecycle.info("Running perform on FinishDriveIntent intent")
 
-    let driveService = try await resolveDriveService()
+    let driveService = try await resolveDriveRecordingService()
     if await driveService.isRecording {
       await driveService.finishDrive()
     }
@@ -102,7 +102,7 @@ enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
 
 // MARK: - Private helpers
 
-private func resolveDriveService() async throws -> DriveService {
+private func resolveDriveRecordingService() async throws -> DriveRecordingService {
   guard let driveService = await MainActor.run(body: { IntentDependencyResolver.provider?() }) else {
     throw AppIntentDependencyError.notReady
   }
