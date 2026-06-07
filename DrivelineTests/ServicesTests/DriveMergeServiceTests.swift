@@ -157,6 +157,38 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     #expect(merged?.accumulatedDistanceMetres == merged?.distanceMetres)
   }
 
+  // MARK: - merge weather
+
+  @Test
+  func mergeKeepsStartWeatherFromFirstDrive() throws {
+    let (first, second) = makeDrivePair()
+    first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
+    second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
+    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect(merged?.startWeather?.temperatureCelsius == 10)
+  }
+
+  @Test
+  func mergeKeepsEndWeatherFromSecondDrive() throws {
+    let (first, second) = makeDrivePair()
+    first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
+    second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
+    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect(merged?.endWeather?.temperatureCelsius == 20)
+  }
+
+  @Test
+  func mergeWeatherReadingsCountIsAtMostTwo() throws {
+    let (first, second) = makeDrivePair()
+    first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
+    second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
+    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect((merged?.weatherReadings?.count ?? 0) <= 2)
+  }
+
   // MARK: - guard clause
 
   @Test
@@ -207,6 +239,10 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     Position(timestamp: timestamp, latitude: latitude, longitude: longitude,
              altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 5,
              course: 0, courseAccuracy: 0, speed: 0, speedAccuracy: 0)
+  }
+
+  private func makeWeather(type: Weather.WeatherType, temperature: Double) -> Weather {
+    Weather(temperatureCelsius: temperature, conditionDescription: "Clear", symbolName: "sun.max", type: type)
   }
 
   private func fetchMerged(excluding ids: [UUID]) throws -> Drive? {

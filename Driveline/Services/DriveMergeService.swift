@@ -35,6 +35,7 @@ final class DriveMergeService {
     merged.startPlaceName = first.startPlaceName
     merged.endPlaceName = second.endPlaceName
     merged.positions = (first.positions ?? []) + (second.positions ?? [])
+    merged.weatherReadings = [first.startWeather, second.endWeather].compactMap { $0 }
     merged.accumulatedDistanceMetres = merged.distanceMetres
 
     modelContext.insert(merged)

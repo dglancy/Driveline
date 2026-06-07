@@ -72,18 +72,6 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     Log.location.info("Stopped monitoring locations")
   }
 
-  func pause() {
-    guard status != .paused else {
-      Log.location.info("Monitoring locations already paused; ignoring.")
-      return
-    }
-
-    Log.location.info("Pausing monitoring locations")
-    manager.stopUpdatingLocation()
-    status = .paused
-    Log.location.info("Paused monitoring locations")
-  }
-
   func resume() {
     guard status == .paused else {
       Log.location.info("resume() called while status=\(status); ignoring.")

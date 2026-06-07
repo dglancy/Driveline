@@ -26,9 +26,6 @@ struct LocationServiceTests {
     service.start()
     #expect(service.status == .started)
 
-    service.pause()
-    #expect(service.status == .paused)
-
     service.resume()
     #expect(service.status == .started)
 

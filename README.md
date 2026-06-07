@@ -13,7 +13,7 @@ Driveline grew out of a personal need. I run [Targa Trips](https://www.targatrip
 
 ## What it does
 
-- **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and pause actions to Bluetooth connect/disconnect automations in the Shortcuts app and Driveline handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
+- **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and stop actions to Bluetooth connect/disconnect automations in the Shortcuts app and Driveline handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
 - **Route list** showing all your drives grouped by date, with start and end place names, distance, and duration at a glance.
 - **Route map** that plots the full drive with pinch-to-zoom once a route is finished.
 - **Merge routes** to join two drives end-to-end into a single route, useful when you forget to start recording and pick it up partway through.
@@ -34,14 +34,14 @@ Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writi
 
 ## Setting up Shortcuts automations
 
-The app exposes two actions to the Shortcuts app: `Start or resume route` and `Pause route`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
+The app exposes two actions to the Shortcuts app: `Start route` and `Finish route`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
 
 For each trigger type you want to use:
 
 1. Open the Shortcuts app and create a new Automation.
 2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
-3. Add the action "Start or resume route" from Driveline.
-4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Pause route" action.
+3. Add the action "Start route" from Driveline.
+4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish route" action.
 
 If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
 
@@ -65,7 +65,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`
 - MapKit for route rendering and map snapshots on export
 - WeatherKit for fetching weather conditions at the start and end of each drive
-- AppIntents for the Shortcuts actions (start/resume and pause)
+- AppIntents for the Shortcuts actions (start and finish)
 - ActivityKit for the Live Activity shown on the Lock Screen and Dynamic Island during recording
 - CloudKit for iCloud sync of drives across devices
 - Combine for publishing location updates through the service layer
