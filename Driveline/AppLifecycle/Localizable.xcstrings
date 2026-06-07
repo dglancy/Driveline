@@ -12,7 +12,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$@ · %2$@"
           }
         },
@@ -47,7 +47,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$@ + %2$@"
           }
         },
@@ -82,7 +82,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$@ drive from %2$@"
           }
         },
@@ -117,7 +117,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$@ drive to %2$@"
           }
         },
@@ -152,7 +152,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$@: %2$@ %3$@"
           }
         },
@@ -217,7 +217,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$lld drives · %2$@ in the last 30 days"
           }
         },
@@ -312,7 +312,7 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
+            "state": "translated",
             "value": "%1$lld. %2$@"
           }
         },
@@ -1443,7 +1443,6 @@
     },
     "Finish a drive in ${applicationName}": {
       "comment": "Siri shortcut phrase to finish a drive",
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1532,7 +1531,6 @@
     },
     "Finish my drive in ${applicationName}": {
       "comment": "Siri shortcut phrase to finish my drive",
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1562,7 +1560,6 @@
     },
     "Finish recording a drive with ${applicationName}": {
       "comment": "Siri shortcut phrase to finish recording a drive",
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2376,7 +2373,6 @@
     },
     "Start a drive in ${applicationName}": {
       "comment": "Siri shortcut phrase to start a drive",
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2553,7 +2549,6 @@
     },
     "Start my drive in ${applicationName}": {
       "comment": "Siri shortcut phrase to start my drive",
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2583,7 +2578,6 @@
     },
     "Start recording a drive with ${applicationName}": {
       "comment": "Siri shortcut phrase to start recording a drive",
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
