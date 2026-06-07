@@ -9,8 +9,8 @@ import OSLog
 // MARK: - Enum
 
 enum LogPrivacy {
-    case `public`
-    case `private`
+  case `public`
+  case `private`
 }
 
 // MARK: - App Logger
@@ -18,33 +18,33 @@ enum LogPrivacy {
 struct AppLogger {
   private let logger: Logger
   private let category: String
-
+  
   init(category: String) {
-    self.logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: category)
+    self.logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.targatrips.Driveline", category: category)
     self.category = category
   }
-
+  
   func info(_ message: String, privacy: LogPrivacy = .private) {
-      log(level: .info, message: message, privacy: privacy)
+    log(level: .info, message: message, privacy: privacy)
   }
-
+  
   func debug(_ message: String, privacy: LogPrivacy = .private) {
-      log(level: .debug, message: message, privacy: privacy)
+    log(level: .debug, message: message, privacy: privacy)
   }
-
+  
   func error(_ message: String, privacy: LogPrivacy = .private) {
-      log(level: .error, message: message, privacy: privacy)
+    log(level: .error, message: message, privacy: privacy)
   }
-
+  
   // MARK: - Private functions
-
+  
   private func log(level: OSLogType, message: String, privacy: LogPrivacy) {
-      switch privacy {
-      case .public:
-          logger.log(level: level, "[\(category)] \(message, privacy: .public)")
-      case .private:
-          logger.log(level: level, "[\(category)] \(message, privacy: .private)")
-      }
+    switch privacy {
+    case .public:
+      logger.log(level: level, "[\(category)] \(message, privacy: .public)")
+    case .private:
+      logger.log(level: level, "[\(category)] \(message, privacy: .private)")
+    }
   }
 }
 
