@@ -9,11 +9,18 @@ import CoreLocation
 import Foundation
 import WeatherKit
 
+// MARK: - WeatherFetchError
+
+enum WeatherFetchError: Error {
+  case noDataAvailable
+}
+
 // MARK: - Protocol
 
 @MainActor
 protocol WeatherFetchServiceProtocol {
   func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather
+  func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather
 }
 
 // MARK: - WeatherFetchService
@@ -29,6 +36,21 @@ final class WeatherFetchService: WeatherFetchServiceProtocol {
       temperatureCelsius: weather.temperature.converted(to: .celsius).value,
       conditionDescription: weather.condition.description,
       symbolName: weather.symbolName,
+      type: type
+    )
+  }
+
+  func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather {
+    let startDate = date.addingTimeInterval(-3600)
+    let endDate = date.addingTimeInterval(3600)
+    let hourlyForecast = try await WeatherService.shared.weather(for: location, including: .hourly(startDate: startDate, endDate: endDate))
+    guard let hourWeather = hourlyForecast.min(by: { abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date)) }) else {
+      throw WeatherFetchError.noDataAvailable
+    }
+    return Weather(
+      temperatureCelsius: hourWeather.temperature.converted(to: .celsius).value,
+      conditionDescription: hourWeather.condition.description,
+      symbolName: hourWeather.symbolName,
       type: type
     )
   }
