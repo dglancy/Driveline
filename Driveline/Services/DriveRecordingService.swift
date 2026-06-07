@@ -28,6 +28,7 @@ final class DriveRecordingService {
   @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
   @ObservationIgnored private let placeNameSweepService: PlaceNameSweepService
   @ObservationIgnored private let weatherSweepService: WeatherSweepService
+  @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
   @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
@@ -45,6 +46,7 @@ final class DriveRecordingService {
        weatherService: any WeatherFetchServiceProtocol = WeatherFetchService(),
        placeNameSweepService: PlaceNameSweepService? = nil,
        weatherSweepService: WeatherSweepService? = nil,
+       spotlightIndexingService: SpotlightIndexingService? = nil,
        userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
     self.modelContext = modelContext
@@ -54,6 +56,7 @@ final class DriveRecordingService {
     self.weatherService = weatherService
     self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContext: modelContext)
     self.weatherSweepService = weatherSweepService ?? WeatherSweepService(modelContext: modelContext)
+    self.spotlightIndexingService = spotlightIndexingService
     self.userPreferences = userPreferences
     self.drive = initialDrive
   }
@@ -157,6 +160,7 @@ final class DriveRecordingService {
       locationDataRecorder.stopRecording()
       saveModelContext()
       fetchEndWeather(for: drive)
+      Task { await spotlightIndexingService?.indexDrive(drive) }
     }
 
     self.drive = nil

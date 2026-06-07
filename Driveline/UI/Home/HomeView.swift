@@ -15,6 +15,7 @@ struct HomeView: View {
 
   @Environment(\.modelContext) private var modelContext
   @Environment(DriveRecordingService.self) private var driveService
+  @Environment(\.spotlightIndexingService) private var spotlightIndexingService
 
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
@@ -41,6 +42,7 @@ struct HomeView: View {
         }
         .onAppear {
           viewModel.modelContext = modelContext
+          viewModel.spotlightIndexingService = spotlightIndexingService
           viewModel.showingRecordingScreen = driveService.isRecording
         }
     }

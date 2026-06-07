@@ -8,196 +8,137 @@
 @testable import Driveline
 import CoreSpotlight
 import Foundation
-import SwiftData
 import Testing
 
 @MainActor
-final class SpotlightIndexingServiceTests: SwiftDataBaseTestCase {
+final class SpotlightIndexingServiceTests {
 
   // MARK: - searchableItem(for:)
 
   @Test
-  func searchableItemHasCorrectIdentifier() throws {
-    let drive = try insertFinishedDrive()
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemHasCorrectIdentifier() {
+    let drive = makeDrive()
+    let item = makeService().searchableItem(for: drive)
     #expect(item.uniqueIdentifier == drive.id.uuidString)
   }
 
   @Test
-  func searchableItemHasCorrectDomainIdentifier() throws {
-    let drive = try insertFinishedDrive()
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemHasCorrectDomainIdentifier() {
+    let drive = makeDrive()
+    let item = makeService().searchableItem(for: drive)
     #expect(item.domainIdentifier == SpotlightIndexingService.domainIdentifier)
   }
 
   @Test
-  func searchableItemTitleIsDisplayName() throws {
-    let drive = try insertFinishedDrive(name: "My Road Trip")
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemTitleIsDisplayName() {
+    let drive = makeDrive(name: "My Road Trip")
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.title == "My Road Trip")
   }
 
   @Test
-  func searchableItemKeywordsContainsBothPlaceNames() throws {
-    let drive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: "Work")
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemKeywordsContainsBothPlaceNames() {
+    let drive = makeDrive(startPlaceName: "Home", endPlaceName: "Work")
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.keywords == ["Home", "Work"])
   }
 
   @Test
-  func searchableItemKeywordsContainsOnlyStartPlaceWhenEndIsNil() throws {
-    let drive = try insertFinishedDrive(startPlaceName: "Home")
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemKeywordsContainsOnlyStartPlaceWhenEndIsNil() {
+    let drive = makeDrive(startPlaceName: "Home")
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.keywords == ["Home"])
   }
 
   @Test
-  func searchableItemKeywordsIsNilWhenNeitherPlaceNameSet() throws {
-    let drive = try insertFinishedDrive()
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemKeywordsIsNilWhenNeitherPlaceNameSet() {
+    let drive = makeDrive()
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.keywords == nil)
   }
 
   @Test
-  func searchableItemContentDescriptionShowsBothPlaceNames() throws {
-    let drive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: "Work")
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemContentDescriptionShowsBothPlaceNames() {
+    let drive = makeDrive(startPlaceName: "Home", endPlaceName: "Work")
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.contentDescription == "Home → Work")
   }
 
   @Test
-  func searchableItemContentDescriptionShowsOnlyStartWhenEndIsNil() throws {
-    let drive = try insertFinishedDrive(startPlaceName: "Home")
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemContentDescriptionShowsOnlyStartWhenEndIsNil() {
+    let drive = makeDrive(startPlaceName: "Home")
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.contentDescription == "Home")
   }
 
   @Test
-  func searchableItemContentDescriptionIsNilWhenNoPlaceNames() throws {
-    let drive = try insertFinishedDrive()
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+  func searchableItemContentDescriptionIsNilWhenNoPlaceNames() {
+    let drive = makeDrive()
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.contentDescription == nil)
   }
 
   @Test
-  func searchableItemStartDateMatchesDrive() throws {
+  func searchableItemStartDateMatchesDrive() {
     let date = Date(timeIntervalSince1970: 1_700_000_000)
-    let drive = try insertFinishedDrive(startedAt: date)
-    let service = makeService()
-
-    let item = service.searchableItem(for: drive)
-
+    let drive = makeDrive(startedAt: date)
+    let item = makeService().searchableItem(for: drive)
     #expect(item.attributeSet.startDate == date)
   }
 
-  // MARK: - reindexAll
+  // MARK: - indexDrive
 
   @Test
-  func reindexAllIndexesFinishedDrives() async throws {
+  func indexDriveIndexesTheDrive() async {
     let mockIndex = MockSpotlightIndex()
-    let service = makeService(index: mockIndex)
-    try insertFinishedDrive()
+    let drive = makeDrive(startPlaceName: "Home", endPlaceName: "Work")
 
-    await service.reindexAll()
+    await makeService(index: mockIndex).indexDrive(drive)
 
     #expect(mockIndex.indexedItems.count == 1)
+    #expect(mockIndex.indexedItems[0].uniqueIdentifier == drive.id.uuidString)
+  }
+
+  // MARK: - deindexDrives
+
+  @Test
+  func deindexDrivesRemovesIdentifiers() async {
+    let mockIndex = MockSpotlightIndex()
+    let id1 = UUID()
+    let id2 = UUID()
+
+    await makeService(index: mockIndex).deindexDrives([id1, id2])
+
+    #expect(mockIndex.deletedIdentifiers == [id1.uuidString, id2.uuidString])
   }
 
   @Test
-  func reindexAllSkipsRecordingDrives() async throws {
+  func deindexDrivesWithEmptyArrayDoesNothing() async {
     let mockIndex = MockSpotlightIndex()
-    let service = makeService(index: mockIndex)
-    let drive = Drive(trigger: .manual)
-    drive.status = .recording
-    context!.insert(drive)
-    try context!.save()
 
-    await service.reindexAll()
+    await makeService(index: mockIndex).deindexDrives([])
 
-    #expect(mockIndex.indexedItems.isEmpty)
-  }
-
-  @Test
-  func reindexAllDeletesBeforeReindexing() async throws {
-    let mockIndex = MockSpotlightIndex()
-    let service = makeService(index: mockIndex)
-    try insertFinishedDrive()
-
-    await service.reindexAll()
-
-    #expect(mockIndex.deletedDomainIdentifiers == [SpotlightIndexingService.domainIdentifier])
-  }
-
-  @Test
-  func reindexAllDoesNotIndexWhenNoFinishedDrives() async throws {
-    let mockIndex = MockSpotlightIndex()
-    let service = makeService(index: mockIndex)
-
-    await service.reindexAll()
-
-    #expect(mockIndex.indexedItems.isEmpty)
-  }
-
-  @Test
-  func reindexAllIndexesMultipleFinishedDrives() async throws {
-    let mockIndex = MockSpotlightIndex()
-    let service = makeService(index: mockIndex)
-    try insertFinishedDrive()
-    try insertFinishedDrive()
-
-    await service.reindexAll()
-
-    #expect(mockIndex.indexedItems.count == 2)
+    #expect(mockIndex.deletedIdentifiers.isEmpty)
   }
 
   // MARK: - Helpers
 
   private func makeService(index: any SpotlightIndexProtocol = MockSpotlightIndex()) -> SpotlightIndexingService {
-    SpotlightIndexingService(modelContext: context!, index: index)
+    SpotlightIndexingService(index: index)
   }
 
-  @discardableResult
-  private func insertFinishedDrive(
+  private func makeDrive(
     name: String? = nil,
     startedAt: Date = .now,
     startPlaceName: String? = nil,
     endPlaceName: String? = nil
-  ) throws -> Drive {
+  ) -> Drive {
     let drive = Drive(name: name, trigger: .manual)
     drive.status = .finished
     drive.startedAt = startedAt
     drive.endedAt = .now
     drive.startPlaceName = startPlaceName
     drive.endPlaceName = endPlaceName
-    context!.insert(drive)
-    try context!.save()
     return drive
   }
 }
@@ -210,7 +151,7 @@ final class MockSpotlightIndex: SpotlightIndexProtocol {
   // MARK: - Properties
 
   private(set) var indexedItems: [CSSearchableItem] = []
-  private(set) var deletedDomainIdentifiers: [String] = []
+  private(set) var deletedIdentifiers: [String] = []
 
   // MARK: - SpotlightIndexProtocol
 
@@ -218,7 +159,7 @@ final class MockSpotlightIndex: SpotlightIndexProtocol {
     indexedItems.append(contentsOf: items)
   }
 
-  func deleteSearchableItems(withDomainIdentifiers identifiers: [String]) async throws {
-    deletedDomainIdentifiers.append(contentsOf: identifiers)
+  func deleteSearchableItems(withIdentifiers identifiers: [String]) async throws {
+    deletedIdentifiers.append(contentsOf: identifiers)
   }
 }

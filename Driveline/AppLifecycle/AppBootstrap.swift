@@ -22,16 +22,19 @@ enum AppBootstrap {
       locationService: locationService,
       modelContext: modelContainer.mainContext
     )
-    let placeNameSweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext)
+    let spotlightIndexingService = SpotlightIndexingService()
+    let placeNameSweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext, spotlightIndexingService: spotlightIndexingService)
     let weatherSweepService = WeatherSweepService(modelContext: modelContainer.mainContext)
-    let driveService = setupDriveRecordingService(
+    let activeDrive = findActiveDrive(in: modelContainer.mainContext)
+    let driveService = DriveRecordingService(
       modelContext: modelContainer.mainContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
       placeNameSweepService: placeNameSweepService,
-      weatherSweepService: weatherSweepService
+      weatherSweepService: weatherSweepService,
+      spotlightIndexingService: spotlightIndexingService,
+      initialDrive: activeDrive
     )
-    let spotlightIndexingService = SpotlightIndexingService(modelContext: modelContainer.mainContext)
     registerBGTasks([placeNameSweepService, weatherSweepService])
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
@@ -77,25 +80,11 @@ enum AppBootstrap {
     return LocationDataRecorderService(locationService: locationService, modelContext: modelContext)
   }
 
-  private static func setupDriveRecordingService(
-    modelContext: ModelContext,
-    locationService: LocationService,
-    locationDataRecorder: LocationDataRecorderService,
-    placeNameSweepService: PlaceNameSweepService,
-    weatherSweepService: WeatherSweepService
-  ) -> DriveRecordingService {
+  private static func findActiveDrive(in modelContext: ModelContext) -> Drive? {
     Log.lifecycle.info("Setting up drive service")
     var descriptor = FetchDescriptor<Drive>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
     descriptor.fetchLimit = 1
-    let activeDrive = (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
-    return DriveRecordingService(
-      modelContext: modelContext,
-      locationService: locationService,
-      locationDataRecorder: locationDataRecorder,
-      placeNameSweepService: placeNameSweepService,
-      weatherSweepService: weatherSweepService,
-      initialDrive: activeDrive
-    )
+    return (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
   }
 
   private static func registerBGTasks(_ services: [any SweepServiceProtocol]) {

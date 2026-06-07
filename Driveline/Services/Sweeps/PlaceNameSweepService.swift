@@ -17,13 +17,15 @@ final class PlaceNameSweepService: SweepServiceProtocol {
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
+  @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
   nonisolated var taskIdentifier: String { Constants.Configuration.placeNameSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, geocodingService: any GeocodingServiceProtocol = GeocodingService()) {
+  init(modelContext: ModelContext, geocodingService: any GeocodingServiceProtocol = GeocodingService(), spotlightIndexingService: SpotlightIndexingService? = nil) {
     self.modelContext = modelContext
     self.geocodingService = geocodingService
+    self.spotlightIndexingService = spotlightIndexingService
   }
 
   // MARK: - Actions
@@ -51,6 +53,7 @@ final class PlaceNameSweepService: SweepServiceProtocol {
         drive.endPlaceName = await geocodingService.reverseGeocode(location: location)
       }
       saveModelContext()
+      await spotlightIndexingService?.indexDrive(drive)
     }
   }
 

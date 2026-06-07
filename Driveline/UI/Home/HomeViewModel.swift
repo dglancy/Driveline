@@ -31,6 +31,7 @@ final class HomeViewModel {
   // MARK: - Properties
 
   @ObservationIgnored var modelContext: ModelContext?
+  @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
 
   var navigationPath: NavigationPath = NavigationPath()
   private(set) var sections: [DriveSection] = []
@@ -109,6 +110,7 @@ final class HomeViewModel {
 
   func deleteDrives(_ drives: [Drive]) {
     guard let modelContext else { return }
+    let ids = drives.map(\.id)
     for drive in drives {
       modelContext.delete(drive)
     }
@@ -117,6 +119,7 @@ final class HomeViewModel {
     } catch {
       Log.data.error("Failed to delete drives: \(error.localizedDescription)")
     }
+    Task { await spotlightIndexingService?.deindexDrives(ids) }
   }
 
   func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {

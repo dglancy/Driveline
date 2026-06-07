@@ -7,45 +7,60 @@
 
 import CoreSpotlight
 import Foundation
-import SwiftData
+import Observation
 
 // MARK: - Protocol
 
 @MainActor
 protocol SpotlightIndexProtocol: AnyObject {
   func indexSearchableItems(_ items: [CSSearchableItem]) async throws
-  func deleteSearchableItems(withDomainIdentifiers identifiers: [String]) async throws
+  func deleteSearchableItems(withIdentifiers identifiers: [String]) async throws
 }
 
 extension CSSearchableIndex: SpotlightIndexProtocol {}
 
+// MARK: - Environment Key
+
+import SwiftUI
+
+private struct SpotlightIndexingServiceKey: EnvironmentKey {
+  static let defaultValue: SpotlightIndexingService? = nil
+}
+
+extension EnvironmentValues {
+  var spotlightIndexingService: SpotlightIndexingService? {
+    get { self[SpotlightIndexingServiceKey.self] }
+    set { self[SpotlightIndexingServiceKey.self] = newValue }
+  }
+}
+
 // MARK: - SpotlightIndexingService
 
 @MainActor
+@Observable
 final class SpotlightIndexingService {
 
   // MARK: - Properties
 
   static let domainIdentifier = Constants.App.bundleIdentifier
 
-  @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let index: any SpotlightIndexProtocol
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, index: any SpotlightIndexProtocol = CSSearchableIndex.default()) {
-    self.modelContext = modelContext
+  init(index: any SpotlightIndexProtocol = CSSearchableIndex.default()) {
     self.index = index
   }
 
   // MARK: - Actions
 
-  func reindexAll() async {
-    try? await index.deleteSearchableItems(withDomainIdentifiers: [Self.domainIdentifier])
-    let drives = fetchFinishedDrives()
-    guard !drives.isEmpty else { return }
-    let items = drives.map { searchableItem(for: $0) }
-    try? await index.indexSearchableItems(items)
+  func indexDrive(_ drive: Drive) async {
+    try? await index.indexSearchableItems([searchableItem(for: drive)])
+  }
+
+  func deindexDrives(_ ids: [UUID]) async {
+    guard !ids.isEmpty else { return }
+    try? await index.deleteSearchableItems(withIdentifiers: ids.map(\.uuidString))
   }
 
   // MARK: - Internal
@@ -66,11 +81,6 @@ final class SpotlightIndexingService {
   }
 
   // MARK: - Private
-
-  private func fetchFinishedDrives() -> [Drive] {
-    let descriptor = FetchDescriptor<Drive>()
-    return ((try? modelContext.fetch(descriptor)) ?? []).filter { $0.status == .finished }
-  }
 
   private func contentDescription(for drive: Drive) -> String? {
     switch (drive.startPlaceName, drive.endPlaceName) {

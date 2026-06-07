@@ -371,6 +371,24 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func deleteDrivesDeindexesFromSpotlight() async throws {
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let drive = insertDrive()
+    let driveID = drive.id
+    let viewModel = HomeViewModel()
+    viewModel.modelContext = context!
+    viewModel.spotlightIndexingService = spotlightService
+
+    viewModel.deleteDrives([drive])
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockSpotlight.deletedIdentifiers == [driveID.uuidString])
+  }
+
+  @Test
   func deleteDrivesAtIndexSetRemovesCorrectDrive() throws {
     let drive = insertDrive()
     let viewModel = HomeViewModel()

@@ -144,6 +144,34 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
     #expect(mockGeocoding.geocodedLocations.count == 4)
   }
 
+  // MARK: - Spotlight indexing
+
+  @Test
+  func sweepIndexesDriveAfterResolvingPlaceNames() async throws {
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let service = PlaceNameSweepService(modelContext: context!, spotlightIndexingService: spotlightService)
+    try insertFinishedDrive(positions: [makePosition()])
+
+    await service.sweep()
+
+    #expect(mockSpotlight.indexedItems.count == 1)
+  }
+
+  @Test
+  func sweepIndexesDriveEvenWhenGeocodingFails() async throws {
+    let mockGeocoding = MockGeocodingService()
+    mockGeocoding.result = nil
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let service = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeocoding, spotlightIndexingService: spotlightService)
+    try insertFinishedDrive(positions: [makePosition()])
+
+    await service.sweep()
+
+    #expect(mockSpotlight.indexedItems.count == 1)
+  }
+
   // MARK: - Helpers
 
   private func makeSweepService(geocodingService: any GeocodingServiceProtocol = MockGeocodingService()) -> PlaceNameSweepService {

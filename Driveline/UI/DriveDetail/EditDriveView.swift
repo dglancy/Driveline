@@ -13,6 +13,7 @@ struct EditDriveView: View {
 
   @State private var viewModel: EditDriveViewModel
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.spotlightIndexingService) private var spotlightIndexingService
 
   // MARK: - Lifecycle
 
@@ -51,6 +52,7 @@ struct EditDriveView: View {
       }
       .navigationTitle(String(localized: "Edit Drive", comment: "Edit drive sheet title"))
       .navigationBarTitleDisplayMode(.inline)
+      .onAppear { viewModel.spotlightIndexingService = spotlightIndexingService }
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button.cancel { dismiss() }

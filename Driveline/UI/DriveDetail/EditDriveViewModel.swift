@@ -19,6 +19,7 @@ final class EditDriveViewModel {
   var endPlaceName: String
 
   @ObservationIgnored private let drive: Drive
+  @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
 
   // MARK: - Lifecycle
 
@@ -38,5 +39,6 @@ final class EditDriveViewModel {
     drive.startPlaceName = trimmedStart.isEmpty ? nil : trimmedStart
     let trimmedEnd = endPlaceName.trimmingCharacters(in: .whitespaces)
     drive.endPlaceName = trimmedEnd.isEmpty ? nil : trimmedEnd
+    Task { await spotlightIndexingService?.indexDrive(drive) }
   }
 }

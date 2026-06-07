@@ -39,12 +39,12 @@ struct Driveline: App {
     WindowGroup {
       HomeView()
         .environment(driveService)
+        .environment(\.spotlightIndexingService, spotlightIndexingService)
         .onChange(of: scenePhase) { _, newPhase in
           switch newPhase {
           case .active:
             Task { await placeNameSweepService.sweep() }
             Task { await weatherSweepService.sweep() }
-            Task { await spotlightIndexingService.reindexAll() }
           case .background:
             schedulePlaceNameSweepTask()
             scheduleWeatherSweepTask()

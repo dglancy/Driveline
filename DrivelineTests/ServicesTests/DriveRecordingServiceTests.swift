@@ -159,6 +159,36 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(mockGeocoding.geocodedLocations.count == 1)
   }
 
+  // MARK: - finishDrive spotlight
+
+  @Test
+  func finishDriveIndexesDriveInSpotlight() async throws {
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let (service, _, _) = makeServices(spotlightIndexingService: spotlightService)
+
+    try service.startDrive()
+    service.finishDrive()
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockSpotlight.indexedItems.count == 1)
+  }
+
+  @Test
+  func finishDriveWithNoActiveDriveDoesNotIndexSpotlight() async throws {
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let (service, _, _) = makeServices(spotlightIndexingService: spotlightService)
+
+    service.finishDrive()
+
+    await Task.yield()
+
+    #expect(mockSpotlight.indexedItems.isEmpty)
+  }
+
   // MARK: - finishDrive geocoding
 
   @Test
@@ -431,6 +461,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   private func makeServices(
     geocodingService: (any GeocodingServiceProtocol)? = nil,
     weatherService: (any WeatherFetchServiceProtocol)? = nil,
+    spotlightIndexingService: SpotlightIndexingService? = nil,
     userPreferences: UserPreferences? = nil
   ) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
     let mockGeo = geocodingService ?? MockGeocodingService()
@@ -445,6 +476,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       geocodingService: mockGeo,
       weatherService: mockWeather,
       placeNameSweepService: placeNameSweepService,
+      spotlightIndexingService: spotlightIndexingService,
       userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)

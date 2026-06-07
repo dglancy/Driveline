@@ -49,7 +49,7 @@ struct LocationServiceTests {
     )
     service.locationManager(CLLocationManager(), didUpdateLocations: [validLocation])
 
-    await Task.yield()
+    for _ in 0..<2 { await Task.yield() }
 
     #expect(receivedLocations.count == 1)
 
