@@ -108,7 +108,7 @@ struct LocationServiceTests {
     var receivedLocations = [CLLocation]()
     let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
 
-    let staleTimestamp = Date().addingTimeInterval(-(kMaxLocationAge + 1))
+    let staleTimestamp = Date().addingTimeInterval(-(Constants.Configuration.maxLocationAge + 1))
     let staleLocation = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
@@ -155,7 +155,7 @@ struct LocationServiceTests {
     let service = LocationService()
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
-      altitude: 0, horizontalAccuracy: kMinimumLocationAccuracy, verticalAccuracy: 5,
+      altitude: 0, horizontalAccuracy: Constants.Configuration.minimumLocationAccuracy, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
     )
     #expect(service.isUsable(location) == false)
@@ -165,7 +165,7 @@ struct LocationServiceTests {
   @MainActor
   func isUsableReturnsFalseForStaleTimestamp() {
     let service = LocationService()
-    let staleTimestamp = Date().addingTimeInterval(-(kMaxLocationAge + 1))
+    let staleTimestamp = Date().addingTimeInterval(-(Constants.Configuration.maxLocationAge + 1))
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,

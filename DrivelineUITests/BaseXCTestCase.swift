@@ -20,7 +20,7 @@ class BaseXCTestCase: XCTestCase {
     try await super.setUp()
     continueAfterFailure = false
     app = XCUIApplication()
-    app.launchArguments += [kUITestingFlag]
+    app.launchArguments += ["-ui-testing"]
   }
 
   override func tearDown() async throws {

@@ -15,13 +15,13 @@ struct ConstantsTests {
 
   @Test
   func gpxCreatorHasCorrectSuffix() {
-    #expect(kGPXCreator.hasSuffix("Driveline for iOS"))
+    #expect(Constants.App.GPXCreator.hasSuffix("Driveline for iOS"))
   }
 
   // MARK: - Testing
 
   @Test
   func uiTestingFlagValue() {
-    #expect(kUITestingFlag == "-ui-testing")
+    #expect(Constants.Testing.UITestingFlag == "-ui-testing")
   }
 }
