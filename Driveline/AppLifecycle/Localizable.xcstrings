@@ -1,3047 +1,3062 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@ · %@": {
-      "comment": "Drive start date and time, e.g. '5 Jun · 09:41'. Translators may change the separator.",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ · %@" : {
+      "comment" : "Drive start date and time, e.g. '5 Jun · 09:41'. Translators may change the separator.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
           }
         }
       }
     },
-    "%@ + %@": {
-      "comment": "Default name for a merged drive, combining two drive names with a plus sign",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ + %2$@"
+    "%@ + %@" : {
+      "comment" : "Default name for a merged drive, combining two drive names with a plus sign",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ + %2$@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ + %2$@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ + %2$@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ + %2$@"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ + %2$@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ + %2$@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ + %2$@"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ + %2$@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ + %2$@"
           }
         }
       }
     },
-    "%@ drive from %@": {
-      "comment": "Drive name with known start location only",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@fahrt ab %2$@"
+    "%@ drive from %@" : {
+      "comment" : "Drive name with known start location only",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@fahrt ab %2$@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ drive from %2$@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ drive from %2$@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet %1$@ depuis %2$@"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ drive from %2$@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@rit vanuit %2$@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet %1$@ depuis %2$@"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ drive from %2$@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@rit vanuit %2$@"
           }
         }
       }
     },
-    "%@ drive to %@": {
-      "comment": "Drive name with known end location only",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@fahrt nach %2$@"
+    "%@ drive to %@" : {
+      "comment" : "Drive name with known end location only",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@fahrt nach %2$@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ drive to %2$@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ drive to %2$@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet %1$@ vers %2$@"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ drive to %2$@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@rit naar %2$@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet %1$@ vers %2$@"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ drive to %2$@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@rit naar %2$@"
           }
         }
       }
     },
-    "%@: %@ %@": {
-      "comment": "Accessibility label for a drive stat tile: label, value, and unit — e.g. 'Avg Speed: 45 km/h'. Translators may adjust punctuation (e.g. space before colon in French).",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@: %2$@ %3$@"
+    "%@: %@ %@" : {
+      "comment" : "Accessibility label for a drive stat tile: label, value, and unit — e.g. 'Avg Speed: 45 km/h'. Translators may adjust punctuation (e.g. space before colon in French).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@: %2$@ %3$@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ : %2$@ %3$@"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@: %2$@ %3$@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ : %2$@ %3$@"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@: %2$@ %3$@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@"
           }
         }
       }
     },
-    "%lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+    "%lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         }
       },
-      "shouldTranslate": false
+      "shouldTranslate" : false
     },
-    "%lld drives · %@ in the last 30 days": {
-      "comment": "Summary line at the bottom of the home screen, showing the number of drive entries and the distance travelled in the last 30 days.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld Fahrten · %2$@ in den letzten 30 Tagen"
+    "%lld drives · %@ in the last 30 days" : {
+      "comment" : "Summary line at the bottom of the home screen, showing the number of drive entries and the distance travelled in the last 30 days.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Fahrten · %2$@ in den letzten 30 Tagen"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld drives · %2$@ in the last 30 days"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld drives · %2$@ in the last 30 days"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld trajets · %2$@ au cours des 30 derniers jours"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld drives · %2$@ in the last 30 days"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld ritten · %2$@ in de laatste 30 dagen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld trajets · %2$@ au cours des 30 derniers jours"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld drives · %2$@ in the last 30 days"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld ritten · %2$@ in de laatste 30 dagen"
           }
         }
       }
     },
-    "%lld drives and all their data will be permanently deleted.": {
-      "comment": "Confirmation message for deleting selected drives.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Fahrten und alle ihre Daten werden endgültig gelöscht."
+    "%lld drives and all their data will be permanently deleted." : {
+      "comment" : "Confirmation message for deleting selected drives.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Fahrten und alle ihre Daten werden endgültig gelöscht."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld trajets et toutes leurs données seront définitivement supprimés."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld drives and all their data will be permanently deleted."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ritten en al hun gegevens worden permanent verwijderd."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld trajets et toutes leurs données seront définitivement supprimés."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld drives and all their data will be permanently deleted."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ritten en al hun gegevens worden permanent verwijderd."
           }
         }
       }
     },
-    "%lld selected": {
-      "comment": "Multiselect count of selected drives",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ausgewählt"
+    "%lld selected" : {
+      "comment" : "Multiselect count of selected drives",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ausgewählt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld sélectionné(s)"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld selected"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld geselecteerd"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sélectionné(s)"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld selected"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld geselecteerd"
           }
         }
       }
     },
-    "%lld. %@": {
-      "comment": "A label that combines the index, the name of the drive, the distance, and the date/time.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld. %2$@"
+    "%lld. %@" : {
+      "comment" : "A label that combines the index, the name of the drive, the distance, and the date/time.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld. %2$@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld. %2$@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld. %2$@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld. %2$@"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld. %2$@"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld. %2$@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld. %2$@"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld. %2$@"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld. %2$@"
           }
         }
       }
     },
-    "active": {
-      "comment": "Label for the active driving duration stat",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "aktiv"
+    "active" : {
+      "comment" : "Label for the active driving duration stat",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktiv"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "actif"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "active"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "actief"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "actif"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "active"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "actief"
           }
         }
       }
     },
-    "Afternoon": {
-      "comment": "Time-of-day word in drive name",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nachmittags"
+    "Afternoon" : {
+      "comment" : "Time-of-day word in drive name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachmittags"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "d'après-midi"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afternoon"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Middag"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "d'après-midi"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afternoon"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middag"
           }
         }
       }
     },
-    "Afternoon Drive": {
-      "comment": "Auto drive name — afternoon",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nachmittagsfahrt"
+    "Afternoon Drive" : {
+      "comment" : "Auto drive name — afternoon",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachmittagsfahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet de l'après-midi"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afternoon Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Middagrit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet de l'après-midi"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afternoon Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middagrit"
           }
         }
       }
     },
-    "Arrival": {
-      "comment": "Endpoint row subtitle",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ankunft"
+    "Arrival" : {
+      "comment" : "Endpoint row subtitle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ankunft"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrivée"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrival"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aankomst"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrivée"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrival"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aankomst"
           }
         }
       }
     },
-    "Automatically": {
-      "comment": "Recording trigger: started automatically by automation",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch"
+    "At Arrival" : {
+      "comment" : "Weather row subtitle"
+    },
+    "At Departure" : {
+      "comment" : "Weather row subtitle"
+    },
+    "Automatically" : {
+      "comment" : "Recording trigger: started automatically by automation",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatiquement"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatiquement"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatically"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
           }
         }
       }
     },
-    "Avg Speed": {
-      "comment": "Stat tile label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ø Tempo"
+    "Avg Speed" : {
+      "comment" : "Stat tile label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ø Tempo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vit. moy."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avg Speed"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gem. snelheid"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vit. moy."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avg Speed"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gem. snelheid"
           }
         }
       }
     },
-    "Back": {
-      "comment": "Accessibility label for the back button on the drive detail screen\nAccessibility label for the back button on the full screen map",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zurück"
+    "Back" : {
+      "comment" : "Accessibility label for the back button on the drive detail screen\nAccessibility label for the back button on the full screen map",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retour"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terug"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terug"
           }
         }
       }
     },
-    "Cancel": {
-      "comment": "Cancel or dismiss",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abbrechen"
+    "Cancel" : {
+      "comment" : "Cancel or dismiss",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuleren"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleren"
           }
         }
       }
     },
-    "Cannot export a drive with no coordinates.": {
-      "comment": "Export error: drive has no recorded positions",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine Fahrt ohne Koordinaten kann nicht exportiert werden."
+    "Cannot export a drive with no coordinates." : {
+      "comment" : "Export error: drive has no recorded positions",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Fahrt ohne Koordinaten kann nicht exportiert werden."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible d'exporter un trajet sans coordonnées."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cannot export a drive with no coordinates."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kan geen rit zonder coördinaten exporteren."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d'exporter un trajet sans coordonnées."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cannot export a drive with no coordinates."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kan geen rit zonder coördinaten exporteren."
           }
         }
       }
     },
-    "Combined Result": {
-      "comment": "Merge combined result section header",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kombiniertes Ergebnis"
+    "Combined Result" : {
+      "comment" : "Merge combined result section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kombiniertes Ergebnis"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Résultat combiné"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combined Result"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gecombineerd resultaat"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résultat combiné"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Combined Result"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gecombineerd resultaat"
           }
         }
       }
     },
-    "Couldn't Start Recording": {
-      "comment": "Start drive failure alert title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufzeichnung konnte nicht gestartet werden"
+    "Couldn't Start Recording" : {
+      "comment" : "Start drive failure alert title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzeichnung konnte nicht gestartet werden"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de démarrer l'enregistrement"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't Start Recording"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opname kon niet worden gestart"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de démarrer l'enregistrement"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't Start Recording"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opname kon niet worden gestart"
           }
         }
       }
     },
-    "Currently recording — open recording screen": {
-      "comment": "Record button when recording",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufzeichnung läuft — Aufnahmebildschirm öffnen"
+    "Currently recording — open recording screen" : {
+      "comment" : "Record button when recording",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzeichnung läuft — Aufnahmebildschirm öffnen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrement en cours — ouvrir l'écran d'enregistrement"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently recording — open recording screen"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opname bezig — opnamescherm openen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement en cours — ouvrir l'écran d'enregistrement"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Currently recording — open recording screen"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opname bezig — opnamescherm openen"
           }
         }
       }
     },
-    "Delete": {
-      "comment": "Delete selected drives button\nDestructive delete",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Löschen"
+    "Delete" : {
+      "comment" : "Delete selected drives button\nDestructive delete",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verwijderen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderen"
           }
         }
       }
     },
-    "Delete Drive": {
-      "comment": "Delete confirmation alert title\nMore menu action",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt löschen"
+    "Delete Drive" : {
+      "comment" : "Delete confirmation alert title\nMore menu action",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt löschen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer le trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit verwijderen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit verwijderen"
           }
         }
       }
     },
-    "Delete Drives": {
-      "comment": "Delete confirmation alert title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrten löschen"
+    "Delete Drives" : {
+      "comment" : "Delete confirmation alert title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten löschen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer les trajets"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Drives"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritten verwijderen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer les trajets"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete Drives"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritten verwijderen"
           }
         }
       }
     },
-    "Departure": {
-      "comment": "Endpoint row subtitle",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abfahrt"
+    "Departure" : {
+      "comment" : "Endpoint row subtitle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abfahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Départ"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Departure"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vertrek"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Départ"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Departure"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertrek"
           }
         }
       }
     },
-    "Distance": {
-      "comment": "Stat tile label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strecke"
+    "Distance" : {
+      "comment" : "Stat tile label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strecke"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distance"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afstand"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distance"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afstand"
           }
         }
       }
     },
-    "Drive": {
-      "comment": "Description of the StartDriveIntent.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt"
+    "Drive" : {
+      "comment" : "Description of the StartDriveIntent.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit"
           }
         }
       }
     },
-    "Drive name": {
-      "comment": "Drive name text field placeholder\nMerge name text field placeholder",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrtenname"
+    "Drive name" : {
+      "comment" : "Drive name text field placeholder\nMerge name text field placeholder",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrtenname"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom du trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive name"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritnaam"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drive name"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritnaam"
           }
         }
       }
     },
-    "Drive Name": {
-      "comment": "Edit drive section header",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrtenname"
+    "Drive Name" : {
+      "comment" : "Edit drive section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrtenname"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom du trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive Name"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritnaam"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drive Name"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritnaam"
           }
         }
       }
     },
-    "Drive Options": {
-      "comment": "More menu title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrtenoptionen"
+    "Drive Options" : {
+      "comment" : "More menu title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrtenoptionen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Options du trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive Options"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritopties"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options du trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drive Options"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritopties"
           }
         }
       }
     },
-    "Driveline isn't ready to start recording.": {
-      "comment": "Error message when Driveline isn't ready to start recording.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Driveline ist noch nicht bereit, die Aufzeichnung zu starten."
+    "Driveline isn't ready to start recording." : {
+      "comment" : "Error message when Driveline isn't ready to start recording.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline ist noch nicht bereit, die Aufzeichnung zu starten."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Driveline n'est pas prêt à démarrer l'enregistrement."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline isn't ready to start recording."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Driveline is nog niet klaar om op te nemen."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline n'est pas prêt à démarrer l'enregistrement."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Driveline isn't ready to start recording."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline is nog niet klaar om op te nemen."
           }
         }
       }
     },
-    "Drives": {
-      "comment": "A title for the list of drives.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrten"
+    "Drives" : {
+      "comment" : "A title for the list of drives.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajets"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drives"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajets"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drives"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritten"
           }
         }
       }
     },
-    "Duration": {
-      "comment": "Stat tile label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dauer"
+    "Duration" : {
+      "comment" : "Stat tile label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dauer"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durée"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duration"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duration"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duur"
           }
         }
       }
     },
-    "Edit Drive": {
-      "comment": "Edit drive sheet title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt bearbeiten"
+    "Edit Drive" : {
+      "comment" : "Edit drive sheet title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt bearbeiten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modifier le trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit bewerken"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit bewerken"
           }
         }
       }
     },
-    "Edit Drive Details": {
-      "comment": "More menu action",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrtendetails bearbeiten"
+    "Edit Drive Details" : {
+      "comment" : "More menu action",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrtendetails bearbeiten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modifier les détails du trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Drive Details"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritdetails bewerken"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier les détails du trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit Drive Details"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritdetails bewerken"
           }
         }
       }
     },
-    "Elapsed": {
-      "comment": "Label above the elapsed time timer on the recording screen",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vergangen"
+    "Elapsed" : {
+      "comment" : "Label above the elapsed time timer on the recording screen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergangen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Écoulé"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elapsed"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verstreken"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écoulé"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elapsed"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstreken"
           }
         }
       }
     },
-    "Elapsed time": {
-      "comment": "Timer accessibility label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abgelaufene Zeit"
+    "Elapsed time" : {
+      "comment" : "Timer accessibility label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgelaufene Zeit"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temps écoulé"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elapsed time"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verstreken tijd"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temps écoulé"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elapsed time"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstreken tijd"
           }
         }
       }
     },
-    "End Location": {
-      "comment": "Edit drive section header",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Endpunkt"
+    "End Location" : {
+      "comment" : "Edit drive section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endpunkt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lieu d'arrivée"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Location"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eindlocatie"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lieu d'arrivée"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "End Location"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eindlocatie"
           }
         }
       }
     },
-    "End location name": {
-      "comment": "End location text field placeholder",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name des Ziels"
+    "End location name" : {
+      "comment" : "End location text field placeholder",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name des Ziels"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom du lieu d'arrivée"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End location name"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam eindlocatie"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du lieu d'arrivée"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "End location name"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam eindlocatie"
           }
         }
       }
     },
-    "Evening": {
-      "comment": "Time-of-day word in drive name",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abend"
+    "Evening" : {
+      "comment" : "Time-of-day word in drive name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abend"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "du soir"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evening"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avond"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "du soir"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Evening"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avond"
           }
         }
       }
     },
-    "Evening Drive": {
-      "comment": "Auto drive name — evening",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abendfahrt"
+    "Evening Drive" : {
+      "comment" : "Auto drive name — evening",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abendfahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet du soir"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evening Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avondrit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet du soir"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Evening Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avondrit"
           }
         }
       }
     },
-    "Export Failed": {
-      "comment": "Export error alert title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export fehlgeschlagen"
+    "Export Failed" : {
+      "comment" : "Export error alert title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export fehlgeschlagen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de l'export"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export Failed"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export mislukt"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l'export"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export Failed"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export mislukt"
           }
         }
       }
     },
-    "Failed to create PNG. Please try again.": {
-      "comment": "Export error: map snapshot failed",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PNG konnte nicht erstellt werden. Bitte erneut versuchen."
+    "Failed to create PNG. Please try again." : {
+      "comment" : "Export error: map snapshot failed",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG konnte nicht erstellt werden. Bitte erneut versuchen."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de la création du PNG. Veuillez réessayer."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to create PNG. Please try again."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PNG kon niet worden aangemaakt. Probeer het opnieuw."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la création du PNG. Veuillez réessayer."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Failed to create PNG. Please try again."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG kon niet worden aangemaakt. Probeer het opnieuw."
           }
         }
       }
     },
-    "Failed to prepare GPX data for sharing.": {
-      "comment": "Export error: GPX string could not be encoded as UTF-8",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GPX-Daten konnten nicht für das Teilen vorbereitet werden."
+    "Failed to prepare GPX data for sharing." : {
+      "comment" : "Export error: GPX string could not be encoded as UTF-8",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX-Daten konnten nicht für das Teilen vorbereitet werden."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de la préparation des données GPX pour le partage."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to prepare GPX data for sharing."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GPX-gegevens konden niet worden voorbereid voor delen."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la préparation des données GPX pour le partage."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Failed to prepare GPX data for sharing."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPX-gegevens konden niet worden voorbereid voor delen."
           }
         }
       }
     },
-    "Failed to prepare PNG data for sharing.": {
-      "comment": "Export error: UIImage could not produce PNG data",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PNG-Daten konnten nicht für das Teilen vorbereitet werden."
+    "Failed to prepare PNG data for sharing." : {
+      "comment" : "Export error: UIImage could not produce PNG data",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG-Daten konnten nicht für das Teilen vorbereitet werden."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de la préparation des données PNG pour le partage."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to prepare PNG data for sharing."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PNG-gegevens konden niet worden voorbereid voor delen."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la préparation des données PNG pour le partage."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Failed to prepare PNG data for sharing."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG-gegevens konden niet worden voorbereid voor delen."
           }
         }
       }
     },
-    "Failed to save PNG. Please try again.": {
-      "comment": "Export error: writing PNG file to disk failed",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PNG konnte nicht gespeichert werden. Bitte erneut versuchen."
+    "Failed to save PNG. Please try again." : {
+      "comment" : "Export error: writing PNG file to disk failed",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG konnte nicht gespeichert werden. Bitte erneut versuchen."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de l'enregistrement du PNG. Veuillez réessayer."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to save PNG. Please try again."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PNG kon niet worden opgeslagen. Probeer het opnieuw."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l'enregistrement du PNG. Veuillez réessayer."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Failed to save PNG. Please try again."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG kon niet worden opgeslagen. Probeer het opnieuw."
           }
         }
       }
     },
-    "Finish": {
-      "comment": "Export PNG finish marker label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziel"
+    "Finish" : {
+      "comment" : "Export PNG finish marker label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrivée"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrivée"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish"
           }
         }
       }
     },
-    "Finish a drive in ${applicationName}": {
-      "comment": "Siri shortcut phrase to finish a drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine Fahrt beenden in ${applicationName}"
+    "Finish a drive in ${applicationName}" : {
+      "comment" : "Siri shortcut phrase to finish a drive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Fahrt beenden in ${applicationName}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer un trajet dans ${applicationName}"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish a drive in ${applicationName}"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een rit beëindigen in ${applicationName}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer un trajet dans ${applicationName}"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish a drive in ${applicationName}"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een rit beëindigen in ${applicationName}"
           }
         }
       }
     },
-    "Finish drive": {
-      "comment": "Title of the Finish Drive intent.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt beenden"
+    "Finish drive" : {
+      "comment" : "Title of the Finish Drive intent.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt beenden"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer le trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit beëindigen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer le trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit beëindigen"
           }
         }
       }
     },
-    "Finish Drive": {
-      "comment": "Finish drive button label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt beenden"
+    "Finish Drive" : {
+      "comment" : "Finish drive button label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt beenden"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer le trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit beëindigen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer le trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit beëindigen"
           }
         }
       }
     },
-    "Finish my drive in ${applicationName}": {
-      "comment": "Siri shortcut phrase to finish my drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meine Fahrt beenden in ${applicationName}"
+    "Finish my drive in ${applicationName}" : {
+      "comment" : "Siri shortcut phrase to finish my drive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meine Fahrt beenden in ${applicationName}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer mon trajet dans ${applicationName}"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish my drive in ${applicationName}"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mijn rit beëindigen in ${applicationName}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer mon trajet dans ${applicationName}"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish my drive in ${applicationName}"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijn rit beëindigen in ${applicationName}"
           }
         }
       }
     },
-    "Finish recording a drive with ${applicationName}": {
-      "comment": "Siri shortcut phrase to finish recording a drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufzeichnung einer Fahrt beenden mit ${applicationName}"
+    "Finish recording a drive with ${applicationName}" : {
+      "comment" : "Siri shortcut phrase to finish recording a drive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzeichnung einer Fahrt beenden mit ${applicationName}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer l'enregistrement d'un trajet avec ${applicationName}"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish recording a drive with ${applicationName}"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opname van een rit beëindigen met ${applicationName}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer l'enregistrement d'un trajet avec ${applicationName}"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish recording a drive with ${applicationName}"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opname van een rit beëindigen met ${applicationName}"
           }
         }
       }
     },
-    "Finish recording a drive.": {
-      "comment": "The description of the FinishDriveIntent intent.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufzeichnung einer Fahrt beenden."
+    "Finish recording a drive." : {
+      "comment" : "The description of the FinishDriveIntent intent.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzeichnung einer Fahrt beenden."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminer l'enregistrement d'un trajet."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish recording a drive."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opname van een rit beëindigen."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer l'enregistrement d'un trajet."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finish recording a drive."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opname van een rit beëindigen."
           }
         }
       }
     },
-    "Full screen map": {
-      "comment": "Accessibility label for the button that opens the full screen map on the drive detail screen",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vollbildkarte"
+    "Full screen map" : {
+      "comment" : "Accessibility label for the button that opens the full screen map on the drive detail screen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollbildkarte"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carte plein écran"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full screen map"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kaart op volledig scherm"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carte plein écran"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Full screen map"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaart op volledig scherm"
           }
         }
       }
     },
-    "logged": {
-      "comment": "Label for the count of GPS positions logged during a drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "protokolliert"
+    "logged" : {
+      "comment" : "Label for the count of GPS positions logged during a drive",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "protokolliert"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "enregistré(s)"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "logged"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "geregistreerd"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "enregistré(s)"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "logged"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "geregistreerd"
           }
         }
       }
     },
-    "Manually": {
-      "comment": "Recording trigger: started manually by the user",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manuell"
+    "Manually" : {
+      "comment" : "Recording trigger: started manually by the user",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manuell"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manuellement"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manually"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Handmatig"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manuellement"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manually"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handmatig"
           }
         }
       }
     },
-    "Merge": {
-      "comment": "Confirm drive merge\nMerge selected drives button",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zusammenführen"
+    "Merge" : {
+      "comment" : "Confirm drive merge\nMerge selected drives button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenführen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fusionner"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Samenvoegen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusionner"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merge"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samenvoegen"
           }
         }
       }
     },
-    "Merge Drives": {
-      "comment": "Merge sheet navigation title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrten zusammenführen"
+    "Merge Drives" : {
+      "comment" : "Merge sheet navigation title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten zusammenführen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fusionner les trajets"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge Drives"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ritten samenvoegen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusionner les trajets"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merge Drives"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritten samenvoegen"
           }
         }
       }
     },
-    "Merged Drive Name": {
-      "comment": "Merge name section header",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name der zusammengeführten Fahrt"
+    "Merged Drive Name" : {
+      "comment" : "Merge name section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name der zusammengeführten Fahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom du trajet fusionné"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merged Drive Name"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam van de samengevoegde rit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du trajet fusionné"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merged Drive Name"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam van de samengevoegde rit"
           }
         }
       }
     },
-    "Minimize recording screen": {
-      "comment": "Dismiss button accessibility label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufnahmebildschirm minimieren"
+    "Minimize recording screen" : {
+      "comment" : "Dismiss button accessibility label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufnahmebildschirm minimieren"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minimise recording screen"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimise recording screen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réduire l'écran d'enregistrement"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réduire l'écran d'enregistrement"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opnamescherm minimaliseren"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opnamescherm minimaliseren"
           }
         }
       }
     },
-    "More options": {
-      "comment": "Accessibility label for the more options button on the drive detail screen",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weitere Optionen"
+    "More options" : {
+      "comment" : "Accessibility label for the more options button on the drive detail screen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Optionen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus d'options"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More options"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meer opties"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus d'options"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "More options"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meer opties"
           }
         }
       }
     },
-    "Morning": {
-      "comment": "Time-of-day word in drive name",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Morgen"
+    "Morning" : {
+      "comment" : "Time-of-day word in drive name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morgen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "du matin"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morning"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ochtend"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "du matin"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Morning"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ochtend"
           }
         }
       }
     },
-    "Morning Drive": {
-      "comment": "Auto drive name — morning",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Morgenfahrt"
+    "Morning Drive" : {
+      "comment" : "Auto drive name — morning",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morgenfahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet du matin"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morning Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ochtendrit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet du matin"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Morning Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ochtendrit"
           }
         }
       }
     },
-    "Night": {
-      "comment": "Time-of-day word in drive name",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nacht"
+    "Night" : {
+      "comment" : "Time-of-day word in drive name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nacht"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "de nuit"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Night"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nacht"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "de nuit"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Night"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nacht"
           }
         }
       }
     },
-    "Night Drive": {
-      "comment": "Auto drive name — night",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nachtfahrt"
+    "Night Drive" : {
+      "comment" : "Auto drive name — night",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachtfahrt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trajet nocturne"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Night Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nachtrit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trajet nocturne"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Night Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachtrit"
           }
         }
       }
     },
-    "No Drives": {
-      "comment": "A title shown when the user has not yet recorded any drives.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Fahrten"
+    "No Drives" : {
+      "comment" : "A title shown when the user has not yet recorded any drives.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Fahrten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Drives"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geen ritten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No Drives"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen ritten"
           }
         }
       }
     },
-    "OK": {
-      "comment": "Dismiss export error alert\nDismiss start drive error alert",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+    "OK" : {
+      "comment" : "Dismiss export error alert\nDismiss start drive error alert",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
     },
-    "Order": {
-      "comment": "Merge order section header",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reihenfolge"
+    "Order" : {
+      "comment" : "Merge order section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reihenfolge"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ordre"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volgorde"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordre"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Order"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volgorde"
           }
         }
       }
     },
-    "RECORDING": {
-      "comment": "Status badge text — translators may lowercase if appropriate",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AUFNAHME"
+    "RECORDING" : {
+      "comment" : "Status badge text — translators may lowercase if appropriate",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AUFNAHME"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ENREGISTREMENT"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RECORDING"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OPNAME"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENREGISTREMENT"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RECORDING"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPNAME"
           }
         }
       }
     },
-    "Recording drive…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt wird aufgezeichnet…"
+    "Recording drive…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt wird aufgezeichnet…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrement du trajet…"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording drive…"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit wordt opgenomen…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement du trajet…"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recording drive…"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit wordt opgenomen…"
           }
         }
       }
     },
-    "Recording in progress": {
-      "comment": "Status badge accessibility label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufzeichnung läuft"
+    "Recording in progress" : {
+      "comment" : "Status badge accessibility label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzeichnung läuft"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrement en cours"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording in progress"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opname bezig"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement en cours"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recording in progress"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opname bezig"
           }
         }
       }
     },
-    "Running in the background to save battery. Your full drive map appears here when the drive ends.": {
-      "comment": "Battery saving note shown on the recording screen while a drive is in progress",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Läuft im Hintergrund, um Akku zu sparen. Die vollständige Fahrtenkarte erscheint hier, wenn die Fahrt endet."
+    "Running in the background to save battery. Your full drive map appears here when the drive ends." : {
+      "comment" : "Battery saving note shown on the recording screen while a drive is in progress",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läuft im Hintergrund, um Akku zu sparen. Die vollständige Fahrtenkarte erscheint hier, wenn die Fahrt endet."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fonctionne en arrière-plan pour économiser la batterie. La carte complète du trajet apparaît ici à la fin du trajet."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Running in the background to save battery. Your full drive map appears here when the drive ends."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loopt op de achtergrond om batterij te sparen. Uw volledige ritkaart verschijnt hier wanneer de rit eindigt."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fonctionne en arrière-plan pour économiser la batterie. La carte complète du trajet apparaît ici à la fin du trajet."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Running in the background to save battery. Your full drive map appears here when the drive ends."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loopt op de achtergrond om batterij te sparen. Uw volledige ritkaart verschijnt hier wanneer de rit eindigt."
           }
         }
       }
     },
-    "Save": {
-      "comment": "Save changes",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speichern"
+    "Save" : {
+      "comment" : "Save changes",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opslaan"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opslaan"
           }
         }
       }
     },
-    "Select": {
-      "comment": "Enter multiselect mode",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auswählen"
+    "Select" : {
+      "comment" : "Enter multiselect mode",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswählen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionner"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecteren"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionner"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Select"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteren"
           }
         }
       }
     },
-    "Select 2 drives to merge": {
-      "comment": "Multiselect placeholder when nothing is selected",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 Fahrten zum Zusammenführen auswählen"
+    "Select 2 drives to merge" : {
+      "comment" : "Multiselect placeholder when nothing is selected",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 Fahrten zum Zusammenführen auswählen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélectionner 2 trajets à fusionner"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select 2 drives to merge"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selecteer 2 ritten om samen te voegen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionner 2 trajets à fusionner"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Select 2 drives to merge"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer 2 ritten om samen te voegen"
           }
         }
       }
     },
-    "Share Drive": {
-      "comment": "Share button\nShare drive dialog title",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt teilen"
+    "Share Drive" : {
+      "comment" : "Share button\nShare drive dialog title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt teilen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager le trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit delen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager le trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit delen"
           }
         }
       }
     },
-    "Share GPX": {
-      "comment": "Share drive as GPX",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als GPX teilen"
+    "Share GPX" : {
+      "comment" : "Share drive as GPX",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als GPX teilen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager en GPX"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share GPX"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deel als GPX"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager en GPX"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share GPX"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel als GPX"
           }
         }
       }
     },
-    "Share PNG": {
-      "comment": "Share drive as PNG",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Als PNG teilen"
+    "Share PNG" : {
+      "comment" : "Share drive as PNG",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als PNG teilen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager en PNG"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share PNG"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deel als PNG"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager en PNG"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share PNG"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel als PNG"
           }
         }
       }
     },
-    "Start": {
-      "comment": "Export PNG start marker label",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start"
+    "Start" : {
+      "comment" : "Export PNG start marker label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Départ"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Départ"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         }
       }
     },
-    "Start a drive in ${applicationName}": {
-      "comment": "Siri shortcut phrase to start a drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine Fahrt starten in ${applicationName}"
+    "Start a drive in ${applicationName}" : {
+      "comment" : "Siri shortcut phrase to start a drive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Fahrt starten in ${applicationName}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer un trajet dans ${applicationName}"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a drive in ${applicationName}"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een rit starten in ${applicationName}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer un trajet dans ${applicationName}"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start a drive in ${applicationName}"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een rit starten in ${applicationName}"
           }
         }
       }
     },
-    "Start a new drive": {
-      "comment": "Record button when idle",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Neue Fahrt starten"
+    "Start a new drive" : {
+      "comment" : "Record button when idle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Fahrt starten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer un nouveau trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a new drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een nieuwe rit starten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer un nouveau trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start a new drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een nieuwe rit starten"
           }
         }
       }
     },
-    "Start drive": {
-      "comment": "Title of the Start Drive intent.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt starten"
+    "Start drive" : {
+      "comment" : "Title of the Start Drive intent.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt starten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer un trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit starten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer un trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit starten"
           }
         }
       }
     },
-    "Start Drive": {
-      "comment": "Short title for the Start Drive intent.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fahrt starten"
+    "Start Drive" : {
+      "comment" : "Short title for the Start Drive intent.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt starten"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer un trajet"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Drive"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rit starten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer un trajet"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start Drive"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit starten"
           }
         }
       }
     },
-    "Start Location": {
-      "comment": "Edit drive section header",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Startpunkt"
+    "Start Location" : {
+      "comment" : "Edit drive section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startpunkt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lieu de départ"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Location"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Startlocatie"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lieu de départ"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start Location"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startlocatie"
           }
         }
       }
     },
-    "Start location name": {
-      "comment": "Start location text field placeholder",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name des Startorts"
+    "Start location name" : {
+      "comment" : "Start location text field placeholder",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name des Startorts"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom du lieu de départ"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start location name"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Naam startlocatie"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du lieu de départ"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start location name"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naam startlocatie"
           }
         }
       }
     },
-    "Start my drive in ${applicationName}": {
-      "comment": "Siri shortcut phrase to start my drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meine Fahrt starten in ${applicationName}"
+    "Start my drive in ${applicationName}" : {
+      "comment" : "Siri shortcut phrase to start my drive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meine Fahrt starten in ${applicationName}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer mon trajet dans ${applicationName}"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start my drive in ${applicationName}"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mijn rit starten in ${applicationName}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer mon trajet dans ${applicationName}"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start my drive in ${applicationName}"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijn rit starten in ${applicationName}"
           }
         }
       }
     },
-    "Start recording a drive with ${applicationName}": {
-      "comment": "Siri shortcut phrase to start recording a drive",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eine Fahrt aufzeichnen mit ${applicationName}"
+    "Start recording a drive with ${applicationName}" : {
+      "comment" : "Siri shortcut phrase to start recording a drive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Fahrt aufzeichnen mit ${applicationName}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commencer l'enregistrement d'un trajet avec ${applicationName}"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start recording a drive with ${applicationName}"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Een rit opnemen met ${applicationName}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer l'enregistrement d'un trajet avec ${applicationName}"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start recording a drive with ${applicationName}"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een rit opnemen met ${applicationName}"
           }
         }
       }
     },
-    "Start recording a drive.": {
-      "comment": "The description of the Start Drive intent.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufzeichnung einer Fahrt starten."
+    "Start recording a drive." : {
+      "comment" : "The description of the Start Drive intent.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzeichnung einer Fahrt starten."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer l'enregistrement d'un trajet."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start recording a drive."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opname van een rit starten."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer l'enregistrement d'un trajet."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start recording a drive."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opname van een rit starten."
           }
         }
       }
     },
-    "started": {
-      "comment": "Label for the time the drive started",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "gestartet"
+    "started" : {
+      "comment" : "Label for the time the drive started",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gestartet"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "démarré"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "started"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "gestart"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "démarré"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "started"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gestart"
           }
         }
       }
     },
-    "Started by": {
-      "comment": "Metadata row",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gestartet von"
+    "Started by" : {
+      "comment" : "Metadata row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestartet von"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarré par"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Started by"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gestart door"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarré par"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Started by"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestart door"
           }
         }
       }
     },
-    "Tap to view": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zum Anzeigen tippen"
+    "Tap to view" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Anzeigen tippen"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Appuyez pour afficher"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to view"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tik om te bekijken"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez pour afficher"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap to view"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om te bekijken"
           }
         }
       }
     },
-    "The two drives are joined end-to-end in this order. The original drives are removed and can't be restored.": {
-      "comment": "Merge disclaimer about track joining and deletion",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die beiden Fahrten werden in dieser Reihenfolge aneinandergehängt. Die ursprünglichen Fahrten werden gelöscht und können nicht wiederhergestellt werden."
+    "The two drives are joined end-to-end in this order. The original drives are removed and can't be restored." : {
+      "comment" : "Merge disclaimer about track joining and deletion",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die beiden Fahrten werden in dieser Reihenfolge aneinandergehängt. Die ursprünglichen Fahrten werden gelöscht und können nicht wiederhergestellt werden."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les deux trajets sont assemblés bout à bout dans cet ordre. Les trajets d'origine sont supprimés et ne peuvent pas être restaurés."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The two drives are joined end-to-end in this order. The original drives are removed and can't be restored."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De twee ritten worden in deze volgorde aaneengesloten. De originele ritten worden verwijderd en kunnen niet worden hersteld."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les deux trajets sont assemblés bout à bout dans cet ordre. Les trajets d'origine sont supprimés et ne peuvent pas être restaurés."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The two drives are joined end-to-end in this order. The original drives are removed and can't be restored."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De twee ritten worden in deze volgorde aaneengesloten. De originele ritten worden verwijderd en kunnen niet worden hersteld."
           }
         }
       }
     },
-    "This drive and all its data will be permanently deleted.": {
-      "comment": "Delete drive confirmation message",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diese Fahrt und alle ihre Daten werden endgültig gelöscht."
+    "This drive and all its data will be permanently deleted." : {
+      "comment" : "Delete drive confirmation message",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Fahrt und alle ihre Daten werden endgültig gelöscht."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce trajet et toutes ses données seront définitivement supprimés."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This drive and all its data will be permanently deleted."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deze rit en al haar gegevens worden permanent verwijderd."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce trajet et toutes ses données seront définitivement supprimés."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This drive and all its data will be permanently deleted."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze rit en al haar gegevens worden permanent verwijderd."
           }
         }
       }
     },
-    "Today": {
-      "comment": "Title of a drive section for today.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heute"
+    "Today" : {
+      "comment" : "Title of a drive section for today.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aujourd'hui"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vandaag"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vandaag"
           }
         }
       }
     },
-    "Top Speed": {
-      "comment": "Metadata row",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höchstgeschwindigkeit"
+    "Top Speed" : {
+      "comment" : "Metadata row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höchstgeschwindigkeit"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vitesse maximale"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Speed"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Topsnelheid"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitesse maximale"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Top Speed"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Topsnelheid"
           }
         }
       }
     },
-    "Total distance": {
-      "comment": "Merge stat: total combined distance",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gesamtstrecke"
+    "Total distance" : {
+      "comment" : "Merge stat: total combined distance",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamtstrecke"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distance totale"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total distance"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Totale afstand"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance totale"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Total distance"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totale afstand"
           }
         }
       }
     },
-    "Total duration": {
-      "comment": "Merge stat: total combined duration",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gesamtdauer"
+    "Total duration" : {
+      "comment" : "Merge stat: total combined duration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamtdauer"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durée totale"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total duration"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Totale duur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée totale"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Total duration"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totale duur"
           }
         }
       }
     },
-    "Track points": {
-      "comment": "Merge stat: combined GPS track point count",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spurpunkte"
+    "Track points" : {
+      "comment" : "Merge stat: combined GPS track point count",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spurpunkte"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Points de trace"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track points"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trackpunten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Points de trace"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Track points"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpunten"
           }
         }
       }
     },
-    "Track Points": {
-      "comment": "Metadata row",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spurpunkte"
+    "Track Points" : {
+      "comment" : "Metadata row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spurpunkte"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Points de trace"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track Points"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trackpunten"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Points de trace"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Track Points"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trackpunten"
           }
         }
       }
     },
-    "Unknown": {
-      "comment": "Unknown place name",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unbekannt"
+    "Unknown" : {
+      "comment" : "Unknown place name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannt"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inconnu"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Onbekend"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inconnu"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unknown"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekend"
           }
         }
       }
+    },
+    "Weather data provided by Apple Weather" : {
+      "comment" : "Weather attribution footer link"
     },
-    "Yesterday": {
-      "comment": "Title of the section for drives from yesterday.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gestern"
+    "Yesterday" : {
+      "comment" : "Title of the section for drives from yesterday.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestern"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hier"
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gisteren"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier"
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gisteren"
           }
         }
       }
     },
-    "Your recorded drives will appear here.": {
-      "comment": "Empty state description shown on the home screen when no drives have been recorded yet",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deine aufgezeichneten Fahrten erscheinen hier."
+    "Your recorded drives will appear here." : {
+      "comment" : "Empty state description shown on the home screen when no drives have been recorded yet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine aufgezeichneten Fahrten erscheinen hier."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vos trajets enregistrés apparaîtront ici."
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your recorded drives will appear here."
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uw opgenomen ritten verschijnen hier."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos trajets enregistrés apparaîtront ici."
           }
         },
-        "en-GB": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your recorded drives will appear here."
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uw opgenomen ritten verschijnen hier."
           }
         }
       }
     }
   },
-  "version": "1.2"
+  "version" : "1.2"
 }

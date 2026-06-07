@@ -12,6 +12,7 @@
 		6D61611A2FD447E700F6F3A7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6161192FD447E700F6F3A7 /* WidgetKit.framework */; };
 		6D61611C2FD447E700F6F3A7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D61611B2FD447E700F6F3A7 /* SwiftUI.framework */; };
 		6D6161292FD447E800F6F3A7 /* DriveWidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6D645D0B2FD597CB008E8086 /* WeatherKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D645D0A2FD597CA008E8086 /* WeatherKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DriveWidgetExtensionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D6161192FD447E700F6F3A7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6D61611B2FD447E700F6F3A7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		6D645D0A2FD597CA008E8086 /* WeatherKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WeatherKit.framework; path = System/Library/Frameworks/WeatherKit.framework; sourceTree = SDKROOT; };
 		6D8311D12FCD8C620036D01E /* Driveline.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Driveline.xctestplan; sourceTree = "<group>"; };
 		6D8311D22FCD908F0036D01E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D645D0B2FD597CB008E8086 /* WeatherKit.framework in Frameworks */,
 				6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -216,6 +219,7 @@
 		6D47A59F2FCB2B1400E6C7B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6D645D0A2FD597CA008E8086 /* WeatherKit.framework */,
 				6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */,
 				6D6161192FD447E700F6F3A7 /* WidgetKit.framework */,
 				6D61611B2FD447E700F6F3A7 /* SwiftUI.framework */,

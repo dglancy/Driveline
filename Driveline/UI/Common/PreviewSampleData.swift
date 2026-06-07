@@ -13,7 +13,7 @@ enum PreviewSampleData {
   @MainActor
   static func previewContainer() -> ModelContainer {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    return try! ModelContainer(for: Drive.self, configurations: config) // swiftlint:disable:this force_try
+    return try! ModelContainer(for: Drive.self, Weather.self, configurations: config) // swiftlint:disable:this force_try
   }
 
   @MainActor
@@ -36,6 +36,12 @@ enum PreviewSampleData {
       let timestamp = drive.startedAt.addingTimeInterval(interval)
       drive.positions = (drive.positions ?? []) + [position(lat: lat, lon: lon, at: timestamp, speed: speed, in: context)]
     }
+
+    let startWeather = Weather(temperatureCelsius: 18.0, conditionDescription: "Partly Cloudy", symbolName: "cloud.sun.fill", type: .start)
+    let endWeather = Weather(temperatureCelsius: 12.0, conditionDescription: "Overcast", symbolName: "cloud.fill", type: .end)
+    context.insert(startWeather)
+    context.insert(endWeather)
+    drive.weatherReadings = [startWeather, endWeather]
 
     return drive
   }

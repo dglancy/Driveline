@@ -101,6 +101,88 @@ struct DriveDetailViewModelTests {
     #expect(vm.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
   }
 
+  // MARK: - Weather computed properties
+
+  @Test
+  func hasWeatherIsFalseWhenNoWeatherSet() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.hasWeather == false)
+  }
+
+  @Test
+  func hasWeatherIsTrueWhenStartWeatherSet() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)]
+    let vm = DriveDetailViewModel(drive: drive)
+    #expect(vm.hasWeather == true)
+  }
+
+  @Test
+  func startWeatherSymbolIsNilWhenNoWeather() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.startWeatherSymbol == nil)
+  }
+
+  @Test
+  func startWeatherSymbolReturnsSymbolName() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)]
+    let vm = DriveDetailViewModel(drive: drive)
+    #expect(vm.startWeatherSymbol == "sun.max.fill")
+  }
+
+  @Test
+  func startWeatherDescriptionIsNilWhenNoWeather() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.startWeatherDescription == nil)
+  }
+
+  @Test
+  func startWeatherDescriptionReturnsCondition() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Partly Cloudy", symbolName: "cloud.sun.fill", type: .start)]
+    let vm = DriveDetailViewModel(drive: drive)
+    #expect(vm.startWeatherDescription == "Partly Cloudy")
+  }
+
+  @Test
+  func startWeatherTemperatureIsNilWhenNoWeather() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.startWeatherTemperature == nil)
+  }
+
+  @Test
+  func startWeatherTemperatureIsNonNilWhenWeatherSet() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)]
+    let vm = DriveDetailViewModel(drive: drive)
+    #expect(vm.startWeatherTemperature != nil)
+  }
+
+  @Test
+  func endWeatherSymbolIsNilWhenNoWeather() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.endWeatherSymbol == nil)
+  }
+
+  @Test
+  func endWeatherTemperatureIsNilWhenNoWeather() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.endWeatherTemperature == nil)
+  }
+
+  @Test
+  func weatherAttributionIsNilByDefault() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.weatherAttribution == nil)
+  }
+
+  @Test
+  func weatherAttributionLegalURLIsNilWhenNoAttribution() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    #expect(vm.weatherAttributionLegalURL == nil)
+  }
+
   // MARK: - shareDriveGPX
 
   @Test

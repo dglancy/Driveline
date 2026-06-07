@@ -25,10 +25,12 @@ final class DriveRecordingService {
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
+  @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
   @ObservationIgnored private let sweepService: PlaceNameSweepService
   @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
+  @ObservationIgnored private var startWeatherCancellable: AnyCancellable?
   #if os(iOS)
   @ObservationIgnored private let activityService = DriveActivityService()
   #endif
@@ -39,6 +41,7 @@ final class DriveRecordingService {
        locationService: LocationService,
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
+       weatherService: any WeatherFetchServiceProtocol = WeatherFetchService(),
        sweepService: PlaceNameSweepService? = nil,
        userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
@@ -46,6 +49,7 @@ final class DriveRecordingService {
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
+    self.weatherService = weatherService
     self.sweepService = sweepService ?? PlaceNameSweepService(modelContext: modelContext)
     self.userPreferences = userPreferences
     self.drive = initialDrive
@@ -80,6 +84,7 @@ final class DriveRecordingService {
       }
 
     setupStartPlaceNameGeocoding(for: drive)
+    setupStartWeather(for: drive)
 
     #if os(iOS)
     activityService.startActivity(for: drive)
@@ -102,6 +107,7 @@ final class DriveRecordingService {
       }
 
     setupStartPlaceNameGeocoding(for: drive)
+    setupStartWeather(for: drive)
 
     #if os(iOS)
     activityService.startActivity(for: drive)
@@ -139,6 +145,7 @@ final class DriveRecordingService {
   func finishDrive() {
     liveActivityCancellable = nil
     startGeocodeCancellable = nil
+    startWeatherCancellable = nil
     locationService.stop()
 
     if let drive {
@@ -146,6 +153,7 @@ final class DriveRecordingService {
       drive.status = .finished
       locationDataRecorder.stopRecording()
       saveModelContext()
+      fetchEndWeather(for: drive)
     }
 
     self.drive = nil
@@ -174,6 +182,40 @@ final class DriveRecordingService {
       )
     }
     #endif
+  }
+
+  private func setupStartWeather(for drive: Drive) {
+    startWeatherCancellable = locationService.locationPublisher
+      .first()
+      .sink { [weak self] location in
+        Task { [weak self] in
+          guard let self, let drive = self.drive else { return }
+          do {
+            let weather = try await self.weatherService.fetchWeather(at: location, type: .start)
+            drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
+            self.saveModelContext()
+            Log.data.info("Start weather fetched: \(weather.conditionDescription), \(weather.temperatureCelsius)°C")
+          } catch {
+            Log.data.error("Start weather fetch failed: \(error)")
+          }
+        }
+      }
+  }
+
+  private func fetchEndWeather(for drive: Drive) {
+    guard let lastPosition = drive.orderedPositions.last else { return }
+    let location = CLLocation(latitude: lastPosition.latitude, longitude: lastPosition.longitude)
+    Task { [weak self] in
+      guard let self else { return }
+      do {
+        let weather = try await self.weatherService.fetchWeather(at: location, type: .end)
+        drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
+        self.saveModelContext()
+        Log.data.info("End weather fetched: \(weather.conditionDescription), \(weather.temperatureCelsius)°C")
+      } catch {
+        Log.data.error("End weather fetch failed: \(error)")
+      }
+    }
   }
 
   private func saveModelContext() {

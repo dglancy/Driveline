@@ -53,7 +53,13 @@ final class Drive {
 
   var accumulatedDistanceMetres: Double = 0
 
+  @Relationship(deleteRule: .cascade, inverse: \Weather.drive)
+  var weatherReadings: [Weather]?
+
   // MARK: - Computed Properties
+
+  var startWeather: Weather? { weatherReadings?.first { $0.type == .start } }
+  var endWeather: Weather? { weatherReadings?.first { $0.type == .end } }
 
   var displayName: String {
     if let name { return name }
@@ -114,6 +120,7 @@ final class Drive {
     self.status = .recording
     self.positions = nil
     self.accumulatedDistanceMetres = 0
+    self.weatherReadings = nil
   }
 
   // MARK: - Private

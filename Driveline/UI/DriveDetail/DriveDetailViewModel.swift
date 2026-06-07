@@ -11,6 +11,7 @@ import MapKit
 import Observation
 import SwiftData
 import SwiftUI
+import WeatherKit
 
 // MARK: - ExportedFile
 
@@ -62,6 +63,21 @@ final class DriveDetailViewModel {
   var trackPoints: String { (drive.positions?.count ?? 0).formatted() }
   var triggerDisplayName: String { drive.trigger.displayName }
 
+  var hasWeather: Bool { drive.startWeather != nil }
+
+  var startWeatherSymbol: String? { drive.startWeather?.symbolName }
+  var startWeatherDescription: String? { drive.startWeather?.conditionDescription }
+  var startWeatherTemperature: String? { drive.startWeather.map { formatTemperature($0.temperatureCelsius) } }
+
+  var endWeatherSymbol: String? { drive.endWeather?.symbolName }
+  var endWeatherDescription: String? { drive.endWeather?.conditionDescription }
+  var endWeatherTemperature: String? { drive.endWeather.map { formatTemperature($0.temperatureCelsius) } }
+
+  var weatherAttribution: WeatherAttribution?
+  var weatherAttributionLightMarkURL: URL? { weatherAttribution?.combinedMarkLightURL }
+  var weatherAttributionDarkMarkURL: URL? { weatherAttribution?.combinedMarkDarkURL }
+  var weatherAttributionLegalURL: URL? { weatherAttribution?.legalPageURL }
+
   var coordinates: [CLLocationCoordinate2D] {
     drive.orderedPositions.map {
       CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
@@ -80,6 +96,13 @@ final class DriveDetailViewModel {
   }
 
   // MARK: - Actions
+
+  func loadWeatherAttribution() {
+    guard weatherAttribution == nil else { return }
+    Task {
+      weatherAttribution = try? await WeatherService.shared.attribution
+    }
+  }
 
   func deleteDrive() {
     guard let modelContext else { return }
@@ -111,5 +134,12 @@ final class DriveDetailViewModel {
         exportError = error.localizedDescription
       }
     }
+  }
+
+  // MARK: - Private
+
+  private func formatTemperature(_ celsius: Double) -> String {
+    Measurement(value: celsius, unit: UnitTemperature.celsius)
+      .formatted(.measurement(width: .abbreviated, usage: .weather))
   }
 }

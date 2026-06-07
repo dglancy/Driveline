@@ -316,10 +316,125 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(driveCount == 2)
   }
 
+  // MARK: - startDrive weather
+
+  @Test
+  func startDriveFetchesStartWeatherFromFirstLocation() async throws {
+    let mockWeather = MockWeatherFetchService()
+    let (service, locationService, _) = makeServices(weatherService: mockWeather)
+
+    try service.startDrive()
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(service.drive?.startWeather?.conditionDescription == "Sunny")
+    #expect(service.drive?.startWeather?.symbolName == "sun.max.fill")
+    #expect(service.drive?.startWeather?.type == .start)
+    #expect(mockWeather.fetchedLocations.count == 1)
+  }
+
+  @Test
+  func startDriveFetchesWeatherOnlyOnceFromFirstLocation() async throws {
+    let mockWeather = MockWeatherFetchService()
+    let (service, locationService, _) = makeServices(weatherService: mockWeather)
+
+    try service.startDrive()
+
+    let first = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    let second = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.502, longitude: -0.102),
+      altitude: 0, horizontalAccuracy: 8, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+
+    locationService.locationPublisher.send(first)
+    locationService.locationPublisher.send(second)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockWeather.fetchedLocations.count == 1)
+  }
+
+  @Test
+  func startDriveDoesNotSetStartWeatherWhenFetchThrows() async throws {
+    let mockWeather = MockWeatherFetchService()
+    mockWeather.shouldThrow = true
+    let (service, locationService, _) = makeServices(weatherService: mockWeather)
+
+    try service.startDrive()
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(service.drive?.startWeather == nil)
+  }
+
+  // MARK: - finishDrive weather
+
+  @Test
+  func finishDriveFetchesEndWeatherFromLastPosition() async throws {
+    let mockWeather = MockWeatherFetchService()
+    let (service, _, _) = makeServices(weatherService: mockWeather)
+
+    try service.startDrive()
+    let drive = service.drive!
+    let position = makePosition()
+    context!.insert(position)
+    drive.positions = [position]
+
+    service.finishDrive()
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(drive.endWeather?.conditionDescription == "Sunny")
+    #expect(drive.endWeather?.symbolName == "sun.max.fill")
+    #expect(drive.endWeather?.type == .end)
+  }
+
+  @Test
+  func finishDriveWithNoPositionsDoesNotFetchEndWeather() async throws {
+    let mockWeather = MockWeatherFetchService()
+    let (service, _, _) = makeServices(weatherService: mockWeather)
+
+    try service.startDrive()
+    service.finishDrive()
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockWeather.fetchedLocations.isEmpty)
+  }
+
   // MARK: - Helpers
 
-  private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil, userPreferences: UserPreferences? = nil) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
+  private func makeServices(
+    geocodingService: (any GeocodingServiceProtocol)? = nil,
+    weatherService: (any WeatherFetchServiceProtocol)? = nil,
+    userPreferences: UserPreferences? = nil
+  ) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
     let mockGeo = geocodingService ?? MockGeocodingService()
+    let mockWeather = weatherService ?? MockWeatherFetchService()
     let sweepService = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeo)
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
@@ -328,6 +443,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       locationService: locationService,
       locationDataRecorder: recorder,
       geocodingService: mockGeo,
+      weatherService: mockWeather,
       sweepService: sweepService,
       userPreferences: userPreferences ?? UserPreferences()
     )

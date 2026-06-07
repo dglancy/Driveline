@@ -46,7 +46,8 @@ enum AppBootstrap {
     Log.lifecycle.info("Setting up data model and container")
     let schema = Schema([
       Drive.self,
-      Position.self
+      Position.self,
+      Weather.self
     ])
     let modelConfiguration = ModelConfiguration(
       schema: schema,
