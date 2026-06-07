@@ -22,6 +22,10 @@ struct Driveline: App {
 
   private let modelContainer: ModelContainer
 
+  private var sweepServices: [any SweepServiceProtocol] {
+    [placeNameSweepService, weatherSweepService]
+  }
+
   // MARK: - Lifecycle
 
   init() {
@@ -43,11 +47,9 @@ struct Driveline: App {
         .onChange(of: scenePhase) { _, newPhase in
           switch newPhase {
           case .active:
-            Task { await placeNameSweepService.sweep() }
-            Task { await weatherSweepService.sweep() }
+            for service in sweepServices { Task { await service.sweep() } }
           case .background:
-            scheduleSweepTask(for: placeNameSweepService)
-            scheduleSweepTask(for: weatherSweepService)
+            sweepServices.forEach { scheduleSweepTask(for: $0) }
           default:
             break
           }
