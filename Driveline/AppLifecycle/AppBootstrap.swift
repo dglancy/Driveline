@@ -31,7 +31,7 @@ enum AppBootstrap {
       placeNameSweepService: placeNameSweepService,
       weatherSweepService: weatherSweepService
     )
-    registerBGTasks(placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
+    registerBGTasks([placeNameSweepService, weatherSweepService])
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
     Log.lifecycle.info("App started")
@@ -97,28 +97,18 @@ enum AppBootstrap {
     )
   }
 
-  private static func registerBGTasks(placeNameSweepService: PlaceNameSweepService, weatherSweepService: WeatherSweepService) {
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: Constants.Configuration.placeNameSweepTaskIdentifier, using: nil) { task in
+  private static func registerBGTasks(_ services: [any SweepServiceProtocol]) {
+    services.forEach { registerBGTask($0) }
+  }
+
+  private static func registerBGTask(_ service: any SweepServiceProtocol) {
+    BGTaskScheduler.shared.register(forTaskWithIdentifier: service.taskIdentifier, using: nil) { task in
       guard let processingTask = task as? BGProcessingTask else {
         task.setTaskCompleted(success: false)
         return
       }
       let sweepTask = Task { @MainActor in
-        await placeNameSweepService.sweep()
-        processingTask.setTaskCompleted(success: true)
-      }
-      processingTask.expirationHandler = {
-        sweepTask.cancel()
-        processingTask.setTaskCompleted(success: false)
-      }
-    }
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: Constants.Configuration.weatherSweepTaskIdentifier, using: nil) { task in
-      guard let processingTask = task as? BGProcessingTask else {
-        task.setTaskCompleted(success: false)
-        return
-      }
-      let sweepTask = Task { @MainActor in
-        await weatherSweepService.sweep()
+        await service.sweep()
         processingTask.setTaskCompleted(success: true)
       }
       processingTask.expirationHandler = {

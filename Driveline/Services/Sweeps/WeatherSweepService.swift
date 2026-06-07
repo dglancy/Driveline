@@ -11,12 +11,13 @@ import SwiftData
 
 @MainActor
 @Observable
-final class WeatherSweepService {
+final class WeatherSweepService: SweepServiceProtocol {
 
   // MARK: - Properties
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
+  nonisolated var taskIdentifier: String { Constants.Configuration.weatherSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 

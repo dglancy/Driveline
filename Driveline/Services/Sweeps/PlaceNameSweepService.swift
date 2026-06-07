@@ -11,12 +11,13 @@ import SwiftData
 
 @MainActor
 @Observable
-final class PlaceNameSweepService {
+final class PlaceNameSweepService: SweepServiceProtocol {
 
   // MARK: - Properties
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
+  nonisolated var taskIdentifier: String { Constants.Configuration.placeNameSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
