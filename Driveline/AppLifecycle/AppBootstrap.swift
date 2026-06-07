@@ -22,18 +22,20 @@ enum AppBootstrap {
       locationService: locationService,
       modelContext: modelContainer.mainContext
     )
-    let sweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext)
+    let placeNameSweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext)
+    let weatherSweepService = WeatherSweepService(modelContext: modelContainer.mainContext)
     let driveService = setupDriveRecordingService(
       modelContext: modelContainer.mainContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
-      sweepService: sweepService
+      placeNameSweepService: placeNameSweepService,
+      weatherSweepService: weatherSweepService
     )
-    registerBGTasks(sweepService: sweepService)
+    registerBGTasks(sweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, sweepService: sweepService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, sweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
   }
 
   // MARK: - Private
@@ -78,7 +80,8 @@ enum AppBootstrap {
     modelContext: ModelContext,
     locationService: LocationService,
     locationDataRecorder: LocationDataRecorderService,
-    sweepService: PlaceNameSweepService
+    placeNameSweepService: PlaceNameSweepService,
+    weatherSweepService: WeatherSweepService
   ) -> DriveRecordingService {
     Log.lifecycle.info("Setting up drive service")
     var descriptor = FetchDescriptor<Drive>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
@@ -88,12 +91,13 @@ enum AppBootstrap {
       modelContext: modelContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
-      sweepService: sweepService,
+      placeNameSweepService: placeNameSweepService,
+      weatherSweepService: weatherSweepService,
       initialDrive: activeDrive
     )
   }
 
-  private static func registerBGTasks(sweepService: PlaceNameSweepService) {
+  private static func registerBGTasks(sweepService: PlaceNameSweepService, weatherSweepService: WeatherSweepService) {
     BGTaskScheduler.shared.register(forTaskWithIdentifier: kPlaceNameSweepTaskIdentifier, using: nil) { task in
       guard let processingTask = task as? BGProcessingTask else {
         task.setTaskCompleted(success: false)
@@ -101,6 +105,20 @@ enum AppBootstrap {
       }
       let sweepTask = Task { @MainActor in
         await sweepService.sweep()
+        processingTask.setTaskCompleted(success: true)
+      }
+      processingTask.expirationHandler = {
+        sweepTask.cancel()
+        processingTask.setTaskCompleted(success: false)
+      }
+    }
+    BGTaskScheduler.shared.register(forTaskWithIdentifier: kWeatherSweepTaskIdentifier, using: nil) { task in
+      guard let processingTask = task as? BGProcessingTask else {
+        task.setTaskCompleted(success: false)
+        return
+      }
+      let sweepTask = Task { @MainActor in
+        await weatherSweepService.sweep()
         processingTask.setTaskCompleted(success: true)
       }
       processingTask.expirationHandler = {

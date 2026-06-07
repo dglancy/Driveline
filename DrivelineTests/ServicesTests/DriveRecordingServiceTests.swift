@@ -435,7 +435,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   ) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
     let mockGeo = geocodingService ?? MockGeocodingService()
     let mockWeather = weatherService ?? MockWeatherFetchService()
-    let sweepService = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeo)
+    let placeNameSweepService = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeo)
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
@@ -444,7 +444,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       locationDataRecorder: recorder,
       geocodingService: mockGeo,
       weatherService: mockWeather,
-      sweepService: sweepService,
+      placeNameSweepService: placeNameSweepService,
       userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)

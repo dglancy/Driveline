@@ -16,6 +16,7 @@ struct Driveline: App {
 
   @State private var driveService: DriveRecordingService
   @State private var sweepService: PlaceNameSweepService
+  @State private var weatherSweepService: WeatherSweepService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -27,6 +28,7 @@ struct Driveline: App {
     self.modelContainer = env.modelContainer
     _driveService = State(initialValue: env.driveService)
     _sweepService = State(initialValue: env.sweepService)
+    _weatherSweepService = State(initialValue: env.weatherSweepService)
   }
 
   // MARK: - Main View Scene
@@ -39,8 +41,10 @@ struct Driveline: App {
           switch newPhase {
           case .active:
             Task { await sweepService.sweep() }
+            Task { await weatherSweepService.sweep() }
           case .background:
             schedulePlaceNameSweepTask()
+            scheduleWeatherSweepTask()
           default:
             break
           }
@@ -57,6 +61,12 @@ struct Driveline: App {
 
   private func schedulePlaceNameSweepTask() {
     let request = BGProcessingTaskRequest(identifier: kPlaceNameSweepTaskIdentifier)
+    request.requiresNetworkConnectivity = true
+    try? BGTaskScheduler.shared.submit(request)
+  }
+
+  private func scheduleWeatherSweepTask() {
+    let request = BGProcessingTaskRequest(identifier: kWeatherSweepTaskIdentifier)
     request.requiresNetworkConnectivity = true
     try? BGTaskScheduler.shared.submit(request)
   }

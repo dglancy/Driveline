@@ -18,6 +18,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.targatrips.driveline.placename-sweep</string>
+		<string>com.targatrips.driveline.weather-sweep</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

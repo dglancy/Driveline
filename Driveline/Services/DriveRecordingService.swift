@@ -26,7 +26,8 @@ final class DriveRecordingService {
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
-  @ObservationIgnored private let sweepService: PlaceNameSweepService
+  @ObservationIgnored private let placeNameSweepService: PlaceNameSweepService
+  @ObservationIgnored private let weatherSweepService: WeatherSweepService
   @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
@@ -42,7 +43,8 @@ final class DriveRecordingService {
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        weatherService: any WeatherFetchServiceProtocol = WeatherFetchService(),
-       sweepService: PlaceNameSweepService? = nil,
+       placeNameSweepService: PlaceNameSweepService? = nil,
+       weatherSweepService: WeatherSweepService? = nil,
        userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
     self.modelContext = modelContext
@@ -50,7 +52,8 @@ final class DriveRecordingService {
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
     self.weatherService = weatherService
-    self.sweepService = sweepService ?? PlaceNameSweepService(modelContext: modelContext)
+    self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContext: modelContext)
+    self.weatherSweepService = weatherSweepService ?? WeatherSweepService(modelContext: modelContext)
     self.userPreferences = userPreferences
     self.drive = initialDrive
   }
@@ -158,7 +161,8 @@ final class DriveRecordingService {
 
     self.drive = nil
 
-    Task { await sweepService.sweep() }
+    Task { await placeNameSweepService.sweep() }
+    Task { await weatherSweepService.sweep() }
 
     #if os(iOS)
     Task { await activityService.endActivity() }
