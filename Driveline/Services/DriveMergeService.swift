@@ -35,6 +35,7 @@ final class DriveMergeService {
     merged.startPlaceName = first.startPlaceName
     merged.endPlaceName = second.endPlaceName
     merged.positions = (first.positions ?? []) + (second.positions ?? [])
+    merged.accumulatedDistanceMetres = merged.distanceMetres
 
     modelContext.insert(merged)
     modelContext.delete(first)

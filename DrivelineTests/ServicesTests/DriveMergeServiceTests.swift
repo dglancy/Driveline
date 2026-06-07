@@ -131,6 +131,32 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     #expect(remaining == 0)
   }
 
+  // MARK: - accumulated distance
+
+  @Test
+  func mergeComputesAccumulatedDistanceFromCombinedPositions() throws {
+    let t1 = Date(timeIntervalSinceReferenceDate: 100)
+    let t2 = Date(timeIntervalSinceReferenceDate: 200)
+    let t3 = Date(timeIntervalSinceReferenceDate: 300)
+    let t4 = Date(timeIntervalSinceReferenceDate: 400)
+
+    let (first, second) = makeDrivePair()
+    let p1 = makePosition(timestamp: t1, latitude: 51.5000, longitude: -0.1000)
+    let p2 = makePosition(timestamp: t2, latitude: 51.5010, longitude: -0.1000)
+    let p3 = makePosition(timestamp: t3, latitude: 51.5020, longitude: -0.1000)
+    let p4 = makePosition(timestamp: t4, latitude: 51.5030, longitude: -0.1000)
+    context!.insert(p1); context!.insert(p2)
+    context!.insert(p3); context!.insert(p4)
+    first.positions = [p1, p2]
+    second.positions = [p3, p4]
+
+    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect((merged?.accumulatedDistanceMetres ?? 0) > 0)
+    #expect(merged?.accumulatedDistanceMetres == merged?.distanceMetres)
+  }
+
   // MARK: - guard clause
 
   @Test
@@ -177,8 +203,8 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     return (first, second)
   }
 
-  private func makePosition(timestamp: Date) -> Position {
-    Position(timestamp: timestamp, latitude: 51.5, longitude: -0.1,
+  private func makePosition(timestamp: Date, latitude: Double = 51.5, longitude: Double = -0.1) -> Position {
+    Position(timestamp: timestamp, latitude: latitude, longitude: longitude,
              altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 5,
              course: 0, courseAccuracy: 0, speed: 0, speedAccuracy: 0)
   }
