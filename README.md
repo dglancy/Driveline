@@ -19,6 +19,7 @@ Driveline grew out of a personal need. I run [Targa Trips](https://www.targatrip
 - **Merge routes** to join two drives end-to-end into a single route, useful when you forget to start recording and pick it up partway through.
 - **GPX export** in standard format, compatible with Strava, Komoot, or any other mapping tool that accepts GPX files.
 - **PNG export** that renders a clean map snapshot with the route drawn on it, suitable for sharing.
+- **Weather at departure and arrival** fetched via WeatherKit and shown on the drive detail screen, including condition, temperature, and a weather symbol. Apple Weather attribution is displayed as required.
 - **Minimal recording screen** showing elapsed time. There is no live map during recording; see below for why.
 - **Live Activity** on the Lock Screen and Dynamic Island showing elapsed time while a drive is in progress.
 - **Localized** into US English, British English (also used in Australia and Ireland), French, German, and Dutch.
@@ -63,6 +64,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 **Apple frameworks**
 - CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`
 - MapKit for route rendering and map snapshots on export
+- WeatherKit for fetching weather conditions at the start and end of each drive
 - AppIntents for the Shortcuts actions (start/resume and pause)
 - ActivityKit for the Live Activity shown on the Lock Screen and Dynamic Island during recording
 - CloudKit for iCloud sync of drives across devices
