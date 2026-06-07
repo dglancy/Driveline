@@ -22,20 +22,20 @@ enum AppBootstrap {
       locationService: locationService,
       modelContext: modelContainer.mainContext
     )
-    let sweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext)
+    let placeNameSweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext)
     let weatherSweepService = WeatherSweepService(modelContext: modelContainer.mainContext)
     let driveService = setupDriveRecordingService(
       modelContext: modelContainer.mainContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
-      sweepService: sweepService,
+      placeNameSweepService: placeNameSweepService,
       weatherSweepService: weatherSweepService
     )
-    registerBGTasks(sweepService: sweepService, weatherSweepService: weatherSweepService)
+    registerBGTasks(sweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, sweepService: sweepService, weatherSweepService: weatherSweepService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, sweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
   }
 
   // MARK: - Private
@@ -80,7 +80,7 @@ enum AppBootstrap {
     modelContext: ModelContext,
     locationService: LocationService,
     locationDataRecorder: LocationDataRecorderService,
-    sweepService: PlaceNameSweepService,
+    placeNameSweepService: PlaceNameSweepService,
     weatherSweepService: WeatherSweepService
   ) -> DriveRecordingService {
     Log.lifecycle.info("Setting up drive service")
@@ -91,7 +91,7 @@ enum AppBootstrap {
       modelContext: modelContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
-      sweepService: sweepService,
+      placeNameSweepService: placeNameSweepService,
       weatherSweepService: weatherSweepService,
       initialDrive: activeDrive
     )
