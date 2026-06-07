@@ -34,14 +34,14 @@ Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writi
 
 ## Setting up Shortcuts automations
 
-The app exposes two actions to the Shortcuts app: `Start route` and `Finish route`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
+The app exposes two actions to the Shortcuts app: `Start drive` and `Finish drive`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
 
 For each trigger type you want to use:
 
 1. Open the Shortcuts app and create a new Automation.
 2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
-3. Add the action "Start route" from Driveline.
-4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish route" action.
+3. Add the action "Start drive" from Driveline.
+4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish drive" action.
 
 If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
 
@@ -59,7 +59,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 **Language and frameworks**
 - Swift 6.3 with strict concurrency throughout
 - SwiftUI on iOS 26+
-- SwiftData for persistence (two model types: `Drive` and `Position`)
+- SwiftData for persistence (three model types: `Drive`, `Position`, and `Weather`)
 
 **Apple frameworks**
 - CoreLocation with `allowsBackgroundLocationUpdates` and `kCLLocationAccuracyBestForNavigation`
@@ -69,7 +69,6 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - ActivityKit for the Live Activity shown on the Lock Screen and Dynamic Island during recording
 - CloudKit for iCloud sync of drives across devices
 - Combine for publishing location updates through the service layer
-- Network framework (via `NWPathMonitor`) for detecting connectivity changes used to retry failed reverse geocoding
 
 **Third-party packages (Swift Package Manager)**
 - None by design.

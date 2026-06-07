@@ -17,6 +17,7 @@ struct Driveline: App {
   @State private var driveService: DriveRecordingService
   @State private var placeNameSweepService: PlaceNameSweepService
   @State private var weatherSweepService: WeatherSweepService
+  @State private var spotlightIndexingService: SpotlightIndexingService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -29,6 +30,7 @@ struct Driveline: App {
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
     _weatherSweepService = State(initialValue: env.weatherSweepService)
+    _spotlightIndexingService = State(initialValue: env.spotlightIndexingService)
   }
 
   // MARK: - Main View Scene
@@ -42,6 +44,7 @@ struct Driveline: App {
           case .active:
             Task { await placeNameSweepService.sweep() }
             Task { await weatherSweepService.sweep() }
+            Task { await spotlightIndexingService.reindexAll() }
           case .background:
             schedulePlaceNameSweepTask()
             scheduleWeatherSweepTask()

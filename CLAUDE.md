@@ -61,3 +61,6 @@ Every screen-level View **must** have a paired ViewModel:
 ### Running builds and tests
 - Use a destination of 'platform=iOS Simulator,name=iPhone 17' if running builds or tests via xcodebuild
 - Never git commit a change
+
+### Xcode
+- The project uses Xcode's File System Synchronized Groups — new files are picked up automatically.

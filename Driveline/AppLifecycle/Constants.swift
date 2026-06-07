@@ -10,6 +10,7 @@ import CoreLocation
 
 enum Constants {
   enum App {
+    nonisolated static let bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.targatrips.Driveline"
     nonisolated static let GPXCreator = "Driveline for iOS"
     nonisolated static let dashString = "—"
   }

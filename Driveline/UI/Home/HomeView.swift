@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+import CoreSpotlight
 import SwiftUI
 import SwiftData
 
@@ -23,7 +24,7 @@ struct HomeView: View {
 
   var body: some View {
     @Bindable var viewModel = viewModel
-    NavigationStack {
+    NavigationStack(path: $viewModel.navigationPath) {
       content
         .navigationTitle("Drives")
         .toolbar { toolbarItems }
@@ -42,6 +43,13 @@ struct HomeView: View {
           viewModel.modelContext = modelContext
           viewModel.showingRecordingScreen = driveService.isRecording
         }
+    }
+    .onContinueUserActivity(CSSearchableItemActionType) { activity in
+      guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+            let uuid = UUID(uuidString: identifier),
+            let drive = drives.first(where: { $0.id == uuid }) else { return }
+      viewModel.navigationPath = NavigationPath()
+      viewModel.navigationPath.append(drive)
     }
     .modifier(RecordingScreenModifier(driveService: driveService, isPresented: $viewModel.showingRecordingScreen))
     .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingDeleteConfirmation))

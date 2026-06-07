@@ -16,4 +16,5 @@ struct AppEnvironment {
   let driveService: DriveRecordingService
   let placeNameSweepService: PlaceNameSweepService
   let weatherSweepService: WeatherSweepService
+  let spotlightIndexingService: SpotlightIndexingService
 }

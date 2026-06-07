@@ -8,6 +8,7 @@
 import Foundation
 import Observation
 import SwiftData
+import SwiftUI
 
 @MainActor
 @Observable
@@ -31,6 +32,7 @@ final class HomeViewModel {
 
   @ObservationIgnored var modelContext: ModelContext?
 
+  var navigationPath: NavigationPath = NavigationPath()
   private(set) var sections: [DriveSection] = []
   private(set) var summaryLine: String?
   private(set) var isSelectMode: Bool = false

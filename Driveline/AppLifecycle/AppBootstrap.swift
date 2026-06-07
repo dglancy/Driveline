@@ -31,11 +31,12 @@ enum AppBootstrap {
       placeNameSweepService: placeNameSweepService,
       weatherSweepService: weatherSweepService
     )
+    let spotlightIndexingService = SpotlightIndexingService(modelContext: modelContainer.mainContext)
     registerBGTasks([placeNameSweepService, weatherSweepService])
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, spotlightIndexingService: spotlightIndexingService)
   }
 
   // MARK: - Private

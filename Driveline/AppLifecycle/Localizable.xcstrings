@@ -36,6 +36,41 @@
         }
       }
     },
+    "%@ → %@" : {
+      "comment" : "Drive name with both start and end location",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ → %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ → %2$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ → %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ → %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ → %2$@"
+          }
+        }
+      }
+    },
     "%@ + %@" : {
       "comment" : "Default name for a merged drive, combining two drive names with a plus sign",
       "localizations" : {
@@ -453,10 +488,62 @@
       }
     },
     "At Arrival" : {
-      "comment" : "Weather row subtitle"
+      "comment" : "Weather row subtitle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei der Ankunft"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At Arrival"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À l'arrivée"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij aankomst"
+          }
+        }
+      }
     },
     "At Departure" : {
-      "comment" : "Weather row subtitle"
+      "comment" : "Weather row subtitle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei der Abfahrt"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At Departure"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au départ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij vertrek"
+          }
+        }
+      }
     },
     "Automatically" : {
       "comment" : "Recording trigger: started automatically by automation",
@@ -2996,7 +3083,33 @@
       }
     },
     "Weather data provided by Apple Weather" : {
-      "comment" : "Weather attribution footer link"
+      "comment" : "Weather attribution footer link",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wetterdaten bereitgestellt von Apple Wetter"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weather data provided by Apple Weather"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Données météo fournies par Apple Météo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weergegevens aangeboden door Apple Weather"
+          }
+        }
+      }
     },
     "Yesterday" : {
       "comment" : "Title of the section for drives from yesterday.",

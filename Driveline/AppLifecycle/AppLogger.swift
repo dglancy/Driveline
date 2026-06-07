@@ -20,7 +20,7 @@ struct AppLogger {
   private let category: String
   
   init(category: String) {
-    self.logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.targatrips.Driveline", category: category)
+    self.logger = Logger(subsystem: Constants.App.bundleIdentifier, category: category)
     self.category = category
   }
   
