@@ -24,7 +24,7 @@ final class EditDriveViewModel {
 
   init(drive: Drive) {
     self.drive = drive
-    self.driveName = drive.displayName
+    self.driveName = drive.name ?? ""
     self.startPlaceName = drive.startPlaceName ?? ""
     self.endPlaceName = drive.endPlaceName ?? ""
   }
