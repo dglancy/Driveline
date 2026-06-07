@@ -99,7 +99,7 @@ final class LocationDataRecorderService {
       speedAccuracy: location.speedAccuracy
     )
 
-    if let previous = drive.positions?.last {
+    if let previous = drive.orderedPositions.last {
       let from = CLLocation(latitude: previous.latitude, longitude: previous.longitude)
       let to = CLLocation(latitude: position.latitude, longitude: position.longitude)
       drive.accumulatedDistanceMetres += from.distance(from: to)

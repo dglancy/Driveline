@@ -49,6 +49,31 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func persistingTwoLocationsAccumulatesDistance() async throws {
+    let drive = Drive(name: "Test drive")
+    let locationService = LocationService()
+    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+    try recorder.startRecording(with: drive)
+
+    let first = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.500, longitude: -0.100),
+      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5,
+      timestamp: Date(timeIntervalSinceReferenceDate: 0))
+    let second = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.501, longitude: -0.100),
+      altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5,
+      timestamp: Date(timeIntervalSinceReferenceDate: 1))
+
+    locationService.locationPublisher.send(first)
+    locationService.locationPublisher.send(second)
+
+    #expect(recorder.drive!.accumulatedDistanceMetres > 0)
+    #expect(recorder.drive!.accumulatedDistanceMetres == recorder.drive!.distanceMetres)
+  }
+
+  @Test
   func doesNotPersistLocationsBeforeRecordingStarts() async throws {
     let locationService = LocationService()
 
