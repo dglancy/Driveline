@@ -15,9 +15,14 @@
 	<array>
 		<string>Intent</string>
 	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.targatrips.driveline.placename-sweep</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 </dict>

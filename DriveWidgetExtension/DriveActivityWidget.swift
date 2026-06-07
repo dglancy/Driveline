@@ -223,7 +223,7 @@ private struct LiveActivityTimerColumn: View {
   }
 }
 
-// MARK: - Brand Colour
+// MARK: - Brand Color
 
 private extension Color {
   static let brand = Color(red: 60 / 255, green: 134 / 255, blue: 92 / 255)

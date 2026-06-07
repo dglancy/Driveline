@@ -14,4 +14,5 @@ struct AppEnvironment {
 
   let modelContainer: ModelContainer
   let driveService: DriveRecordingService
+  let sweepService: PlaceNameSweepService
 }

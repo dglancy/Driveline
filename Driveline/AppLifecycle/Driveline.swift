@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+import BackgroundTasks
 import SwiftData
 import SwiftUI
 
@@ -14,6 +15,7 @@ struct Driveline: App {
   // MARK: - Properties
 
   @State private var driveService: DriveRecordingService
+  @State private var sweepService: PlaceNameSweepService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -24,6 +26,7 @@ struct Driveline: App {
     let env = AppBootstrap.boot()
     self.modelContainer = env.modelContainer
     _driveService = State(initialValue: env.driveService)
+    _sweepService = State(initialValue: env.sweepService)
   }
 
   // MARK: - Main View Scene
@@ -33,8 +36,14 @@ struct Driveline: App {
       HomeView()
         .environment(driveService)
         .onChange(of: scenePhase) { _, newPhase in
-          guard newPhase == .active else { return }
-          Task { await driveService.checkAndRetryNilPlaceNamesForFinishedDrives() }
+          switch newPhase {
+          case .active:
+            Task { await sweepService.sweep() }
+          case .background:
+            schedulePlaceNameSweepTask()
+          default:
+            break
+          }
         }
         .onOpenURL { url in
           guard url.scheme == "driveline", url.host == "finish" else { return }
@@ -42,5 +51,13 @@ struct Driveline: App {
         }
     }
     .modelContainer(modelContainer)
+  }
+
+  // MARK: - Private
+
+  private func schedulePlaceNameSweepTask() {
+    let request = BGProcessingTaskRequest(identifier: kPlaceNameSweepTaskIdentifier)
+    request.requiresNetworkConnectivity = true
+    try? BGTaskScheduler.shared.submit(request)
   }
 }

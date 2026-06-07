@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 06/06/2026.
 //
 
+import BackgroundTasks
 import Foundation
 import SwiftData
 
@@ -21,17 +22,18 @@ enum AppBootstrap {
       locationService: locationService,
       modelContext: modelContainer.mainContext
     )
-    let networkMonitorService = NetworkMonitorService()
+    let sweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext)
     let driveService = setupDriveRecordingService(
       modelContext: modelContainer.mainContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
-      networkMonitorService: networkMonitorService
+      sweepService: sweepService
     )
+    registerBGTasks(sweepService: sweepService)
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, sweepService: sweepService)
   }
 
   // MARK: - Private
@@ -75,7 +77,7 @@ enum AppBootstrap {
     modelContext: ModelContext,
     locationService: LocationService,
     locationDataRecorder: LocationDataRecorderService,
-    networkMonitorService: any NetworkMonitorServiceProtocol
+    sweepService: PlaceNameSweepService
   ) -> DriveRecordingService {
     Log.lifecycle.info("Setting up drive service")
     var descriptor = FetchDescriptor<Drive>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
@@ -85,9 +87,26 @@ enum AppBootstrap {
       modelContext: modelContext,
       locationService: locationService,
       locationDataRecorder: locationDataRecorder,
-      networkMonitorService: networkMonitorService,
+      sweepService: sweepService,
       initialDrive: activeDrive
     )
+  }
+
+  private static func registerBGTasks(sweepService: PlaceNameSweepService) {
+    BGTaskScheduler.shared.register(forTaskWithIdentifier: kPlaceNameSweepTaskIdentifier, using: nil) { task in
+      guard let processingTask = task as? BGProcessingTask else {
+        task.setTaskCompleted(success: false)
+        return
+      }
+      let sweepTask = Task { @MainActor in
+        await sweepService.sweep()
+        processingTask.setTaskCompleted(success: true)
+      }
+      processingTask.expirationHandler = {
+        sweepTask.cancel()
+        processingTask.setTaskCompleted(success: false)
+      }
+    }
   }
 
   private static func registerIntentDependencies(driveService: DriveRecordingService) {

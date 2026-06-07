@@ -16,8 +16,9 @@ let kGPXCreator = "Driveline for iOS"
 
 nonisolated let kMinimumLocationAccuracy: CLLocationAccuracy = 50
 nonisolated let kMaxLocationAge: TimeInterval = 5
-let kDriveAgeCutoff: TimeInterval = -86400
+nonisolated let kDrivePlaceNameSweepCutoff: TimeInterval = -2_592_000 // 30 days
 let kRecentDriveCutoff: TimeInterval = -1800
+let kPlaceNameSweepTaskIdentifier = "com.targatrips.driveline.placename-sweep"
 
 // MARK: - Common strings
 

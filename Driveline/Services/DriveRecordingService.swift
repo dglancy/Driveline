@@ -25,11 +25,10 @@ final class DriveRecordingService {
   @ObservationIgnored private let locationService: LocationService
   @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
-  @ObservationIgnored private let networkMonitorService: any NetworkMonitorServiceProtocol
+  @ObservationIgnored private let sweepService: PlaceNameSweepService
   @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
-  @ObservationIgnored private var networkCancellable: AnyCancellable?
   #if os(iOS)
   @ObservationIgnored private let activityService = DriveActivityService()
   #endif
@@ -40,24 +39,16 @@ final class DriveRecordingService {
        locationService: LocationService,
        locationDataRecorder: LocationDataRecorderService,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
-       networkMonitorService: any NetworkMonitorServiceProtocol = NetworkMonitorService(),
+       sweepService: PlaceNameSweepService? = nil,
        userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
     self.modelContext = modelContext
     self.locationService = locationService
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
-    self.networkMonitorService = networkMonitorService
+    self.sweepService = sweepService ?? PlaceNameSweepService(modelContext: modelContext)
     self.userPreferences = userPreferences
     self.drive = initialDrive
-
-    networkCancellable = networkMonitorService.connectivityRestoredPublisher
-      .sink { [weak self] in
-        Task { 
-          guard let self else { return }
-          await self.retryNilPlaceNamesOnConnectivity()
-        }
-      }
   }
 
   // MARK: - Actions
@@ -88,18 +79,7 @@ final class DriveRecordingService {
         self?.updateLiveActivity()
       }
 
-    startGeocodeCancellable = locationService.locationPublisher
-      .first()
-      .sink { [weak self] location in
-        Task { [weak self] in
-          guard let self, let drive = self.drive else { return }
-          if let placeName = await self.geocodingService.reverseGeocode(location: location) {
-            drive.startPlaceName = placeName
-            self.saveModelContext()
-            self.updateLiveActivity()
-          }
-        }
-      }
+    setupStartPlaceNameGeocoding(for: drive)
 
     #if os(iOS)
     activityService.startActivity(for: drive)
@@ -121,9 +101,27 @@ final class DriveRecordingService {
         self?.updateLiveActivity()
       }
 
+    setupStartPlaceNameGeocoding(for: drive)
+
     #if os(iOS)
     activityService.startActivity(for: drive)
     #endif
+  }
+
+  private func setupStartPlaceNameGeocoding(for drive: Drive) {
+    guard drive.startPlaceName == nil else { return }
+    startGeocodeCancellable = locationService.locationPublisher
+      .first()
+      .sink { [weak self] location in
+        Task { [weak self] in
+          guard let self, let drive = self.drive else { return }
+          if let placeName = await self.geocodingService.reverseGeocode(location: location) {
+            drive.startPlaceName = placeName
+            self.saveModelContext()
+            self.updateLiveActivity()
+          }
+        }
+      }
   }
 
   private func findRecentlyFinishedDrive() -> Drive? {
@@ -148,49 +146,15 @@ final class DriveRecordingService {
       drive.status = .finished
       locationDataRecorder.stopRecording()
       saveModelContext()
-
-      if let last = drive.orderedPositions.last {
-        let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        Task { [weak self] in
-          guard let self else { return }
-          if let placeName = await geocodingService.reverseGeocode(location: location) {
-            drive.endPlaceName = placeName
-            saveModelContext()
-          }
-        }
-      }
     }
 
     self.drive = nil
 
+    Task { await sweepService.sweep() }
+
     #if os(iOS)
     Task { await activityService.endActivity() }
     #endif
-  }
-
-  func checkAndRetryNilPlaceNamesForFinishedDrives() async {
-    guard networkMonitorService.isConnected else { return }
-    let cutoff = Date().addingTimeInterval(kDriveAgeCutoff)
-    let finishedStatus = Drive.DriveStatus.finished
-    let descriptor = FetchDescriptor<Drive>(
-      predicate: #Predicate<Drive> { drive in
-        drive.startedAt >= cutoff && drive.status == finishedStatus
-      }
-    )
-    guard let candidates = try? modelContext.fetch(descriptor) else { return }
-    let needsRetry = candidates.filter { $0.startPlaceName == nil || $0.endPlaceName == nil }
-    guard !needsRetry.isEmpty else { return }
-    for finishedDrive in needsRetry {
-      if finishedDrive.startPlaceName == nil, let first = finishedDrive.orderedPositions.first {
-        let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
-        finishedDrive.startPlaceName = await geocodingService.reverseGeocode(location: location)
-      }
-      if finishedDrive.endPlaceName == nil, let last = finishedDrive.orderedPositions.last {
-        let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        finishedDrive.endPlaceName = await geocodingService.reverseGeocode(location: location)
-      }
-      saveModelContext()
-    }
   }
 
   // MARK: - Private
@@ -210,16 +174,6 @@ final class DriveRecordingService {
       )
     }
     #endif
-  }
-
-  private func retryNilPlaceNamesOnConnectivity() async {
-    if let activeDrive = drive, activeDrive.startPlaceName == nil,
-       let first = activeDrive.orderedPositions.first {
-      let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
-      activeDrive.startPlaceName = await geocodingService.reverseGeocode(location: location)
-      saveModelContext()
-    }
-    await checkAndRetryNilPlaceNamesForFinishedDrives()
   }
 
   private func saveModelContext() {

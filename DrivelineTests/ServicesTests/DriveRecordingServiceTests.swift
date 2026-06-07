@@ -83,7 +83,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let existingDrive = Drive(name: "Existing drive")
-    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: existingDrive)
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialDrive: existingDrive)
 
     #expect(service.drive?.id == existingDrive.id)
   }
@@ -94,7 +94,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let drive = Drive(name: "Test")
     drive.status = .recording
-    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialDrive: drive)
 
     #expect(service.isRecording == true)
   }
@@ -105,7 +105,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let drive = Drive(name: "Test")
     drive.status = .finished
-    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, networkMonitorService: MockNetworkMonitorService(), initialDrive: drive)
+    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialDrive: drive)
 
     #expect(service.isRecording == false)
   }
@@ -162,7 +162,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   // MARK: - finishDrive geocoding
 
   @Test
-  func finishDriveSetsEndPlaceNameWhenGeocodingSucceeds() async throws {
+  func finishDriveTriggersSweepWhichSetsEndPlaceName() async throws {
     let mockGeocoding = MockGeocodingService()
     let (service, _, _) = makeServices(geocodingService: mockGeocoding)
 
@@ -178,28 +178,6 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     await Task.yield()
 
     #expect(drive.endPlaceName == "Test Place")
-  }
-
-  @Test
-  func finishDriveDoesNotOverwriteEndPlaceNameWhenGeocodingFails() async throws {
-    let mockGeocoding = MockGeocodingService()
-    mockGeocoding.result = nil
-    let (service, _, _) = makeServices(geocodingService: mockGeocoding)
-
-    try service.startDrive()
-    let drive = service.drive!
-    let position = makePosition()
-    context!.insert(position)
-    drive.positions = [position]
-
-    service.finishDrive()
-
-    drive.endPlaceName = "Retry Result"
-
-    await Task.yield()
-    await Task.yield()
-
-    #expect(drive.endPlaceName == "Retry Result")
   }
 
   @Test
@@ -223,6 +201,57 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     await Task.yield()
 
     #expect(drive.startPlaceName == "Retry Result")
+  }
+
+  // MARK: - resumeDrive geocoding
+
+  @Test
+  func resumeDriveSetsStartPlaceNameWhenPreviousGeocodingFailed() async throws {
+    let mockGeocoding = MockGeocodingService()
+    let finishedDrive = try insertFinishedDrive(startPlaceName: nil, endPlaceName: nil)
+    let (service, locationService, _) = makeServices(
+      geocodingService: mockGeocoding,
+      userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
+    )
+
+    try service.startDrive(trigger: .automatic)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(finishedDrive.startPlaceName == "Test Place")
+  }
+
+  @Test
+  func resumeDriveDoesNotReplaceExistingStartPlaceName() async throws {
+    let mockGeocoding = MockGeocodingService()
+    let finishedDrive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: nil)
+    let (service, locationService, _) = makeServices(
+      geocodingService: mockGeocoding,
+      userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
+    )
+
+    try service.startDrive(trigger: .automatic)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(finishedDrive.startPlaceName == "Home")
+    #expect(mockGeocoding.geocodedLocations.isEmpty)
   }
 
   // MARK: - Continue drive if recently finished
@@ -290,14 +319,16 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   // MARK: - Helpers
 
   private func makeServices(geocodingService: (any GeocodingServiceProtocol)? = nil, userPreferences: UserPreferences? = nil) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
+    let mockGeo = geocodingService ?? MockGeocodingService()
+    let sweepService = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeo)
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
       modelContext: context!,
       locationService: locationService,
       locationDataRecorder: recorder,
-      geocodingService: geocodingService ?? MockGeocodingService(),
-      networkMonitorService: MockNetworkMonitorService(),
+      geocodingService: mockGeo,
+      sweepService: sweepService,
       userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)
