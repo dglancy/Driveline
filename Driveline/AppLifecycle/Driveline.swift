@@ -46,8 +46,8 @@ struct Driveline: App {
             Task { await placeNameSweepService.sweep() }
             Task { await weatherSweepService.sweep() }
           case .background:
-            schedulePlaceNameSweepTask()
-            scheduleWeatherSweepTask()
+            scheduleSweepTask(for: placeNameSweepService)
+            scheduleSweepTask(for: weatherSweepService)
           default:
             break
           }
@@ -62,14 +62,8 @@ struct Driveline: App {
 
   // MARK: - Private
 
-  private func schedulePlaceNameSweepTask() {
-    let request = BGProcessingTaskRequest(identifier: Constants.Configuration.placeNameSweepTaskIdentifier)
-    request.requiresNetworkConnectivity = true
-    try? BGTaskScheduler.shared.submit(request)
-  }
-
-  private func scheduleWeatherSweepTask() {
-    let request = BGProcessingTaskRequest(identifier: Constants.Configuration.weatherSweepTaskIdentifier)
+  private func scheduleSweepTask(for service: any SweepServiceProtocol) {
+    let request = BGProcessingTaskRequest(identifier: service.taskIdentifier)
     request.requiresNetworkConnectivity = true
     try? BGTaskScheduler.shared.submit(request)
   }

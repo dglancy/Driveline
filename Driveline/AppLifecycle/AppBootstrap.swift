@@ -35,9 +35,12 @@ enum AppBootstrap {
       spotlightIndexingService: spotlightIndexingService,
       initialDrive: activeDrive
     )
+    
     registerBGTasks([placeNameSweepService, weatherSweepService])
     registerIntentDependencies(driveService: driveService)
+    
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
+    
     Log.lifecycle.info("App started")
     return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, spotlightIndexingService: spotlightIndexingService)
   }
