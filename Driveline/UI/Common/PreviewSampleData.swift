@@ -37,8 +37,8 @@ enum PreviewSampleData {
       drive.positions = (drive.positions ?? []) + [position(lat: lat, lon: lon, at: timestamp, speed: speed, in: context)]
     }
 
-    let startWeather = Weather(temperatureCelsius: 18.0, conditionDescription: "Partly Cloudy", symbolName: "cloud.sun.fill", type: .start)
-    let endWeather = Weather(temperatureCelsius: 12.0, conditionDescription: "Overcast", symbolName: "cloud.fill", type: .end)
+    let startWeather = Weather(temperatureCelsius: 18.454545, conditionDescription: "Partly Cloudy", symbolName: "cloud.sun.fill", type: .start)
+    let endWeather = Weather(temperatureCelsius: 12.12345, conditionDescription: "Overcast", symbolName: "cloud.fill", type: .end)
     context.insert(startWeather)
     context.insert(endWeather)
     drive.weatherReadings = [startWeather, endWeather]

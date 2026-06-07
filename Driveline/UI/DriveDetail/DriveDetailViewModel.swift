@@ -140,6 +140,6 @@ final class DriveDetailViewModel {
 
   private func formatTemperature(_ celsius: Double) -> String {
     Measurement(value: celsius, unit: UnitTemperature.celsius)
-      .formatted(.measurement(width: .abbreviated, usage: .weather))
+      .formatted(.measurement(width: .abbreviated, usage: .weather, numberFormatStyle: .number.precision(.fractionLength(0))))
   }
 }
