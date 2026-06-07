@@ -179,7 +179,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func summaryLineContainsLocalisedDistance() {
+  func summaryLineContainsLocalizedDistance() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)

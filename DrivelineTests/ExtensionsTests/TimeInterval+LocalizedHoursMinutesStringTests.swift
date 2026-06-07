@@ -113,7 +113,7 @@ struct TimeIntervalTests {
   }
 
   @Test("ar_EG locale uses Arabic-Indic digits")
-  func testElapsedArabicLocaleUsesLocalisedDigits() {
+  func testElapsedArabicLocaleUsesLocalizedDigits() {
     let locale = Locale(identifier: "ar_EG")
     let result = TimeInterval(65).elapsedTimeString(locale: locale)
     #expect(result == "٠١:٠٥")

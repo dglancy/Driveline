@@ -11,17 +11,17 @@ import Testing
 @Suite("AppLogger")
 struct AppLoggerTests {
 
-  // MARK: - Initialisation
+  // MARK: - Initialization
 
   @Test
   @MainActor
-  func initialisesWithDefaultSubsystem() {
+  func initializesWithDefaultSubsystem() {
     _ = AppLogger(category: "Test")
   }
 
   @Test
   @MainActor
-  func initialisesWithCustomSubsystem() {
+  func initializesWithCustomSubsystem() {
     _ = AppLogger(category: "Test")
   }
 

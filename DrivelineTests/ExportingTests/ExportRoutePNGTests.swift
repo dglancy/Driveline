@@ -64,10 +64,10 @@ final class ExportDrivePNGTests: SwiftDataBaseTestCase {
     #expect(MapSize.highest.size == CGSize(width: 2400, height: 1800))
   }
 
-  // MARK: - MapSize initialiser
+  // MARK: - MapSize initializer
 
   @Test
-  func mapSizeInitialisesFromValidLowercaseString() {
+  func mapSizeInitializesFromValidLowercaseString() {
     #expect(MapSize(from: "low") == .low)
     #expect(MapSize(from: "medium") == .medium)
     #expect(MapSize(from: "high1") == .high1)
@@ -76,14 +76,14 @@ final class ExportDrivePNGTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func mapSizeInitialisesFromMixedCaseString() {
+  func mapSizeInitializesFromMixedCaseString() {
     #expect(MapSize(from: "LOW") == .low)
     #expect(MapSize(from: "High2") == .high2)
     #expect(MapSize(from: "HIGHEST") == .highest)
   }
 
   @Test
-  func mapSizeInitialisesFromStringWithSurroundingWhitespace() {
+  func mapSizeInitializesFromStringWithSurroundingWhitespace() {
     #expect(MapSize(from: "  low  ") == .low)
     #expect(MapSize(from: "\thigh2\n") == .high2)
   }
@@ -103,24 +103,24 @@ final class ExportDrivePNGTests: SwiftDataBaseTestCase {
     #expect(DriveWidth.thick.width == 9.0)
   }
 
-  // MARK: - DriveWidth initialiser
+  // MARK: - DriveWidth initializer
 
   @Test
-  func driveWidthInitialisesFromValidLowercaseString() {
+  func driveWidthInitializesFromValidLowercaseString() {
     #expect(DriveWidth(from: "thin") == .thin)
     #expect(DriveWidth(from: "medium") == .medium)
     #expect(DriveWidth(from: "thick") == .thick)
   }
 
   @Test
-  func driveWidthInitialisesFromMixedCaseString() {
+  func driveWidthInitializesFromMixedCaseString() {
     #expect(DriveWidth(from: "THIN") == .thin)
     #expect(DriveWidth(from: "Medium") == .medium)
     #expect(DriveWidth(from: "THICK") == .thick)
   }
 
   @Test
-  func driveWidthInitialisesFromStringWithSurroundingWhitespace() {
+  func driveWidthInitializesFromStringWithSurroundingWhitespace() {
     #expect(DriveWidth(from: "  thin  ") == .thin)
   }
 

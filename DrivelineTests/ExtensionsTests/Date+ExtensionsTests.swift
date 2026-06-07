@@ -56,7 +56,7 @@ struct DateExtensionsTests {
     #expect(referenceDate.monthAndYear(locale: Locale(identifier: "en_GB")) == "January 2025")
   }
 
-  @Test("monthAndYear returns localised wide month in fr_FR")
+  @Test("monthAndYear returns localized wide month in fr_FR")
   func testMonthAndYearFrFR() {
     #expect(referenceDate.monthAndYear(locale: Locale(identifier: "fr_FR")) == "janvier 2025")
   }
@@ -68,7 +68,7 @@ struct DateExtensionsTests {
     #expect(referenceDate.abbreviatedMonthAndDay(locale: Locale(identifier: "en_GB")) == "8 Jan")
   }
 
-  @Test("abbreviatedMonthAndDay returns localised abbreviated month in fr_FR")
+  @Test("abbreviatedMonthAndDay returns localized abbreviated month in fr_FR")
   func testAbbreviatedMonthAndDayFrFR() {
     #expect(referenceDate.abbreviatedMonthAndDay(locale: Locale(identifier: "fr_FR")) == "8 janv.")
   }

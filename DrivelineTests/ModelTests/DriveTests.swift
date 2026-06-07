@@ -14,10 +14,10 @@ import SwiftData
 @MainActor
 final class DriveTests: SwiftDataBaseTestCase {
 
-  // MARK: - Initialisation
+  // MARK: - Initialization
 
   @Test
-  func initialisesWithCorrectDefaults() throws {
+  func initializesWithCorrectDefaults() throws {
     let drive = Drive(name: "Morning Commute")
 
     #expect(drive.name == "Morning Commute")
@@ -30,7 +30,7 @@ final class DriveTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func initialisesWithAutomaticTrigger() throws {
+  func initializesWithAutomaticTrigger() throws {
     let drive = Drive(name: "School Run", trigger: .automatic)
     #expect(drive.trigger == .automatic)
   }

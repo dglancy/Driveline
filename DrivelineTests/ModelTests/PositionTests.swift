@@ -15,10 +15,10 @@ import CoreLocation
 @MainActor
 final class PositionTests: SwiftDataBaseTestCase {
 
-  // MARK: - Initialisation
+  // MARK: - Initialization
 
   @Test
-  func initialisesWithProvidedValues() throws {
+  func initializesWithProvidedValues() throws {
     let timestamp = Date(timeIntervalSinceReferenceDate: 0)
     let position = Position(
       timestamp: timestamp,

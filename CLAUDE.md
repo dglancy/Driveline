@@ -17,7 +17,7 @@ Every screen-level View **must** have a paired ViewModel:
 - The ViewModel is `@Observable`, `@MainActor`, a `final class`, lives in the same folder as its View, and is named `<Screen>ViewModel`.
 - The ViewModel owns **all** formatted output (dates, distances, speeds, durations) and **all** UI state (`showingSheet`, `isLoading`, etc.). The View must not call formatters or compute display strings inline.
 - Tightly related private subviews (e.g. `EndpointRow`, `MetadataRow`) may live in the same file as the View; they are not screen-level and do not need their own ViewModels.
-- The View creates the ViewModel in a `@State` property, initialising it from its inputs: `@State private var viewModel: FooViewModel` / `init(…) { _viewModel = State(initialValue: FooViewModel(…)) }`.
+- The View creates the ViewModel in a `@State` property, initializing it from its inputs: `@State private var viewModel: FooViewModel` / `init(…) { _viewModel = State(initialValue: FooViewModel(…)) }`.
 
 ## Coding Standards
 
@@ -34,10 +34,10 @@ Every screen-level View **must** have a paired ViewModel:
 - Explicit access control where non-default (`private`, `fileprivate`)
 - Avoid `public` unless strictly necessary
 - Avoid force unwraps and `try!` in production code, encourage their use in tests
-- Use UK English spelling over US English
+- Use US English spelling over UK English
 - Do not write comments in generated code unless it is absolutely necessary to aid understanding
-- Use `// MARK: -` sections to organise Swift types (e.g. `// MARK: - Properties`, `// MARK: - Computed Properties`, `// MARK: - Lifecycle`)
-– Any hardcoded strings that are available to the UI (i.e. not Log statements) should be localisation/accessibility friendly.
+- Use `// MARK: -` sections to organize Swift types (e.g. `// MARK: - Properties`, `// MARK: - Computed Properties`, `// MARK: - Lifecycle`)
+– Any hardcoded strings that are available to the UI (i.e. not Log statements) should be localization/accessibility friendly.
 - We need to have a project with zero warnings on compile.
 - Always write new tests or update existing tests for any code changes
 - Begin every new Swift file with the standard Xcode boilerplate header, using the current date and "Damien Glancy" as the author:
