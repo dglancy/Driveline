@@ -31,11 +31,11 @@ enum AppBootstrap {
       placeNameSweepService: placeNameSweepService,
       weatherSweepService: weatherSweepService
     )
-    registerBGTasks(sweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
+    registerBGTasks(placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
     registerIntentDependencies(driveService: driveService)
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, sweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService)
   }
 
   // MARK: - Private
@@ -97,14 +97,14 @@ enum AppBootstrap {
     )
   }
 
-  private static func registerBGTasks(sweepService: PlaceNameSweepService, weatherSweepService: WeatherSweepService) {
+  private static func registerBGTasks(placeNameSweepService: PlaceNameSweepService, weatherSweepService: WeatherSweepService) {
     BGTaskScheduler.shared.register(forTaskWithIdentifier: kPlaceNameSweepTaskIdentifier, using: nil) { task in
       guard let processingTask = task as? BGProcessingTask else {
         task.setTaskCompleted(success: false)
         return
       }
       let sweepTask = Task { @MainActor in
-        await sweepService.sweep()
+        await placeNameSweepService.sweep()
         processingTask.setTaskCompleted(success: true)
       }
       processingTask.expirationHandler = {

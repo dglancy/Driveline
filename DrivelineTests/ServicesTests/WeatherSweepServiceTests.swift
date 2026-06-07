@@ -45,7 +45,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
     let mockWeather = MockWeatherFetchService()
     let service = makeSweepService(weatherService: mockWeather)
     let startDate = Date().addingTimeInterval(-3600)
-    let drive = try insertFinishedDrive(startedAt: startDate, positions: [makePosition()])
+    let _ = try insertFinishedDrive(startedAt: startDate, positions: [makePosition()])
 
     await service.sweep()
 
@@ -57,7 +57,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
     let mockWeather = MockWeatherFetchService()
     let service = makeSweepService(weatherService: mockWeather)
     let endDate = Date().addingTimeInterval(-300)
-    let drive = try insertFinishedDrive(endedAt: endDate, positions: [makePosition()])
+    let _ = try insertFinishedDrive(endedAt: endDate, positions: [makePosition()])
 
     await service.sweep()
 
