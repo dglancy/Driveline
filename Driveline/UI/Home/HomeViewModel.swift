@@ -39,7 +39,7 @@ final class HomeViewModel {
   private(set) var sections: [DriveSection] = []
   private(set) var recentDriveCount: Int = 0
   private(set) var recentDistanceValue: String = "0.0"
-  private(set) var recentDistanceUnit: String = "km"
+  private(set) var recentDistanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
   private(set) var isSelectMode: Bool = false
   private(set) var selectedDriveIDs: Set<UUID> = []
   private(set) var startDriveErrorMessage: String?

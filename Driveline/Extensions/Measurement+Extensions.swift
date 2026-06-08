@@ -1,5 +1,5 @@
 //
-//  Double+DistanceExtensions.swift
+//  Measurement+Extensions.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 30/05/2026.
@@ -16,6 +16,30 @@ private enum DistanceFormatterCache {
 
 extension Measurement where UnitType == UnitLength {
 
+  // MARK: - Static methods
+  
+  static func localizedDistanceUnitSymbol(locale: Locale = .current) -> String {
+    preferredUnit(for: locale).symbol
+  }
+  
+  // MARK: - Methods
+
+  @MainActor
+  func localizedDistanceString(locale: Locale = .current) -> String {
+    let converted = self.converted(to: Self.preferredUnit(for: locale))
+    return Self.measurementFormatter(for: locale).string(from: converted)
+  }
+
+  @MainActor
+  func localizedDistanceValueString(locale: Locale = .current) -> String {
+    let value = self.converted(to: Self.preferredUnit(for: locale)).value
+    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? ""
+  }
+
+  func localizedDistanceUnitSymbol(locale: Locale = .current) -> String {
+    Self.preferredUnit(for: locale).symbol
+  }
+  
   // MARK: - Private
 
   private static func preferredUnit(for locale: Locale) -> UnitLength {
@@ -53,23 +77,5 @@ extension Measurement where UnitType == UnitLength {
     }
     DistanceFormatterCache.number = formatter
     return formatter
-  }
-
-  // MARK: - Methods
-
-  @MainActor
-  func localizedDistanceString(locale: Locale = .current) -> String {
-    let converted = self.converted(to: Self.preferredUnit(for: locale))
-    return Self.measurementFormatter(for: locale).string(from: converted)
-  }
-
-  @MainActor
-  func localizedDistanceValueString(locale: Locale = .current) -> String {
-    let value = self.converted(to: Self.preferredUnit(for: locale)).value
-    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? ""
-  }
-
-  func localizedDistanceUnitSymbol(locale: Locale = .current) -> String {
-    Self.preferredUnit(for: locale).symbol
   }
 }
