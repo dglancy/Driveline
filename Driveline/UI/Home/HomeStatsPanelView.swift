@@ -78,10 +78,12 @@ private struct StatCard: View {
         HStack(spacing: 4) {
           Image(systemName: icon)
             .font(.caption2)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
           Text(label)
             .font(.caption2)
             .fontWeight(.semibold)
             .tracking(0.5)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
         }
         .foregroundStyle(.white.opacity(0.8))
 
@@ -89,20 +91,24 @@ private struct StatCard: View {
 
         HStack(alignment: .firstTextBaseline, spacing: 2) {
           Text(value)
-            .font(.system(size: 40, weight: .bold, design: .rounded))
+            .font(.largeTitle)
+            .bold()
             .foregroundStyle(.white)
             .minimumScaleFactor(0.6)
             .lineLimit(1)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
           if let unit {
             Text(unit)
               .font(.title3.weight(.semibold))
               .foregroundStyle(.white.opacity(0.8))
+              .dynamicTypeSize(.xSmall ... .accessibility1)
           }
         }
 
         Text(scopeLabel)
           .font(.caption2)
           .foregroundStyle(.white.opacity(0.7))
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
       .padding(12)
       .frame(maxWidth: .infinity, alignment: .leading)
@@ -119,7 +125,7 @@ private struct StatCard: View {
 #Preview {
   List {
     Section {
-      HomeStatsPanelView(driveCount: 6, distanceValue: "93.5", distanceUnit: "km", scopeLabel: "last 30 days", onTap: {})
+      HomeStatsPanelView(driveCount: 6, distanceValue: "10,000", distanceUnit: "km", scopeLabel: "last 30 days", onTap: {})
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)
