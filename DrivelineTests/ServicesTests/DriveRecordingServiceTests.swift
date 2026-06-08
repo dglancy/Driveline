@@ -38,6 +38,34 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(service.isRecording == true)
   }
 
+  @Test
+  func startDriveClearsStateWhenRecorderThrows() async throws {
+    let mockRecorder = MockLocationDataRecorderService()
+    mockRecorder.shouldThrow = true
+    let (service, _, _) = makeServices(locationDataRecorder: mockRecorder)
+
+    #expect(throws: MockRecorderError.startFailed) { try service.startDrive() }
+    #expect(service.drive == nil)
+    #expect(service.isRecording == false)
+  }
+
+  @Test
+  func resumeDriveClearsStateAndThrowsWhenRecorderFails() async throws {
+    let finishedDrive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: "Work")
+    let mockRecorder = MockLocationDataRecorderService()
+    mockRecorder.shouldThrow = true
+    let (service, _, _) = makeServices(
+      locationDataRecorder: mockRecorder,
+      userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
+    )
+
+    #expect(throws: MockRecorderError.startFailed) { try service.startDrive(trigger: .automatic) }
+    #expect(service.drive == nil)
+    #expect(finishedDrive.status == .finished)
+    #expect(finishedDrive.endedAt != nil)
+    #expect(finishedDrive.endPlaceName == "Work")
+  }
+
   // MARK: - finishDrive
 
   @Test
@@ -516,14 +544,15 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   private func makeServices(
     geocodingService: (any GeocodingServiceProtocol)? = nil,
     weatherService: (any WeatherFetchServiceProtocol)? = nil,
+    locationDataRecorder: (any LocationDataRecorderServiceProtocol)? = nil,
     spotlightIndexingService: SpotlightIndexingService? = nil,
     userPreferences: UserPreferences? = nil
-  ) -> (DriveRecordingService, LocationService, LocationDataRecorderService) {
+  ) -> (DriveRecordingService, LocationService, any LocationDataRecorderServiceProtocol) {
     let mockGeo = geocodingService ?? MockGeocodingService()
     let mockWeather = weatherService ?? MockWeatherFetchService()
     let placeNameSweepService = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeo)
     let locationService = LocationService()
-    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+    let recorder = locationDataRecorder ?? LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
       modelContext: context!,
       locationService: locationService,

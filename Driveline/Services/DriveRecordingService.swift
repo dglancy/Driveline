@@ -23,7 +23,7 @@ final class DriveRecordingService {
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService
-  @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
+  @ObservationIgnored private let locationDataRecorder: any LocationDataRecorderServiceProtocol
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
   @ObservationIgnored private let placeNameSweepService: PlaceNameSweepService
@@ -41,7 +41,7 @@ final class DriveRecordingService {
 
   init(modelContext: ModelContext,
        locationService: LocationService,
-       locationDataRecorder: LocationDataRecorderService,
+       locationDataRecorder: any LocationDataRecorderServiceProtocol,
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        weatherService: any WeatherFetchServiceProtocol = WeatherFetchService(),
        placeNameSweepService: PlaceNameSweepService? = nil,
@@ -66,12 +66,39 @@ final class DriveRecordingService {
   func startDrive(trigger: Drive.RecordingTrigger = .manual) throws {
     if trigger == .automatic && userPreferences.continueDriveIfRecentlyFinished,
        let recentDrive = findRecentlyFinishedDrive() {
-      resumeDrive(recentDrive)
+      try resumeDrive(recentDrive)
     } else {
       try createNewDrive(trigger: trigger)
     }
   }
+  
+  func finishDrive() {
+    liveActivityCancellable = nil
+    startGeocodeCancellable = nil
+    startWeatherCancellable = nil
+    locationService.stop()
 
+    if let drive {
+      drive.endedAt = Date()
+      drive.status = .finished
+      locationDataRecorder.stopRecording()
+      saveModelContext()
+      fetchEndWeather(for: drive)
+      Task { await spotlightIndexingService?.indexDrive(drive) }
+    }
+
+    self.drive = nil
+
+    Task { await placeNameSweepService.sweep() }
+    Task { await weatherSweepService.sweep() }
+
+    #if os(iOS)
+    Task { await activityService.endActivity() }
+    #endif
+  }
+
+  // MARK: - Private functions
+  
   private func createNewDrive(trigger: Drive.RecordingTrigger) throws {
     let drive = Drive(trigger: trigger)
     self.drive = drive
@@ -82,29 +109,35 @@ final class DriveRecordingService {
       self.drive = nil
       throw error
     }
-    locationService.start()
 
-    liveActivityCancellable = locationService.locationPublisher
-      .sink { [weak self] _ in
-        self?.updateLiveActivity()
-      }
-
-    setupStartPlaceNameGeocoding(for: drive)
-    setupStartWeather(for: drive)
-
-    #if os(iOS)
-    activityService.startActivity(for: drive)
-    #endif
+    beginTracking(drive)
   }
 
-  private func resumeDrive(_ drive: Drive) {
+  private func resumeDrive(_ drive: Drive) throws {
+    let previousStatus = drive.status
+    let previousEndedAt = drive.endedAt
+    let previousEndPlaceName = drive.endPlaceName
+
     drive.status = .recording
     drive.endedAt = nil
     drive.endPlaceName = nil
     self.drive = drive
     saveModelContext()
 
-    try? locationDataRecorder.startRecording(with: drive)
+    do {
+      try locationDataRecorder.startRecording(with: drive)
+    } catch {
+      drive.status = previousStatus
+      drive.endedAt = previousEndedAt
+      drive.endPlaceName = previousEndPlaceName
+      self.drive = nil
+      throw error
+    }
+
+    beginTracking(drive)
+  }
+
+  private func beginTracking(_ drive: Drive) {
     locationService.start()
 
     liveActivityCancellable = locationService.locationPublisher
@@ -147,33 +180,6 @@ final class DriveRecordingService {
       $0.status == .finished && ($0.endedAt.map { $0 >= cutoff } ?? false)
     }
   }
-
-  func finishDrive() {
-    liveActivityCancellable = nil
-    startGeocodeCancellable = nil
-    startWeatherCancellable = nil
-    locationService.stop()
-
-    if let drive {
-      drive.endedAt = Date()
-      drive.status = .finished
-      locationDataRecorder.stopRecording()
-      saveModelContext()
-      fetchEndWeather(for: drive)
-      Task { await spotlightIndexingService?.indexDrive(drive) }
-    }
-
-    self.drive = nil
-
-    Task { await placeNameSweepService.sweep() }
-    Task { await weatherSweepService.sweep() }
-
-    #if os(iOS)
-    Task { await activityService.endActivity() }
-    #endif
-  }
-
-  // MARK: - Private
 
   private func updateLiveActivity() {
     #if os(iOS)
