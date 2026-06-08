@@ -219,6 +219,18 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   // MARK: - Select Mode
 
   @Test
+  func isSelectModeFalseOnInitialization() {
+    let viewModel = HomeViewModel()
+    #expect(viewModel.isSelectMode == false)
+  }
+
+  @Test
+  func sectionsAreEmptyOnInitializationSoSelectButtonIsHidden() {
+    let viewModel = HomeViewModel()
+    #expect(viewModel.sections.isEmpty)
+  }
+
+  @Test
   func enterSelectModeSetsIsSelectModeTrue() {
     let viewModel = HomeViewModel()
     viewModel.enterSelectMode()

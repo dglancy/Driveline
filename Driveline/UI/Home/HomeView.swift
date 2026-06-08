@@ -156,7 +156,7 @@ struct HomeView: View {
     ToolbarItem(placement: .topBarLeading) {
       if viewModel.isSelectMode {
         Button.cancel { viewModel.exitSelectMode() }
-      } else {
+      } else if !viewModel.sections.isEmpty {
         Button(String(localized: "Select", comment: "Enter multiselect mode")) {
           viewModel.enterSelectMode()
         }
