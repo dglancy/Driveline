@@ -77,7 +77,7 @@ struct MergeDrivesView: View {
         viewModel.swapOrder()
       }
     } label: {
-      Image(systemName: Icons.reorderDrives)
+      Image(systemName: Icons.Drive.reorderDrives)
         .font(.callout.weight(.medium))
         .foregroundStyle(.tint)
         .frame(width: 36, height: 36)

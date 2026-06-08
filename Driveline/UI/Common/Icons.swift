@@ -7,59 +7,57 @@
 
 enum Icons {
 
-  // MARK: - Drive
+  enum Drive {
+    static let morningDrive = "sunrise.fill"
+    static let afternoonDrive = "sun.max.fill"
+    static let eveningDrive = "sunset.fill"
+    static let nightDrive = "moon.stars.fill"
+    static let startMarker = "house.fill"
+    static let finishFlag = "flag.pattern.checkered"
+    static let finishFlagCircle = "flag.pattern.checkered.circle.fill"
+    static let reorderDrives = "arrow.up.arrow.down"
+  }
 
-  static let driveBadge = "point.bottomleft.forward.to.point.topright.scurvepath"
+  enum Recording {
+    static let stop = "stop.fill"
+    static let battery = "battery.75percent"
+  }
 
-  // MARK: - Drive (time of day)
+  enum Stats {
+    static let speed = "gauge"
+    static let location = "location"
+    static let gpsSignal = "dot.radiowaves.left.and.right"
+  }
 
-  static let morningDrive = "sunrise.fill"
-  static let afternoonDrive = "sun.max.fill"
-  static let eveningDrive = "sunset.fill"
-  static let nightDrive = "moon.stars.fill"
-  static let startMarker = "house.fill"
-  static let finishFlag = "flag.pattern.checkered"
-  static let finishFlagCircle = "flag.pattern.checkered.circle.fill"
-  static let reorderDrives = "arrow.up.arrow.down"
+  enum Navigation {
+    static let chevronDown = "chevron.down"
+    static let chevronRight = "chevron.right"
+    static let chevronLeft = "chevron.left"
+  }
 
-  // MARK: - Recording
+  enum Options {
+    static let ellipsis = "ellipsis"
+    static let viewfinder = "viewfinder"
+    static let sharing = "square.and.arrow.up"
+  }
 
-  static let stop = "stop.fill"
-  static let battery = "battery.75percent"
+  enum Selection {
+    static let selected = "checkmark.circle.fill"
+    static let deselected = "circle"
+    static let recordingActive = "circle.inset.filled"
+  }
 
-  // MARK: - Stats
+  enum Merging {
+    static let merge = "arrow.triangle.merge"
+  }
 
-  static let speed = "gauge"
-  static let location = "location"
-  static let gpsSignal = "dot.radiowaves.left.and.right"
-
-  // MARK: - Navigation
-
-  static let chevronDown = "chevron.down"
-  static let chevronRight = "chevron.right"
-  static let chevronLeft = "chevron.left"
-
-  // MARK: - Options
-
-  static let ellipsis = "ellipsis"
-  static let viewfinder = "viewfinder"
-  static let sharing = "square.and.arrow.up"
-
-  // MARK: - Selection
-
-  static let selected = "checkmark.circle.fill"
-  static let deselected = "circle"
-  static let recordingActive = "circle.inset.filled"
-
-  // MARK: - Merging
-
-  static let merge = "arrow.triangle.merge"
-
-  // MARK: - On-boarding
-
-  static let car = "car.fill"
+  enum Widgets {
+    static let timer = "timer"
+    static let car = "car.fill"
+  }
   
-  // MARK: - Widgets
-  
-  static let timer = "timer"
+  enum Panels {
+    static let drives = "checkmark.circle"
+    static let distance = "arrow.right"
+  }
 }

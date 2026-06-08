@@ -35,7 +35,7 @@ struct FullScreenMapView: View {
 
       VStack {
         HStack {
-          GlassButton(systemImage: Icons.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the full screen map")) { dismiss() }
+          GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the full screen map")) { dismiss() }
           Spacer()
         }
         .padding(.horizontal, 14)

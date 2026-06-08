@@ -26,7 +26,7 @@ struct DriveEndAnnotation: View {
   // MARK: - Body
 
   var body: some View {
-    Image(systemName: Icons.finishFlagCircle)
+    Image(systemName: Icons.Drive.finishFlagCircle)
       .font(.title)
       .foregroundStyle(.red, Color(.systemBackground))
       .shadow(color: .black.opacity(0.2), radius: 2, y: 1)

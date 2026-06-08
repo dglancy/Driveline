@@ -84,7 +84,7 @@ struct HomeView: View {
   private var emptyState: some View {
     ContentUnavailableView(
       "No Drives",
-      systemImage: Icons.car,
+      systemImage: Icons.Widgets.car,
       description: Text(String(localized: "Your recorded drives will appear here.", comment: "Empty state description shown on the home screen when no drives have been recorded yet"))
     )
   }
@@ -98,12 +98,14 @@ struct HomeView: View {
           }
         }
 
-        if viewModel.recentDriveCount > 0 && !viewModel.isSelectMode && searchText.isEmpty {
+        if viewModel.recentStats.driveCount > 0 && !viewModel.isSelectMode && searchText.isEmpty {
           Section {
             HomeStatsPanelView(
-              driveCount: viewModel.recentDriveCount,
-              distanceValue: viewModel.recentDistanceValue,
-              distanceUnit: viewModel.recentDistanceUnit
+              driveCount: viewModel.statsDriveCount,
+              distanceValue: viewModel.statsDistanceValue,
+              distanceUnit: viewModel.statsDistanceUnit,
+              scopeLabel: viewModel.statsScopeLabel,
+              onTap: viewModel.toggleStatsScope
             )
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
@@ -187,7 +189,7 @@ struct HomeView: View {
                 .fill(.red)
                 .frame(width: 11, height: 11)
             } else {
-              Image(systemName: Icons.recordingActive)
+              Image(systemName: Icons.Selection.recordingActive)
                 .font(.title2)
                 .foregroundStyle(.red)
             }

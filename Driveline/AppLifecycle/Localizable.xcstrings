@@ -36,13 +36,37 @@
         }
       }
     },
-    "%@ %@ in the last 30 days" : {
+    "%@ %@, %@" : {
       "comment" : "Accessibility label for distance stats card",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, %3$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@ in the last 30 days"
+            "state" : "translated",
+            "value" : "%1$@ %2$@, %3$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, %3$@"
           }
         }
       }
@@ -318,8 +342,40 @@
         }
       }
     },
-    "%lld drives in the last 30 days" : {
-      "comment" : "Accessibility label for drives stats card"
+    "%lld drives, %@" : {
+      "comment" : "Accessibility label for drives stats card",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Fahrten, %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld drives, %2$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld drives, %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld trajets, %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld ritten, %2$@"
+          }
+        }
+      }
     },
     "%lld selected" : {
       "comment" : "Multiselect count of selected drives",
@@ -469,6 +525,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Middagrit"
+          }
+        }
+      }
+    },
+    "all time" : {
+      "comment" : "Stats scope label for all drives",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gesamt"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "all time"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tous les temps"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "altijd"
           }
         }
       }
@@ -938,7 +1023,33 @@
       }
     },
     "DISTANCE" : {
-      "comment" : "Stats panel distance card label"
+      "comment" : "Stats panel distance card label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STRECKE"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DISTANCE"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DISTANCE"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AFSTAND"
+          }
+        }
+      }
     },
     "Drive" : {
       "comment" : "Description of the StartDriveIntent.",
@@ -1118,7 +1229,33 @@
       }
     },
     "DRIVES" : {
-      "comment" : "Stats panel drives card label"
+      "comment" : "Stats panel drives card label",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FAHRTEN"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DRIVES"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TRAJETS"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RITTEN"
+          }
+        }
+      }
     },
     "Duration" : {
       "comment" : "Stat tile label",
@@ -1764,7 +1901,33 @@
       }
     },
     "last 30 days" : {
-      "comment" : "Stats card scope caption"
+      "comment" : "Stats scope label for recent period",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "letzte 30 Tage"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "last 30 days"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 derniers jours"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "laatste 30 dagen"
+          }
+        }
+      }
     },
     "logged" : {
       "comment" : "Label for the count of GPS positions logged during a drive",

@@ -16,10 +16,10 @@ struct DriveRowDisplay {
   static func iconName(for date: Date) -> String {
     let hour = Calendar.current.component(.hour, from: date)
     switch hour {
-    case 5..<12: return Icons.morningDrive
-    case 12..<17: return Icons.afternoonDrive
-    case 17..<21: return Icons.eveningDrive
-    default: return Icons.nightDrive
+    case 5..<12: return Icons.Drive.morningDrive
+    case 12..<17: return Icons.Drive.afternoonDrive
+    case 17..<21: return Icons.Drive.eveningDrive
+    default: return Icons.Drive.nightDrive
     }
   }
 }

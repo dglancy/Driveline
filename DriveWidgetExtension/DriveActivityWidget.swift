@@ -29,12 +29,12 @@ struct DriveActivityWidget: Widget {
           DriveActivityExpandedBottomView(context: context)
         }
       } compactLeading: {
-        Image(systemName: Icons.car)
+        Image(systemName: Icons.Widgets.car)
           .foregroundStyle(Color.brand)
       } compactTrailing: {
         DriveActivityCompactTrailingView(context: context)
       } minimal: {
-        Image(systemName: Icons.car)
+        Image(systemName: Icons.Widgets.car)
           .foregroundStyle(Color.brand)
       }
     }
@@ -60,7 +60,7 @@ private struct DriveActivityLockScreenView: View {
 
   private var headerRow: some View {
     HStack(spacing: 8) {
-      Image(systemName: Icons.car)
+      Image(systemName: Icons.Widgets.car)
         .foregroundStyle(Color.brand)
       Text(String(localized: "Recording Drive", comment: "Live Activity title"))
         .font(.headline.weight(.semibold))
@@ -158,7 +158,7 @@ private struct DriveActivityExpandedBottomView: View {
   var body: some View {
     HStack {
       HStack(spacing: 6) {
-        Image(systemName: Icons.timer)
+        Image(systemName: Icons.Widgets.timer)
           .font(.caption)
           .foregroundStyle(.secondary)
         Text(context.attributes.startedAt, style: .timer)

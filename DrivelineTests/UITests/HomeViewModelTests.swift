@@ -148,14 +148,14 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func recentDriveCountIsZeroWhenNoDrives() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [])
-    #expect(viewModel.recentDriveCount == 0)
+    #expect(viewModel.recentStats.driveCount == 0)
   }
 
   @Test
   func recentDriveCountIsZeroWhenAllDrivesOlderThan30Days() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 31), makeDrive(daysAgo: 60)])
-    #expect(viewModel.recentDriveCount == 0)
+    #expect(viewModel.recentStats.driveCount == 0)
   }
 
   @Test
@@ -166,7 +166,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
       makeDrive(daysAgo: 5),
       makeDrive(daysAgo: 31)
     ])
-    #expect(viewModel.recentDriveCount == 2)
+    #expect(viewModel.recentStats.driveCount == 2)
   }
 
   @Test
@@ -174,16 +174,16 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     let expectedUnit = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
-    #expect(viewModel.recentDistanceUnit == expectedUnit)
+    #expect(viewModel.recentStats.distanceUnit == expectedUnit)
   }
 
   @Test
   func recentStatsResetWhenUpdatedWithNoRecentDrives() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
-    #expect(viewModel.recentDriveCount == 1)
+    #expect(viewModel.recentStats.driveCount == 1)
     viewModel.update(with: [makeDrive(daysAgo: 60)])
-    #expect(viewModel.recentDriveCount == 0)
+    #expect(viewModel.recentStats.driveCount == 0)
   }
 
   // MARK: - Update
@@ -715,34 +715,34 @@ struct DriveRowDisplayIconTests {
   }
 
   @Test func hourEightIsMorning() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 8)) == Icons.morningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 8)) == Icons.Drive.morningDrive)
   }
 
   @Test func hourFourteenIsAfternoon() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 14)) == Icons.afternoonDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 14)) == Icons.Drive.afternoonDrive)
   }
 
   @Test func hourNineteenIsEvening() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 19)) == Icons.eveningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 19)) == Icons.Drive.eveningDrive)
   }
 
   @Test func hourTwentyThreeIsNight() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 23)) == Icons.nightDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 23)) == Icons.Drive.nightDrive)
   }
 
   @Test func hourThreeIsNight() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 3)) == Icons.nightDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 3)) == Icons.Drive.nightDrive)
   }
 
   @Test func hourFiveIsMorning() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 5)) == Icons.morningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 5)) == Icons.Drive.morningDrive)
   }
 
   @Test func hourTwelveIsAfternoon() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 12)) == Icons.afternoonDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 12)) == Icons.Drive.afternoonDrive)
   }
 
   @Test func hourSeventeenIsEvening() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 17)) == Icons.eveningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 17)) == Icons.Drive.eveningDrive)
   }
 }

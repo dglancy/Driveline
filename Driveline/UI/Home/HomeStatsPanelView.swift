@@ -14,33 +14,39 @@ struct HomeStatsPanelView: View {
   let driveCount: Int
   let distanceValue: String
   let distanceUnit: String
+  let scopeLabel: String
+  let onTap: () -> Void
 
   // MARK: - Body
 
   var body: some View {
     HStack(spacing: 11) {
       StatCard(
-        icon: "checkmark.circle",
+        icon: Icons.Panels.drives,
         label: String(localized: "DRIVES", comment: "Stats panel drives card label"),
         value: "\(driveCount)",
-        unit: nil
+        unit: nil,
+        scopeLabel: scopeLabel
       )
       .accessibilityLabel(
-        String(localized: "\(driveCount) drives in the last 30 days", comment: "Accessibility label for drives stats card")
+        String(localized: "\(driveCount) drives, \(scopeLabel)", comment: "Accessibility label for drives stats card")
       )
 
       StatCard(
-        icon: "arrow.right",
+        icon: Icons.Panels.distance,
         label: String(localized: "DISTANCE", comment: "Stats panel distance card label"),
         value: distanceValue,
-        unit: distanceUnit
+        unit: distanceUnit,
+        scopeLabel: scopeLabel
       )
       .accessibilityLabel(
-        String(localized: "\(distanceValue) \(distanceUnit) in the last 30 days", comment: "Accessibility label for distance stats card")
+        String(localized: "\(distanceValue) \(distanceUnit), \(scopeLabel)", comment: "Accessibility label for distance stats card")
       )
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
+    .contentShape(Rectangle())
+    .onTapGesture { onTap() }
   }
 }
 
@@ -52,6 +58,7 @@ private struct StatCard: View {
   let label: String
   let value: String
   let unit: String?
+  let scopeLabel: String
 
   var body: some View {
     ZStack(alignment: .topTrailing) {
@@ -71,10 +78,12 @@ private struct StatCard: View {
         HStack(spacing: 4) {
           Image(systemName: icon)
             .font(.caption2)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
           Text(label)
             .font(.caption2)
             .fontWeight(.semibold)
             .tracking(0.5)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
         }
         .foregroundStyle(.white.opacity(0.8))
 
@@ -82,20 +91,24 @@ private struct StatCard: View {
 
         HStack(alignment: .firstTextBaseline, spacing: 2) {
           Text(value)
-            .font(.system(size: 40, weight: .bold, design: .rounded))
+            .font(.largeTitle)
+            .bold()
             .foregroundStyle(.white)
             .minimumScaleFactor(0.6)
             .lineLimit(1)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
           if let unit {
             Text(unit)
               .font(.title3.weight(.semibold))
               .foregroundStyle(.white.opacity(0.8))
+              .dynamicTypeSize(.xSmall ... .accessibility1)
           }
         }
 
-        Text(String(localized: "last 30 days", comment: "Stats card scope caption"))
+        Text(scopeLabel)
           .font(.caption2)
           .foregroundStyle(.white.opacity(0.7))
+          .dynamicTypeSize(.xSmall ... .accessibility1)
       }
       .padding(12)
       .frame(maxWidth: .infinity, alignment: .leading)
@@ -112,7 +125,7 @@ private struct StatCard: View {
 #Preview {
   List {
     Section {
-      HomeStatsPanelView(driveCount: 6, distanceValue: "93.5", distanceUnit: "km")
+      HomeStatsPanelView(driveCount: 6, distanceValue: "10,000", distanceUnit: "km", scopeLabel: "last 30 days", onTap: {})
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)

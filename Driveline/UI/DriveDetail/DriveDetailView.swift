@@ -37,17 +37,17 @@ struct DriveDetailView: View {
         DriveDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
           .frame(height: mapHeight)
           .overlay(alignment: .topLeading) {
-            GlassButton(systemImage: Icons.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
+            GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
               .padding(14)
           }
           .overlay(alignment: .topTrailing) {
-            GlassButton(systemImage: Icons.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
+            GlassButton(systemImage: Icons.Options.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
               viewModel.showingMoreMenu = true
             }
             .padding(14)
           }
           .overlay(alignment: .bottomTrailing) {
-            GlassButton(systemImage: Icons.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
+            GlassButton(systemImage: Icons.Options.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
               viewModel.showingFullScreenMap = true
             }
             .padding(14)
@@ -143,7 +143,7 @@ struct DriveDetailView: View {
         subtitle: String(localized: "Arrival", comment: "Endpoint row subtitle"),
         trailing: viewModel.arrivalTime
       ) {
-        Image(systemName: Icons.finishFlag)
+        Image(systemName: Icons.Drive.finishFlag)
           .font(.body.weight(.medium))
           .foregroundStyle(.red)
           .dynamicTypeSize(.xSmall ... .xxxLarge)
@@ -219,7 +219,7 @@ struct DriveDetailView: View {
   private var metadataCard: some View {
     VStack(spacing: 0) {
       IconRow(title: String(localized: "Top Speed", comment: "Metadata row"), trailing: viewModel.topSpeed) {
-        Image(systemName: Icons.speed)
+        Image(systemName: Icons.Stats.speed)
           .font(.callout)
           .foregroundStyle(.secondary)
           .dynamicTypeSize(.xSmall ... .accessibility1)
@@ -228,7 +228,7 @@ struct DriveDetailView: View {
       Divider().padding(.leading, 52)
       
       IconRow(title: String(localized: "Track Points", comment: "Metadata row"), trailing: viewModel.trackPoints) {
-        Image(systemName: Icons.location)
+        Image(systemName: Icons.Stats.location)
           .font(.callout)
           .foregroundStyle(.secondary)
           .dynamicTypeSize(.xSmall ... .accessibility1)
@@ -237,7 +237,7 @@ struct DriveDetailView: View {
       Divider().padding(.leading, 52)
       
       IconRow(title: String(localized: "Started by", comment: "Metadata row"), trailing: viewModel.triggerDisplayName) {
-        Image(systemName: Icons.gpsSignal)
+        Image(systemName: Icons.Stats.gpsSignal)
           .font(.callout)
           .foregroundStyle(.secondary)
           .dynamicTypeSize(.xSmall ... .accessibility1)
@@ -250,7 +250,7 @@ struct DriveDetailView: View {
     Button {
       viewModel.showSharingDialog = true
     } label: {
-      Label(String(localized: "Share Drive", comment: "Share button"), systemImage: Icons.sharing)
+      Label(String(localized: "Share Drive", comment: "Share button"), systemImage: Icons.Options.sharing)
         .font(.body.weight(.medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)

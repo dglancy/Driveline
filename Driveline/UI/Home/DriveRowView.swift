@@ -39,7 +39,7 @@ struct DriveRowView: View {
   private func listBody(isSelected: Bool?) -> some View {
     HStack(spacing: 13) {
       if let isSelected {
-        Image(systemName: isSelected ? Icons.selected : Icons.deselected)
+        Image(systemName: isSelected ? Icons.Selection.selected : Icons.Selection.deselected)
           .font(.title2)
           .foregroundStyle(isSelected ? Color.accentColor : Color(.tertiaryLabel))
           .animation(.easeInOut(duration: 0.15), value: isSelected)
