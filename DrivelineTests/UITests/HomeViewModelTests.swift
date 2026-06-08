@@ -715,34 +715,34 @@ struct DriveRowDisplayIconTests {
   }
 
   @Test func hourEightIsMorning() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 8)) == Icons.morningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 8)) == Icons.Drive.morningDrive)
   }
 
   @Test func hourFourteenIsAfternoon() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 14)) == Icons.afternoonDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 14)) == Icons.Drive.afternoonDrive)
   }
 
   @Test func hourNineteenIsEvening() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 19)) == Icons.eveningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 19)) == Icons.Drive.eveningDrive)
   }
 
   @Test func hourTwentyThreeIsNight() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 23)) == Icons.nightDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 23)) == Icons.Drive.nightDrive)
   }
 
   @Test func hourThreeIsNight() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 3)) == Icons.nightDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 3)) == Icons.Drive.nightDrive)
   }
 
   @Test func hourFiveIsMorning() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 5)) == Icons.morningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 5)) == Icons.Drive.morningDrive)
   }
 
   @Test func hourTwelveIsAfternoon() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 12)) == Icons.afternoonDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 12)) == Icons.Drive.afternoonDrive)
   }
 
   @Test func hourSeventeenIsEvening() {
-    #expect(DriveRowDisplay.iconName(for: date(hour: 17)) == Icons.eveningDrive)
+    #expect(DriveRowDisplay.iconName(for: date(hour: 17)) == Icons.Drive.eveningDrive)
   }
 }
