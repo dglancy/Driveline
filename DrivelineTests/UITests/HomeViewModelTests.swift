@@ -148,14 +148,14 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func recentDriveCountIsZeroWhenNoDrives() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [])
-    #expect(viewModel.recentDriveCount == 0)
+    #expect(viewModel.recentStats.driveCount == 0)
   }
 
   @Test
   func recentDriveCountIsZeroWhenAllDrivesOlderThan30Days() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 31), makeDrive(daysAgo: 60)])
-    #expect(viewModel.recentDriveCount == 0)
+    #expect(viewModel.recentStats.driveCount == 0)
   }
 
   @Test
@@ -166,7 +166,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
       makeDrive(daysAgo: 5),
       makeDrive(daysAgo: 31)
     ])
-    #expect(viewModel.recentDriveCount == 2)
+    #expect(viewModel.recentStats.driveCount == 2)
   }
 
   @Test
@@ -174,16 +174,16 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     let expectedUnit = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
-    #expect(viewModel.recentDistanceUnit == expectedUnit)
+    #expect(viewModel.recentStats.distanceUnit == expectedUnit)
   }
 
   @Test
   func recentStatsResetWhenUpdatedWithNoRecentDrives() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
-    #expect(viewModel.recentDriveCount == 1)
+    #expect(viewModel.recentStats.driveCount == 1)
     viewModel.update(with: [makeDrive(daysAgo: 60)])
-    #expect(viewModel.recentDriveCount == 0)
+    #expect(viewModel.recentStats.driveCount == 0)
   }
 
   // MARK: - Update

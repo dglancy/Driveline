@@ -20,6 +20,12 @@ final class HomeViewModel {
     case last30Days, allTime
   }
 
+  struct DriveStats {
+    var driveCount: Int = 0
+    var distanceValue: String = "0.0"
+    var distanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
+  }
+
   struct DriveRow: Identifiable {
     let drive: Drive
     let display: DriveRowDisplay
@@ -42,12 +48,8 @@ final class HomeViewModel {
   var navigationPath: NavigationPath = NavigationPath()
   private(set) var sections: [DriveSection] = []
   private(set) var statsScope: StatsScope = .last30Days
-  private(set) var recentDriveCount: Int = 0
-  private(set) var recentDistanceValue: String = "0.0"
-  private(set) var recentDistanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
-  private(set) var allTimeDriveCount: Int = 0
-  private(set) var allTimeDistanceValue: String = "0.0"
-  private(set) var allTimeDistanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
+  private(set) var recentStats: DriveStats = DriveStats()
+  private(set) var allTimeStats: DriveStats = DriveStats()
   private(set) var isSelectMode: Bool = false
   private(set) var selectedDriveIDs: Set<UUID> = []
   private(set) var startDriveErrorMessage: String?
@@ -60,9 +62,9 @@ final class HomeViewModel {
 
   // MARK: - Computed Properties
 
-  var statsDriveCount: Int { statsScope == .last30Days ? recentDriveCount : allTimeDriveCount }
-  var statsDistanceValue: String { statsScope == .last30Days ? recentDistanceValue : allTimeDistanceValue }
-  var statsDistanceUnit: String { statsScope == .last30Days ? recentDistanceUnit : allTimeDistanceUnit }
+  var statsDriveCount: Int { activeStats.driveCount }
+  var statsDistanceValue: String { activeStats.distanceValue }
+  var statsDistanceUnit: String { activeStats.distanceUnit }
   var statsScopeLabel: String {
     statsScope == .last30Days
       ? String(localized: "last 30 days", comment: "Stats scope label for recent period")
@@ -164,6 +166,8 @@ final class HomeViewModel {
 
   // MARK: - Private
 
+  private var activeStats: DriveStats { statsScope == .last30Days ? recentStats : allTimeStats }
+
   private var filteredDrives: [Drive] {
     guard !currentSearchText.isEmpty else { return allDrives }
     return allDrives.filter { matches($0, currentSearchText) }
@@ -209,16 +213,17 @@ final class HomeViewModel {
 
   private func buildRecentStats(from drives: [Drive]) {
     let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
-    let recent = drives.filter { $0.startedAt >= cutoff }
-    recentDriveCount = recent.count
-    let recentMeasurement = Measurement(value: recent.reduce(0.0) { $0 + $1.distanceMetres }, unit: UnitLength.meters)
-    recentDistanceValue = recentMeasurement.localizedDistanceValueString()
-    recentDistanceUnit = recentMeasurement.localizedDistanceUnitSymbol()
+    recentStats = driveStats(from: drives.filter { $0.startedAt >= cutoff })
+    allTimeStats = driveStats(from: drives)
+  }
 
-    allTimeDriveCount = drives.count
-    let allTimeMeasurement = Measurement(value: drives.reduce(0.0) { $0 + $1.distanceMetres }, unit: UnitLength.meters)
-    allTimeDistanceValue = allTimeMeasurement.localizedDistanceValueString()
-    allTimeDistanceUnit = allTimeMeasurement.localizedDistanceUnitSymbol()
+  private func driveStats(from drives: [Drive]) -> DriveStats {
+    let measurement = Measurement(value: drives.reduce(0.0) { $0 + $1.distanceMetres }, unit: UnitLength.meters)
+    return DriveStats(
+      driveCount: drives.count,
+      distanceValue: measurement.localizedDistanceValueString(),
+      distanceUnit: measurement.localizedDistanceUnitSymbol()
+    )
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {
