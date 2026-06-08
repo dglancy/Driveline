@@ -16,6 +16,7 @@ struct HomeView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(DriveRecordingService.self) private var driveService
   @Environment(\.spotlightIndexingService) private var spotlightIndexingService
+  @Environment(\.openURL) private var openURL
 
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
@@ -210,7 +211,9 @@ struct HomeView: View {
             String(localized: "Settings", comment: "Menu item to open settings"),
             systemImage: "gear"
           ) {
-            viewModel.showingSettings = true
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+              openURL(url)
+            }
           }
         } label: {
           Image(systemName: "ellipsis")
