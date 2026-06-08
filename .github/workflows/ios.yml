@@ -32,6 +32,7 @@ jobs:
 
       - name: Build & Test
         run: |
+          set -o pipefail
           rm -rf TestResults.xcresult
           xcodebuild test \
             -project Driveline.xcodeproj \
