@@ -98,7 +98,7 @@ struct HomeView: View {
           }
         }
 
-        if viewModel.recentDriveCount > 0 && !viewModel.isSelectMode {
+        if viewModel.recentDriveCount > 0 && !viewModel.isSelectMode && searchText.isEmpty {
           Section {
             HomeStatsPanelView(
               driveCount: viewModel.recentDriveCount,
