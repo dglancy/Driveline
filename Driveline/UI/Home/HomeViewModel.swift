@@ -32,6 +32,8 @@ final class HomeViewModel {
 
   @ObservationIgnored var modelContext: ModelContext?
   @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
+  @ObservationIgnored private var allDrives: [Drive] = []
+  @ObservationIgnored private var currentSearchText: String = ""
 
   var navigationPath: NavigationPath = NavigationPath()
   private(set) var sections: [DriveSection] = []
@@ -104,8 +106,14 @@ final class HomeViewModel {
   }
 
   func update(with drives: [Drive]) {
-    sections = buildSections(from: drives)
+    allDrives = drives
+    sections = buildSections(from: filteredDrives)
     summaryLine = buildSummaryLine(from: drives)
+  }
+
+  func applySearch(text: String) {
+    currentSearchText = text
+    sections = buildSections(from: filteredDrives)
   }
 
   func deleteDrives(_ drives: [Drive]) {
@@ -132,6 +140,17 @@ final class HomeViewModel {
   }
 
   // MARK: - Private
+
+  private var filteredDrives: [Drive] {
+    guard !currentSearchText.isEmpty else { return allDrives }
+    return allDrives.filter { matches($0, currentSearchText) }
+  }
+
+  private func matches(_ drive: Drive, _ query: String) -> Bool {
+    drive.displayName.localizedCaseInsensitiveContains(query) ||
+      drive.startPlaceName?.localizedCaseInsensitiveContains(query) == true ||
+      drive.endPlaceName?.localizedCaseInsensitiveContains(query) == true
+  }
 
   private func buildSections(from drives: [Drive]) -> [DriveSection] {
     let calendar = Calendar.current

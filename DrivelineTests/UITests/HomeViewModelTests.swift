@@ -216,6 +216,93 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     #expect(viewModel.sections[0].rows[0].drive.displayName == "B")
   }
 
+  // MARK: - Search
+
+  @Test
+  func emptyQueryShowsAllDrives() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeDrive(name: "A", daysAgo: 0), makeDrive(name: "B", daysAgo: 1)])
+    viewModel.applySearch(text: "")
+    #expect(viewModel.sections.flatMap(\.rows).count == 2)
+  }
+
+  @Test
+  func searchByDisplayNameFiltersResults() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeDrive(name: "Morning Commute", daysAgo: 0), makeDrive(name: "Evening Run", daysAgo: 0)])
+    viewModel.applySearch(text: "Morning")
+    let rows = viewModel.sections.flatMap(\.rows)
+    #expect(rows.count == 1)
+    #expect(rows[0].drive.displayName == "Morning Commute")
+  }
+
+  @Test
+  func searchByStartPlaceNameFiltersResults() {
+    let viewModel = HomeViewModel()
+    let match = makeDrive(name: "A", daysAgo: 0)
+    match.startPlaceName = "Home"
+    let noMatch = makeDrive(name: "B", daysAgo: 0)
+    noMatch.startPlaceName = "Office"
+    viewModel.update(with: [match, noMatch])
+    viewModel.applySearch(text: "Home")
+    let rows = viewModel.sections.flatMap(\.rows)
+    #expect(rows.count == 1)
+    #expect(rows[0].drive.id == match.id)
+  }
+
+  @Test
+  func searchByEndPlaceNameFiltersResults() {
+    let viewModel = HomeViewModel()
+    let match = makeDrive(name: "A", daysAgo: 0)
+    match.endPlaceName = "Airport"
+    let noMatch = makeDrive(name: "B", daysAgo: 0)
+    noMatch.endPlaceName = "Office"
+    viewModel.update(with: [match, noMatch])
+    viewModel.applySearch(text: "Airport")
+    let rows = viewModel.sections.flatMap(\.rows)
+    #expect(rows.count == 1)
+    #expect(rows[0].drive.id == match.id)
+  }
+
+  @Test
+  func searchIsCaseInsensitive() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeDrive(name: "morning commute", daysAgo: 0)])
+    viewModel.applySearch(text: "MORNING")
+    #expect(viewModel.sections.flatMap(\.rows).count == 1)
+  }
+
+  @Test
+  func searchWithNoMatchReturnsEmptySections() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeDrive(name: "Home to Office", daysAgo: 0)])
+    viewModel.applySearch(text: "zzznomatch")
+    #expect(viewModel.sections.isEmpty)
+  }
+
+  @Test
+  func clearingSearchRestoresAllDrives() {
+    let viewModel = HomeViewModel()
+    viewModel.update(with: [makeDrive(name: "A", daysAgo: 0), makeDrive(name: "B", daysAgo: 1)])
+    viewModel.applySearch(text: "A")
+    #expect(viewModel.sections.flatMap(\.rows).count == 1)
+    viewModel.applySearch(text: "")
+    #expect(viewModel.sections.flatMap(\.rows).count == 2)
+  }
+
+  @Test
+  func searchIsPreservedWhenDrivesUpdate() {
+    let viewModel = HomeViewModel()
+    let drive1 = makeDrive(name: "Morning Commute", daysAgo: 0)
+    let drive2 = makeDrive(name: "Evening Run", daysAgo: 0)
+    viewModel.update(with: [drive1])
+    viewModel.applySearch(text: "Morning")
+    #expect(viewModel.sections.flatMap(\.rows).count == 1)
+    viewModel.update(with: [drive1, drive2])
+    #expect(viewModel.sections.flatMap(\.rows).count == 1)
+    #expect(viewModel.sections.flatMap(\.rows)[0].drive.displayName == "Morning Commute")
+  }
+
   // MARK: - Select Mode
 
   @Test

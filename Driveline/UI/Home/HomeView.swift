@@ -20,6 +20,7 @@ struct HomeView: View {
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
   @State private var viewModel = HomeViewModel()
+  @State private var searchText = ""
 
   // MARK: - Body
 
@@ -28,9 +29,13 @@ struct HomeView: View {
     NavigationStack(path: $viewModel.navigationPath) {
       content
         .navigationTitle("Drives")
+        .searchable(text: $searchText, prompt: "Search")
         .toolbar { toolbarItems }
         .onChange(of: drives, initial: true) { _, newDrives in
           viewModel.update(with: newDrives)
+        }
+        .onChange(of: searchText) { _, text in
+          viewModel.applySearch(text: text)
         }
         .onChange(of: driveService.isRecording) { _, isRecording in
           if isRecording {
@@ -64,7 +69,11 @@ struct HomeView: View {
   @ViewBuilder
   private var content: some View {
     if viewModel.sections.isEmpty && !driveService.isRecording {
-      emptyState
+      if searchText.isEmpty {
+        emptyState
+      } else {
+        ContentUnavailableView.search
+      }
     } else {
       driveList
     }
