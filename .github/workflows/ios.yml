@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  checks: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -43,9 +44,26 @@ jobs:
             -resultBundlePath TestResults.xcresult \
             | xcpretty
 
+      - name: Install xcresultparser
+        if: always()
+        run: brew install a7ex/homebrew-formulae/xcresultparser
+
+      - name: Convert test results to JUnit
+        if: always()
+        run: xcresultparser --output-format junit TestResults.xcresult > TestResults.xml
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v3
+        with:
+          name: iOS Tests
+          path: TestResults.xml
+          reporter: java-junit
+          fail-on-error: false
+
       - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v5
+        if: always()
+        uses: actions/upload-artifact@v6
         with:
           name: test-results
           path: TestResults.xcresult
