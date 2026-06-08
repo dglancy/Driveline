@@ -11,11 +11,20 @@ import CoreLocation
 import Observation
 import SwiftData
 
+// MARK: - Protocol
+
+@MainActor
+protocol LocationDataRecorderServiceProtocol {
+  var drive: Drive? { get }
+  func startRecording(with drive: Drive) throws
+  func stopRecording()
+}
+
 // MARK: - Location Data Recorder Service
 
 @MainActor
 @Observable
-final class LocationDataRecorderService {
+final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
 
   // MARK: - Properties
 

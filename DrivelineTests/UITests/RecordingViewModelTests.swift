@@ -94,7 +94,13 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   private func makeService() -> (DriveRecordingService, LocationService) {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder)
+    let service = DriveRecordingService(
+      modelContext: context!,
+      locationService: locationService,
+      locationDataRecorder: recorder,
+      geocodingService: MockGeocodingService(),
+      weatherService: MockWeatherFetchService()
+    )
     return (service, locationService)
   }
 

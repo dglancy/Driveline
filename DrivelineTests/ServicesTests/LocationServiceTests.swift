@@ -35,27 +35,20 @@ struct LocationServiceTests {
 
   @Test
   @MainActor
-  func publishesValidLocationThroughPublisher() async throws {
+  func publishesValidLocationThroughPublisher() {
     let service = LocationService()
     var receivedLocations = [CLLocation]()
-    var cancellable: AnyCancellable?
+    let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
 
     let validLocation = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date()
     )
-
-    await withCheckedContinuation { continuation in
-      cancellable = service.locationPublisher.first().sink { location in
-        receivedLocations.append(location)
-        continuation.resume()
-      }
-      service.locationManager(CLLocationManager(), didUpdateLocations: [validLocation])
-    }
+    service.handleLocations([validLocation])
 
     #expect(receivedLocations.count == 1)
-    cancellable?.cancel()
+    cancellable.cancel()
   }
 
   @Test

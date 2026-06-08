@@ -55,8 +55,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
       manager.requestWhenInUseAuthorization()
     }
 
-    manager.startUpdatingLocation()
     status = .started
+    manager.startUpdatingLocation()
     Log.location.info("Started monitoring locations")
   }
 
@@ -90,7 +90,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     let status = manager.authorizationStatus
     Task { @MainActor in
       Log.location.info("Location authorisation changed to \(status.rawValue)")
-      guard status == .authorizedWhenInUse, !self.alwaysAuthorizationRequested else { return }
+      guard self.status == .started,
+            status == .authorizedWhenInUse,
+            !self.alwaysAuthorizationRequested else { return }
       self.alwaysAuthorizationRequested = true
       self.manager.requestAlwaysAuthorization()
     }
@@ -98,10 +100,14 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
   nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     Task { @MainActor in
-      Log.location.info("\(locations.count) new location(s) received")
-      for location in locations where isUsable(location) {
-        locationPublisher.send(location)
-      }
+      handleLocations(locations)
+    }
+  }
+
+  func handleLocations(_ locations: [CLLocation]) {
+    Log.location.info("\(locations.count) new location(s) received")
+    for location in locations where isUsable(location) {
+      locationPublisher.send(location)
     }
   }
 

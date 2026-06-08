@@ -20,7 +20,7 @@ class SwiftDataBaseTestCase {
 
   init() async throws {
     let schema = Schema([Drive.self, Position.self, Weather.self])
-    let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+    let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
     let container = try ModelContainer(for: schema, configurations: [configuration])
     context = ModelContext(container)
   }
