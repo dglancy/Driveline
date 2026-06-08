@@ -181,12 +181,12 @@ struct HomeView: View {
             Circle().fill(Color(.systemFill))
             if driveService.isRecording {
               RoundedRectangle(cornerRadius: 3)
-                .fill(.black)
+                .fill(.red)
                 .frame(width: 11, height: 11)
             } else {
               Image(systemName: Icons.recordingActive)
                 .font(.title2)
-                .foregroundStyle(.black)
+                .foregroundStyle(.red)
             }
           }
           .frame(width: 36, height: 36)
