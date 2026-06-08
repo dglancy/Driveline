@@ -37,7 +37,9 @@ final class HomeViewModel {
 
   var navigationPath: NavigationPath = NavigationPath()
   private(set) var sections: [DriveSection] = []
-  private(set) var summaryLine: String?
+  private(set) var recentDriveCount: Int = 0
+  private(set) var recentDistanceValue: String = "0.0"
+  private(set) var recentDistanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
   private(set) var isSelectMode: Bool = false
   private(set) var selectedDriveIDs: Set<UUID> = []
   private(set) var startDriveErrorMessage: String?
@@ -108,7 +110,7 @@ final class HomeViewModel {
   func update(with drives: [Drive]) {
     allDrives = drives
     sections = buildSections(from: filteredDrives)
-    summaryLine = buildSummaryLine(from: drives)
+    buildRecentStats(from: drives)
   }
 
   func applySearch(text: String) {
@@ -184,14 +186,14 @@ final class HomeViewModel {
     )
   }
 
-  private func buildSummaryLine(from drives: [Drive]) -> String? {
+  private func buildRecentStats(from drives: [Drive]) {
     let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
     let recent = drives.filter { $0.startedAt >= cutoff }
-    guard !recent.isEmpty else { return nil }
+    recentDriveCount = recent.count
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
-    let count = recent.count
-    let distance = Measurement(value: totalMetres, unit: UnitLength.meters).localizedDistanceString()
-    return String(localized: "\(count) drives · \(distance) in the last 30 days")
+    let measurement = Measurement(value: totalMetres, unit: UnitLength.meters)
+    recentDistanceValue = measurement.localizedDistanceValueString()
+    recentDistanceUnit = measurement.localizedDistanceUnitSymbol()
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {

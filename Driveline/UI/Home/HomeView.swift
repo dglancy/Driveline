@@ -98,16 +98,18 @@ struct HomeView: View {
           }
         }
 
-        if let summary = viewModel.summaryLine {
+        if viewModel.recentDriveCount > 0 && !viewModel.isSelectMode && searchText.isEmpty {
           Section {
-            Text(summary)
-              .font(.callout)
-              .foregroundStyle(.secondary)
-              .listRowBackground(Color.clear)
-              .frame(maxWidth: .infinity, alignment: .center)
-              .dynamicTypeSize(.large ... .xxLarge)
+            HomeStatsPanelView(
+              driveCount: viewModel.recentDriveCount,
+              distanceValue: viewModel.recentDistanceValue,
+              distanceUnit: viewModel.recentDistanceUnit
+            )
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
           }
-          .listSectionSpacing(0)
+          .listSectionSpacing(8)
         }
 
         ForEach(viewModel.sections) { section in

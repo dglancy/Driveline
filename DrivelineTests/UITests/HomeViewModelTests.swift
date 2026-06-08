@@ -142,58 +142,48 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     #expect(viewModel.sections[0].rows[1].drive.displayName == "Morning")
   }
 
-  // MARK: - Summary Line
+  // MARK: - Stats Panel
 
   @Test
-  func summaryLineIsNilWhenNoDrives() {
+  func recentDriveCountIsZeroWhenNoDrives() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [])
-    #expect(viewModel.summaryLine == nil)
+    #expect(viewModel.recentDriveCount == 0)
   }
 
   @Test
-  func summaryLineIsNilWhenAllDrivesOlderThan30Days() {
+  func recentDriveCountIsZeroWhenAllDrivesOlderThan30Days() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 31), makeDrive(daysAgo: 60)])
-    #expect(viewModel.summaryLine == nil)
+    #expect(viewModel.recentDriveCount == 0)
   }
 
   @Test
-  func summaryLineIncludesCountOfDrivesInWindow() {
+  func recentDriveCountReflectsOnlyDrivesWithinWindow() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [
       makeDrive(daysAgo: 0),
       makeDrive(daysAgo: 5),
       makeDrive(daysAgo: 31)
     ])
-    let summary = try! #require(viewModel.summaryLine)
-    #expect(summary.hasPrefix("2 drives"))
+    #expect(viewModel.recentDriveCount == 2)
   }
 
   @Test
-  func summaryLineUsesSingularForOneDrive() {
+  func recentDistanceUnitMatchesLocale() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
-    let summary = try! #require(viewModel.summaryLine)
-    #expect(summary.hasPrefix("1 drive"))
-  }
-
-  @Test
-  func summaryLineContainsLocalizedDistance() {
-    let viewModel = HomeViewModel()
-    viewModel.update(with: [makeDrive(daysAgo: 0)])
-    let summary = try! #require(viewModel.summaryLine)
     let expectedUnit = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
-    #expect(summary.contains("\(expectedUnit) in the last 30 days"))
+    #expect(viewModel.recentDistanceUnit == expectedUnit)
   }
 
   @Test
-  func summaryLineIsNilAfterUpdateWithNoRecentDrives() {
+  func recentStatsResetWhenUpdatedWithNoRecentDrives() {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
-    #expect(viewModel.summaryLine != nil)
+    #expect(viewModel.recentDriveCount == 1)
     viewModel.update(with: [makeDrive(daysAgo: 60)])
-    #expect(viewModel.summaryLine == nil)
+    #expect(viewModel.recentDriveCount == 0)
   }
 
   // MARK: - Update
