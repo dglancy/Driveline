@@ -68,24 +68,6 @@ final class DriveTests: SwiftDataBaseTestCase {
   }
 
 
-  // MARK: - activeDurationSeconds
-
-  @Test
-  func activeDurationWhenRecording() throws {
-    let drive = Drive(name: "Test", trigger: .automatic)
-    #expect(drive.activeDurationSeconds >= 0)
-    #expect(drive.activeDurationSeconds < 2)
-  }
-
-  @Test
-  func activeDurationUsesEndDateWhenFinished() throws {
-    let drive = Drive(name: "Test", trigger: .automatic)
-    drive.status = .finished
-    drive.endedAt = drive.startedAt.addingTimeInterval(600)
-
-    #expect(drive.activeDurationSeconds == 600)
-  }
-
   // MARK: - Persistence
 
   @Test
@@ -106,53 +88,6 @@ final class DriveTests: SwiftDataBaseTestCase {
     let fetched = try context!.fetch(FetchDescriptor<Drive>())
     #expect(fetched.count == 1)
     #expect(fetched[0].name == "Coastal Drive")
-  }
-
-  // MARK: - distanceMetres
-
-  @Test
-  func distanceMetresIsZeroWithNoPositions() throws {
-    let drive = Drive(name: "Test")
-    #expect(drive.distanceMetres == 0)
-  }
-
-  @Test
-  func distanceMetresIsZeroForSinglePosition() throws {
-    let drive = Drive(name: "Test")
-    context!.insert(drive)
-    let p = makePosition(latitude: 51.5, longitude: -0.1)
-    context!.insert(p)
-    drive.positions = (drive.positions ?? []) + [p]
-    #expect(drive.distanceMetres == 0)
-  }
-
-  @Test
-  func distanceMetresCalculatesBetweenTwoPoints() throws {
-    let drive = Drive(name: "Test")
-    context!.insert(drive)
-    // 0.1 degree latitude ≈ 11,132m
-    let p1 = makePosition(latitude: 0.0, longitude: 0.0)
-    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
-    context!.insert(p1)
-    context!.insert(p2)
-    drive.positions = [p1, p2]
-    #expect(drive.distanceMetres > 11_000)
-    #expect(drive.distanceMetres < 11_500)
-  }
-
-  @Test
-  func distanceMetresSortsPositionsByTimestamp() throws {
-    let drive = Drive(name: "Test")
-    context!.insert(drive)
-    let t1 = Date.now
-    let t2 = t1.addingTimeInterval(60)
-    let p1 = makePosition(latitude: 0.0, longitude: 0.0, timestamp: t1)
-    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: t2)
-    context!.insert(p1)
-    context!.insert(p2)
-    drive.positions = [p2, p1]
-    #expect(drive.distanceMetres > 11_000)
-    #expect(drive.distanceMetres < 11_500)
   }
 
   // MARK: - Persistence
@@ -182,74 +117,6 @@ final class DriveTests: SwiftDataBaseTestCase {
 
     #expect(try context!.fetch(FetchDescriptor<Drive>()).isEmpty)
     #expect(try context!.fetch(FetchDescriptor<Position>()).isEmpty)
-  }
-
-  // MARK: - maxSpeedMetresPerSecond
-
-  @Test
-  func maxSpeedIsZeroWithNilPositions() {
-    let drive = Drive(name: "Test")
-    #expect(drive.maxSpeedMetresPerSecond == 0)
-  }
-
-  @Test
-  func maxSpeedIsZeroWithEmptyPositions() {
-    let drive = Drive(name: "Test")
-    drive.positions = []
-    #expect(drive.maxSpeedMetresPerSecond == 0)
-  }
-
-  @Test
-  func maxSpeedReturnsFastestPositionSpeed() {
-    let drive = Drive(name: "Test")
-    let slow = Position(latitude: 0, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: 20, speedAccuracy: 1)
-    let fast = Position(latitude: 0, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: 50, speedAccuracy: 1)
-    let medium = Position(latitude: 0, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: 35, speedAccuracy: 1)
-    drive.positions = [slow, fast, medium]
-    #expect(drive.maxSpeedMetresPerSecond == 50)
-  }
-
-  @Test
-  func maxSpeedExcludesNegativeSpeeds() {
-    let drive = Drive(name: "Test")
-    let valid = Position(latitude: 0, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: 25, speedAccuracy: 1)
-    let unavailable = Position(latitude: 0, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: -1, speedAccuracy: 0)
-    drive.positions = [valid, unavailable]
-    #expect(drive.maxSpeedMetresPerSecond == 25)
-  }
-
-  @Test
-  func maxSpeedIsZeroWhenAllSpeedsAreNegative() {
-    let drive = Drive(name: "Test")
-    let unavailable = Position(latitude: 0, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: -1, speedAccuracy: 0)
-    drive.positions = [unavailable]
-    #expect(drive.maxSpeedMetresPerSecond == 0)
-  }
-
-  // MARK: - avgSpeedMetresPerSecond
-
-  @Test
-  func avgSpeedIsZeroWhenDurationIsZero() {
-    let drive = Drive(name: "Test")
-    drive.startedAt = Date(timeIntervalSinceReferenceDate: 0)
-    drive.endedAt = Date(timeIntervalSinceReferenceDate: 0)
-    #expect(drive.avgSpeedMetresPerSecond == 0)
-  }
-
-  @Test
-  func avgSpeedIsPositiveWhenDriveHasDistanceAndDuration() throws {
-    let drive = Drive(name: "Test")
-    context!.insert(drive)
-    let t1 = Date(timeIntervalSinceReferenceDate: 0)
-    let t2 = t1.addingTimeInterval(60)
-    let p1 = makePosition(latitude: 0.0, longitude: 0.0, timestamp: t1)
-    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: t2)
-    context!.insert(p1)
-    context!.insert(p2)
-    drive.positions = [p1, p2]
-    drive.startedAt = t1
-    drive.endedAt = t2
-    #expect(drive.avgSpeedMetresPerSecond > 0)
   }
 
   // MARK: - positionLocationCoordinatesIn2D

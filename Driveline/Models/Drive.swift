@@ -83,30 +83,6 @@ final class Drive {
     orderedPositions.map(\.location.coordinate)
   }
 
-  var distanceMetres: Double {
-    let sorted = orderedPositions
-    return zip(sorted, sorted.dropFirst()).reduce(0.0) { total, pair in
-      let from = CLLocation(latitude: pair.0.latitude, longitude: pair.0.longitude)
-      let to = CLLocation(latitude: pair.1.latitude, longitude: pair.1.longitude)
-      return total + from.distance(from: to)
-    }
-  }
-
-  var activeDurationSeconds: Double {
-    max(0, (endedAt ?? .now).timeIntervalSince(startedAt))
-  }
-
-  var avgSpeedMetresPerSecond: CLLocationSpeed {
-    guard activeDurationSeconds > 0 else { return 0 }
-    return distanceMetres / activeDurationSeconds
-  }
-
-  var maxSpeedMetresPerSecond: CLLocationSpeed {
-    guard let positions else { return 0 }
-    let speeds = positions.compactMap { $0.speed >= 0 ? $0.speed : nil }
-    return speeds.max() ?? 0
-  }
-
   // MARK: - Lifecycle
 
   init(name: String? = nil, trigger: RecordingTrigger = .manual) {
