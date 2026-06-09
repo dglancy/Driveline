@@ -165,72 +165,85 @@ struct HomeView: View {
   }
 
   // MARK: - Toolbar
+
   @ToolbarContentBuilder
   private var toolbarItems: some ToolbarContent {
+    cancelToolbarItem
+
+    if !viewModel.isSelectMode {
+      overflowMenuItem
+      DefaultToolbarItem(kind: .search, placement: .bottomBar)
+      ToolbarSpacer(.fixed, placement: .bottomBar)
+      recordButtonItem
+    }
+  }
+
+  @ToolbarContentBuilder
+  private var cancelToolbarItem: some ToolbarContent {
     ToolbarItem(placement: .topBarLeading) {
       if viewModel.isSelectMode {
         Button.cancel { viewModel.exitSelectMode() }
       }
     }
+  }
 
-    if !viewModel.isSelectMode {
-      ToolbarItem(placement: .topBarTrailing) {
-        Menu {
-          Button(
-            String(localized: "Select Drives", comment: "Menu item to enter multiselect mode"),
-            systemImage: "checkmark.circle"
-          ) {
-            viewModel.enterSelectMode()
-          }
-          .disabled(driveService.isRecording || viewModel.sections.isEmpty)
-
-          Button(
-            String(localized: "Settings", comment: "Menu item to open settings"),
-            systemImage: "gear"
-          ) {
-            if let url = URL(string: UIApplication.openSettingsURLString) {
-              openURL(url)
-            }
-          }
-        } label: {
-          Image(systemName: "ellipsis")
+  @ToolbarContentBuilder
+  private var overflowMenuItem: some ToolbarContent {
+    ToolbarItem(placement: .topBarTrailing) {
+      Menu {
+        Button(
+          String(localized: "Select Drives", comment: "Menu item to enter multiselect mode"),
+          systemImage: "checkmark.circle"
+        ) {
+          viewModel.enterSelectMode()
         }
-        .accessibilityLabel(String(localized: "More options", comment: "Ellipsis menu accessibility label"))
+        .disabled(driveService.isRecording || viewModel.sections.isEmpty)
+
+        Button(
+          String(localized: "Settings", comment: "Menu item to open settings"),
+          systemImage: "gear"
+        ) {
+          if let url = URL(string: UIApplication.openSettingsURLString) {
+            openURL(url)
+          }
+        }
+      } label: {
+        Image(systemName: "ellipsis")
       }
+      .accessibilityLabel(String(localized: "More options", comment: "Ellipsis menu accessibility label"))
+    }
+  }
 
-      DefaultToolbarItem(kind: .search, placement: .bottomBar)
-
-      ToolbarSpacer(.fixed, placement: .bottomBar)
-
-      ToolbarItem(placement: .bottomBar) {
-        Button {
+  @ToolbarContentBuilder
+  private var recordButtonItem: some ToolbarContent {
+    ToolbarItem(placement: .bottomBar) {
+      Button {
+        if driveService.isRecording {
+          viewModel.showingRecordingScreen = true
+        } else {
+          viewModel.startDrive(using: driveService)
+        }
+      } label: {
+        ZStack {
+          Circle().fill(Color(.systemFill))
           if driveService.isRecording {
-            viewModel.showingRecordingScreen = true
+            RoundedRectangle(cornerRadius: 3)
+              .fill(.black)
+              .frame(width: 11, height: 11)
           } else {
-            viewModel.startDrive(using: driveService)
+            Image(systemName: Icons.Selection.record)
+              .font(.title2)
+              .foregroundStyle(.black)
           }
-        } label: {
-          ZStack {
-            Circle().fill(Color(.systemFill))
-            if driveService.isRecording {
-              RoundedRectangle(cornerRadius: 3)
-                .fill(.black)
-                .frame(width: 11, height: 11)
-            } else {
-              Image(systemName: Icons.Selection.record)
-                .font(.title2)
-                .foregroundStyle(.black)
-            }
-          }
-          .frame(width: 36, height: 36)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(
-          driveService.isRecording
-          ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
-          : String(localized: "Start a new drive", comment: "Record button when idle")
-        )
+        .frame(width: 36, height: 36)
       }
+      .buttonStyle(.plain)
+      .accessibilityLabel(
+        driveService.isRecording
+        ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
+        : String(localized: "Start a new drive", comment: "Record button when idle")
+      )
     }
   }
 }
