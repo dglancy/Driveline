@@ -72,8 +72,6 @@ final class Drive {
     }
   }
 
-  var isRecording: Bool { status != .finished }
-
   var orderedPositions: [Position] {
     guard let positions else { return [] }
     return positions.sorted(by: { $0.timestamp < $1.timestamp })

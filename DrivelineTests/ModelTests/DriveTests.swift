@@ -26,7 +26,6 @@ final class DriveTests: SwiftDataBaseTestCase {
     #expect(drive.endedAt == nil)
     #expect(drive.startPlaceName == nil)
     #expect(drive.endPlaceName == nil)
-    #expect(drive.isRecording == true)
     #expect(drive.positions == nil || drive.positions!.isEmpty)
   }
 

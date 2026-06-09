@@ -19,7 +19,7 @@ final class DriveRecordingService {
 
   private(set) var drive: Drive?
 
-  var isRecording: Bool { drive?.isRecording ?? false }
+  var isRecording: Bool { drive?.status == .recording }
 
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let locationService: LocationService

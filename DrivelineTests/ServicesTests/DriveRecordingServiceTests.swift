@@ -24,7 +24,6 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     try service.startDrive()
 
     #expect(service.drive != nil)
-    #expect(service.drive!.isRecording == true)
     #expect(locationService.status == .started)
     #expect(recorder.drive != nil)
   }
@@ -77,7 +76,6 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     service.finishDrive()
 
     #expect(locationService.status == .stopped)
-    #expect(startedDrive.isRecording == false)
     #expect(startedDrive.endedAt != nil)
     #expect(recorder.drive == nil)
 
