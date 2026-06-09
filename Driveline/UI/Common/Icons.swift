@@ -44,7 +44,7 @@ enum Icons {
   enum Selection {
     static let selected = "checkmark.circle.fill"
     static let deselected = "circle"
-    static let recordingActive = "circle.inset.filled"
+    static let record = "record.circle"
   }
 
   enum Merging {

@@ -173,36 +173,8 @@ struct HomeView: View {
       }
     }
 
-    ToolbarItemGroup(placement: .topBarTrailing) {
-      if !viewModel.isSelectMode {
-        Button {
-          if driveService.isRecording {
-            viewModel.showingRecordingScreen = true
-          } else {
-            viewModel.startDrive(using: driveService)
-          }
-        } label: {
-          ZStack {
-            Circle().fill(Color(.systemFill))
-            if driveService.isRecording {
-              RoundedRectangle(cornerRadius: 3)
-                .fill(.red)
-                .frame(width: 11, height: 11)
-            } else {
-              Image(systemName: Icons.Selection.recordingActive)
-                .font(.title2)
-                .foregroundStyle(.red)
-            }
-          }
-          .frame(width: 36, height: 36)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(
-          driveService.isRecording
-          ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
-          : String(localized: "Start a new drive", comment: "Record button when idle")
-        )
-
+    if !viewModel.isSelectMode {
+      ToolbarItem(placement: .topBarTrailing) {
         Menu {
           Button(
             String(localized: "Select Drives", comment: "Menu item to enter multiselect mode"),
@@ -224,6 +196,40 @@ struct HomeView: View {
           Image(systemName: "ellipsis")
         }
         .accessibilityLabel(String(localized: "More options", comment: "Ellipsis menu accessibility label"))
+      }
+
+      DefaultToolbarItem(kind: .search, placement: .bottomBar)
+
+      ToolbarSpacer(.fixed, placement: .bottomBar)
+
+      ToolbarItem(placement: .bottomBar) {
+        Button {
+          if driveService.isRecording {
+            viewModel.showingRecordingScreen = true
+          } else {
+            viewModel.startDrive(using: driveService)
+          }
+        } label: {
+          ZStack {
+            Circle().fill(Color(.systemFill))
+            if driveService.isRecording {
+              RoundedRectangle(cornerRadius: 3)
+                .fill(.black)
+                .frame(width: 11, height: 11)
+            } else {
+              Image(systemName: Icons.Selection.record)
+                .font(.title2)
+                .foregroundStyle(.black)
+            }
+          }
+          .frame(width: 36, height: 36)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(
+          driveService.isRecording
+          ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
+          : String(localized: "Start a new drive", comment: "Record button when idle")
+        )
       }
     }
   }
