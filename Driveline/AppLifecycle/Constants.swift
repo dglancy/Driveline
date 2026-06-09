@@ -29,6 +29,7 @@ enum Constants {
     nonisolated static let highSpeedMetresPerSecond: CLLocationSpeed = 80 / 3.6
     nonisolated static let stoppedSpeedMetresPerSecond: CLLocationSpeed = 5 / 3.6
     nonisolated static let sustainedMinimumSeconds: TimeInterval = 10
+    nonisolated static let metresPerSecondToKilometresPerHour = 3.6
   }
 
   enum Testing {

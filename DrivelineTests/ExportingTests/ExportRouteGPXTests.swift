@@ -161,7 +161,139 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
     #expect(FileManager.default.fileExists(atPath: secondURL.path))
   }
 
+  // MARK: - Namespaces & extensions
+
+  @Test
+  func gpxFileDeclaresCustomNamespaces() async throws {
+    let drive = driveWithOnePosition()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("xmlns:drv=\"https://www.targatrips.com/gpx/v1\""))
+    #expect(content.contains("xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\""))
+  }
+
+  @Test
+  func gpxFileWritesPerPointSpeedInGpxtpxNamespace() async throws {
+    let drive = driveWithOnePosition()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<gpxtpx:TrackPointExtension>"))
+    #expect(content.contains("<gpxtpx:speed>"))
+    #expect(!content.contains("<extensions><speed>"))
+  }
+
+  // MARK: - Statistics block
+
+  @Test
+  func gpxFileContainsStatsBlock() async throws {
+    let drive = driveWithMultiplePositions()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<drv:stats>"))
+    #expect(content.contains("</drv:stats>"))
+  }
+
+  @Test
+  func gpxFileContainsAllStatElements() async throws {
+    let drive = driveWithMultiplePositions()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    let expectedElements = [
+      "drv:distanceMetres",
+      "drv:averageSpeedKmh",
+      "drv:meanSpeedKmh",
+      "drv:speedStandardDeviationKmh",
+      "drv:speedVarianceKmh2",
+      "drv:percentTimeAbove80Kmh",
+      "drv:sustainedHighSpeedSegmentCount",
+      "drv:stopCount",
+      "drv:percentTimeStopped",
+      "drv:sinuosity",
+      "drv:bearingChangeRateDegreesPerKilometre",
+      "drv:elevationGainMetres",
+      "drv:elevationLossMetres"
+    ]
+    for element in expectedElements {
+      #expect(content.contains("<\(element)>"), "Missing stat element <\(element)>")
+    }
+  }
+
+  @Test
+  func gpxStatsUseLocaleIndependentDecimalSeparator() async throws {
+    let drive = driveWithMultiplePositions()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<drv:sinuosity>"))
+    #expect(!content.contains(","), "Numeric values must not use comma decimal/grouping separators")
+  }
+
+  // MARK: - XML escaping
+
+  @Test
+  func gpxFileEscapesSpecialCharactersInName() async throws {
+    let drive = Drive(name: "Cork & Dublin <fast>")
+    let position = Position(
+      latitude: 51.5,
+      longitude: -0.1,
+      altitude: 10,
+      horizontalAccuracy: 5,
+      verticalAccuracy: 3,
+      course: 0,
+      courseAccuracy: 5,
+      speed: 10,
+      speedAccuracy: 1
+    )
+    drive.positions = (drive.positions ?? []) + [position]
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(!content.contains("Cork & Dublin <fast>"))
+    #expect(content.contains("Cork &amp; Dublin &lt;fast&gt;"))
+
+    let parser = XMLParser(data: Data(content.utf8))
+    #expect(parser.parse(), "Escaped output must be well-formed XML")
+  }
+
   // MARK: - Helpers
+
+  private func driveWithMultiplePositions() -> Drive {
+    let drive = Drive(name: "Stats Drive")
+    let base = Date(timeIntervalSinceReferenceDate: 0)
+    for i in 0..<5 {
+      let position = Position(
+        timestamp: base.addingTimeInterval(Double(i) * 10),
+        latitude: 51.5 + Double(i) * 0.001,
+        longitude: -0.1 + Double(i) * 0.001,
+        altitude: 10 + Double(i),
+        horizontalAccuracy: 5,
+        verticalAccuracy: 3,
+        course: Double(i) * 10,
+        courseAccuracy: 5,
+        speed: Double(i) * 8,
+        speedAccuracy: 1
+      )
+      drive.positions = (drive.positions ?? []) + [position]
+    }
+    drive.endedAt = base.addingTimeInterval(40)
+    return drive
+  }
 
   private func driveWithOnePosition() -> Drive {
     let drive = Drive(name: "Test Drive")
