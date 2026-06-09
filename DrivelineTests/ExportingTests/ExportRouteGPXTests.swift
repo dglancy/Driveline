@@ -242,6 +242,83 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
     #expect(!content.contains(","), "Numeric values must not use comma decimal/grouping separators")
   }
 
+  // MARK: - Weather block
+
+  @Test
+  func gpxFileContainsWeatherBlock() async throws {
+    let drive = driveWithMultiplePositions()
+    attachWeather(
+      to: drive,
+      departureDescription: "Partly Cloudy",
+      departureTemperatureCelsius: 14.5,
+      arrivalDescription: "Clear",
+      arrivalTemperatureCelsius: 16.2
+    )
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<drv:weather>"))
+    #expect(content.contains("</drv:weather>"))
+    #expect(content.contains("<drv:departure>"))
+    #expect(content.contains("<drv:arrival>"))
+    #expect(content.contains("<drv:description>Partly Cloudy</drv:description>"))
+    #expect(content.contains("<drv:description>Clear</drv:description>"))
+    #expect(content.contains("<drv:temperatureCelsius>14.5</drv:temperatureCelsius>"))
+    #expect(content.contains("<drv:temperatureCelsius>16.2</drv:temperatureCelsius>"))
+  }
+
+  @Test
+  func gpxFileOmitsWeatherBlockWhenNoWeatherData() async throws {
+    let drive = driveWithMultiplePositions()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(!content.contains("<drv:weather>"))
+  }
+
+  @Test
+  func gpxWeatherBlockEscapesDescription() async throws {
+    let drive = driveWithMultiplePositions()
+    attachWeather(
+      to: drive,
+      departureDescription: "Rain & <Wind>",
+      departureTemperatureCelsius: 10,
+      arrivalDescription: "Sun",
+      arrivalTemperatureCelsius: 12
+    )
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<drv:description>Rain &amp; &lt;Wind&gt;</drv:description>"))
+
+    let parser = XMLParser(data: Data(content.utf8))
+    #expect(parser.parse(), "Escaped output must be well-formed XML")
+  }
+
+  @Test
+  func gpxWeatherTemperatureUsesLocaleIndependentDecimalSeparator() async throws {
+    let drive = driveWithMultiplePositions()
+    attachWeather(
+      to: drive,
+      departureDescription: "Cloudy",
+      departureTemperatureCelsius: 1234.5,
+      arrivalDescription: "Cloudy",
+      arrivalTemperatureCelsius: 1234.5
+    )
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<drv:temperatureCelsius>1234.5</drv:temperatureCelsius>"))
+  }
+
   // MARK: - XML escaping
 
   @Test
@@ -293,6 +370,28 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
     }
     drive.endedAt = base.addingTimeInterval(40)
     return drive
+  }
+
+  private func attachWeather(
+    to drive: Drive,
+    departureDescription: String,
+    departureTemperatureCelsius: Double,
+    arrivalDescription: String,
+    arrivalTemperatureCelsius: Double
+  ) {
+    let startWeather = Weather(
+      temperatureCelsius: departureTemperatureCelsius,
+      conditionDescription: departureDescription,
+      symbolName: "cloud",
+      type: .start
+    )
+    let endWeather = Weather(
+      temperatureCelsius: arrivalTemperatureCelsius,
+      conditionDescription: arrivalDescription,
+      symbolName: "sun.max",
+      type: .end
+    )
+    drive.weatherReadings = (drive.weatherReadings ?? []) + [startWeather, endWeather]
   }
 
   private func driveWithOnePosition() -> Drive {

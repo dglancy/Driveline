@@ -51,7 +51,7 @@ final class ExportDriveGPX: ExportingDrive {
     <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:drv="https://www.targatrips.com/gpx/v1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" version="1.1" creator="\(Constants.App.GPXCreator)">
       <trk>
         <name>\(xmlEscaped(title))</name>
-    \(statsExtensionXML(for: drive))
+    \(extensionsXML(for: drive))
         <trkseg>
     \(trkpts)
         </trkseg>
@@ -60,8 +60,9 @@ final class ExportDriveGPX: ExportingDrive {
     """
   }
 
-  private func statsExtensionXML(for drive: Drive) -> String {
+  private func extensionsXML(for drive: Drive) -> String {
     let kmh = Constants.Statistics.metresPerSecondToKilometresPerHour
+    let weatherXML = weatherExtensionXML(for: drive)
     return """
           <extensions>
             <drv:stats>
@@ -78,8 +79,31 @@ final class ExportDriveGPX: ExportingDrive {
               <drv:bearingChangeRateDegreesPerKilometre>\(number(drive.bearingChangeRateDegreesPerKilometre))</drv:bearingChangeRateDegreesPerKilometre>
               <drv:elevationGainMetres>\(number(drive.elevationGainMetres))</drv:elevationGainMetres>
               <drv:elevationLossMetres>\(number(drive.elevationLossMetres))</drv:elevationLossMetres>
-            </drv:stats>
+            </drv:stats>\(weatherXML)
           </extensions>
+    """
+  }
+
+  private func weatherExtensionXML(for drive: Drive) -> String {
+    guard drive.startWeather != nil || drive.endWeather != nil else { return "" }
+
+    var lines = ["", "        <drv:weather>"]
+    if let startWeather = drive.startWeather {
+      lines.append(weatherEntryXML(tag: "drv:departure", weather: startWeather))
+    }
+    if let endWeather = drive.endWeather {
+      lines.append(weatherEntryXML(tag: "drv:arrival", weather: endWeather))
+    }
+    lines.append("        </drv:weather>")
+    return lines.joined(separator: "\n")
+  }
+
+  private func weatherEntryXML(tag: String, weather: Weather) -> String {
+    """
+            <\(tag)>
+              <drv:description>\(xmlEscaped(weather.conditionDescription))</drv:description>
+              <drv:temperatureCelsius>\(number(weather.temperatureCelsius))</drv:temperatureCelsius>
+            </\(tag)>
     """
   }
 
