@@ -228,12 +228,12 @@ struct HomeView: View {
           Circle().fill(Color(.systemFill))
           if driveService.isRecording {
             RoundedRectangle(cornerRadius: 3)
-              .fill(.black)
+              .fill(.primary)
               .frame(width: 11, height: 11)
           } else {
             Image(systemName: Icons.Selection.record)
               .font(.title2)
-              .foregroundStyle(.black)
+              .foregroundStyle(.primary)
           }
         }
         .frame(width: 36, height: 36)
