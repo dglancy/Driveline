@@ -54,10 +54,6 @@ struct Driveline: App {
             break
           }
         }
-        .onOpenURL { url in
-          guard url.scheme == "driveline", url.host == "finish" else { return }
-          driveService.finishDrive()
-        }
     }
     .modelContainer(modelContainer)
   }
