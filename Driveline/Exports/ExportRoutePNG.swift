@@ -47,15 +47,7 @@ final class ExportDrivePNG: ExportingDrive {
       throw ExportError.pngDataPreparationFailure
     }
 
-    let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: .png)
-
-    do {
-      try pngData.write(to: fileURL, options: [.atomic, .completeFileProtection])
-      return fileURL
-    } catch {
-      Log.ui.error("Failed to write PNG for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
-      throw ExportError.pngFileWriteFailure
-    }
+    return try write(pngData, for: drive, type: .png)
   }
 
   // MARK: - Private functions

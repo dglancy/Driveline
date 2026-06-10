@@ -64,3 +64,4 @@ Every screen-level View **must** have a paired ViewModel:
 
 ### Xcode
 - The project uses Xcode's File System Synchronized Groups — new files are picked up automatically.
+- There is no need to report on stale sourceKit indexer noise.

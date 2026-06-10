@@ -18,14 +18,12 @@ final class ExportDriveGPX: ExportingDrive {
     guard !positions.isEmpty else { throw ExportError.emptyDrive }
 
     let xml = xmlString(title: drive.displayName, positions: positions, drive: drive)
-    let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
 
     guard let data = xml.data(using: .utf8) else {
       throw ExportError.gpxEncodingFailed
     }
 
-    try data.write(to: fileURL, options: [.atomic, .completeFileProtection])
-    return fileURL
+    return try write(data, for: drive, type: .gpx)
   }
 
   // MARK: - Private

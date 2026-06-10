@@ -1635,8 +1635,12 @@
         }
       }
     },
+    "Failed to save export. Please try again." : {
+      "comment" : "Export error: writing export file to disk failed"
+    },
     "Failed to save PNG. Please try again." : {
       "comment" : "Export error: writing PNG file to disk failed",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

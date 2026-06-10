@@ -32,7 +32,7 @@ final class ExportDrivePNGTests: SwiftDataBaseTestCase {
 
   @Test
   func fileWriteFailureHasUserFacingDescription() {
-    let error = ExportError.pngFileWriteFailure
+    let error = ExportError.fileWriteFailure
     #expect(error.errorDescription != nil)
     #expect(error.errorDescription?.isEmpty == false)
   }

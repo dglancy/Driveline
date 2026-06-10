@@ -22,6 +22,17 @@ extension ExportingDrive {
     guard !coords.isEmpty else { throw ExportError.emptyDrive }
     return coords
   }
+
+  func write(_ data: Data, for drive: Drive, type: ExportFileType) throws -> URL {
+    let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: type)
+    do {
+      try data.write(to: fileURL, options: [.atomic, .completeFileProtection])
+      return fileURL
+    } catch {
+      Log.ui.error("Failed to write \(type.fileExtension) export for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
+      throw ExportError.fileWriteFailure
+    }
+  }
 }
 
 // MARK: - Export error enum
@@ -31,7 +42,7 @@ enum ExportError: LocalizedError, Equatable {
   case gpxEncodingFailed
   case pngSnapshotFailure
   case pngDataPreparationFailure
-  case pngFileWriteFailure
+  case fileWriteFailure
 
   var errorDescription: String? {
     switch self {
@@ -43,8 +54,8 @@ enum ExportError: LocalizedError, Equatable {
       return String(localized: "Failed to create PNG. Please try again.", comment: "Export error: map snapshot failed")
     case .pngDataPreparationFailure:
       return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
-    case .pngFileWriteFailure:
-      return String(localized: "Failed to save PNG. Please try again.", comment: "Export error: writing PNG file to disk failed")
+    case .fileWriteFailure:
+      return String(localized: "Failed to save export. Please try again.", comment: "Export error: writing export file to disk failed")
     }
   }
 }
