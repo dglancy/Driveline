@@ -790,6 +790,9 @@
         }
       }
     },
+    "Clear text" : {
+      "comment" : "Accessibility label for button that clears a text field"
+    },
     "Combined Result" : {
       "comment" : "Merge combined result section header",
       "localizations" : {
@@ -3002,6 +3005,9 @@
           }
         }
       }
+    },
+    "Swap order" : {
+      "comment" : "Accessibility label for button that swaps the order of the two drives being merged"
     },
     "Tap to view" : {
       "localizations" : {

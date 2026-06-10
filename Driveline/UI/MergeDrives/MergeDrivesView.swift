@@ -87,6 +87,7 @@ struct MergeDrivesView: View {
         .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
     }
     .buttonStyle(.plain)
+    .accessibilityLabel(String(localized: "Swap order", comment: "Accessibility label for button that swaps the order of the two drives being merged"))
   }
 
   private var nameSection: some View {

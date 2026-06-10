@@ -31,6 +31,7 @@ private struct ClearableTextFieldModifier: ViewModifier {
               .foregroundStyle(.secondary)
           }
           .buttonStyle(.plain)
+          .accessibilityLabel(String(localized: "Clear text", comment: "Accessibility label for button that clears a text field"))
         }
       }
   }
