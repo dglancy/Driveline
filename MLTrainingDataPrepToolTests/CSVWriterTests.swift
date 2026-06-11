@@ -56,6 +56,15 @@ struct CSVWriterTests {
   }
 
   @Test
+  func escapesNameContainingNewline() {
+    let statistics = sampleStatistics(name: "Multi\nLine")
+
+    let row = CSVWriter.row(for: statistics)
+
+    #expect(row.hasPrefix("\"Multi\nLine\","))
+  }
+
+  @Test
   func doesNotEscapeNameWithoutSpecialCharacters() {
     let statistics = sampleStatistics(name: "Simple Drive")
 

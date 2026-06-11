@@ -55,6 +55,51 @@ struct MLTrainingDataPrepToolTests {
     }
   }
 
+  @Test
+  func throwsWhenNoGPXFilesFound() throws {
+    let inputDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: inputDirectory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: inputDirectory) }
+
+    let outputCSV = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).csv")
+
+    let command = try MLTrainingDataPrepTool.parse([inputDirectory.path, outputCSV.path])
+
+    #expect(throws: MLTrainingDataPrepToolError.noGPXFilesFound(inputDirectory.path)) {
+      try command.run()
+    }
+  }
+
+  @Test
+  func skipsFilesThatFailToParseAndContinuesWithRemaining() throws {
+    let inputDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: inputDirectory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: inputDirectory) }
+
+    try "not xml".write(
+      to: inputDirectory.appendingPathComponent("a.gpx"),
+      atomically: true,
+      encoding: .utf8
+    )
+    try Self.gpx(name: "Drive Two").write(
+      to: inputDirectory.appendingPathComponent("b.gpx"),
+      atomically: true,
+      encoding: .utf8
+    )
+
+    let outputCSV = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).csv")
+    defer { try? FileManager.default.removeItem(at: outputCSV) }
+
+    let command = try MLTrainingDataPrepTool.parse([inputDirectory.path, outputCSV.path])
+    try command.run()
+
+    let content = try String(contentsOf: outputCSV, encoding: .utf8)
+    let lines = content.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    #expect(lines[0] == CSVWriter.header)
+    #expect(lines[1].hasPrefix("Drive Two,"))
+    #expect(lines.count == 3) // header + 1 row + trailing empty
+  }
+
   // MARK: - Fixtures
 
   private static func gpx(name: String) -> String {

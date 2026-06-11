@@ -51,6 +51,20 @@ struct GPXStatisticsParserTests {
   }
 
   @Test
+  func throwsMissingFieldForMissingDoubleField() {
+    #expect(throws: GPXParsingError.missingField("drv:distanceMetres")) {
+      try GPXStatisticsParser().parse(data: Data(Self.gpxMissingDistance.utf8))
+    }
+  }
+
+  @Test
+  func throwsMissingFieldForMissingIntField() {
+    #expect(throws: GPXParsingError.missingField("drv:durationSeconds")) {
+      try GPXStatisticsParser().parse(data: Data(Self.gpxMissingDuration.utf8))
+    }
+  }
+
+  @Test
   func errorDescriptionsAreUserFacing() {
     #expect(GPXParsingError.malformedXML.errorDescription?.isEmpty == false)
     #expect(GPXParsingError.missingStatsBlock.errorDescription?.isEmpty == false)
@@ -85,6 +99,70 @@ struct GPXStatisticsParserTests {
       <trkseg>
         <trkpt lat="53.375883400000006" lon="-6.332005999999999">
           <ele>50.8</ele>
+          <time>2026-06-11T12:01:55Z</time>
+        </trkpt>
+      </trkseg>
+    </trk>
+  </gpx>
+  """
+
+  private static let gpxMissingDistance = """
+  <?xml version="1.0" encoding="UTF-8"?>
+  <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:drv="https://www.targatrips.com/gpx/v1" version="1.1" creator="Driveline for iOS">
+    <trk>
+      <name>Missing Distance</name>
+      <extensions>
+        <drv:stats>
+          <drv:durationSeconds>1800</drv:durationSeconds>
+          <drv:averageSpeedKmh>7.9</drv:averageSpeedKmh>
+          <drv:meanSpeedKmh>9.3</drv:meanSpeedKmh>
+          <drv:speedStandardDeviationKmh>15.9</drv:speedStandardDeviationKmh>
+          <drv:speedVarianceKmh2>253.4</drv:speedVarianceKmh2>
+          <drv:percentTimeAbove80Kmh>0.0</drv:percentTimeAbove80Kmh>
+          <drv:sustainedHighSpeedSegmentCount>0</drv:sustainedHighSpeedSegmentCount>
+          <drv:stopCount>18</drv:stopCount>
+          <drv:percentTimeStopped>56.7</drv:percentTimeStopped>
+          <drv:sinuosity>268.980</drv:sinuosity>
+          <drv:bearingChangeRateDegreesPerKilometre>3853.8</drv:bearingChangeRateDegreesPerKilometre>
+          <drv:elevationGainMetres>194.7</drv:elevationGainMetres>
+          <drv:elevationLossMetres>205.1</drv:elevationLossMetres>
+        </drv:stats>
+      </extensions>
+      <trkseg>
+        <trkpt lat="53.0" lon="-6.0">
+          <ele>10.0</ele>
+          <time>2026-06-11T12:01:55Z</time>
+        </trkpt>
+      </trkseg>
+    </trk>
+  </gpx>
+  """
+
+  private static let gpxMissingDuration = """
+  <?xml version="1.0" encoding="UTF-8"?>
+  <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:drv="https://www.targatrips.com/gpx/v1" version="1.1" creator="Driveline for iOS">
+    <trk>
+      <name>Missing Duration</name>
+      <extensions>
+        <drv:stats>
+          <drv:distanceMetres>11917.1</drv:distanceMetres>
+          <drv:averageSpeedKmh>7.9</drv:averageSpeedKmh>
+          <drv:meanSpeedKmh>9.3</drv:meanSpeedKmh>
+          <drv:speedStandardDeviationKmh>15.9</drv:speedStandardDeviationKmh>
+          <drv:speedVarianceKmh2>253.4</drv:speedVarianceKmh2>
+          <drv:percentTimeAbove80Kmh>0.0</drv:percentTimeAbove80Kmh>
+          <drv:sustainedHighSpeedSegmentCount>0</drv:sustainedHighSpeedSegmentCount>
+          <drv:stopCount>18</drv:stopCount>
+          <drv:percentTimeStopped>56.7</drv:percentTimeStopped>
+          <drv:sinuosity>268.980</drv:sinuosity>
+          <drv:bearingChangeRateDegreesPerKilometre>3853.8</drv:bearingChangeRateDegreesPerKilometre>
+          <drv:elevationGainMetres>194.7</drv:elevationGainMetres>
+          <drv:elevationLossMetres>205.1</drv:elevationLossMetres>
+        </drv:stats>
+      </extensions>
+      <trkseg>
+        <trkpt lat="53.0" lon="-6.0">
+          <ele>10.0</ele>
           <time>2026-06-11T12:01:55Z</time>
         </trkpt>
       </trkseg>
