@@ -43,9 +43,14 @@ final class HomeViewModel {
   @ObservationIgnored private let modelContext: ModelContext
   @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService
   @ObservationIgnored private var drives: [Drive] = []
-  @ObservationIgnored private var currentSearchText: String = ""
 
   var navigationPath: NavigationPath = NavigationPath()
+  var searchText: String = "" {
+    didSet {
+      guard searchText != oldValue else { return }
+      sections = buildSections(from: filteredDrives)
+    }
+  }
   private(set) var sections: [DriveSection] = []
   private(set) var statsScope: StatsScope = .last30Days
   private(set) var recentStats: DriveStats = DriveStats()
@@ -77,6 +82,8 @@ final class HomeViewModel {
       ? String(localized: "last 30 days", comment: "Stats scope label for recent period")
       : String(localized: "all time", comment: "Stats scope label for all drives")
   }
+
+  var isSearchActive: Bool { !searchText.isEmpty }
 
   var canMerge: Bool { selectedDriveIDs.count == 2 }
   var canDelete: Bool { !selectedDriveIDs.isEmpty }
@@ -146,11 +153,6 @@ final class HomeViewModel {
     buildStats(from: drives)
   }
 
-  func applySearch(text: String) {
-    currentSearchText = text
-    sections = buildSections(from: filteredDrives)
-  }
-
   func deleteDrives(_ drives: [Drive]) {
     DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete(drives)
   }
@@ -168,8 +170,8 @@ final class HomeViewModel {
   private var activeStats: DriveStats { statsScope == .last30Days ? recentStats : allTimeStats }
 
   private var filteredDrives: [Drive] {
-    guard !currentSearchText.isEmpty else { return drives }
-    return drives.filter { matches($0, currentSearchText) }
+    guard !searchText.isEmpty else { return drives }
+    return drives.filter { matches($0, searchText) }
   }
 
   private func matches(_ drive: Drive, _ query: String) -> Bool {

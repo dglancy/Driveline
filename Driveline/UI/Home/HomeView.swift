@@ -21,7 +21,6 @@ struct HomeView: View {
   private let modelContext: ModelContext
   private let spotlightIndexingService: SpotlightIndexingService
   @State private var viewModel: HomeViewModel
-  @State private var searchText = ""
 
   // MARK: - Lifecycle
 
@@ -38,14 +37,11 @@ struct HomeView: View {
     NavigationStack(path: $viewModel.navigationPath) {
       content
         .navigationTitle("Drives")
-        .searchable(text: $searchText, prompt: "Search")
+        .searchable(text: $viewModel.searchText, prompt: "Search")
         .searchDictationBehavior(.inline(activation: .onSelect))
         .toolbar { toolbarItems }
         .onChange(of: drives, initial: true) { _, newDrives in
           viewModel.update(with: newDrives)
-        }
-        .onChange(of: searchText) { _, text in
-          viewModel.applySearch(text: text)
         }
         .onChange(of: driveService.isRecording) { _, isRecording in
           if isRecording {
@@ -77,7 +73,7 @@ struct HomeView: View {
   @ViewBuilder
   private var content: some View {
     if viewModel.sections.isEmpty && !driveService.isRecording {
-      if searchText.isEmpty {
+      if !viewModel.isSearchActive {
         emptyState
       } else {
         ContentUnavailableView.search
@@ -104,7 +100,7 @@ struct HomeView: View {
           }
         }
 
-        if viewModel.recentStats.driveCount > 0 && !viewModel.isSelectMode && searchText.isEmpty {
+        if viewModel.recentStats.driveCount > 0 && !viewModel.isSelectMode && !viewModel.isSearchActive {
           Section {
             HomeStatsPanelView(
               driveCount: viewModel.statsDriveCount,

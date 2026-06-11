@@ -212,18 +212,20 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func emptyQueryShowsAllDrives() {
     let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0), makeDrive(name: "B", daysAgo: 1)])
-    viewModel.applySearch(text: "")
+    viewModel.searchText = ""
     #expect(viewModel.sections.flatMap(\.rows).count == 2)
+    #expect(viewModel.isSearchActive == false)
   }
 
   @Test
   func searchByDisplayNameFiltersResults() {
     let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "Morning Commute", daysAgo: 0), makeDrive(name: "Evening Run", daysAgo: 0)])
-    viewModel.applySearch(text: "Morning")
+    viewModel.searchText = "Morning"
     let rows = viewModel.sections.flatMap(\.rows)
     #expect(rows.count == 1)
     #expect(rows[0].drive.displayName == "Morning Commute")
+    #expect(viewModel.isSearchActive == true)
   }
 
   @Test
@@ -234,7 +236,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let noMatch = makeDrive(name: "B", daysAgo: 0)
     noMatch.startPlaceName = "Office"
     viewModel.update(with: [match, noMatch])
-    viewModel.applySearch(text: "Home")
+    viewModel.searchText = "Home"
     let rows = viewModel.sections.flatMap(\.rows)
     #expect(rows.count == 1)
     #expect(rows[0].drive.id == match.id)
@@ -248,7 +250,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let noMatch = makeDrive(name: "B", daysAgo: 0)
     noMatch.endPlaceName = "Office"
     viewModel.update(with: [match, noMatch])
-    viewModel.applySearch(text: "Airport")
+    viewModel.searchText = "Airport"
     let rows = viewModel.sections.flatMap(\.rows)
     #expect(rows.count == 1)
     #expect(rows[0].drive.id == match.id)
@@ -258,7 +260,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func searchIsCaseInsensitive() {
     let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "morning commute", daysAgo: 0)])
-    viewModel.applySearch(text: "MORNING")
+    viewModel.searchText = "MORNING"
     #expect(viewModel.sections.flatMap(\.rows).count == 1)
   }
 
@@ -266,7 +268,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func searchWithNoMatchReturnsEmptySections() {
     let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "Home to Office", daysAgo: 0)])
-    viewModel.applySearch(text: "zzznomatch")
+    viewModel.searchText = "zzznomatch"
     #expect(viewModel.sections.isEmpty)
   }
 
@@ -274,9 +276,9 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func clearingSearchRestoresAllDrives() {
     let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0), makeDrive(name: "B", daysAgo: 1)])
-    viewModel.applySearch(text: "A")
+    viewModel.searchText = "A"
     #expect(viewModel.sections.flatMap(\.rows).count == 1)
-    viewModel.applySearch(text: "")
+    viewModel.searchText = ""
     #expect(viewModel.sections.flatMap(\.rows).count == 2)
   }
 
@@ -286,7 +288,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let drive1 = makeDrive(name: "Morning Commute", daysAgo: 0)
     let drive2 = makeDrive(name: "Evening Run", daysAgo: 0)
     viewModel.update(with: [drive1])
-    viewModel.applySearch(text: "Morning")
+    viewModel.searchText = "Morning"
     #expect(viewModel.sections.flatMap(\.rows).count == 1)
     viewModel.update(with: [drive1, drive2])
     #expect(viewModel.sections.flatMap(\.rows).count == 1)
