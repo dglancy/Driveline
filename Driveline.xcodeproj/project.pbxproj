@@ -83,11 +83,11 @@
 		6D6161192FD447E700F6F3A7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6D61611B2FD447E700F6F3A7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		6D645D0A2FD597CA008E8086 /* WeatherKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WeatherKit.framework; path = System/Library/Frameworks/WeatherKit.framework; sourceTree = SDKROOT; };
-		6D8311D12FCD8C620036D01E /* iOS Test Suite.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "iOS Test Suite.xctestplan"; sourceTree = "<group>"; };
+		6D8311D12FCD8C620036D01E /* iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iOS.xctestplan; sourceTree = "<group>"; };
 		6D8311D22FCD908F0036D01E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		6DAB000000000000000003 /* MLTrainingDataPrepTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MLTrainingDataPrepTool; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DAB000000000000000004 /* MLTrainingDataPrepToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MLTrainingDataPrepToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6DB7778A2FDB5EC20093240A /* MacOS Test Suite.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "MacOS Test Suite.xctestplan"; sourceTree = "<group>"; };
+		6DB7778A2FDB5EC20093240A /* MacOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MacOS.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -252,8 +252,8 @@
 				6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */,
 				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
 				6D47A5502FCAE68700E6C7B7 /* README.md */,
-				6D8311D12FCD8C620036D01E /* iOS Test Suite.xctestplan */,
-				6DB7778A2FDB5EC20093240A /* MacOS Test Suite.xctestplan */,
+				6D8311D12FCD8C620036D01E /* iOS.xctestplan */,
+				6DB7778A2FDB5EC20093240A /* MacOS.xctestplan */,
 				6D8311CF2FCD81C40036D01E /* workflows */,
 				6D47A5122FCAD20600E6C7B7 /* Driveline */,
 				6D47A5222FCAD20800E6C7B7 /* DrivelineTests */,

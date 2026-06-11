@@ -39,7 +39,7 @@ jobs:
             -project Driveline.xcodeproj \
             -scheme Driveline \
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
-            -testPlan Driveline \
+            -testPlan iOS \
             -skipPackagePluginValidation \
             -enableCodeCoverage YES \
             -resultBundlePath TestResults.xcresult \
@@ -129,11 +129,13 @@ jobs:
           xcodebuild test \
             -project Driveline.xcodeproj \
             -scheme MLTrainingDataPrepTool \
-            -destination 'platform=macOS' \
-            -testPlan "MacOS Test Suite" \
+            -destination 'platform=macOS,arch=arm64' \
+            -testPlan MacOS \
             -skipPackagePluginValidation \
             -enableCodeCoverage YES \
             -resultBundlePath TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
             | xcpretty
 
       - name: Install xcresultparser
