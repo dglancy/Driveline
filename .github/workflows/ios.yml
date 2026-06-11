@@ -125,10 +125,71 @@ jobs:
       - name: Build & Test
         run: |
           set -o pipefail
+          rm -rf TestResults.xcresult
           xcodebuild test \
             -project Driveline.xcodeproj \
             -scheme MLTrainingDataPrepTool \
             -destination 'platform=macOS' \
             -testPlan "MacOS Test Suite" \
             -skipPackagePluginValidation \
+            -enableCodeCoverage YES \
+            -resultBundlePath TestResults.xcresult \
             | xcpretty
+
+      - name: Install xcresultparser
+        if: always()
+        run: brew install a7ex/homebrew-formulae/xcresultparser
+
+      - name: Convert test results to JUnit
+        if: always()
+        run: xcresultparser --output-format junit TestResults.xcresult > TestResults.xml
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v3
+        with:
+          name: MLTrainingDataPrepTool Tests
+          path: TestResults.xml
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Report code coverage
+        if: always()
+        run: |
+          REPORT=$(xcrun xccov view --report --json TestResults.xcresult)
+          {
+            echo "## Code Coverage"
+            echo ""
+            OVERALL=$(echo "$REPORT" | jq -r '
+              [.targets[] | select(.name | endswith(".xctest") | not)] as $t
+              | ([$t[].coveredLines] | add) as $covered
+              | ([$t[].executableLines] | add) as $exec
+              | (($covered / $exec) * 1000 | round) / 10
+            ')
+            echo "**Overall line coverage: ${OVERALL}%**"
+            echo ""
+            echo "| Target | Coverage |"
+            echo "|---|---|"
+            echo "$REPORT" | jq -r '.targets[] | select(.name | endswith(".xctest") | not) | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
+            echo ""
+            echo "<details><summary>Lowest covered files</summary>"
+            echo ""
+            echo "| File | Coverage | Lines |"
+            echo "|---|---|---|"
+            echo "$REPORT" | jq -r '
+              [.targets[] | select(.name | endswith(".xctest") | not) | .files[] | select(.executableLines > 0)]
+              | sort_by(.lineCoverage)
+              | .[:25]
+              | .[]
+              | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% | \(.coveredLines)/\(.executableLines) |"
+            '
+            echo ""
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ml-training-data-prep-tool-test-results
+          path: TestResults.xcresult
