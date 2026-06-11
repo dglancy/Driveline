@@ -47,7 +47,7 @@ jobs:
 
       - name: Install xcresultparser
         if: always()
-        run: brew install a7ex/homebrew-formulae/xcresultparser
+        run: HOMEBREW_NO_ENV_HINTS=1 brew install a7ex/homebrew-formulae/xcresultparser
 
       - name: Convert test results to JUnit
         if: always()
@@ -140,7 +140,7 @@ jobs:
 
       - name: Install xcresultparser
         if: always()
-        run: brew install a7ex/homebrew-formulae/xcresultparser
+        run: HOMEBREW_NO_ENV_HINTS=1 brew install a7ex/homebrew-formulae/xcresultparser
 
       - name: Convert test results to JUnit
         if: always()
