@@ -41,6 +41,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
             -testPlan Driveline \
             -skipPackagePluginValidation \
+            -enableCodeCoverage YES \
             -resultBundlePath TestResults.xcresult \
             | xcpretty
 
@@ -60,6 +61,16 @@ jobs:
           path: TestResults.xml
           reporter: java-junit
           fail-on-error: false
+
+      - name: Report code coverage
+        if: always()
+        run: |
+          {
+            echo "## Code Coverage"
+            echo '```'
+            xcrun xccov view --report TestResults.xcresult
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload test results
         if: always()
