@@ -82,6 +82,29 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - Swift Testing framework (`import Testing`) for unit tests
 - XCTest for UI tests, with an in-memory SwiftData store to keep tests isolated
 
+## ML training data prep tool
+
+`MLTrainingDataPrepTool` is a small command-line tool, included as part of the Xcode project, for turning a folder of exported GPX drives into a CSV dataset suitable for training machine learning models.
+
+It reads every `.gpx` file in an input directory and, for each drive, computes a row of summary statistics:
+
+- Name, distance, and duration
+- Average speed, mean speed, speed standard deviation, and speed variance
+- Percentage of time spent above 80 km/h and the number of sustained high-speed segments
+- Stop count and percentage of time stopped
+- Sinuosity and bearing change rate per kilometre
+- Elevation gain and loss
+
+Results are appended to the given CSV file, writing a header row only if the file does not already exist.
+
+**Usage**
+
+```
+ml-training-data-prep <input-directory> <output.csv>
+```
+
+Build and run it via the `MLTrainingDataPrepTool` scheme in Xcode, or with `xcodebuild`/`swift run` from the command line.
+
 ## Building it yourself
 
 **Requirements**
