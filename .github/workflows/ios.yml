@@ -1,11 +1,7 @@
-name: Build & Test
+name: Build & Test (iOS)
 
 on:
   push:
-
-permissions:
-  contents: read
-  checks: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,185 +9,15 @@ concurrency:
 
 jobs:
   ios-app-test:
-    name: iOS App Tests
-    runs-on: macos-26
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Cache SPM packages
-        uses: actions/cache@v5
-        with:
-          path: ~/.swiftpm
-          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            spm-${{ runner.os }}
-
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.5.app
-
-      - name: Build & Test
-        run: |
-          set -o pipefail
-          rm -rf TestResults.xcresult
-          xcodebuild test \
-            -project Driveline.xcodeproj \
-            -scheme Driveline \
-            -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
-            -testPlan iOS \
-            -skipPackagePluginValidation \
-            -enableCodeCoverage YES \
-            -resultBundlePath TestResults.xcresult \
-            | xcpretty
-
-      - name: Install xcresultparser
-        if: always()
-        run: HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_REQUIRE_TAP_TRUST=1 brew install a7ex/homebrew-formulae/xcresultparser
-
-      - name: Convert test results to JUnit
-        if: always()
-        run: xcresultparser --output-format junit TestResults.xcresult > TestResults.xml
-
-      - name: Publish test results
-        if: always()
-        uses: dorny/test-reporter@v3
-        with:
-          name: iOS Tests
-          path: TestResults.xml
-          reporter: java-junit
-          fail-on-error: false
-
-      - name: Report code coverage
-        if: always()
-        run: |
-          REPORT=$(xcrun xccov view --report --json TestResults.xcresult)
-          {
-            echo "## Code Coverage"
-            echo ""
-            OVERALL=$(echo "$REPORT" | jq -r '
-              [.targets[] | select((.name | endswith(".xctest") | not) and .name != "MLTrainingDataPrepTool")] as $t
-              | ([$t[].coveredLines] | add) as $covered
-              | ([$t[].executableLines] | add) as $exec
-              | (($covered / $exec) * 1000 | round) / 10
-            ')
-            echo "**Overall line coverage: ${OVERALL}%**"
-            echo ""
-            echo "| Target | Coverage |"
-            echo "|---|---|"
-            echo "$REPORT" | jq -r '.targets[] | select((.name | endswith(".xctest") | not) and .name != "MLTrainingDataPrepTool") | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
-            echo ""
-            echo "<details><summary>Lowest covered files</summary>"
-            echo ""
-            echo "| File | Coverage | Lines |"
-            echo "|---|---|---|"
-            echo "$REPORT" | jq -r '
-              [.targets[] | select((.name | endswith(".xctest") | not) and .name != "MLTrainingDataPrepTool") | .files[] | select(.executableLines > 0)]
-              | sort_by(.lineCoverage)
-              | .[:25]
-              | .[]
-              | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% | \(.coveredLines)/\(.executableLines) |"
-            '
-            echo ""
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: test-results
-          path: TestResults.xcresult
-
-  ml-training-data-prep-tool-test:
-    name: MLTrainingDataPrepTool Tests
-    runs-on: macos-26
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Cache SPM packages
-        uses: actions/cache@v5
-        with:
-          path: ~/.swiftpm
-          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            spm-${{ runner.os }}
-
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.5.app
-
-      - name: Build & Test
-        run: |
-          set -o pipefail
-          rm -rf TestResults.xcresult
-          xcodebuild test \
-            -project Driveline.xcodeproj \
-            -scheme MLTrainingDataPrepTool \
-            -destination 'platform=macOS,arch=arm64' \
-            -testPlan MacOS \
-            -skipPackagePluginValidation \
-            -enableCodeCoverage YES \
-            -resultBundlePath TestResults.xcresult \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            | xcpretty
-
-      - name: Install xcresultparser
-        if: always()
-        run: HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_REQUIRE_TAP_TRUST=1 brew install a7ex/homebrew-formulae/xcresultparser
-
-      - name: Convert test results to JUnit
-        if: always()
-        run: xcresultparser --output-format junit TestResults.xcresult > TestResults.xml
-
-      - name: Publish test results
-        if: always()
-        uses: dorny/test-reporter@v3
-        with:
-          name: MLTrainingDataPrepTool Tests
-          path: TestResults.xml
-          reporter: java-junit
-          fail-on-error: false
-
-      - name: Report code coverage
-        if: always()
-        run: |
-          REPORT=$(xcrun xccov view --report --json TestResults.xcresult)
-          {
-            echo "## Code Coverage"
-            echo ""
-            OVERALL=$(echo "$REPORT" | jq -r '
-              [.targets[] | select(.name == "MLTrainingDataPrepTool")] as $t
-              | ([$t[].coveredLines] | add) as $covered
-              | ([$t[].executableLines] | add) as $exec
-              | (($covered / $exec) * 1000 | round) / 10
-            ')
-            echo "**Overall line coverage: ${OVERALL}%**"
-            echo ""
-            echo "| Target | Coverage |"
-            echo "|---|---|"
-            echo "$REPORT" | jq -r '.targets[] | select(.name == "MLTrainingDataPrepTool") | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
-            echo ""
-            echo "<details><summary>Lowest covered files</summary>"
-            echo ""
-            echo "| File | Coverage | Lines |"
-            echo "|---|---|---|"
-            echo "$REPORT" | jq -r '
-              [.targets[] | select(.name == "MLTrainingDataPrepTool") | .files[] | select(.executableLines > 0)]
-              | sort_by(.lineCoverage)
-              | .[:25]
-              | .[]
-              | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% | \(.coveredLines)/\(.executableLines) |"
-            '
-            echo ""
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: ml-training-data-prep-tool-test-results
-          path: TestResults.xcresult
+    permissions:
+      contents: read
+      checks: write
+    uses: ./.github/workflows/xcode-test.yml
+    with:
+      job_name: iOS App Tests
+      scheme: Driveline
+      destination: 'platform=iOS Simulator,name=iPhone 17,arch=arm64'
+      test_plan: iOS
+      coverage_exclude_xctest: "true"
+      coverage_exclude_target: MLTrainingDataPrepTool
+      artifact_name: test-results

@@ -1,0 +1,140 @@
+name: Xcode Test
+
+on:
+  workflow_call:
+    inputs:
+      job_name:
+        required: true
+        type: string
+      scheme:
+        required: true
+        type: string
+      destination:
+        required: true
+        type: string
+      test_plan:
+        required: true
+        type: string
+      extra_build_settings:
+        required: false
+        type: string
+        default: ""
+      coverage_only_target:
+        required: false
+        type: string
+        default: ""
+      coverage_exclude_xctest:
+        required: false
+        type: string
+        default: "false"
+      coverage_exclude_target:
+        required: false
+        type: string
+        default: ""
+      artifact_name:
+        required: true
+        type: string
+
+jobs:
+  test:
+    name: ${{ inputs.job_name }}
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Cache SPM packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.swiftpm
+          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.5.app
+
+      - name: Build & Test
+        run: |
+          set -o pipefail
+          rm -rf TestResults.xcresult
+          xcodebuild test \
+            -project Driveline.xcodeproj \
+            -scheme "${{ inputs.scheme }}" \
+            -destination "${{ inputs.destination }}" \
+            -testPlan "${{ inputs.test_plan }}" \
+            -skipPackagePluginValidation \
+            -enableCodeCoverage YES \
+            -resultBundlePath TestResults.xcresult \
+            ${{ inputs.extra_build_settings }} \
+            | xcpretty
+
+      - name: Install xcresultparser
+        if: always()
+        run: HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_REQUIRE_TAP_TRUST=1 brew install a7ex/homebrew-formulae/xcresultparser
+
+      - name: Convert test results to JUnit
+        if: always()
+        run: xcresultparser --output-format junit TestResults.xcresult > TestResults.xml
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v3
+        with:
+          name: ${{ inputs.job_name }}
+          path: TestResults.xml
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Report code coverage
+        if: always()
+        env:
+          COVERAGE_ONLY_TARGET: ${{ inputs.coverage_only_target }}
+          COVERAGE_EXCLUDE_XCTEST: ${{ inputs.coverage_exclude_xctest }}
+          COVERAGE_EXCLUDE_TARGET: ${{ inputs.coverage_exclude_target }}
+        run: |
+          REPORT=$(xcrun xccov view --report --json TestResults.xcresult)
+          FILTER='
+            (env.COVERAGE_ONLY_TARGET != "" and .name == env.COVERAGE_ONLY_TARGET)
+            or
+            (env.COVERAGE_ONLY_TARGET == ""
+              and (env.COVERAGE_EXCLUDE_XCTEST != "true" or (.name | endswith(".xctest") | not))
+              and (env.COVERAGE_EXCLUDE_TARGET == "" or .name != env.COVERAGE_EXCLUDE_TARGET))
+          '
+          {
+            echo "## Code Coverage"
+            echo ""
+            OVERALL=$(echo "$REPORT" | jq -r "
+              [.targets[] | select($FILTER)] as \$t
+              | ([\$t[].coveredLines] | add) as \$covered
+              | ([\$t[].executableLines] | add) as \$exec
+              | ((\$covered / \$exec) * 1000 | round) / 10
+            ")
+            echo "**Overall line coverage: ${OVERALL}%**"
+            echo ""
+            echo "| Target | Coverage |"
+            echo "|---|---|"
+            echo "$REPORT" | jq -r ".targets[] | select($FILTER) | \"| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |\""
+            echo ""
+            echo "<details><summary>Lowest covered files</summary>"
+            echo ""
+            echo "| File | Coverage | Lines |"
+            echo "|---|---|---|"
+            echo "$REPORT" | jq -r "
+              [.targets[] | select($FILTER) | .files[] | select(.executableLines > 0)]
+              | sort_by(.lineCoverage)
+              | .[:25]
+              | .[]
+              | \"| \(.name) | \((.lineCoverage * 1000 | round) / 10)% | \(.coveredLines)/\(.executableLines) |\"
+            "
+            echo ""
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: TestResults.xcresult

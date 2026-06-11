@@ -1,0 +1,23 @@
+name: Build & Test (macOS)
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ml-training-data-prep-tool-test:
+    permissions:
+      contents: read
+      checks: write
+    uses: ./.github/workflows/xcode-test.yml
+    with:
+      job_name: MLTrainingDataPrepTool Tests
+      scheme: MLTrainingDataPrepTool
+      destination: 'platform=macOS,arch=arm64'
+      test_plan: MacOS
+      extra_build_settings: CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+      coverage_only_target: MLTrainingDataPrepTool
+      artifact_name: ml-training-data-prep-tool-test-results
