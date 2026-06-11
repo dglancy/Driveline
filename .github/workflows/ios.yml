@@ -70,7 +70,7 @@ jobs:
             echo "## Code Coverage"
             echo ""
             OVERALL=$(echo "$REPORT" | jq -r '
-              [.targets[] | select(.name | endswith(".xctest") | not)] as $t
+              [.targets[] | select((.name | endswith(".xctest") | not) and .name != "MLTrainingDataPrepTool")] as $t
               | ([$t[].coveredLines] | add) as $covered
               | ([$t[].executableLines] | add) as $exec
               | (($covered / $exec) * 1000 | round) / 10
@@ -79,14 +79,14 @@ jobs:
             echo ""
             echo "| Target | Coverage |"
             echo "|---|---|"
-            echo "$REPORT" | jq -r '.targets[] | select(.name | endswith(".xctest") | not) | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
+            echo "$REPORT" | jq -r '.targets[] | select((.name | endswith(".xctest") | not) and .name != "MLTrainingDataPrepTool") | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
             echo ""
             echo "<details><summary>Lowest covered files</summary>"
             echo ""
             echo "| File | Coverage | Lines |"
             echo "|---|---|---|"
             echo "$REPORT" | jq -r '
-              [.targets[] | select(.name | endswith(".xctest") | not) | .files[] | select(.executableLines > 0)]
+              [.targets[] | select((.name | endswith(".xctest") | not) and .name != "MLTrainingDataPrepTool") | .files[] | select(.executableLines > 0)]
               | sort_by(.lineCoverage)
               | .[:25]
               | .[]
@@ -163,7 +163,7 @@ jobs:
             echo "## Code Coverage"
             echo ""
             OVERALL=$(echo "$REPORT" | jq -r '
-              [.targets[] | select(.name | endswith(".xctest") | not)] as $t
+              [.targets[] | select(.name == "MLTrainingDataPrepTool")] as $t
               | ([$t[].coveredLines] | add) as $covered
               | ([$t[].executableLines] | add) as $exec
               | (($covered / $exec) * 1000 | round) / 10
@@ -172,14 +172,14 @@ jobs:
             echo ""
             echo "| Target | Coverage |"
             echo "|---|---|"
-            echo "$REPORT" | jq -r '.targets[] | select(.name | endswith(".xctest") | not) | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
+            echo "$REPORT" | jq -r '.targets[] | select(.name == "MLTrainingDataPrepTool") | "| \(.name) | \((.lineCoverage * 1000 | round) / 10)% |"'
             echo ""
             echo "<details><summary>Lowest covered files</summary>"
             echo ""
             echo "| File | Coverage | Lines |"
             echo "|---|---|---|"
             echo "$REPORT" | jq -r '
-              [.targets[] | select(.name | endswith(".xctest") | not) | .files[] | select(.executableLines > 0)]
+              [.targets[] | select(.name == "MLTrainingDataPrepTool") | .files[] | select(.executableLines > 0)]
               | sort_by(.lineCoverage)
               | .[:25]
               | .[]
