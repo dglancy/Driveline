@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-               BuildableName = "Driveline.app"
-               BlueprintName = "Driveline"
+               BlueprintIdentifier = "6DAB000000000000000001"
+               BuildableName = "MLTrainingDataPrepTool"
+               BlueprintName = "MLTrainingDataPrepTool"
                ReferencedContainer = "container:Driveline.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,14 +30,13 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:iOS Test Suite.xctestplan"
+            reference = "container:MacOS Test Suite.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6D47A51E2FCAD20800E6C7B7"
@@ -45,15 +44,19 @@
                BlueprintName = "DrivelineTests"
                ReferencedContainer = "container:Driveline.xcodeproj">
             </BuildableReference>
+            <LocationScenarioReference
+               identifier = "London, England"
+               referenceType = "1">
+            </LocationScenarioReference>
          </TestableReference>
          <TestableReference
-            skipped = "YES"
+            skipped = "NO"
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6D47A5282FCAD20800E6C7B7"
-               BuildableName = "DrivelineUITests.xctest"
-               BlueprintName = "DrivelineUITests"
+               BlueprintIdentifier = "6DAB000000000000000002"
+               BuildableName = "MLTrainingDataPrepToolTests.xctest"
+               BlueprintName = "MLTrainingDataPrepToolTests"
                ReferencedContainer = "container:Driveline.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -74,9 +77,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-            BuildableName = "Driveline.app"
-            BlueprintName = "Driveline"
+            BlueprintIdentifier = "6DAB000000000000000001"
+            BuildableName = "MLTrainingDataPrepTool"
+            BlueprintName = "MLTrainingDataPrepTool"
             ReferencedContainer = "container:Driveline.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -91,9 +94,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-            BuildableName = "Driveline.app"
-            BlueprintName = "Driveline"
+            BlueprintIdentifier = "6DAB000000000000000001"
+            BuildableName = "MLTrainingDataPrepTool"
+            BlueprintName = "MLTrainingDataPrepTool"
             ReferencedContainer = "container:Driveline.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -104,23 +107,5 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "cd &quot;$SRCROOT&quot;&#10;agvtool next-version -all&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "6D47A50F2FCAD20600E6C7B7"
-                     BuildableName = "Driveline.app"
-                     BlueprintName = "Driveline"
-                     ReferencedContainer = "container:Driveline.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
    </ArchiveAction>
 </Scheme>

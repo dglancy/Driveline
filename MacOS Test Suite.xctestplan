@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "86E0AF06-F229-489A-9A61-C717EFBDBD68",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Driveline.xcodeproj",
+        "identifier" : "6DAB000000000000000002",
+        "name" : "MLTrainingDataPrepToolTests"
+      }
+    }
+  ],
+  "version" : 2
+}

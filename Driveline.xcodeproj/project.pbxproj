@@ -13,6 +13,8 @@
 		6D61611C2FD447E700F6F3A7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D61611B2FD447E700F6F3A7 /* SwiftUI.framework */; };
 		6D6161292FD447E800F6F3A7 /* DriveWidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6D645D0B2FD597CB008E8086 /* WeatherKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D645D0A2FD597CA008E8086 /* WeatherKit.framework */; };
+		6DAB000000000000000015 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6DAB000000000000000014 /* ArgumentParser */; };
+		6DAB000000000000000019 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6DAB00000000000000001A /* ArgumentParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6D6161172FD447E700F6F3A7;
 			remoteInfo = WidgetExtensionExtension;
+		};
+		6DAB000000000000000016 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DAB000000000000000001;
+			remoteInfo = MLTrainingDataPrepTool;
+		};
+		6DB7778B2FDB61580093240A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
+			remoteInfo = Driveline;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -67,8 +83,11 @@
 		6D6161192FD447E700F6F3A7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6D61611B2FD447E700F6F3A7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		6D645D0A2FD597CA008E8086 /* WeatherKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WeatherKit.framework; path = System/Library/Frameworks/WeatherKit.framework; sourceTree = SDKROOT; };
-		6D8311D12FCD8C620036D01E /* Driveline.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Driveline.xctestplan; sourceTree = "<group>"; };
+		6D8311D12FCD8C620036D01E /* iOS Test Suite.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "iOS Test Suite.xctestplan"; sourceTree = "<group>"; };
 		6D8311D22FCD908F0036D01E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		6DAB000000000000000003 /* MLTrainingDataPrepTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MLTrainingDataPrepTool; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DAB000000000000000004 /* MLTrainingDataPrepToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MLTrainingDataPrepToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DB7778A2FDB5EC20093240A /* MacOS Test Suite.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "MacOS Test Suite.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -109,6 +128,17 @@
 			);
 			target = 6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */;
 		};
+		6DAB000000000000000018 /* Exceptions for "MLTrainingDataPrepTool" folder in "MLTrainingDataPrepToolTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CSVWriter.swift,
+				GPXDriveStatistics.swift,
+				GPXStatisticsParser.swift,
+				MLTrainingDataPrepTool.swift,
+				MLTrainingDataPrepToolError.swift,
+			);
+			target = 6DAB000000000000000002 /* MLTrainingDataPrepToolTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -147,6 +177,19 @@
 			path = .github/workflows;
 			sourceTree = "<group>";
 		};
+		6DAB000000000000000005 /* MLTrainingDataPrepTool */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6DAB000000000000000018 /* Exceptions for "MLTrainingDataPrepTool" folder in "MLTrainingDataPrepToolTests" target */,
+			);
+			path = MLTrainingDataPrepTool;
+			sourceTree = "<group>";
+		};
+		6DAB000000000000000006 /* MLTrainingDataPrepToolTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MLTrainingDataPrepToolTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +225,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6DAB000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DAB000000000000000015 /* ArgumentParser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DAB00000000000000000B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DAB000000000000000019 /* ArgumentParser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -193,13 +252,16 @@
 				6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */,
 				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
 				6D47A5502FCAE68700E6C7B7 /* README.md */,
-				6D8311D12FCD8C620036D01E /* Driveline.xctestplan */,
+				6D8311D12FCD8C620036D01E /* iOS Test Suite.xctestplan */,
+				6DB7778A2FDB5EC20093240A /* MacOS Test Suite.xctestplan */,
 				6D8311CF2FCD81C40036D01E /* workflows */,
 				6D47A5122FCAD20600E6C7B7 /* Driveline */,
 				6D47A5222FCAD20800E6C7B7 /* DrivelineTests */,
 				6D47A52C2FCAD20800E6C7B7 /* DrivelineUITests */,
 				6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */,
 				6D61611D2FD447E700F6F3A7 /* DriveWidgetExtension */,
+				6DAB000000000000000005 /* MLTrainingDataPrepTool */,
+				6DAB000000000000000006 /* MLTrainingDataPrepToolTests */,
 				6D47A59F2FCB2B1400E6C7B7 /* Frameworks */,
 				6D47A5112FCAD20600E6C7B7 /* Products */,
 			);
@@ -212,6 +274,8 @@
 				6D47A51F2FCAD20800E6C7B7 /* DrivelineTests.xctest */,
 				6D47A5292FCAD20800E6C7B7 /* DrivelineUITests.xctest */,
 				6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */,
+				6DAB000000000000000003 /* MLTrainingDataPrepTool */,
+				6DAB000000000000000004 /* MLTrainingDataPrepToolTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,6 +387,54 @@
 			productReference = 6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6DAB000000000000000001 /* MLTrainingDataPrepTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6DAB000000000000000011 /* Build configuration list for PBXNativeTarget "MLTrainingDataPrepTool" */;
+			buildPhases = (
+				6DAB000000000000000007 /* Sources */,
+				6DAB000000000000000008 /* Frameworks */,
+				6DAB000000000000000009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6DAB000000000000000005 /* MLTrainingDataPrepTool */,
+			);
+			name = MLTrainingDataPrepTool;
+			packageProductDependencies = (
+				6DAB000000000000000014 /* ArgumentParser */,
+			);
+			productName = MLTrainingDataPrepTool;
+			productReference = 6DAB000000000000000003 /* MLTrainingDataPrepTool */;
+			productType = "com.apple.product-type.tool";
+		};
+		6DAB000000000000000002 /* MLTrainingDataPrepToolTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6DAB000000000000000012 /* Build configuration list for PBXNativeTarget "MLTrainingDataPrepToolTests" */;
+			buildPhases = (
+				6DAB00000000000000000A /* Sources */,
+				6DAB00000000000000000B /* Frameworks */,
+				6DAB00000000000000000C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6DAB000000000000000017 /* PBXTargetDependency */,
+				6DB7778C2FDB61580093240A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6DAB000000000000000006 /* MLTrainingDataPrepToolTests */,
+			);
+			name = MLTrainingDataPrepToolTests;
+			packageProductDependencies = (
+				6DAB00000000000000001A /* ArgumentParser */,
+			);
+			productName = MLTrainingDataPrepToolTests;
+			productReference = 6DAB000000000000000004 /* MLTrainingDataPrepToolTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -347,6 +459,12 @@
 					6D6161172FD447E700F6F3A7 = {
 						CreatedOnToolsVersion = 26.5;
 					};
+					6DAB000000000000000001 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					6DAB000000000000000002 = {
+						CreatedOnToolsVersion = 26.5;
+					};
 				};
 			};
 			buildConfigurationList = 6D47A50B2FCAD20600E6C7B7 /* Build configuration list for PBXProject "Driveline" */;
@@ -364,6 +482,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				6DAB000000000000000013 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6D47A5112FCAD20600E6C7B7 /* Products */;
@@ -374,6 +493,8 @@
 				6D47A51E2FCAD20800E6C7B7 /* DrivelineTests */,
 				6D47A5282FCAD20800E6C7B7 /* DrivelineUITests */,
 				6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */,
+				6DAB000000000000000001 /* MLTrainingDataPrepTool */,
+				6DAB000000000000000002 /* MLTrainingDataPrepToolTests */,
 			);
 		};
 /* End PBXProject section */
@@ -402,6 +523,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6D6161162FD447E700F6F3A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DAB000000000000000009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DAB00000000000000000C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -439,6 +574,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6DAB000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DAB00000000000000000A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -460,6 +609,16 @@
 			isa = PBXTargetDependency;
 			target = 6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */;
 			targetProxy = 6D6161272FD447E800F6F3A7 /* PBXContainerItemProxy */;
+		};
+		6DAB000000000000000017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DAB000000000000000001 /* MLTrainingDataPrepTool */;
+			targetProxy = 6DAB000000000000000016 /* PBXContainerItemProxy */;
+		};
+		6DB7778C2FDB61580093240A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D47A50F2FCAD20600E6C7B7 /* Driveline */;
+			targetProxy = 6DB7778B2FDB61580093240A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -859,6 +1018,69 @@
 			};
 			name = Release;
 		};
+		6DAB00000000000000000D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		6DAB00000000000000000E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		6DAB00000000000000000F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.MLTrainingDataPrepToolTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = MLTrainingDataPrepTool;
+			};
+			name = Debug;
+		};
+		6DAB000000000000000010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.MLTrainingDataPrepToolTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = MLTrainingDataPrepTool;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -907,6 +1129,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		6DAB000000000000000011 /* Build configuration list for PBXNativeTarget "MLTrainingDataPrepTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6DAB00000000000000000D /* Debug */,
+				6DAB00000000000000000E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6DAB000000000000000012 /* Build configuration list for PBXNativeTarget "MLTrainingDataPrepToolTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6DAB00000000000000000F /* Debug */,
+				6DAB000000000000000010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -918,6 +1158,14 @@
 				minimumVersion = 0.63.3;
 			};
 		};
+		6DAB000000000000000013 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -925,6 +1173,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6D47A58E2FCB122700E6C7B7 /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		6DAB000000000000000014 /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DAB000000000000000013 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+		6DAB00000000000000001A /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DAB000000000000000013 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
