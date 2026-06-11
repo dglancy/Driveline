@@ -237,10 +237,7 @@ private extension Color {
 private func formattedDistance(_ metres: Double) -> String {
   let unit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
   let value = Measurement(value: metres, unit: UnitLength.meters).converted(to: unit).value
-  let formatter = NumberFormatter()
-  formatter.maximumFractionDigits = 1
-  formatter.minimumFractionDigits = 1
-  return formatter.string(from: NSNumber(value: value)) ?? "0.0"
+  return value.formatted(.number.precision(.fractionLength(1)))
 }
 
 private func distanceUnitSymbol() -> String {
