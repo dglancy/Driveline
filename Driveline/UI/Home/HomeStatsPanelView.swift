@@ -17,6 +17,10 @@ struct HomeStatsPanelView: View {
   let scopeLabel: String
   let onTap: () -> Void
 
+  // MARK: - Constants
+
+  private static let scopeToggleHint = String(localized: "Double tap to switch between last 30 days and all time", comment: "Accessibility hint for toggling stats panel scope")
+
   // MARK: - Body
 
   var body: some View {
@@ -31,6 +35,9 @@ struct HomeStatsPanelView: View {
       .accessibilityLabel(
         String(localized: "\(driveCount) drives, \(scopeLabel)", comment: "Accessibility label for drives stats card")
       )
+      .accessibilityAddTraits(.isButton)
+      .accessibilityHint(Self.scopeToggleHint)
+      .accessibilityAction { onTap() }
 
       StatCard(
         icon: Icons.Panels.distance,
@@ -42,6 +49,9 @@ struct HomeStatsPanelView: View {
       .accessibilityLabel(
         String(localized: "\(distanceValue) \(distanceUnit), \(scopeLabel)", comment: "Accessibility label for distance stats card")
       )
+      .accessibilityAddTraits(.isButton)
+      .accessibilityHint(Self.scopeToggleHint)
+      .accessibilityAction { onTap() }
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
