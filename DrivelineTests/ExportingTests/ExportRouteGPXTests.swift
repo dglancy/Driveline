@@ -212,6 +212,7 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
     let content = try String(contentsOf: outputURL, encoding: .utf8)
     let expectedElements = [
       "drv:distanceMetres",
+      "drv:durationSeconds",
       "drv:averageSpeedKmh",
       "drv:meanSpeedKmh",
       "drv:speedStandardDeviationKmh",
@@ -228,6 +229,19 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
     for element in expectedElements {
       #expect(content.contains("<\(element)>"), "Missing stat element <\(element)>")
     }
+  }
+
+  @Test
+  func gpxFileContainsCorrectDurationSeconds() async throws {
+    let drive = driveWithMultiplePositions()
+    drive.startedAt = Date(timeIntervalSinceReferenceDate: 0)
+    drive.endedAt = Date(timeIntervalSinceReferenceDate: 40)
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.contains("<drv:durationSeconds>40</drv:durationSeconds>"))
   }
 
   @Test

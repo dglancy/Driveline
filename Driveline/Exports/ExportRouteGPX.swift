@@ -65,6 +65,7 @@ final class ExportDriveGPX: ExportingDrive {
           <extensions>
             <drv:stats>
               <drv:distanceMetres>\(number(drive.distanceMetres))</drv:distanceMetres>
+              <drv:durationSeconds>\(Int(drive.activeDurationSeconds))</drv:durationSeconds>
               <drv:averageSpeedKmh>\(number(drive.avgSpeedMetresPerSecond * kmh))</drv:averageSpeedKmh>
               <drv:meanSpeedKmh>\(number(drive.meanSpeedMetresPerSecond * kmh))</drv:meanSpeedKmh>
               <drv:speedStandardDeviationKmh>\(number(drive.speedStandardDeviationMetresPerSecond * kmh))</drv:speedStandardDeviationKmh>
