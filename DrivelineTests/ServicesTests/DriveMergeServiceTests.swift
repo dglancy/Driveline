@@ -211,10 +211,43 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     #expect(afterCount == beforeCount)
   }
 
+  // MARK: - Spotlight
+
+  @Test
+  func mergeDeindexesSourceDrivesFromSpotlight() async throws {
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let (first, second) = makeDrivePair()
+    let firstID = first.id
+    let secondID = second.id
+
+    makeService(spotlightIndexingService: spotlightService).merge(orderedDrives: [first, second], mergedName: "Trip")
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(Set(mockSpotlight.deletedIdentifiers) == Set([firstID.uuidString, secondID.uuidString]))
+  }
+
+  @Test
+  func mergeIndexesMergedDriveInSpotlight() async throws {
+    let mockSpotlight = MockSpotlightIndex()
+    let spotlightService = SpotlightIndexingService(index: mockSpotlight)
+    let (first, second) = makeDrivePair()
+
+    makeService(spotlightIndexingService: spotlightService).merge(orderedDrives: [first, second], mergedName: "Trip")
+
+    await Task.yield()
+    await Task.yield()
+
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect(mockSpotlight.indexedItems.map(\.uniqueIdentifier) == [merged?.id.uuidString])
+  }
+
   // MARK: - Helpers
 
-  private func makeService() -> DriveMergeService {
-    DriveMergeService(modelContext: context!)
+  private func makeService(spotlightIndexingService: SpotlightIndexingService? = nil) -> DriveMergeService {
+    DriveMergeService(modelContext: context!, spotlightIndexingService: spotlightIndexingService)
   }
 
   private func makeDrivePair(

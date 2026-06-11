@@ -146,16 +146,7 @@ final class HomeViewModel {
 
   func deleteDrives(_ drives: [Drive]) {
     guard let modelContext else { return }
-    let ids = drives.map(\.id)
-    for drive in drives {
-      modelContext.delete(drive)
-    }
-    do {
-      try modelContext.save()
-    } catch {
-      Log.data.error("Failed to delete drives: \(error.localizedDescription)")
-    }
-    Task { await spotlightIndexingService?.deindexDrives(ids) }
+    DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete(drives)
   }
 
   func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
@@ -164,7 +155,7 @@ final class HomeViewModel {
 
   func mergeDrives(orderedDrives: [Drive], mergedName: String) {
     guard let modelContext else { return }
-    DriveMergeService(modelContext: modelContext).merge(orderedDrives: orderedDrives, mergedName: mergedName)
+    DriveMergeService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).merge(orderedDrives: orderedDrives, mergedName: mergedName)
   }
 
   // MARK: - Private

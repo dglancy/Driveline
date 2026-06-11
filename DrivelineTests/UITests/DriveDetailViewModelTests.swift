@@ -7,6 +7,7 @@
 
 @testable import Driveline
 import Foundation
+import SwiftData
 import Testing
 
 @Suite("DriveDetailViewModel")
@@ -195,7 +196,48 @@ struct DriveDetailViewModelTests {
     #expect(vm.pngExport.drive === drive)
   }
 
+  // MARK: - Delete
+
+  @Test
+  func deleteDriveRemovesDriveFromContext() throws {
+    let context = try makeContext()
+    let drive = makeDrive()
+    context.insert(drive)
+    let vm = DriveDetailViewModel(drive: drive)
+    vm.modelContext = context
+
+    vm.deleteDrive()
+
+    #expect(try context.fetchCount(FetchDescriptor<Drive>()) == 0)
+  }
+
+  @Test
+  func deleteDriveDeindexesFromSpotlight() async throws {
+    let context = try makeContext()
+    let drive = makeDrive()
+    let driveID = drive.id
+    context.insert(drive)
+    let mockSpotlight = MockSpotlightIndex()
+    let vm = DriveDetailViewModel(drive: drive)
+    vm.modelContext = context
+    vm.spotlightIndexingService = SpotlightIndexingService(index: mockSpotlight)
+
+    vm.deleteDrive()
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockSpotlight.deletedIdentifiers == [driveID.uuidString])
+  }
+
   // MARK: - Helpers
+
+  private func makeContext() throws -> ModelContext {
+    let schema = Schema([Drive.self, Position.self, Weather.self])
+    let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+    let container = try ModelContainer(for: schema, configurations: [configuration])
+    return ModelContext(container)
+  }
 
   private func makeDrive(name: String = "Test Drive") -> Drive {
     let drive = Drive(name: name)

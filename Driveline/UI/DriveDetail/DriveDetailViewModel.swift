@@ -29,6 +29,7 @@ final class DriveDetailViewModel {
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
   @ObservationIgnored var modelContext: ModelContext?
+  @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
 
   // MARK: - Computed Properties
 
@@ -100,12 +101,7 @@ final class DriveDetailViewModel {
 
   func deleteDrive() {
     guard let modelContext else { return }
-    modelContext.delete(drive)
-    do {
-      try modelContext.save()
-    } catch {
-      Log.data.error("Failed to delete drive: \(error.localizedDescription)")
-    }
+    DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete([drive])
   }
 
   // MARK: - Private

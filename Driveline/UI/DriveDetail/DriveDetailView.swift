@@ -17,6 +17,7 @@ struct DriveDetailView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   @Environment(\.colorScheme) private var colorScheme
+  @Environment(\.spotlightIndexingService) private var spotlightIndexingService
 
   private let mapHeight: CGFloat = 280
 
@@ -72,7 +73,10 @@ struct DriveDetailView: View {
       }
     }
     .toolbar(.hidden, for: .navigationBar)
-    .onAppear { viewModel.modelContext = modelContext }
+    .onAppear {
+      viewModel.modelContext = modelContext
+      viewModel.spotlightIndexingService = spotlightIndexingService
+    }
     .modifier(FullScreenMapModifier(viewModel: viewModel))
     .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))

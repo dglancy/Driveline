@@ -14,11 +14,13 @@ final class DriveMergeService {
   // MARK: - Properties
 
   private let modelContext: ModelContext
+  private let spotlightIndexingService: SpotlightIndexingService?
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext) {
+  init(modelContext: ModelContext, spotlightIndexingService: SpotlightIndexingService? = nil) {
     self.modelContext = modelContext
+    self.spotlightIndexingService = spotlightIndexingService
   }
 
   // MARK: - Actions
@@ -39,12 +41,13 @@ final class DriveMergeService {
     merged.accumulatedDistanceMetres = merged.distanceMetres
 
     modelContext.insert(merged)
-    modelContext.delete(first)
-    modelContext.delete(second)
     do {
       try modelContext.save()
     } catch {
       Log.ui.error("Failed to save model context: \(error.localizedDescription)")
     }
+
+    DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete([first, second])
+    Task { await spotlightIndexingService?.indexDrive(merged) }
   }
 }
