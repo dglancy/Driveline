@@ -12,8 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
-    name: Build & Test
+  ios-app-test:
+    name: iOS App Tests
     runs-on: macos-26
 
     steps:
