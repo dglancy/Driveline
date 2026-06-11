@@ -87,8 +87,31 @@ struct ExportDriveFileNamingService {
     return formatter
   }()
 
+  private static let reservedFilenameCharacters = CharacterSet(charactersIn: "/\\:*?\"<>|→")
+  private static let maxDisplayNameLength = 80
+
   static func fileURL(for drive: Drive, type: ExportFileType) -> URL {
-    let filename = "\(startedAtFormatter.string(from: drive.startedAt)).\(type.fileExtension)"
+    let datePart = startedAtFormatter.string(from: drive.startedAt)
+    let namePart = sanitizedDisplayName(for: drive)
+    let filename = namePart.isEmpty
+      ? "\(datePart).\(type.fileExtension)"
+      : "\(datePart) - \(namePart).\(type.fileExtension)"
     return FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+  }
+
+  private static func sanitizedDisplayName(for drive: Drive) -> String {
+    let replaced = drive.displayName.unicodeScalars.map { scalar -> String in
+      reservedFilenameCharacters.contains(scalar) ? "-" : String(scalar)
+    }.joined()
+
+    let collapsed = replaced.components(separatedBy: .whitespaces)
+      .filter { !$0.isEmpty }
+      .joined(separator: " ")
+      .components(separatedBy: "-")
+      .filter { !$0.isEmpty }
+      .joined(separator: "-")
+      .trimmingCharacters(in: CharacterSet(charactersIn: "- "))
+
+    return String(collapsed.prefix(maxDisplayNameLength))
   }
 }

@@ -65,10 +65,51 @@ final class ExportDriveFileNamingServiceTests: SwiftDataBaseTestCase {
     #expect(url.path.hasPrefix(FileManager.default.temporaryDirectory.path))
   }
 
+  // MARK: - Display name
+
+  @Test
+  func filenameIncludesDisplayNameAfterDate() {
+    let drive = makeDrive()
+    let datePart = ExportDriveFileNamingService.startedAtFormatter.string(from: drive.startedAt)
+    let url = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
+    #expect(url.deletingPathExtension().lastPathComponent == "\(datePart) - Test Drive")
+  }
+
+  @Test
+  func filenameSanitizesReservedCharactersInDisplayName() {
+    let drive = makeDrive(name: "Home / Work: A *Quick* Trip?")
+    let url = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
+    let name = url.deletingPathExtension().lastPathComponent
+    let reserved = CharacterSet(charactersIn: "/\\:*?\"<>|→")
+    #expect(name.unicodeScalars.allSatisfy { !reserved.contains($0) })
+    #expect(!name.contains("--"))
+  }
+
+  @Test
+  func filenameSanitizesArrowSeparatorInDisplayName() {
+    let drive = makeDrive(name: nil)
+    drive.startPlaceName = "Home"
+    drive.endPlaceName = "Work"
+    let url = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
+    let name = url.deletingPathExtension().lastPathComponent
+    #expect(!name.contains("→"))
+    #expect(name.hasSuffix("Home - Work"))
+  }
+
+  @Test
+  func filenameTruncatesLongDisplayNames() {
+    let drive = makeDrive(name: String(repeating: "a", count: 200))
+    let url = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx)
+    let namePart = url.deletingPathExtension().lastPathComponent
+      .components(separatedBy: " - ")
+      .last ?? ""
+    #expect(namePart.count == 80)
+  }
+
   // MARK: - Helpers
 
-  private func makeDrive() -> Drive {
-    let drive = Drive(name: "Test Drive")
+  private func makeDrive(name: String? = "Test Drive") -> Drive {
+    let drive = Drive(name: name)
     var components = DateComponents()
     components.year = 2026
     components.month = 5
