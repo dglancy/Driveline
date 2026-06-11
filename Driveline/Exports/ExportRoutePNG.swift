@@ -92,23 +92,12 @@ final class ExportDrivePNG: ExportingDrive {
   }
 
   private func takeSnapshot(with options: MKMapSnapshotter.Options, drive: Drive) async throws -> MKMapSnapshotter.Snapshot {
-    let box: SnapshotBox = try await withCheckedThrowingContinuation { continuation in
-      MKMapSnapshotter(options: options).start { snapshot, error in
-        if let error {
-          Log.ui.error("Failed to create PNG snapshot for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
-          continuation.resume(throwing: ExportError.pngSnapshotFailure)
-          return
-        }
-
-        guard let snapshot else {
-          continuation.resume(throwing: ExportError.pngSnapshotFailure)
-          return
-        }
-
-        continuation.resume(returning: SnapshotBox(snapshot))
-      }
+    do {
+      return try await MKMapSnapshotter(options: options).start()
+    } catch {
+      Log.ui.error("Failed to create PNG snapshot for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
+      throw ExportError.pngSnapshotFailure
     }
-    return box.snapshot
   }
 
 }
@@ -158,12 +147,4 @@ enum DriveWidth: String {
     let key = string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     self.init(rawValue: key)
   }
-}
-
-// MARK: - SnapshotBox
-
-// Snapshot is immutable after creation; safe to cross actors
-private final class SnapshotBox: @unchecked Sendable {
-  let snapshot: MKMapSnapshotter.Snapshot
-  init(_ snapshot: MKMapSnapshotter.Snapshot) { self.snapshot = snapshot }
 }
