@@ -165,6 +165,13 @@ final class HomeViewModel {
     DriveMergeService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).merge(orderedDrives: orderedDrives, mergedName: mergedName)
   }
 
+  func openDrive(fromSpotlightIdentifier identifier: String) {
+    guard let uuid = UUID(uuidString: identifier),
+          let drive = drives.first(where: { $0.id == uuid }) else { return }
+    navigationPath = NavigationPath()
+    navigationPath.append(drive)
+  }
+
   // MARK: - Private
 
   private var activeStats: DriveStats { statsScope == .last30Days ? recentStats : allTimeStats }

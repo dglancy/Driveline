@@ -8,6 +8,7 @@
 import Testing
 import Foundation
 import SwiftData
+import SwiftUI
 @testable import Driveline
 
 @Suite("HomeViewModel")
@@ -559,6 +560,46 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [drive], mergedName: "Should not merge")
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 1)
+  }
+
+  // MARK: - Spotlight
+
+  @Test
+  func openDriveFromSpotlightIdentifierNavigatesToDrive() throws {
+    let drive = insertDrive()
+    let viewModel = buildViewModel()
+    viewModel.update(with: [drive])
+    viewModel.openDrive(fromSpotlightIdentifier: drive.id.uuidString)
+    #expect(viewModel.navigationPath.count == 1)
+  }
+
+  @Test
+  func openDriveFromSpotlightIdentifierResetsExistingPath() throws {
+    let first = insertDrive(name: "First")
+    let second = insertDrive(name: "Second", startOffset: 3600, endOffset: 7200)
+    let viewModel = buildViewModel()
+    viewModel.update(with: [first, second])
+    viewModel.navigationPath.append(first)
+    viewModel.openDrive(fromSpotlightIdentifier: second.id.uuidString)
+    #expect(viewModel.navigationPath.count == 1)
+  }
+
+  @Test
+  func openDriveFromSpotlightIdentifierWithInvalidUUIDIsNoOp() throws {
+    let drive = insertDrive()
+    let viewModel = buildViewModel()
+    viewModel.update(with: [drive])
+    viewModel.openDrive(fromSpotlightIdentifier: "not-a-uuid")
+    #expect(viewModel.navigationPath.isEmpty)
+  }
+
+  @Test
+  func openDriveFromSpotlightIdentifierWithUnknownDriveIsNoOp() throws {
+    let drive = insertDrive()
+    let viewModel = buildViewModel()
+    viewModel.update(with: [drive])
+    viewModel.openDrive(fromSpotlightIdentifier: UUID().uuidString)
+    #expect(viewModel.navigationPath.isEmpty)
   }
 
   // MARK: - Helpers

@@ -56,11 +56,8 @@ struct HomeView: View {
         }
     }
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
-      guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
-            let uuid = UUID(uuidString: identifier),
-            let drive = drives.first(where: { $0.id == uuid }) else { return }
-      viewModel.navigationPath = NavigationPath()
-      viewModel.navigationPath.append(drive)
+      guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
+      viewModel.openDrive(fromSpotlightIdentifier: identifier)
     }
     .modifier(RecordingScreenModifier(driveService: driveService, isPresented: $viewModel.showingRecordingScreen))
     .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingDeleteConfirmation))
