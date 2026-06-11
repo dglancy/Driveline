@@ -189,6 +189,22 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func sweepDoesNotWritePlaceNameWhenCancelledMidGeocode() async throws {
+    let mockGeocoding = MockGeocodingService()
+    mockGeocoding.delay = .milliseconds(50)
+    let service = makeSweepService(geocodingService: mockGeocoding)
+    let drive = try insertFinishedDrive(positions: [makePosition()])
+
+    let task = Task { await service.sweep() }
+    await Task.yield()
+    task.cancel()
+    await task.value
+
+    #expect(drive.startPlaceName == nil)
+    #expect(drive.endPlaceName == nil)
+  }
+
+  @Test
   func sweepStopsProcessingRemainingDrivesWhenCancelledMidSweep() async throws {
     let mockGeocoding = MockGeocodingService()
     let service = makeSweepService(geocodingService: mockGeocoding)
@@ -199,7 +215,7 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
     mockGeocoding.onGeocode = { task.cancel() }
     await task.value
 
-    #expect(mockGeocoding.geocodedLocations.count == 2)
+    #expect(mockGeocoding.geocodedLocations.count == 1)
   }
 
   // MARK: - Helpers

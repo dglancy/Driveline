@@ -45,13 +45,17 @@ final class WeatherSweepService: SweepServiceProtocol {
       guard !Task.isCancelled else { return }
       if drive.startWeather == nil, let first = drive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
-        if let weather = try? await weatherService.fetchWeather(at: location, type: .start, date: drive.startedAt) {
+        let weather = try? await weatherService.fetchWeather(at: location, type: .start, date: drive.startedAt)
+        guard !Task.isCancelled else { return }
+        if let weather {
           drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
         }
       }
       if drive.endWeather == nil, let last = drive.orderedPositions.last, let endedAt = drive.endedAt {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        if let weather = try? await weatherService.fetchWeather(at: location, type: .end, date: endedAt) {
+        let weather = try? await weatherService.fetchWeather(at: location, type: .end, date: endedAt)
+        guard !Task.isCancelled else { return }
+        if let weather {
           drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
         }
       }

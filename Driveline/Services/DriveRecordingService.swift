@@ -33,6 +33,7 @@ final class DriveRecordingService {
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var startWeatherCancellable: AnyCancellable?
+  @ObservationIgnored private var finishTasks: [Task<Void, Never>] = []
   #if os(iOS)
   @ObservationIgnored private let activityService = DriveActivityService()
   #endif
@@ -64,6 +65,8 @@ final class DriveRecordingService {
   // MARK: - Actions
 
   func startDrive(trigger: Drive.RecordingTrigger = .manual) throws {
+    cancelFinishTasks()
+
     if trigger == .automatic && userPreferences.continueDriveIfRecentlyFinished,
        let recentDrive = findRecentlyFinishedDrive() {
       try resumeDrive(recentDrive)
@@ -84,21 +87,26 @@ final class DriveRecordingService {
       locationDataRecorder.stopRecording()
       saveModelContext()
       fetchEndWeather(for: drive)
-      Task { await spotlightIndexingService?.indexDrive(drive) }
+      finishTasks.append(Task { await spotlightIndexingService?.indexDrive(drive) })
     }
 
     self.drive = nil
 
-    Task { await placeNameSweepService.sweep() }
-    Task { await weatherSweepService.sweep() }
+    finishTasks.append(Task { await placeNameSweepService.sweep() })
+    finishTasks.append(Task { await weatherSweepService.sweep() })
 
     #if os(iOS)
-    Task { await activityService.endActivity() }
+    finishTasks.append(Task { await activityService.endActivity() })
     #endif
   }
 
   // MARK: - Private functions
-  
+
+  private func cancelFinishTasks() {
+    finishTasks.forEach { $0.cancel() }
+    finishTasks.removeAll()
+  }
+
   private func createNewDrive(trigger: Drive.RecordingTrigger) throws {
     let drive = Drive(trigger: trigger)
     self.drive = drive
@@ -220,7 +228,7 @@ final class DriveRecordingService {
   private func fetchEndWeather(for drive: Drive) {
     guard let lastPosition = drive.orderedPositions.last else { return }
     let location = CLLocation(latitude: lastPosition.latitude, longitude: lastPosition.longitude)
-    Task { [weak self] in
+    finishTasks.append(Task { [weak self] in
       guard let self else { return }
       do {
         let weather = try await self.weatherService.fetchWeather(at: location, type: .end)
@@ -230,7 +238,7 @@ final class DriveRecordingService {
       } catch {
         Log.data.error("End weather fetch failed: \(error)")
       }
-    }
+    })
   }
 
   private func saveModelContext() {

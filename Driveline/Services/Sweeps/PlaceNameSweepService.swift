@@ -47,11 +47,15 @@ final class PlaceNameSweepService: SweepServiceProtocol {
       guard !Task.isCancelled else { return }
       if drive.startPlaceName == nil, let first = drive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
-        drive.startPlaceName = await geocodingService.reverseGeocode(location: location)
+        let placeName = await geocodingService.reverseGeocode(location: location)
+        guard !Task.isCancelled else { return }
+        drive.startPlaceName = placeName
       }
       if drive.endPlaceName == nil, let last = drive.orderedPositions.last {
         let location = CLLocation(latitude: last.latitude, longitude: last.longitude)
-        drive.endPlaceName = await geocodingService.reverseGeocode(location: location)
+        let placeName = await geocodingService.reverseGeocode(location: location)
+        guard !Task.isCancelled else { return }
+        drive.endPlaceName = placeName
       }
       saveModelContext()
       await spotlightIndexingService?.indexDrive(drive)

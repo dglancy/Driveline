@@ -172,6 +172,22 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   // MARK: - Cancellation
 
   @Test
+  func sweepDoesNotWriteWeatherWhenCancelledMidFetch() async throws {
+    let mockWeather = MockWeatherFetchService()
+    mockWeather.delay = .milliseconds(50)
+    let service = makeSweepService(weatherService: mockWeather)
+    let drive = try insertFinishedDrive(positions: [makePosition()])
+
+    let task = Task { await service.sweep() }
+    await Task.yield()
+    task.cancel()
+    await task.value
+
+    #expect(drive.startWeather == nil)
+    #expect(drive.endWeather == nil)
+  }
+
+  @Test
   func sweepDoesNoWorkWhenTaskAlreadyCancelled() async throws {
     let mockWeather = MockWeatherFetchService()
     let service = makeSweepService(weatherService: mockWeather)

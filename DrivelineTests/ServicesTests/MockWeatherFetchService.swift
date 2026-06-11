@@ -20,6 +20,7 @@ final class MockWeatherFetchService: WeatherFetchServiceProtocol {
   var symbolName = "sun.max.fill"
   var temperatureCelsius = 18.0
   var shouldThrow = false
+  var delay: Duration?
 
   // MARK: - WeatherFetchServiceProtocol
 
@@ -37,6 +38,9 @@ final class MockWeatherFetchService: WeatherFetchServiceProtocol {
   func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather {
     fetchedLocations.append(location)
     fetchedDates.append(date)
+    if let delay {
+      try? await Task.sleep(for: delay)
+    }
     if shouldThrow { throw URLError(.notConnectedToInternet) }
     return Weather(
       temperatureCelsius: temperatureCelsius,

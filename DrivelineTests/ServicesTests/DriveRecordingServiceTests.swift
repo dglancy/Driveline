@@ -500,6 +500,32 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(service.drive?.startWeather == nil)
   }
 
+  // MARK: - finishDrive task cancellation
+
+  @Test
+  func startDriveCancelsInFlightPlaceNameSweep() async throws {
+    let mockGeocoding = MockGeocodingService()
+    mockGeocoding.delay = .milliseconds(50)
+    let (service, _, _) = makeServices(geocodingService: mockGeocoding)
+
+    let finishedDrive = try insertFinishedDrive()
+    let position = makePosition()
+    context!.insert(position)
+    finishedDrive.positions = [position]
+    try context!.save()
+
+    service.finishDrive()
+
+    await Task.yield()
+    await Task.yield()
+
+    try service.startDrive()
+
+    try await Task.sleep(for: .milliseconds(100))
+
+    #expect(finishedDrive.startPlaceName == nil)
+  }
+
   // MARK: - finishDrive weather
 
   @Test
