@@ -13,6 +13,6 @@ xcodebuild build \
 
 mkdir -p ~/bin
 cp build/Build/Products/Release/MLTrainingDataPrepTool ~/bin/MLTrainingDataPrepTool
+rm -rf build
 
 echo "Installed to ~/bin/MLTrainingDataPrepTool"
-echo "Make sure ~/bin is on your PATH (e.g. add 'export PATH=\"\$HOME/bin:\$PATH\"' to your shell profile)."
