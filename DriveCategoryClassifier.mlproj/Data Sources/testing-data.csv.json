@@ -5,16 +5,105 @@
   "createdDate" : "2026-06-12T18:43:34Z",
   "dataPathRelativeToProjectURL" : "../MLTrainingData/testing-data.csv/",
   "dataResult" : {
+    "columnTypes" : [
+      "String",
+      "Double",
+      "Int",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "Int",
+      "Int",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "String"
+    ],
+    "columnValues" : [
+      "Driving to Circle K in Cabra, Driving back from Circle K in Cabra, Dropping Rose into Drury Street, Collecting Rose & Paul from night out, Going to lunch, Coming from Lunch",
+      "3,804.80, 3,727.50, 16,084.50, 26,837.80, 5,818.80, 6,668.80",
+      "796, 801, 3,505, 2,981, 859, 778",
+      "17.20, 16.70, 16.50, 32.40, 24.40, 30.80",
+      "17.70, 18.90, 16.20, 34.30, 27.40, 31.80",
+      "20.00, 14.60, 17.40, 32.40, 24.70, 24.20",
+      "399.00, 213.30, 303.10, 1,049.50, 607.60, 584.20",
+      "0.00, 0.00, 0.00, 10.60, 0.00, 2.60",
+      "0, 0, 0, 2, 0, 1",
+      "11, 4, 39, 18, 7, 4",
+      "34.70, 20.70, 41.10, 24.40, 20.50, 8.90",
+      "1.19, 1.19, 107.76, 182.83, 1.29, 1.47",
+      "3,136.40, 2,122.70, 5,095.30, 1,498.40, 2,609.70, 1,750.20",
+      "86.60, 41.10, 206.50, 256.60, 85.40, 67.50",
+      "51.40, 35.30, 206.40, 258.40, 66.20, 93.00",
+      "errand, errand, urban, urban, errand, errand"
+    ],
+    "columns" : [
+      "Name",
+      "Distance",
+      "Duration",
+      "Average Speed",
+      "Mean Speed",
+      "Std Deviation Speed",
+      "Speed Variance",
+      "Percentage Time At High Speed",
+      "Sustained High Speed Segment Count",
+      "Stop Count",
+      "Percentage Time Stopped",
+      "Sinuosity",
+      "Bearing Change Rate",
+      "Elevation Gain",
+      "Elevation Loss",
+      "Category"
+    ],
     "createdDate" : "2026-06-12T18:43:34Z",
+    "dataAnalysis" : {
+      "classifierAnalysis" : {
+
+      },
+      "issues" : [
+        {
+          "description" : "No target selected",
+          "severity" : "notReady"
+        },
+        {
+          "description" : "Data has 6 rows",
+          "severity" : "info"
+        },
+        {
+          "description" : "No features selected",
+          "severity" : "notReady"
+        }
+      ],
+      "objectDetectorAnalysis" : {
+        "details" : {
+
+        }
+      },
+      "summary" : {
+        "canUseValidation" : 0,
+        "sampleCount" : 6
+      }
+    },
     "dataSourceID" : "570F659F-134E-4497-8FEA-18FA3DEEED1E",
-    "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/testing-data.csv"
+    "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/testing-data.csv",
+    "error" : {
+      "code" : 1000,
+      "domain" : "composer.error.domain",
+      "errorType" : "notReady",
+      "reason" : "No target selected"
+    },
+    "itemsCount" : 6
   },
   "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/testing-data.csv",
   "experimentIDs" : [
     "C203C388-B37D-4D94-9506-3E66ECAB5057"
   ],
   "id" : "570F659F-134E-4497-8FEA-18FA3DEEED1E",
-  "modifiedDate" : "2026-06-12T18:43:34Z",
+  "modifiedDate" : "2026-06-12T19:09:59Z",
   "pathType" : 0,
   "preferredFilename" : "testing-data.csv",
   "title" : "testing-data.csv",

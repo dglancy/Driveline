@@ -24,16 +24,105 @@
   "createdDate" : "2026-06-12T18:43:01Z",
   "dataPathRelativeToProjectURL" : "../MLTrainingData/training-data.csv/",
   "dataResult" : {
+    "columnTypes" : [
+      "String",
+      "Double",
+      "Int",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "Int",
+      "Int",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "Double",
+      "String"
+    ],
+    "columnValues" : [
+      "Driving to Tesco Phibsborough, Driving back from SuperValu Stoneybatter, Driving to Aldi Cabra, Driving back from Lidl Finglas, Driving to Boots Henry Street, Driving back from Post Office Drumcondra, Driving to Dry Cleaners Glasnevin, Driving back from Pharmacy Cabra, Driving to Centra Glasnevin, Driving back from Local Garage, Driving to Recycling Centre, Driving back from Dentist Phibsborough, Driving to Vet Castleknock, Driving back from Hardware Store Finglas, Driving to Library Cabra, Driving back from Petrol Station N3, Driving to Butcher Stoneybatter, Driving back from Farmer's Market Smithfield, Driving to Charity Shop Drumcondra, Driving back from DIY Store Blanchardstown, Drop kids to school, Trip to the office, Visit to Mater Hospital, Dinner in town, Collect parcel from depot, Drive to Temple Bar, Visit friend in Rathmines, Run to Liffey Valley, Drive to Croke Park, Pick up from Connolly Station",
+      "3,545.70, 3,158.40, 4,509.10, 5,000.20, 2,883.40, 4,101.50, 3,703.10, 6,596.90, 3,711.30, 4,133.90, 1,976.90, 5,526.10, 4,937.80, 1,761.50, 3,506.40, 4,874.40, 5,349.70, 5,669.20, 5,069.30, 2,799.50, 23,806.70, 17,598.70, 10,958.30, 21,106.20, 7,952.70, 19,137.60, 4,831.10, 14,424.70, 7,781.50, 5,170.10",
+      "673, 451, 853, 1,234, 410, 558, 688, 1,134, 860, 1,092, 364, 851, 1,065, 233, 676, 732, 1,263, 893, 1,231, 607, 2,942, 1,998, 1,672, 3,067, 1,194, 3,074, 570, 3,437, 2,213, 624",
+      "18.90, 25.20, 19.00, 14.60, 25.30, 26.50, 19.40, 20.90, 15.50, 13.60, 19.50, 23.40, 16.70, 27.10, 18.70, 24.00, 15.20, 22.80, 14.80, 16.60, 29.10, 31.70, 23.60, 24.80, 24.00, 22.40, 30.50, 15.10, 12.70, 29.80",
+      "19.80, 24.80, 19.30, 14.70, 26.10, 24.70, 21.10, 19.30, 15.30, 12.40, 19.40, 21.30, 18.30, 24.80, 19.60, 21.60, 13.90, 21.20, 13.90, 17.80, 26.80, 32.70, 23.30, 25.10, 23.10, 20.50, 33.20, 14.00, 12.00, 29.20",
+      "21.00, 11.80, 15.10, 12.70, 17.20, 18.90, 18.60, 17.10, 12.70, 8.80, 20.00, 24.90, 18.10, 19.60, 10.70, 18.20, 19.90, 10.60, 13.00, 13.50, 21.60, 16.50, 24.30, 23.80, 25.00, 14.00, 21.50, 16.70, 28.40, 20.70",
+      "439.40, 139.60, 228.10, 162.40, 295.60, 355.90, 344.80, 293.90, 162.30, 77.10, 402.00, 622.40, 328.50, 382.50, 114.30, 331.80, 397.30, 113.30, 169.80, 181.90, 468.00, 273.00, 589.00, 565.20, 625.30, 196.70, 461.30, 277.50, 807.80, 426.50",
+      "0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.80, 4.70, 9.30, 2.10, 9.10, 0.90, 4.80, 2.20, 1.90, 6.20",
+      "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 2, 0, 1, 0, 0, 1",
+      "3, 14, 5, 6, 9, 8, 10, 14, 13, 7, 12, 3, 4, 11, 11, 12, 2, 14, 7, 8, 35, 28, 8, 3, 38, 29, 34, 23, 10, 22",
+      "25.10, 20.20, 42.80, 44.10, 16.10, 30.30, 35.70, 19.20, 36.50, 15.10, 17.00, 45.60, 17.90, 22.50, 34.70, 20.50, 16.70, 33.70, 34.80, 27.30, 13.80, 32.40, 18.80, 43.90, 20.00, 22.20, 15.10, 22.40, 24.10, 38.40",
+      "1.04, 1.18, 1.63, 1.41, 1.47, 1.47, 1.14, 1.67, 1.31, 1.34, 1.33, 1.14, 1.13, 1.37, 1.11, 1.29, 1.33, 1.29, 1.48, 1.51, 54.48, 138.88, 1.26, 1.48, 1.44, 1.20, 111.21, 183.61, 1.46, 231.08",
+      "2,936.60, 3,152.70, 2,449.50, 3,591.80, 3,077.10, 2,858.50, 3,322.60, 1,946.00, 2,768.50, 2,304.50, 2,038.70, 2,119.90, 1,802.90, 2,870.10, 3,877.50, 2,812.20, 3,182.80, 2,868.80, 2,017.00, 2,865.70, 3,908.80, 4,053.20, 2,300.70, 4,993.60, 4,534.80, 5,248.50, 2,804.00, 4,796.50, 4,221.20, 2,826.70",
+      "58.80, 55.90, 52.70, 22.40, 44.50, 58.60, 24.60, 20.80, 35.80, 45.90, 38.40, 17.30, 17.60, 58.60, 60.10, 27.00, 31.00, 52.70, 51.10, 70.00, 221.10, 154.80, 185.10, 140.00, 207.60, 217.10, 117.00, 166.00, 63.50, 115.50",
+      "37.30, 65.20, 36.90, 29.30, 59.70, 40.40, 28.20, 48.60, 15.00, 65.30, 27.30, 62.70, 66.40, 48.70, 26.80, 36.40, 22.10, 75.40, 16.90, 56.40, 175.30, 204.40, 48.50, 204.50, 83.00, 196.20, 140.40, 221.50, 212.40, 123.70",
+      "errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, errand, urban, urban, urban, urban, urban, urban, urban, urban, urban, urban"
+    ],
+    "columns" : [
+      "Name",
+      "Distance",
+      "Duration",
+      "Average Speed",
+      "Mean Speed",
+      "Std Deviation Speed",
+      "Speed Variance",
+      "Percentage Time At High Speed",
+      "Sustained High Speed Segment Count",
+      "Stop Count",
+      "Percentage Time Stopped",
+      "Sinuosity",
+      "Bearing Change Rate",
+      "Elevation Gain",
+      "Elevation Loss",
+      "Category"
+    ],
     "createdDate" : "2026-06-12T18:43:01Z",
+    "dataAnalysis" : {
+      "classifierAnalysis" : {
+
+      },
+      "issues" : [
+        {
+          "description" : "No target selected",
+          "severity" : "notReady"
+        },
+        {
+          "description" : "Data has 100 rows",
+          "severity" : "info"
+        },
+        {
+          "description" : "No features selected",
+          "severity" : "notReady"
+        }
+      ],
+      "objectDetectorAnalysis" : {
+        "details" : {
+
+        }
+      },
+      "summary" : {
+        "canUseValidation" : 1,
+        "sampleCount" : 100
+      }
+    },
     "dataSourceID" : "CA675425-A40D-4B45-9C69-06E49A56D729",
-    "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/training-data.csv"
+    "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/training-data.csv",
+    "error" : {
+      "code" : 1000,
+      "domain" : "composer.error.domain",
+      "errorType" : "notReady",
+      "reason" : "No target selected"
+    },
+    "itemsCount" : 100
   },
   "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/training-data.csv",
   "experimentIDs" : [
     "C203C388-B37D-4D94-9506-3E66ECAB5057"
   ],
   "id" : "CA675425-A40D-4B45-9C69-06E49A56D729",
-  "modifiedDate" : "2026-06-12T18:52:47Z",
+  "modifiedDate" : "2026-06-12T19:09:59Z",
   "pathType" : 0,
   "preferredFilename" : "training-data.csv",
   "title" : "training-data.csv",

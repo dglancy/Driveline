@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D1E962D2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E962C2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel */; };
 		6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */; };
 		6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */; };
 		6D61611A2FD447E700F6F3A7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6161192FD447E700F6F3A7 /* WidgetKit.framework */; };
@@ -70,6 +71,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6D1E962C2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DriveCategoryClassifier.mlmodel; sourceTree = "<group>"; };
 		6D206A8F2FDBE838009EB720 /* build-MLTrainingDataPrepTool.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-MLTrainingDataPrepTool.sh"; sourceTree = "<group>"; };
 		6D47A5102FCAD20600E6C7B7 /* Driveline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Driveline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D47A51F2FCAD20800E6C7B7 /* DrivelineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivelineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,6 +259,7 @@
 				6D8311D12FCD8C620036D01E /* iOS.xctestplan */,
 				6DB7778A2FDB5EC20093240A /* MacOS.xctestplan */,
 				6D206A8F2FDBE838009EB720 /* build-MLTrainingDataPrepTool.sh */,
+				6D1E962C2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel */,
 				6D8311CF2FCD81C40036D01E /* workflows */,
 				6D47A5122FCAD20600E6C7B7 /* Driveline */,
 				6D47A5222FCAD20800E6C7B7 /* DrivelineTests */,
@@ -553,6 +556,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D1E962D2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
