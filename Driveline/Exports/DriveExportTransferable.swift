@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 // MARK: - UTType
 
 extension UTType {
-  nonisolated static let gpx = UTType(filenameExtension: "gpx", conformingTo: .xml) ?? .xml
+  nonisolated static let gpx = UTType("com.targatrips.driveline.gpx") ?? UTType(filenameExtension: "gpx", conformingTo: .xml) ?? .xml
 }
 
 // MARK: - GPX export
@@ -21,8 +21,9 @@ struct DriveGPXExport: Transferable {
   nonisolated(unsafe) let drive: Drive
 
   static var transferRepresentation: some TransferRepresentation {
-    FileRepresentation(exportedContentType: .gpx) { export in
-      SentTransferredFile(try await ExportDriveGPX().export(drive: export.drive))
+    DataRepresentation(exportedContentType: .gpx) { export in
+      let url = try await ExportDriveGPX().export(drive: export.drive)
+      return try Data(contentsOf: url)
     }
   }
 }
@@ -33,8 +34,9 @@ struct DrivePNGExport: Transferable {
   nonisolated(unsafe) let drive: Drive
 
   static var transferRepresentation: some TransferRepresentation {
-    FileRepresentation(exportedContentType: .png) { export in
-      SentTransferredFile(try await ExportDrivePNG().export(drive: export.drive))
+    DataRepresentation(exportedContentType: .png) { export in
+      let url = try await ExportDrivePNG().export(drive: export.drive)
+      return try Data(contentsOf: url)
     }
   }
 }
