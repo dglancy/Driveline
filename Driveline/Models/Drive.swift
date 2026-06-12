@@ -88,7 +88,6 @@ final class Drive {
 
   var trigger: RecordingTrigger = RecordingTrigger.manual
   var status: DriveStatus = DriveStatus.recording
-  var category: Category = Category.none
 
   @Relationship(deleteRule: .cascade, inverse: \Position.drive)
   var positions: [Position]?
@@ -97,11 +96,20 @@ final class Drive {
 
   @Relationship(deleteRule: .cascade, inverse: \Weather.drive)
   var weatherReadings: [Weather]?
+  
+  // MARK: - Private properties
+  
+  private var categoryRaw: Category?
 
   // MARK: - Computed Properties
 
   var startWeather: Weather? { weatherReadings?.first { $0.type == .start } }
   var endWeather: Weather? { weatherReadings?.first { $0.type == .end } }
+
+  var category: Category {
+    get { categoryRaw ?? .none }
+    set { categoryRaw = newValue }
+  }
 
   var displayName: String {
     if let name { return name }
@@ -134,7 +142,7 @@ final class Drive {
     self.endPlaceName = nil
     self.trigger = trigger
     self.status = .recording
-    self.category = .none
+    self.categoryRaw = nil
     self.positions = nil
     self.accumulatedDistanceMetres = 0
     self.weatherReadings = nil
