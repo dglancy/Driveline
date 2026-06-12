@@ -1,0 +1,7 @@
+Name,Distance,Duration,Average Speed,Mean Speed,Std Deviation Speed,Speed Variance,Percentage Time At High Speed,Sustained High Speed Segment Count,Stop Count,Percentage Time Stopped,Sinuosity,Bearing Change Rate,Elevation Gain,Elevation Loss,Category
+Driving to Circle K in Cabra,3804.8,796,17.2,17.7,20.0,399.0,0.0,0,11,34.7,1.188,3136.4,86.6,51.4,
+Driving back from Circle K in Cabra,3727.5,801,16.7,18.9,14.6,213.3,0.0,0,4,20.7,1.194,2122.7,41.1,35.3,
+Dropping Rose into Drury Street,16084.5,3505,16.5,16.2,17.4,303.1,0.0,0,39,41.1,107.755,5095.3,206.5,206.4,
+Collecting Rose & Paul from night out,26837.8,2981,32.4,34.3,32.4,1049.5,10.6,2,18,24.4,182.83,1498.4,256.6,258.4,
+Going to lunch,5818.8,859,24.4,27.4,24.7,607.6,0.0,0,7,20.5,1.287,2609.7,85.4,66.2,
+Coming from Lunch,6668.8,778,30.8,31.8,24.2,584.2,2.6,1,4,8.9,1.466,1750.2,67.5,93.0,

@@ -9,7 +9,9 @@ xcodebuild build \
   -scheme MLTrainingDataPrepTool \
   -configuration Release \
   -destination 'platform=macOS' \
-  -derivedDataPath build
+  -derivedDataPath build \
+  CLANG_ENABLE_CODE_COVERAGE=NO \
+  SWIFT_ENABLE_TESTABILITY=NO
 
 mkdir -p ~/bin
 cp build/Build/Products/Release/MLTrainingDataPrepTool ~/bin/MLTrainingDataPrepTool
