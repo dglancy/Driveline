@@ -132,6 +132,7 @@
 		6DAB000000000000000018 /* Exceptions for "MLTrainingDataPrepTool" folder in "MLTrainingDataPrepToolTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				CSVReader.swift,
 				CSVWriter.swift,
 				GPXDriveStatistics.swift,
 				GPXStatisticsParser.swift,

@@ -59,6 +59,8 @@ struct MLTrainingDataPrepTool: ParsableCommand {
     }
 
     let outputURL = URL(fileURLWithPath: outputCSV)
-    try CSVWriter.append(records, to: outputURL)
+    let existingNames = try CSVReader.existingNames(at: outputURL)
+    let newRecords = records.filter { !existingNames.contains($0.name) }
+    try CSVWriter.append(newRecords, to: outputURL)
   }
 }

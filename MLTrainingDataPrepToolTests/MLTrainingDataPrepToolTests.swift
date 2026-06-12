@@ -100,6 +100,66 @@ struct MLTrainingDataPrepToolTests {
     #expect(lines.count == 3) // header + 1 row + trailing empty
   }
 
+  // MARK: - Deduplication
+
+  @Test
+  func doesNotDuplicateRowsWhenRunTwiceOverSameInput() throws {
+    let inputDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: inputDirectory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: inputDirectory) }
+
+    try Self.gpx(name: "Drive One").write(
+      to: inputDirectory.appendingPathComponent("a.gpx"),
+      atomically: true,
+      encoding: .utf8
+    )
+    try Self.gpx(name: "Drive Two").write(
+      to: inputDirectory.appendingPathComponent("b.gpx"),
+      atomically: true,
+      encoding: .utf8
+    )
+
+    let outputCSV = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).csv")
+    defer { try? FileManager.default.removeItem(at: outputCSV) }
+
+    try MLTrainingDataPrepTool.parse([inputDirectory.path, outputCSV.path]).run()
+    try MLTrainingDataPrepTool.parse([inputDirectory.path, outputCSV.path]).run()
+
+    let content = try String(contentsOf: outputCSV, encoding: .utf8)
+    let lines = content.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    #expect(lines.count == 4) // header + 2 rows + trailing empty
+  }
+
+  @Test
+  func preservesHumanEnteredCategoryOnRerun() throws {
+    let inputDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: inputDirectory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: inputDirectory) }
+
+    try Self.gpx(name: "Drive One").write(
+      to: inputDirectory.appendingPathComponent("a.gpx"),
+      atomically: true,
+      encoding: .utf8
+    )
+
+    let outputCSV = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).csv")
+    defer { try? FileManager.default.removeItem(at: outputCSV) }
+
+    try MLTrainingDataPrepTool.parse([inputDirectory.path, outputCSV.path]).run()
+
+    var content = try String(contentsOf: outputCSV, encoding: .utf8)
+    var lines = content.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    lines[1] += "Commute"
+    try lines.joined(separator: "\n").write(to: outputCSV, atomically: true, encoding: .utf8)
+
+    try MLTrainingDataPrepTool.parse([inputDirectory.path, outputCSV.path]).run()
+
+    content = try String(contentsOf: outputCSV, encoding: .utf8)
+    lines = content.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    #expect(lines.count == 3) // header + 1 row + trailing empty
+    #expect(lines[1].hasSuffix(",Commute"))
+  }
+
   // MARK: - Fixtures
 
   private static func gpx(name: String) -> String {
