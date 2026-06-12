@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6D1E962D2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E962C2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel */; };
+		6D1E962F2FDC929F006943C4 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D1E962E2FDC929F006943C4 /* CoreML.framework */; };
 		6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */; };
 		6D47A5C92FCB6AB200E6C7B7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */; };
 		6D61611A2FD447E700F6F3A7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6161192FD447E700F6F3A7 /* WidgetKit.framework */; };
@@ -72,6 +73,7 @@
 
 /* Begin PBXFileReference section */
 		6D1E962C2FDC91D2006943C4 /* DriveCategoryClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DriveCategoryClassifier.mlmodel; sourceTree = "<group>"; };
+		6D1E962E2FDC929F006943C4 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
 		6D206A8F2FDBE838009EB720 /* build-MLTrainingDataPrepTool.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-MLTrainingDataPrepTool.sh"; sourceTree = "<group>"; };
 		6D47A5102FCAD20600E6C7B7 /* Driveline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Driveline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D47A51F2FCAD20800E6C7B7 /* DrivelineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivelineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -203,6 +205,7 @@
 			files = (
 				6D645D0B2FD597CB008E8086 /* WeatherKit.framework in Frameworks */,
 				6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */,
+				6D1E962F2FDC929F006943C4 /* CoreML.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +292,7 @@
 		6D47A59F2FCB2B1400E6C7B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6D1E962E2FDC929F006943C4 /* CoreML.framework */,
 				6D645D0A2FD597CA008E8086 /* WeatherKit.framework */,
 				6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */,
 				6D6161192FD447E700F6F3A7 /* WidgetKit.framework */,

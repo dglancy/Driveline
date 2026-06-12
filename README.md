@@ -76,9 +76,11 @@ Driveline/
 │       ├── Home/                    Home/route list screen
 │       ├── MergeDrives/             Merge drives screen
 │       └── Recording/               In-progress recording screen
+├── DriveCategoryClassifier.mlproj/ Create ML project for training the drive category classifier
 ├── DriveWidgetExtension/           Lock Screen / Dynamic Island Live Activity widget
 ├── DrivelineTests/                 Unit tests (Swift Testing), mirroring the app's folder structure
 ├── DrivelineUITests/               XCTest UI tests
+├── MLTrainingData/                 CSV datasets used to train the drive category classifier
 ├── MLTrainingDataPrepTool/         Command-line tool for building ML training datasets from GPX exports
 ├── MLTrainingDataPrepToolTests/    Unit tests for the ML training data prep tool
 └── Settings.bundle/                In-app Settings.app bundle
