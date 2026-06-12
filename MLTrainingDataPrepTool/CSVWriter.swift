@@ -28,7 +28,8 @@ enum CSVWriter {
     "Sinuosity",
     "Bearing Change Rate",
     "Elevation Gain",
-    "Elevation Loss"
+    "Elevation Loss",
+    "Category"
   ].joined(separator: ",")
 
   // MARK: - Actions
@@ -73,7 +74,8 @@ enum CSVWriter {
       String(statistics.sinuosity),
       String(statistics.bearingChangeRateDegreesPerKilometre),
       String(statistics.elevationGainMetres),
-      String(statistics.elevationLossMetres)
+      String(statistics.elevationLossMetres),
+      escaped(statistics.category)
     ]
     return fields.joined(separator: ",")
   }

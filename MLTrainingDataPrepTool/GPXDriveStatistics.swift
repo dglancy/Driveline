@@ -28,4 +28,5 @@ struct GPXDriveStatistics {
   let bearingChangeRateDegreesPerKilometre: Double
   let elevationGainMetres: Double
   let elevationLossMetres: Double
+  let category: String = ""
 }

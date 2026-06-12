@@ -73,6 +73,20 @@ struct CSVWriterTests {
     #expect(row.hasPrefix("Simple Drive,"))
   }
 
+  // MARK: - Category
+
+  @Test
+  func headerEndsWithCategoryColumn() {
+    #expect(CSVWriter.header.hasSuffix(",Category"))
+  }
+
+  @Test
+  func rowEndsWithEmptyCategoryField() {
+    let row = CSVWriter.row(for: sampleStatistics())
+
+    #expect(row.hasSuffix(","))
+  }
+
   // MARK: - Helpers
 
   private func makeTemporaryURL() -> URL {
