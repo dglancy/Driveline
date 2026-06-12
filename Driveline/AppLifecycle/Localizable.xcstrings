@@ -916,6 +916,9 @@
         }
       }
     },
+    "Couldn't Share Drive" : {
+      "comment" : "Export failure alert title"
+    },
     "Couldn't Start Recording" : {
       "comment" : "Start drive failure alert title",
       "localizations" : {
@@ -1680,6 +1683,9 @@
         }
       }
     },
+    "Failed to prepare export. Please try again." : {
+      "comment" : "Generic export failure message"
+    },
     "Failed to prepare GPX data for sharing." : {
       "comment" : "Export error: GPX string could not be encoded as UTF-8",
       "localizations" : {
@@ -2419,7 +2425,7 @@
       "comment" : "Drive category: not categorized"
     },
     "OK" : {
-      "comment" : "Dismiss start drive error alert",
+      "comment" : "Dismiss export error alert\nDismiss start drive error alert",
       "localizations" : {
         "de" : {
           "stringUnit" : {

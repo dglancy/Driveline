@@ -308,20 +308,32 @@ struct DriveDetailViewModelTests {
     #expect(vm.canExport == true)
   }
 
-  // MARK: - Export items
+  // MARK: - Share
 
   @Test
-  func gpxExportWrapsDrive() {
+  func shareGPXProducesFileWithFriendlyName() async {
     let drive = driveWithOnePosition()
     let vm = buildViewModel(drive: drive)
-    #expect(vm.gpxExport.drive === drive)
+
+    await vm.share(.gpx)
+
+    let expectedName = ExportDriveFileNamingService.fileURL(for: drive, type: .gpx).lastPathComponent
+    #expect(vm.shareItem?.url.lastPathComponent == expectedName)
+    #expect(vm.isPreparingExport == false)
+    #expect(vm.showingExportError == false)
+    if let url = vm.shareItem?.url {
+      #expect(FileManager.default.fileExists(atPath: url.path))
+    }
   }
 
   @Test
-  func pngExportWrapsDrive() {
-    let drive = driveWithOnePosition()
-    let vm = buildViewModel(drive: drive)
-    #expect(vm.pngExport.drive === drive)
+  func shareReportsErrorWhenDriveHasNoCoordinates() async {
+    let vm = buildViewModel(drive: makeDrive())
+
+    await vm.share(.gpx)
+
+    #expect(vm.shareItem == nil)
+    #expect(vm.showingExportError == true)
   }
 
   // MARK: - Delete

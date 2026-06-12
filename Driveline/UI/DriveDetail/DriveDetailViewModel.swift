@@ -26,6 +26,11 @@ final class DriveDetailViewModel {
   var showingDeleteConfirmation = false
   var showingEditDrive = false
 
+  var shareItem: ShareItem?
+  var isPreparingExport = false
+  var showingExportError = false
+  var exportErrorMessage: String?
+
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
   @ObservationIgnored private let modelContext: ModelContext
@@ -73,8 +78,6 @@ final class DriveDetailViewModel {
   var weatherAttributionLegalURL: URL? { weatherAttribution?.legalPageURL }
 
   var canExport: Bool { !drive.orderedPositions.isEmpty }
-  var gpxExport: DriveGPXExport { DriveGPXExport(drive: drive) }
-  var pngExport: DrivePNGExport { DrivePNGExport(drive: drive) }
 
   var coordinates: [CLLocationCoordinate2D] {
     drive.orderedPositions.map {
@@ -108,10 +111,38 @@ final class DriveDetailViewModel {
     DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete([drive])
   }
 
+  func share(_ type: ExportFileType) async {
+    guard !isPreparingExport else { return }
+    isPreparingExport = true
+    defer { isPreparingExport = false }
+    do {
+      let url = try await exporter(for: type).export(drive: drive)
+      shareItem = ShareItem(url: url)
+    } catch {
+      exportErrorMessage = (error as? ExportError)?.errorDescription
+        ?? String(localized: "Failed to prepare export. Please try again.", comment: "Generic export failure message")
+      showingExportError = true
+    }
+  }
+
   // MARK: - Private
+
+  private func exporter(for type: ExportFileType) -> any ExportingDrive {
+    switch type {
+    case .gpx: ExportDriveGPX()
+    case .png: ExportDrivePNG()
+    }
+  }
 
   private func formatTemperature(_ celsius: Double) -> String {
     Measurement(value: celsius, unit: UnitTemperature.celsius)
       .formatted(.measurement(width: .abbreviated, usage: .weather, numberFormatStyle: .number.precision(.fractionLength(0))))
   }
+}
+
+// MARK: - ShareItem
+
+struct ShareItem: Identifiable {
+  let id = UUID()
+  let url: URL
 }

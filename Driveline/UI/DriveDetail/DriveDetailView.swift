@@ -75,6 +75,8 @@ struct DriveDetailView: View {
     .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))
     .modifier(DriveOptionsDialogModifier(viewModel: viewModel))
+    .modifier(ShareDriveSheetModifier(viewModel: viewModel))
+    .modifier(ExportErrorAlertModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
@@ -254,10 +256,14 @@ struct DriveDetailView: View {
 
   private var shareDriveButton: some View {
     Menu {
-      ShareLink(item: viewModel.gpxExport, preview: SharePreview(viewModel.name)) {
+      Button {
+        Task { await viewModel.share(.gpx) }
+      } label: {
         Label(String(localized: "Share as GPX", comment: "Share drive as GPX"), systemImage: Icons.Options.gpxFile)
       }
-      ShareLink(item: viewModel.pngExport, preview: SharePreview(viewModel.name)) {
+      Button {
+        Task { await viewModel.share(.png) }
+      } label: {
         Label(String(localized: "Share as PNG", comment: "Share drive as PNG"), systemImage: Icons.Options.pngImage)
       }
     } label: {
@@ -265,8 +271,13 @@ struct DriveDetailView: View {
         .font(.body.weight(.medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
+        .overlay(alignment: .trailing) {
+          if viewModel.isPreparingExport {
+            ProgressView().padding(.trailing, 16)
+          }
+        }
     }
-    .disabled(!viewModel.canExport)
+    .disabled(!viewModel.canExport || viewModel.isPreparingExport)
     .cardBackground(cornerRadius: 16)
   }
 }
@@ -330,6 +341,31 @@ private struct DriveOptionsDialogModifier: ViewModifier {
         viewModel.showingDeleteConfirmation = true
       }
       Button.cancel()
+    }
+  }
+}
+
+private struct ShareDriveSheetModifier: ViewModifier {
+  @Bindable var viewModel: DriveDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.sheet(item: $viewModel.shareItem) { item in
+      ActivityView(activityItems: [item.url])
+    }
+  }
+}
+
+private struct ExportErrorAlertModifier: ViewModifier {
+  @Bindable var viewModel: DriveDetailViewModel
+
+  func body(content: Content) -> some View {
+    content.alert(
+      String(localized: "Couldn't Share Drive", comment: "Export failure alert title"),
+      isPresented: $viewModel.showingExportError
+    ) {
+      Button(String(localized: "OK", comment: "Dismiss export error alert"), role: .cancel) { }
+    } message: {
+      Text(viewModel.exportErrorMessage ?? "")
     }
   }
 }
