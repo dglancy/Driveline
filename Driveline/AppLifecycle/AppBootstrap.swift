@@ -45,13 +45,16 @@ enum AppBootstrap {
       initialDrive: activeDrive
     )
     
+    let metricKitService = MetricKitService()
+    metricKitService.start()
+
     registerBGTasks([placeNameSweepService, weatherSweepService, debugCategoryPredictionSweepService])
     registerIntentDependencies(driveService: driveService)
 
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
 
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, debugCategoryPredictionSweepService: debugCategoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, debugCategoryPredictionSweepService: debugCategoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
   }
 
   // MARK: - Private

@@ -20,6 +20,7 @@ struct Driveline: App {
   // TODO: Remove once the DriveCategoryClassifier model is finalized.
   @State private var debugCategoryPredictionSweepService: DebugCategoryPredictionSweepService
   @State private var spotlightIndexingService: SpotlightIndexingService
+  @State private var metricKitService: MetricKitService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -38,6 +39,7 @@ struct Driveline: App {
     _weatherSweepService = State(initialValue: env.weatherSweepService)
     _debugCategoryPredictionSweepService = State(initialValue: env.debugCategoryPredictionSweepService)
     _spotlightIndexingService = State(initialValue: env.spotlightIndexingService)
+    _metricKitService = State(initialValue: env.metricKitService)
   }
 
   // MARK: - Main View Scene

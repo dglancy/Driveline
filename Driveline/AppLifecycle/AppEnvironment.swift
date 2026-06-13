@@ -19,4 +19,5 @@ struct AppEnvironment {
   // TODO: Remove once the DriveCategoryClassifier model is finalized.
   let debugCategoryPredictionSweepService: DebugCategoryPredictionSweepService
   let spotlightIndexingService: SpotlightIndexingService
+  let metricKitService: MetricKitService
 }

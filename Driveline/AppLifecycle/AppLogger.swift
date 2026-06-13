@@ -57,4 +57,5 @@ enum Log {
   static let data = AppLogger(category: "Data")
   static let intent = AppLogger(category: "Intent")
   static let settings = AppLogger(category: "Settings")
+  static let metricKit = AppLogger(category: "MetricKit")
 }
