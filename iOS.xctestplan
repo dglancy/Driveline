@@ -18,6 +18,16 @@
         "identifier" : "6D47A51E2FCAD20800E6C7B7",
         "name" : "DrivelineTests"
       }
+    },
+    {
+      "skippedTests" : [
+        "BaseXCTestCase"
+      ],
+      "target" : {
+        "containerPath" : "container:Driveline.xcodeproj",
+        "identifier" : "6D47A5282FCAD20800E6C7B7",
+        "name" : "DrivelineUITests"
+      }
     }
   ],
   "version" : 1

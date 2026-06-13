@@ -21,10 +21,17 @@ class BaseXCTestCase: XCTestCase {
     continueAfterFailure = false
     app = XCUIApplication()
     app.launchArguments += ["-ui-testing"]
+    app.launch()
   }
 
   override func tearDown() async throws {
     app = nil
     try await super.tearDown()
+  }
+  
+  // MARK: - Helper functions
+  
+  func navigatePastEmptyState() {
+    app.buttons["Start a new drive"].tap()
   }
 }
