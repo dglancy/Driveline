@@ -68,10 +68,7 @@ final class DriveClassifierService: DriveClassifierServiceProtocol {
 
   // MARK: - Private
 
-  private func predict(
-    _ model: DriveCategoryClassifier,
-    input: DriveCategoryClassifierInput
-  ) throws -> DriveCategoryClassifierOutput {
+  private func predict(_ model: DriveCategoryClassifier, input: DriveCategoryClassifierInput) throws -> DriveCategoryClassifierOutput {
     try model.prediction(input: input)
   }
 
