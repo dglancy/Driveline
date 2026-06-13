@@ -104,6 +104,7 @@ Each screen-level View has a paired `<Screen>ViewModel` living alongside it, fol
 - CoreSpotlight for indexing drives so they appear in Spotlight search
 - CloudKit for iCloud sync of drives across devices
 - Combine for publishing location updates through the service layer
+- CoreML for on-device drive category classification
 
 **Third-party packages (Swift Package Manager)**
 - None by design.
@@ -115,7 +116,13 @@ Each screen-level View has a paired `<Screen>ViewModel` living alongside it, fol
 - Swift Testing framework (`import Testing`) for unit tests
 - XCTest for UI tests, with an in-memory SwiftData store to keep tests isolated
 
-## ML training data prep tool
+## Machine Learning
+
+Driveline includes an on-device `DriveCategoryClassifier` CoreML model, used by `DriveClassifierService` to automatically assign each finished drive a category — `none`, `errand`, `urban`, `roadTrip`, `scenic`, or `mixed` — based on 14 computed driving statistics (distance, duration, speed averages and variance, time at high speed, stop counts, sinuosity, bearing change rate, and elevation gain/loss).
+
+The model is trained using the `DriveCategoryClassifier.mlproj` Create ML project, with training and testing datasets stored as CSV files in `MLTrainingData/`.
+
+### ML training data prep tool
 
 `MLTrainingDataPrepTool` is a small command-line tool, included as part of the Xcode project, for turning a folder of exported GPX drives into a CSV dataset suitable for training machine learning models.
 
