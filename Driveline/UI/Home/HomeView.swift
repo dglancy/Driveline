@@ -228,7 +228,10 @@ private struct RecordingScreenModifier: ViewModifier {
       get: { driveService.isRecording },
       set: { _ in }
     )) {
-      RecordingView(driveService: driveService)
+      NavigationStack {
+        RecordingView(driveService: driveService)
+          .toolbarVisibility(.hidden, for: .navigationBar)
+      }
     }
   }
 }

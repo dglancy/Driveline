@@ -63,6 +63,7 @@ struct RecordingView: View {
         .foregroundStyle(Color.red)
         .tracking(1.4)
         .accessibilityLabel(String(localized: "Recording in progress", comment: "Status badge accessibility label"))
+        .accessibilityIdentifier("RecordingBanner")
         .dynamicTypeSize(.large ... .xxxLarge)
     }
     .padding(.vertical, 7)
@@ -80,6 +81,8 @@ struct RecordingView: View {
         .textCase(.uppercase)
         .padding(.bottom, 6)
         .accessibilityHidden(true)
+        .accessibilityIdentifier("ElapsedTimer")
+        .dynamicTypeSize(.large ... .accessibility2)
         .dynamicTypeSize(.large ... .accessibility2)
 
       Text(viewModel.elapsedDisplay)

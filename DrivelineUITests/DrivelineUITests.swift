@@ -25,30 +25,14 @@ final class DrivelineUITests: BaseXCTestCase {
   @MainActor
   func testRecordScreenFromEmptyScreen() throws {
     navigatePastEmptyState()
+    
+    let recordingBanner = app.staticTexts["RecordingBanner"]
+    XCTAssertTrue(recordingBanner.waitForExistence(timeout: 5))
+    XCTAssertEqual(recordingBanner.label, "Recording in progress")
+    
+    XCTAssertEqual(app.staticTexts["Elapsed"].label, "Elapsed")
+    
+    app.buttons["stop.fill"].firstMatch.tap()
   }
   
 }
-  
-  //// Assert text exists on screen
-  //XCTAssertTrue(app.staticTexts["Your text here"].exists)
-  //
-  //// Assert a button exists
-  //XCTAssertTrue(app.buttons["Button Label"].exists)
-  //
-  //// Wait for elements that may take time to appear
-  //let button = app.buttons["Finish Drive"]
-  //XCTAssertTrue(button.waitForExistence(timeout: 5))
-  
-  
-  //func testLaunchEmpty() throws {
-  //    app.launch()
-  //
-  //    // Assert the record button exists before tapping
-  //    XCTAssertTrue(app.buttons["Start a new drive"].waitForExistence(timeout: 5))
-  //    app.buttons["record.circle"].firstMatch.tap()
-  //
-  //    // Assert some label appears on the recording screen
-  //    XCTAssertTrue(app.staticTexts["Recording"].waitForExistence(timeout: 5))
-  //
-  //    app.buttons["stop.fill"].firstMatch.tap()
-  //}
