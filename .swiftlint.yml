@@ -10,6 +10,7 @@ identifier_name:
     - i
     - x
     - y
+    - t
     - id
 
 large_tuple:

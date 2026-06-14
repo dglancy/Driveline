@@ -77,17 +77,17 @@ final class DriveDetailViewModel {
   var weatherAttributionDarkMarkURL: URL? { weatherAttribution?.combinedMarkDarkURL }
   var weatherAttributionLegalURL: URL? { weatherAttribution?.legalPageURL }
 
-  var canExport: Bool { !drive.orderedPositions.isEmpty }
+  var canExport: Bool { !(drive.positions?.isEmpty ?? true) }
 
-  var coordinates: [CLLocationCoordinate2D] {
-    drive.orderedPositions.map {
-      CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
-    }
+  @ObservationIgnored private lazy var fullCoordinates: [CLLocationCoordinate2D] = drive.orderedPositions.map {
+    CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
   }
 
-  var cameraPosition: MapCameraPosition {
-    .fit(to: coordinates, paddingMultiplier: 1.5)
-  }
+  @ObservationIgnored private(set) lazy var coordinates: [CLLocationCoordinate2D] =
+    PolylineSimplifier.simplify(fullCoordinates, toleranceMeters: 15)
+
+  @ObservationIgnored private(set) lazy var cameraPosition: MapCameraPosition =
+    .fit(to: fullCoordinates, paddingMultiplier: 1.5)
 
   // MARK: - Lifecycle
 
