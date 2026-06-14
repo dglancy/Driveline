@@ -21,22 +21,27 @@ final class DrivelineUITests: BaseXCTestCase {
   
   @MainActor
   func testShowRecordScreenFromEmptyScreen() throws {
+    let beforeStart = Date.now
     navigatePastEmptyState()
-    
+
     let recordingBanner = app.staticTexts["RecordingBanner"]
     XCTAssertTrue(recordingBanner.waitForExistence(timeout: 5))
     XCTAssertEqual(recordingBanner.label, "Recording in progress")
-    
+    let afterStart = Date.now
+
     XCTAssertEqual(app.staticTexts["Elapsed"].label, "Elapsed")
     XCTAssertEqual(app.staticTexts["ElapsedTime"].label, "Elapsed time")
-    
+
     XCTAssertEqual(app.staticTexts["DistanceValue"].label, "0.0")
     XCTAssertEqual(app.staticTexts["DistanceUnit"].label, "km")
-    
+
     XCTAssertTrue(app.staticTexts["PositionsCountValue"].exists)
     XCTAssertEqual(app.staticTexts["PositionCountLabel"].label, "logged")
-    
-    XCTAssertEqual(app.staticTexts["DriveStartedAtValue"].label, Date.now.formatted(.dateTime.hour().minute().locale(.current)))
+
+    let expectedStartedAtValues = [beforeStart, afterStart].map {
+      $0.formatted(.dateTime.hour().minute().locale(.current))
+    }
+    XCTAssertTrue(expectedStartedAtValues.contains(app.staticTexts["DriveStartedAtValue"].label))
     XCTAssertEqual(app.staticTexts["DriveStartedAtLabel"].label, "started")
     
     XCTAssertEqual(app.staticTexts["BatteryExplanation"].label, "Running in the background to save battery. Your full drive map appears here when the drive ends.")
