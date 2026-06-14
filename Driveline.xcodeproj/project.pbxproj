@@ -55,6 +55,13 @@
 			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
 			remoteInfo = Driveline;
 		};
+		6D7000000000000000000007 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D47A5082FCAD20600E6C7B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D47A50F2FCAD20600E6C7B7;
+			remoteInfo = Driveline;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,6 +85,7 @@
 		6D47A5102FCAD20600E6C7B7 /* Driveline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Driveline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D47A51F2FCAD20800E6C7B7 /* DrivelineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivelineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D47A5292FCAD20800E6C7B7 /* DrivelineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivelineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D7000000000000000000001 /* DriveWidgetExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DriveWidgetExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		6D47A54F2FCAE68700E6C7B7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6D47A5502FCAE68700E6C7B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -124,14 +132,34 @@
 			);
 			target = 6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */;
 		};
+		6D700000000000000000000D /* Exceptions for "DriveWidgetExtension" folder in "DriveWidgetExtensionTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DriveActivityWidget.swift,
+				FinishDriveIntent.swift,
+			);
+			target = 6D7000000000000000000002 /* DriveWidgetExtensionTests */;
+		};
 		6D6161302FD4482100F6F3A7 /* Exceptions for "Driveline" folder in "DriveWidgetExtensionExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
+				"Extensions/CLLocationSpeed+Extensions.swift",
+				"Extensions/Measurement+Extensions.swift",
 				LiveActivity/DriveActivityAttributes.swift,
 				UI/Common/Icons.swift,
 			);
 			target = 6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */;
+		};
+		6D700000000000000000000C /* Exceptions for "Driveline" folder in "DriveWidgetExtensionTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Extensions/CLLocationSpeed+Extensions.swift",
+				"Extensions/Measurement+Extensions.swift",
+				LiveActivity/DriveActivityAttributes.swift,
+				UI/Common/Icons.swift,
+			);
+			target = 6D7000000000000000000002 /* DriveWidgetExtensionTests */;
 		};
 		6DAB000000000000000018 /* Exceptions for "MLTrainingDataPrepTool" folder in "MLTrainingDataPrepToolTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -155,6 +183,7 @@
 				6D47A59D2FCB1FEB00E6C7B7 /* Exceptions for "Driveline" folder in "DrivelineTests" target */,
 				6D47A5892FCB019F00E6C7B7 /* Exceptions for "Driveline" folder in "DrivelineUITests" target */,
 				6D6161302FD4482100F6F3A7 /* Exceptions for "Driveline" folder in "DriveWidgetExtensionExtension" target */,
+				6D700000000000000000000C /* Exceptions for "Driveline" folder in "DriveWidgetExtensionTests" target */,
 			);
 			path = Driveline;
 			sourceTree = "<group>";
@@ -173,8 +202,14 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				6D61612D2FD447E800F6F3A7 /* Exceptions for "DriveWidgetExtension" folder in "DriveWidgetExtensionExtension" target */,
+				6D700000000000000000000D /* Exceptions for "DriveWidgetExtension" folder in "DriveWidgetExtensionTests" target */,
 			);
 			path = DriveWidgetExtension;
+			sourceTree = "<group>";
+		};
+		6D7000000000000000000006 /* DriveWidgetExtensionTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DriveWidgetExtensionTests;
 			sourceTree = "<group>";
 		};
 		6D8311CF2FCD81C40036D01E /* workflows */ = {
@@ -248,6 +283,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6D7000000000000000000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -269,6 +311,7 @@
 				6D47A52C2FCAD20800E6C7B7 /* DrivelineUITests */,
 				6D47A5C82FCB6AB200E6C7B7 /* Settings.bundle */,
 				6D61611D2FD447E700F6F3A7 /* DriveWidgetExtension */,
+				6D7000000000000000000006 /* DriveWidgetExtensionTests */,
 				6DAB000000000000000005 /* MLTrainingDataPrepTool */,
 				6DAB000000000000000006 /* MLTrainingDataPrepToolTests */,
 				6D47A59F2FCB2B1400E6C7B7 /* Frameworks */,
@@ -283,6 +326,7 @@
 				6D47A51F2FCAD20800E6C7B7 /* DrivelineTests.xctest */,
 				6D47A5292FCAD20800E6C7B7 /* DrivelineUITests.xctest */,
 				6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */,
+				6D7000000000000000000001 /* DriveWidgetExtensionTests.xctest */,
 				6DAB000000000000000003 /* MLTrainingDataPrepTool */,
 				6DAB000000000000000004 /* MLTrainingDataPrepToolTests.xctest */,
 			);
@@ -397,6 +441,29 @@
 			productReference = 6D6161182FD447E700F6F3A7 /* DriveWidgetExtensionExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6D7000000000000000000002 /* DriveWidgetExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D700000000000000000000B /* Build configuration list for PBXNativeTarget "DriveWidgetExtensionTests" */;
+			buildPhases = (
+				6D7000000000000000000003 /* Sources */,
+				6D7000000000000000000004 /* Frameworks */,
+				6D7000000000000000000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D7000000000000000000008 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6D7000000000000000000006 /* DriveWidgetExtensionTests */,
+			);
+			name = DriveWidgetExtensionTests;
+			packageProductDependencies = (
+			);
+			productName = DriveWidgetExtensionTests;
+			productReference = 6D7000000000000000000001 /* DriveWidgetExtensionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		6DAB000000000000000001 /* MLTrainingDataPrepTool */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6DAB000000000000000011 /* Build configuration list for PBXNativeTarget "MLTrainingDataPrepTool" */;
@@ -469,6 +536,10 @@
 					6D6161172FD447E700F6F3A7 = {
 						CreatedOnToolsVersion = 26.5;
 					};
+					6D7000000000000000000002 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 6D47A50F2FCAD20600E6C7B7;
+					};
 					6DAB000000000000000001 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -503,6 +574,7 @@
 				6D47A51E2FCAD20800E6C7B7 /* DrivelineTests */,
 				6D47A5282FCAD20800E6C7B7 /* DrivelineUITests */,
 				6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */,
+				6D7000000000000000000002 /* DriveWidgetExtensionTests */,
 				6DAB000000000000000001 /* MLTrainingDataPrepTool */,
 				6DAB000000000000000002 /* MLTrainingDataPrepToolTests */,
 			);
@@ -547,6 +619,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6DAB00000000000000000C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D7000000000000000000005 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -599,6 +678,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6D7000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -630,6 +716,11 @@
 			isa = PBXTargetDependency;
 			target = 6D47A50F2FCAD20600E6C7B7 /* Driveline */;
 			targetProxy = 6DB7778B2FDB61580093240A /* PBXContainerItemProxy */;
+		};
+		6D7000000000000000000008 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D6161172FD447E700F6F3A7 /* DriveWidgetExtensionExtension */;
+			targetProxy = 6D7000000000000000000007 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1029,6 +1120,56 @@
 			};
 			name = Release;
 		};
+		6D7000000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.Driveline.WidgetExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Driveline.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Driveline";
+			};
+			name = Debug;
+		};
+		6D700000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = 4U6275HKV3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.targatrips.Driveline.WidgetExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Driveline.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Driveline";
+			};
+			name = Release;
+		};
 		6DAB00000000000000000D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1136,6 +1277,15 @@
 			buildConfigurations = (
 				6D61612B2FD447E800F6F3A7 /* Debug */,
 				6D61612C2FD447E800F6F3A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D700000000000000000000B /* Build configuration list for PBXNativeTarget "DriveWidgetExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D7000000000000000000009 /* Debug */,
+				6D700000000000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

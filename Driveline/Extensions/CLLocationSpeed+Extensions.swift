@@ -16,6 +16,12 @@ private enum SpeedFormatterCache {
 
 extension Measurement where UnitType == UnitSpeed {
 
+  // MARK: - Static methods
+
+  static func localizedSpeedUnitSymbol(locale: Locale = .current) -> String {
+    preferredUnit(for: locale).symbol
+  }
+
   // MARK: - Private
 
   private static func preferredUnit(for locale: Locale) -> UnitSpeed {
