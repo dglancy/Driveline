@@ -14,12 +14,12 @@ struct DriveDetailMapView: View {
   // MARK: - Properties
 
   let coordinates: [CLLocationCoordinate2D]
-  let cameraPosition: MapCameraPosition
+  @Binding var cameraPosition: MapCameraPosition
 
   // MARK: - Body
 
   var body: some View {
-    Map(initialPosition: cameraPosition, interactionModes: []) {
+    Map(position: $cameraPosition, interactionModes: []) {
       DriveMapContent(coordinates: coordinates)
     }
     .mapStyle(.standard(emphasis: .muted))
