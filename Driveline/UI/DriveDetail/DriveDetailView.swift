@@ -33,8 +33,9 @@ struct DriveDetailView: View {
         .ignoresSafeArea()
 
       VStack(spacing: 0) {
-        DriveDetailMapView(coordinates: viewModel.coordinates, cameraPosition: viewModel.cameraPosition)
+        DriveDetailMapView(coordinates: viewModel.coordinates, cameraPosition: $viewModel.cameraPosition)
           .frame(height: mapHeight)
+          .task { await viewModel.loadRoute() }
           .overlay(alignment: .topLeading) {
             GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
               .padding(14)
@@ -289,7 +290,7 @@ private struct FullScreenMapModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content.navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
-      FullScreenMapView(drive: viewModel.drive)
+      FullScreenMapView(drive: viewModel.drive, modelContainer: viewModel.modelContainer)
     }
   }
 }

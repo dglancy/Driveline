@@ -39,6 +39,11 @@ extension Drive {
     return distanceMetres / activeDurationSeconds
   }
 
+  var displayAvgSpeedMetresPerSecond: CLLocationSpeed {
+    guard activeDurationSeconds > 0 else { return 0 }
+    return displayDistanceMetres / activeDurationSeconds
+  }
+
   var maxSpeedMetresPerSecond: CLLocationSpeed {
     guard let positions else { return 0 }
     let speeds = positions.compactMap { $0.speed >= 0 ? $0.speed : nil }

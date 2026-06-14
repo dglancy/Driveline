@@ -22,18 +22,18 @@ struct DriveStatsPresenter {
   // MARK: - Computed Properties
 
   var distanceValue: String {
-    Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
+    Measurement(value: drive.displayDistanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
   }
   var distanceUnit: String {
-    Measurement(value: drive.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
+    Measurement(value: drive.displayDistanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
   }
   var durationValue: String { drive.activeDurationSeconds.localizedHoursMinutesString() }
   var durationUnit: String { String(localized: "active", comment: "Label for the active driving duration stat") }
   var avgSpeedValue: String {
-    Measurement(value: drive.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
+    Measurement(value: drive.displayAvgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
   }
   var avgSpeedUnit: String {
-    Measurement(value: drive.avgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
+    Measurement(value: drive.displayAvgSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
   }
 
   var startTimeLabel: String {

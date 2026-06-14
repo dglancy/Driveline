@@ -58,8 +58,8 @@ final class DriveDetailViewModel {
   var hasCategory: Bool { drive.category != .none }
   var categoryDisplayName: String { drive.category.displayName }
 
-  var topSpeed: String { Measurement(value: drive.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
-  var trackPoints: String { (drive.positions?.count ?? 0).formatted() }
+  var topSpeed: String { Measurement(value: maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
+  var trackPoints: String { positionCount.formatted() }
   var triggerDisplayName: String { drive.trigger.displayName }
 
   var hasWeather: Bool { drive.startWeather != nil }
@@ -77,17 +77,31 @@ final class DriveDetailViewModel {
   var weatherAttributionDarkMarkURL: URL? { weatherAttribution?.combinedMarkDarkURL }
   var weatherAttributionLegalURL: URL? { weatherAttribution?.legalPageURL }
 
-  var canExport: Bool { !(drive.positions?.isEmpty ?? true) }
+  var canExport: Bool { positionCount > 0 }
 
-  @ObservationIgnored private lazy var fullCoordinates: [CLLocationCoordinate2D] = drive.orderedPositions.map {
-    CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
-  }
+  @ObservationIgnored private lazy var positionCount: Int = {
+    let driveID = drive.id
+    let descriptor = FetchDescriptor<Position>(predicate: #Predicate { $0.drive?.id == driveID })
+    return (try? modelContext.fetchCount(descriptor)) ?? 0
+  }()
 
-  @ObservationIgnored private(set) lazy var coordinates: [CLLocationCoordinate2D] =
-    PolylineSimplifier.simplify(fullCoordinates, toleranceMeters: 15)
+  @ObservationIgnored private lazy var maxSpeedMetresPerSecond: CLLocationSpeed = {
+    let driveID = drive.id
+    var descriptor = FetchDescriptor<Position>(
+      predicate: #Predicate { $0.drive?.id == driveID },
+      sortBy: [SortDescriptor(\.speed, order: .reverse)]
+    )
+    descriptor.fetchLimit = 1
+    let top = (try? modelContext.fetch(descriptor))?.first?.speed ?? 0
+    return max(0, top)
+  }()
 
-  @ObservationIgnored private(set) lazy var cameraPosition: MapCameraPosition =
-    .fit(to: fullCoordinates, paddingMultiplier: 1.5)
+  var coordinates: [CLLocationCoordinate2D] = []
+  var cameraPosition: MapCameraPosition = .automatic
+
+  var modelContainer: ModelContainer { modelContext.container }
+
+  @ObservationIgnored private var didLoadRoute = false
 
   // MARK: - Lifecycle
 
@@ -105,6 +119,15 @@ final class DriveDetailViewModel {
     Task {
       weatherAttribution = try? await WeatherService.shared.attribution
     }
+  }
+
+  func loadRoute() async {
+    guard !didLoadRoute else { return }
+    didLoadRoute = true
+    let loader = DrivePositionLoader(modelContainer: modelContainer)
+    let simplified = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 15)
+    coordinates = simplified
+    cameraPosition = .fit(to: simplified, paddingMultiplier: 1.5)
   }
 
   func deleteDrive() {

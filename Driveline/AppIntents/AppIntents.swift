@@ -55,7 +55,7 @@ struct StartDriveIntent: AppIntent {
   // MARK: - Actions
 
   func perform() async throws -> some IntentResult {
-    await Log.lifecycle.info("Running perform on StartDriveIntent intent")
+    Log.lifecycle.info("Running perform on StartDriveIntent intent")
 
     let driveService = try await resolveDriveRecordingService()
     if await !driveService.isRecording {
@@ -77,7 +77,7 @@ struct FinishDriveIntent: LiveActivityIntent {
   // MARK: - Actions
 
   func perform() async throws -> some IntentResult {
-    await Log.lifecycle.info("Running perform on FinishDriveIntent intent")
+    Log.lifecycle.info("Running perform on FinishDriveIntent intent")
 
     let driveService = try await resolveDriveRecordingService()
     if await driveService.isRecording {

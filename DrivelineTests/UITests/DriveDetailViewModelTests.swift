@@ -168,15 +168,17 @@ struct DriveDetailViewModelTests {
   // MARK: - Map
 
   @Test
-  func coordinatesIsEmptyWhenDriveHasNoPositions() {
+  func coordinatesIsEmptyWhenDriveHasNoPositions() async {
     let vm = buildViewModel(drive: makeDrive())
+    await vm.loadRoute()
     #expect(vm.coordinates.isEmpty)
   }
 
   @Test
-  func coordinatesMatchDriveOrderedPositions() {
+  func coordinatesMatchDriveOrderedPositions() async {
     let drive = driveWithOnePosition()
     let vm = buildViewModel(drive: drive)
+    await vm.loadRoute()
     #expect(vm.coordinates.count == 1)
     #expect(vm.coordinates[0].latitude == 51.5074)
     #expect(vm.coordinates[0].longitude == -0.1278)
@@ -382,6 +384,8 @@ struct DriveDetailViewModelTests {
     spotlight: SpotlightIndexingService = SpotlightIndexingService(index: MockSpotlightIndex())
   ) -> DriveDetailViewModel {
     let context = try! modelContext ?? makeContext()
+    context.insert(drive)
+    try? context.save()
     return DriveDetailViewModel(drive: drive, spotlightIndexingService: spotlight, modelContext: context)
   }
 
