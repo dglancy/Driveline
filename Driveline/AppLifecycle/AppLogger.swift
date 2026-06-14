@@ -15,7 +15,7 @@ enum LogPrivacy {
 
 // MARK: - App Logger
 
-struct AppLogger {
+nonisolated struct AppLogger {
   private let logger: Logger
   private let category: String
   
@@ -50,7 +50,7 @@ struct AppLogger {
 
 // MARK: - Log Enum
 
-enum Log {
+nonisolated enum Log {
   static let lifecycle = AppLogger(category: "Lifecycle")
   static let ui = AppLogger(category: "UI")
   static let location = AppLogger(category: "Location")
