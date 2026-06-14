@@ -26,13 +26,13 @@ final class MetricKitService: NSObject, MXMetricManagerSubscriber {
 
   // MARK: - MXMetricManagerSubscriber
 
-  func didReceive(_ payloads: [MXMetricPayload]) {
+  nonisolated func didReceive(_ payloads: [MXMetricPayload]) {
     payloads.forEach {
       Log.metricKit.debug("Received metric payload for period \($0.timeStampBegin) to \($0.timeStampEnd)")
     }
   }
 
-  func didReceive(_ payloads: [MXDiagnosticPayload]) {
+  nonisolated func didReceive(_ payloads: [MXDiagnosticPayload]) {
     payloads.forEach {
       Log.metricKit.info("Received diagnostic payload for period \($0.timeStampBegin) to \($0.timeStampEnd)")
     }
