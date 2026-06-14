@@ -33,7 +33,8 @@ final class DrivelineUITests: BaseXCTestCase {
     XCTAssertEqual(app.staticTexts["ElapsedTime"].label, "Elapsed time")
 
     XCTAssertEqual(app.staticTexts["DistanceValue"].label, "0.0")
-    XCTAssertEqual(app.staticTexts["DistanceUnit"].label, "km")
+    let expectedDistanceUnit = Locale.current.measurementSystem == .metric ? "km" : "mi"
+    XCTAssertEqual(app.staticTexts["DistanceUnit"].label, expectedDistanceUnit)
 
     XCTAssertTrue(app.staticTexts["PositionsCountValue"].exists)
     XCTAssertEqual(app.staticTexts["PositionCountLabel"].label, "logged")
