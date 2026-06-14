@@ -33,6 +33,13 @@
         "identifier" : "6D47A5282FCAD20800E6C7B7",
         "name" : "DrivelineUITests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Driveline.xcodeproj",
+        "identifier" : "6D7000000000000000000002",
+        "name" : "DriveWidgetExtensionTests"
+      }
     }
   ],
   "version" : 1

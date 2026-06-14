@@ -57,6 +57,17 @@
                ReferencedContainer = "container:Driveline.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6D7000000000000000000002"
+               BuildableName = "DriveWidgetExtensionTests.xctest"
+               BlueprintName = "DriveWidgetExtensionTests"
+               ReferencedContainer = "container:Driveline.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

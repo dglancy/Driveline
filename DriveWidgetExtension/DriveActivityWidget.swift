@@ -43,7 +43,7 @@ struct DriveActivityWidget: Widget {
 
 // MARK: - Lock Screen / Banner
 
-private struct DriveActivityLockScreenView: View {
+struct DriveActivityLockScreenView: View {
 
   let context: ActivityViewContext<DriveActivityAttributes>
 
@@ -101,7 +101,7 @@ private struct DriveActivityLockScreenView: View {
 
 // MARK: - Dynamic Island Compact Trailing
 
-private struct DriveActivityCompactTrailingView: View {
+struct DriveActivityCompactTrailingView: View {
 
   let context: ActivityViewContext<DriveActivityAttributes>
 
@@ -115,7 +115,7 @@ private struct DriveActivityCompactTrailingView: View {
 
 // MARK: - Dynamic Island Expanded Regions
 
-private struct DriveActivityExpandedLeadingView: View {
+struct DriveActivityExpandedLeadingView: View {
 
   let context: ActivityViewContext<DriveActivityAttributes>
 
@@ -133,7 +133,7 @@ private struct DriveActivityExpandedLeadingView: View {
   }
 }
 
-private struct DriveActivityExpandedTrailingView: View {
+struct DriveActivityExpandedTrailingView: View {
 
   let context: ActivityViewContext<DriveActivityAttributes>
 
@@ -151,7 +151,7 @@ private struct DriveActivityExpandedTrailingView: View {
   }
 }
 
-private struct DriveActivityExpandedBottomView: View {
+struct DriveActivityExpandedBottomView: View {
 
   let context: ActivityViewContext<DriveActivityAttributes>
 
@@ -185,7 +185,7 @@ private struct DriveActivityExpandedBottomView: View {
 
 // MARK: - Shared Subviews
 
-private struct LiveActivityStatColumn: View {
+struct LiveActivityStatColumn: View {
 
   let value: String
   let label: String
@@ -206,7 +206,7 @@ private struct LiveActivityStatColumn: View {
   }
 }
 
-private struct LiveActivityTimerColumn: View {
+struct LiveActivityTimerColumn: View {
 
   let startedAt: Date
 
@@ -234,22 +234,20 @@ private extension Color {
 
 // MARK: - Formatting Helpers
 
-private func formattedDistance(_ metres: Double) -> String {
-  let unit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
-  let value = Measurement(value: metres, unit: UnitLength.meters).converted(to: unit).value
-  return value.formatted(.number.precision(.fractionLength(1)))
+@MainActor
+func formattedDistance(_ metres: Double) -> String {
+  Measurement(value: metres, unit: UnitLength.meters).localizedDistanceValueString()
 }
 
-private func distanceUnitSymbol() -> String {
-  Locale.current.measurementSystem == .metric ? UnitLength.kilometers.symbol : UnitLength.miles.symbol
+func distanceUnitSymbol() -> String {
+  Measurement<UnitLength>.localizedDistanceUnitSymbol()
 }
 
-private func formattedSpeed(_ metresPerSecond: Double) -> String {
-  let unit: UnitSpeed = Locale.current.measurementSystem == .metric ? .kilometersPerHour : .milesPerHour
-  let value = Measurement(value: metresPerSecond, unit: UnitSpeed.metersPerSecond).converted(to: unit).value
-  return Int(value.rounded()).formatted()
+@MainActor
+func formattedSpeed(_ metresPerSecond: Double) -> String {
+  Measurement(value: metresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
 }
 
-private func speedUnitSymbol() -> String {
-  Locale.current.measurementSystem == .metric ? UnitSpeed.kilometersPerHour.symbol : UnitSpeed.milesPerHour.symbol
+func speedUnitSymbol() -> String {
+  Measurement<UnitSpeed>.localizedSpeedUnitSymbol()
 }
