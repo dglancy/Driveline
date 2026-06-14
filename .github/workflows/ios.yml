@@ -18,6 +18,6 @@ jobs:
       scheme: Driveline
       destination: 'platform=iOS Simulator,name=iPhone 17,arch=arm64'
       test_plan: iOS
-      coverage_exclude_xctest: "true"
+      coverage_exclude_xctest: "false"
       coverage_exclude_target: MLTrainingDataPrepTool
       artifact_name: test-results

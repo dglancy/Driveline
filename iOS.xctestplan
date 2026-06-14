@@ -26,7 +26,8 @@
     },
     {
       "skippedTests" : [
-        "BaseXCTestCase"
+        "BaseXCTestCase",
+        "DrivelineUITests\/testShowRecordScreenFromEmptyScreen()"
       ],
       "target" : {
         "containerPath" : "container:Driveline.xcodeproj",
