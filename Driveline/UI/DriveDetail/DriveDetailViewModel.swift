@@ -79,22 +79,8 @@ final class DriveDetailViewModel {
 
   var canExport: Bool { positionCount > 0 }
 
-  @ObservationIgnored private lazy var positionCount: Int = {
-    let driveID = drive.id
-    let descriptor = FetchDescriptor<Position>(predicate: #Predicate { $0.drive?.id == driveID })
-    return (try? modelContext.fetchCount(descriptor)) ?? 0
-  }()
-
-  @ObservationIgnored private lazy var maxSpeedMetresPerSecond: CLLocationSpeed = {
-    let driveID = drive.id
-    var descriptor = FetchDescriptor<Position>(
-      predicate: #Predicate { $0.drive?.id == driveID },
-      sortBy: [SortDescriptor(\.speed, order: .reverse)]
-    )
-    descriptor.fetchLimit = 1
-    let top = (try? modelContext.fetch(descriptor))?.first?.speed ?? 0
-    return max(0, top)
-  }()
+  private(set) var positionCount = 0
+  private(set) var maxSpeedMetresPerSecond: CLLocationSpeed = 0
 
   var coordinates: [CLLocationCoordinate2D] = []
   var cameraPosition: MapCameraPosition = .automatic
@@ -124,10 +110,12 @@ final class DriveDetailViewModel {
   func loadRoute() async {
     guard !didLoadRoute else { return }
     didLoadRoute = true
-    let loader = DrivePositionLoader(modelContainer: modelContainer)
-    let simplified = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 15)
-    coordinates = simplified
-    cameraPosition = .fit(to: simplified, paddingMultiplier: 1.5)
+    let loader = DrivePositionsLoader(modelContainer: modelContainer)
+    let routeData = await loader.routeData(forDriveID: drive.id, toleranceMeters: 15)
+    coordinates = routeData.coordinates
+    positionCount = routeData.positionCount
+    maxSpeedMetresPerSecond = routeData.maxSpeedMetresPerSecond
+    cameraPosition = .fit(to: routeData.coordinates, paddingMultiplier: 1.5)
   }
 
   func deleteDrive() {

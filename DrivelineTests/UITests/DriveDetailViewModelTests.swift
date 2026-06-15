@@ -80,6 +80,13 @@ struct DriveDetailViewModelTests {
   }
 
   @Test
+  func trackPointsReflectsLoadedPositionCount() async {
+    let vm = buildViewModel(drive: driveWithOnePosition())
+    await vm.loadRoute()
+    #expect(vm.trackPoints == "1")
+  }
+
+  @Test
   func triggerDisplayNameMatchesDriveTrigger() {
     let vm = buildViewModel(drive: makeDrive())
     #expect(vm.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
@@ -129,9 +136,10 @@ struct DriveDetailViewModelTests {
   }
 
   @Test
-  func topSpeedMatchesLocalizedSpeedString() {
+  func topSpeedMatchesLocalizedSpeedString() async {
     let drive = driveWithOnePosition()
     let vm = buildViewModel(drive: drive)
+    await vm.loadRoute()
     let expected = Measurement(value: drive.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString()
     #expect(vm.topSpeed == expected)
   }
@@ -305,8 +313,9 @@ struct DriveDetailViewModelTests {
   }
 
   @Test
-  func canExportIsTrueWhenDriveHasPositions() {
+  func canExportIsTrueWhenDriveHasPositions() async {
     let vm = buildViewModel(drive: driveWithOnePosition())
+    await vm.loadRoute()
     #expect(vm.canExport == true)
   }
 

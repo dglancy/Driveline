@@ -50,7 +50,7 @@ final class FullScreenMapViewModel {
   func loadRoute() async {
     guard !didLoadRoute else { return }
     didLoadRoute = true
-    let loader = DrivePositionLoader(modelContainer: modelContainer)
+    let loader = DrivePositionsLoader(modelContainer: modelContainer)
     let simplified = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 5)
     coordinates = simplified
     cameraPosition = .fit(to: simplified, paddingMultiplier: 2.0)

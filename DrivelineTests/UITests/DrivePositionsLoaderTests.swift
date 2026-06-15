@@ -1,5 +1,5 @@
 //
-//  DrivePositionLoaderTests.swift
+//  DrivePositionsLoaderTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 14/06/2026.
@@ -11,9 +11,9 @@ import CoreLocation
 import SwiftData
 @testable import Driveline
 
-@Suite("DrivePositionLoader")
+@Suite("DrivePositionsLoader")
 @MainActor
-struct DrivePositionLoaderTests {
+struct DrivePositionsLoaderTests {
 
   @Test
   func returnsEmptyForDriveWithNoPositions() async {
@@ -22,7 +22,7 @@ struct DrivePositionLoaderTests {
     container.mainContext.insert(drive)
     try? container.mainContext.save()
 
-    let loader = DrivePositionLoader(modelContainer: container)
+    let loader = DrivePositionsLoader(modelContainer: container)
     let coordinates = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 5)
     #expect(coordinates.isEmpty)
   }
@@ -38,7 +38,7 @@ struct DrivePositionLoaderTests {
     container.mainContext.insert(drive)
     try? container.mainContext.save()
 
-    let loader = DrivePositionLoader(modelContainer: container)
+    let loader = DrivePositionsLoader(modelContainer: container)
     let coordinates = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
     #expect(coordinates.count == 2)
     #expect(coordinates[0].latitude == 37.0)
@@ -58,10 +58,44 @@ struct DrivePositionLoaderTests {
     container.mainContext.insert(otherDrive)
     try? container.mainContext.save()
 
-    let loader = DrivePositionLoader(modelContainer: container)
+    let loader = DrivePositionsLoader(modelContainer: container)
     let coordinates = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
     #expect(coordinates.count == 1)
     #expect(coordinates[0].latitude == 37.0)
+  }
+
+  // MARK: - routeData
+
+  @Test
+  func routeDataReturnsZeroCountAndSpeedForDriveWithNoPositions() async {
+    let container = makeContainer()
+    let drive = makeDrive()
+    container.mainContext.insert(drive)
+    try? container.mainContext.save()
+
+    let loader = DrivePositionsLoader(modelContainer: container)
+    let routeData = await loader.routeData(forDriveID: drive.id, toleranceMeters: 5)
+    #expect(routeData.coordinates.isEmpty)
+    #expect(routeData.positionCount == 0)
+    #expect(routeData.maxSpeedMetresPerSecond == 0)
+  }
+
+  @Test
+  func routeDataReturnsPositionCountAndMaxSpeed() async {
+    let container = makeContainer()
+    let drive = makeDrive()
+    drive.positions = [
+      makePosition(latitude: 37.0, longitude: -122.0, timestamp: Date(timeIntervalSinceReferenceDate: 100), speed: 5),
+      makePosition(latitude: 38.0, longitude: -121.0, timestamp: Date(timeIntervalSinceReferenceDate: 200), speed: 20)
+    ]
+    container.mainContext.insert(drive)
+    try? container.mainContext.save()
+
+    let loader = DrivePositionsLoader(modelContainer: container)
+    let routeData = await loader.routeData(forDriveID: drive.id, toleranceMeters: 0)
+    #expect(routeData.positionCount == 2)
+    #expect(routeData.maxSpeedMetresPerSecond == 20)
+    #expect(routeData.coordinates.count == 2)
   }
 
   // MARK: - Helpers
@@ -76,7 +110,7 @@ struct DrivePositionLoaderTests {
     Drive(name: name)
   }
 
-  private func makePosition(latitude: CLLocationDegrees, longitude: CLLocationDegrees, timestamp: Date) -> Position {
+  private func makePosition(latitude: CLLocationDegrees, longitude: CLLocationDegrees, timestamp: Date, speed: CLLocationSpeed = 0) -> Position {
     Position(
       timestamp: timestamp,
       latitude: latitude,
@@ -86,7 +120,7 @@ struct DrivePositionLoaderTests {
       verticalAccuracy: 3,
       course: 0,
       courseAccuracy: 0,
-      speed: 0,
+      speed: speed,
       speedAccuracy: 0
     )
   }
