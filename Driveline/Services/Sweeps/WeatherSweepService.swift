@@ -9,21 +9,17 @@ import CoreLocation
 import Foundation
 import SwiftData
 
-actor WeatherSweepService: ModelActor, SweepServiceProtocol {
+@ModelActor
+actor WeatherSweepService: SweepServiceProtocol {
 
   // MARK: - Properties
 
-  nonisolated let modelContainer: ModelContainer
-  nonisolated let modelExecutor: any ModelExecutor
-  private let weatherService: any WeatherFetchServiceProtocol
+  private var weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()
   nonisolated var taskIdentifier: String { Constants.Configuration.weatherSweepTaskIdentifier }
 
-  // MARK: - Lifecycle
+  // MARK: - Configuration
 
-  init(modelContainer: ModelContainer, weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()) {
-    self.modelContainer = modelContainer
-    let modelContext = ModelContext(modelContainer)
-    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
+  func configure(weatherService: any WeatherFetchServiceProtocol) {
     self.weatherService = weatherService
   }
 

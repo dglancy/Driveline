@@ -9,23 +9,22 @@ import CoreLocation
 import Foundation
 import SwiftData
 
-actor PlaceNameSweepService: ModelActor, SweepServiceProtocol {
+@ModelActor
+actor PlaceNameSweepService: SweepServiceProtocol {
 
   // MARK: - Properties
 
-  nonisolated let modelContainer: ModelContainer
-  nonisolated let modelExecutor: any ModelExecutor
-  private let geocodingService: any GeocodingServiceProtocol
-  private let spotlightIndexingService: SpotlightIndexingService?
+  private var geocodingService: any GeocodingServiceProtocol = GeocodingService()
+  private var spotlightIndexingService: SpotlightIndexingService?
   nonisolated var taskIdentifier: String { Constants.Configuration.placeNameSweepTaskIdentifier }
 
-  // MARK: - Lifecycle
+  // MARK: - Configuration
 
-  init(modelContainer: ModelContainer, geocodingService: any GeocodingServiceProtocol = GeocodingService(), spotlightIndexingService: SpotlightIndexingService? = nil) {
-    self.modelContainer = modelContainer
-    let modelContext = ModelContext(modelContainer)
-    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
+  func configure(geocodingService: any GeocodingServiceProtocol) {
     self.geocodingService = geocodingService
+  }
+
+  func configure(spotlightIndexingService: SpotlightIndexingService?) {
     self.spotlightIndexingService = spotlightIndexingService
   }
 

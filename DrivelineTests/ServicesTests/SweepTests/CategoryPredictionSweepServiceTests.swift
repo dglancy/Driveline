@@ -18,7 +18,7 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepClassifiesFinishedDrives() async throws {
     let mockClassifier = MockDriveClassifierService()
-    let service = makeSweepService(classifierService: mockClassifier)
+    let service = await makeSweepService(classifierService: mockClassifier)
     let drive = try insertDrive(status: .finished)
 
     await service.sweep()
@@ -32,7 +32,7 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepReclassifiesDrivesWithOutdatedModelVersion() async throws {
     let mockClassifier = MockDriveClassifierService()
-    let service = makeSweepService(classifierService: mockClassifier)
+    let service = await makeSweepService(classifierService: mockClassifier)
     let drive = try insertDrive(status: .finished, category: .urban, categoryModelVersion: Constants.Configuration.driveCategoryModelVersion - 1)
 
     await service.sweep()
@@ -46,7 +46,7 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSkipsDrivesAlreadyClassifiedWithCurrentModelVersion() async throws {
     let mockClassifier = MockDriveClassifierService()
-    let service = makeSweepService(classifierService: mockClassifier)
+    let service = await makeSweepService(classifierService: mockClassifier)
     try insertDrive(status: .finished, category: .urban, categoryModelVersion: Constants.Configuration.driveCategoryModelVersion)
 
     await service.sweep()
@@ -57,7 +57,7 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSkipsNonFinishedDrives() async throws {
     let mockClassifier = MockDriveClassifierService()
-    let service = makeSweepService(classifierService: mockClassifier)
+    let service = await makeSweepService(classifierService: mockClassifier)
     try insertDrive(status: .recording)
 
     await service.sweep()
@@ -68,7 +68,7 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepProcessesMultipleFinishedDrives() async throws {
     let mockClassifier = MockDriveClassifierService()
-    let service = makeSweepService(classifierService: mockClassifier)
+    let service = await makeSweepService(classifierService: mockClassifier)
     try insertDrive(status: .finished)
     try insertDrive(status: .finished)
     try insertDrive(status: .recording)
@@ -83,7 +83,7 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepDoesNoWorkWhenTaskAlreadyCancelled() async throws {
     let mockClassifier = MockDriveClassifierService()
-    let service = makeSweepService(classifierService: mockClassifier)
+    let service = await makeSweepService(classifierService: mockClassifier)
     try insertDrive(status: .finished)
 
     let task = Task { await service.sweep() }
@@ -95,8 +95,10 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeSweepService(classifierService: any DriveClassifierServiceProtocol) -> CategoryPredictionSweepService {
-    CategoryPredictionSweepService(modelContainer: container!, classifierService: classifierService)
+  private func makeSweepService(classifierService: any DriveClassifierServiceProtocol) async -> CategoryPredictionSweepService {
+    let service = CategoryPredictionSweepService(modelContainer: container!)
+    await service.configure(classifierService: classifierService)
+    return service
   }
 
   @discardableResult

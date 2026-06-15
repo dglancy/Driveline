@@ -26,13 +26,10 @@ enum AppBootstrap {
       modelContext: modelContainer.mainContext
     )
     let spotlightIndexingService = SpotlightIndexingService()
-    let placeNameSweepService = PlaceNameSweepService(modelContainer: modelContainer, spotlightIndexingService: spotlightIndexingService)
+    let placeNameSweepService = PlaceNameSweepService(modelContainer: modelContainer)
+    Task { await placeNameSweepService.configure(spotlightIndexingService: spotlightIndexingService) }
     let weatherSweepService = WeatherSweepService(modelContainer: modelContainer)
-    let driveClassifierService = DriveClassifierService()
-    let debugCategoryPredictionSweepService = CategoryPredictionSweepService(
-      modelContainer: modelContainer,
-      classifierService: driveClassifierService
-    )
+    let categoryPredictionSweepService = CategoryPredictionSweepService(modelContainer: modelContainer)
     let activeDrive = findActiveDrive(in: modelContainer.mainContext)
     let driveService = DriveRecordingService(
       modelContext: modelContainer.mainContext,
@@ -47,13 +44,13 @@ enum AppBootstrap {
     let metricKitService = MetricKitService()
     metricKitService.start()
 
-    registerBGTasks([placeNameSweepService, weatherSweepService, debugCategoryPredictionSweepService])
+    registerBGTasks([placeNameSweepService, weatherSweepService, categoryPredictionSweepService])
     registerIntentDependencies(driveService: driveService)
 
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
 
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: debugCategoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: categoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
   }
 
   // MARK: - Private
