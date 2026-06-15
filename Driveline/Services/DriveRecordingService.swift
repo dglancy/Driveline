@@ -92,6 +92,7 @@ final class DriveRecordingService {
       fetchEndWeather(for: drive)
       finishTasks.append(Task { await spotlightIndexingService?.indexDrive(drive) })
       drive.category = driveClassifierService.classify(DriveClassificationInput(drive: drive))
+      drive.categoryModelVersion = Constants.Configuration.driveCategoryModelVersion
       saveModelContext()
     }
 

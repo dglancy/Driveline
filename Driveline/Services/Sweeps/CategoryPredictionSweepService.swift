@@ -29,15 +29,20 @@ actor CategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
   // MARK: - Actions
 
   func sweep() async {
+    let currentModelVersion = Constants.Configuration.driveCategoryModelVersion
     let descriptor = FetchDescriptor<Drive>()
     guard let drives = try? modelContext.fetch(descriptor) else { return }
-    let finished = drives.filter { $0.status == .finished }
-    guard !finished.isEmpty else { return }
+    let needsClassification = drives.filter {
+      $0.status == .finished && $0.categoryModelVersion != currentModelVersion
+    }
+    guard !needsClassification.isEmpty else { return }
 
-    for drive in finished {
+    for drive in needsClassification {
       guard !Task.isCancelled else { return }
       let input = DriveClassificationInput(drive: drive)
       drive.category = await classifierService.classify(input)
+      drive.categoryModelVersion = currentModelVersion
+      await Task.yield()
     }
 
     do {

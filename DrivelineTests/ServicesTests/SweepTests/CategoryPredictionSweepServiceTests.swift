@@ -1,5 +1,5 @@
 //
-//  DebugCategoryPredictionSweepServiceTests.swift
+//  CategoryPredictionSweepServiceTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 13/06/2026.
@@ -11,7 +11,7 @@ import SwiftData
 import Testing
 
 @MainActor
-final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
+final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - sweep
 
@@ -24,19 +24,34 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
     await service.sweep()
 
     #expect(mockClassifier.classifiedInputs.count == 1)
-    #expect(try reload(drive).category == mockClassifier.categoryToSet)
+    let reloaded = try reload(drive)
+    #expect(reloaded.category == mockClassifier.categoryToSet)
+    #expect(reloaded.categoryModelVersion == Constants.Configuration.driveCategoryModelVersion)
   }
 
   @Test
-  func sweepReclassifiesDrivesWithExistingCategory() async throws {
+  func sweepReclassifiesDrivesWithOutdatedModelVersion() async throws {
     let mockClassifier = MockDriveClassifierService()
     let service = makeSweepService(classifierService: mockClassifier)
-    let drive = try insertDrive(status: .finished, category: .urban)
+    let drive = try insertDrive(status: .finished, category: .urban, categoryModelVersion: Constants.Configuration.driveCategoryModelVersion - 1)
 
     await service.sweep()
 
     #expect(mockClassifier.classifiedInputs.count == 1)
-    #expect(try reload(drive).category == mockClassifier.categoryToSet)
+    let reloaded = try reload(drive)
+    #expect(reloaded.category == mockClassifier.categoryToSet)
+    #expect(reloaded.categoryModelVersion == Constants.Configuration.driveCategoryModelVersion)
+  }
+
+  @Test
+  func sweepSkipsDrivesAlreadyClassifiedWithCurrentModelVersion() async throws {
+    let mockClassifier = MockDriveClassifierService()
+    let service = makeSweepService(classifierService: mockClassifier)
+    try insertDrive(status: .finished, category: .urban, categoryModelVersion: Constants.Configuration.driveCategoryModelVersion)
+
+    await service.sweep()
+
+    #expect(mockClassifier.classifiedInputs.isEmpty)
   }
 
   @Test
@@ -85,10 +100,11 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
   }
 
   @discardableResult
-  private func insertDrive(status: Drive.DriveStatus, category: Drive.Category = .none) throws -> Drive {
+  private func insertDrive(status: Drive.DriveStatus, category: Drive.Category = .none, categoryModelVersion: Int? = nil) throws -> Drive {
     let drive = Drive(trigger: .manual)
     drive.status = status
     drive.category = category
+    drive.categoryModelVersion = categoryModelVersion
     context!.insert(drive)
     try context!.save()
     return drive

@@ -16,6 +16,11 @@ enum Constants {
   }
   
   enum Configuration {
+    /// Bump this whenever `DriveCategoryClassifier.mlmodel` is retrained and shipped, so the
+    /// category prediction sweep reclassifies every finished drive exactly once against the
+    /// new model.
+    nonisolated static let driveCategoryModelVersion = 1
+    
     nonisolated static let minimumLocationAccuracy: CLLocationAccuracy = 50
     nonisolated static let maxLocationAge: TimeInterval = 5
     nonisolated static let drivePlaceNameSweepCutoff: TimeInterval = -2_592_000 // 30 days
