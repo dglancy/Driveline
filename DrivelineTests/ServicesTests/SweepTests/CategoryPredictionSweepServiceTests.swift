@@ -78,6 +78,36 @@ final class CategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
     #expect(mockClassifier.classifiedInputs.count == 2)
   }
 
+  // MARK: - classify(driveID:)
+
+  @Test
+  func classifyByIDClassifiesDrive() async throws {
+    let mockClassifier = MockDriveClassifierService()
+    let service = await makeSweepService(classifierService: mockClassifier)
+    let drive = try insertDrive(status: .finished)
+
+    await service.classify(driveID: drive.persistentModelID)
+
+    #expect(mockClassifier.classifiedInputs.count == 1)
+    let reloaded = try reload(drive)
+    #expect(reloaded.category == mockClassifier.categoryToSet)
+    #expect(reloaded.categoryModelVersion == Constants.Configuration.driveCategoryModelVersion)
+  }
+
+  @Test
+  func classifyByIDDoesNothingForUnknownID() async throws {
+    let mockClassifier = MockDriveClassifierService()
+    let service = await makeSweepService(classifierService: mockClassifier)
+    let drive = try insertDrive(status: .finished)
+    let driveID = drive.persistentModelID
+    context!.delete(drive)
+    try context!.save()
+
+    await service.classify(driveID: driveID)
+
+    #expect(mockClassifier.classifiedInputs.isEmpty)
+  }
+
   // MARK: - Cancellation
 
   @Test

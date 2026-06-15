@@ -29,7 +29,7 @@ final class DriveRecordingService {
   @ObservationIgnored private let placeNameSweepService: PlaceNameSweepService
   @ObservationIgnored private let weatherSweepService: WeatherSweepService
   @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
-  @ObservationIgnored private let driveClassifierService: any DriveClassifierServiceProtocol
+  @ObservationIgnored private let categoryPredictionSweepService: CategoryPredictionSweepService
   @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
@@ -49,7 +49,7 @@ final class DriveRecordingService {
        placeNameSweepService: PlaceNameSweepService? = nil,
        weatherSweepService: WeatherSweepService? = nil,
        spotlightIndexingService: SpotlightIndexingService? = nil,
-       driveClassifierService: (any DriveClassifierServiceProtocol)? = nil,
+       categoryPredictionSweepService: CategoryPredictionSweepService? = nil,
        userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
     self.modelContext = modelContext
@@ -60,7 +60,7 @@ final class DriveRecordingService {
     self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContainer: modelContext.container)
     self.weatherSweepService = weatherSweepService ?? WeatherSweepService(modelContainer: modelContext.container)
     self.spotlightIndexingService = spotlightIndexingService
-    self.driveClassifierService = driveClassifierService ?? DriveClassifierService()
+    self.categoryPredictionSweepService = categoryPredictionSweepService ?? CategoryPredictionSweepService(modelContainer: modelContext.container)
     self.userPreferences = userPreferences
     self.drive = initialDrive
   }
@@ -91,9 +91,8 @@ final class DriveRecordingService {
       saveModelContext()
       fetchEndWeather(for: drive)
       finishTasks.append(Task { await spotlightIndexingService?.indexDrive(drive) })
-      drive.category = driveClassifierService.classify(DriveClassificationInput(drive: drive))
-      drive.categoryModelVersion = Constants.Configuration.driveCategoryModelVersion
-      saveModelContext()
+      let driveID = drive.persistentModelID
+      finishTasks.append(Task { await categoryPredictionSweepService.classify(driveID: driveID) })
     }
 
     self.drive = nil

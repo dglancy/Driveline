@@ -24,11 +24,13 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     try await super.init()
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+    let categoryPredictionSweepService = CategoryPredictionSweepService(modelContainer: container!)
+    await categoryPredictionSweepService.configure(classifierService: MockDriveClassifierService())
     driveService = DriveRecordingService(
       modelContext: context!,
       locationService: locationService,
       locationDataRecorder: recorder,
-      driveClassifierService: MockDriveClassifierService()
+      categoryPredictionSweepService: categoryPredictionSweepService
     )
     IntentDependencyResolver.provider = { [weak self] in
       self?.driveService

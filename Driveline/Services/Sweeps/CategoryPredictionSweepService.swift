@@ -36,25 +36,41 @@ actor CategoryPredictionSweepService: SweepServiceProtocol {
     let classifierService = await resolvedClassifierService()
     for drive in needsReclassification {
       guard !Task.isCancelled else { return }
-      let input = DriveClassificationInput(drive: drive)
-      drive.category = await classifierService.classify(input)
-      drive.categoryModelVersion = currentModelVersion
+      await reclassify(drive, using: classifierService)
       await Task.yield()
     }
 
-    do {
-      try modelContext.save()
-    } catch {
-      Log.data.error("Failed to save model context during debug category prediction sweep: \(error.localizedDescription)")
-    }
+    saveModelContext()
+  }
+
+  func classify(driveID: PersistentIdentifier) async {
+    let descriptor = FetchDescriptor<Drive>()
+    guard let drive = (try? modelContext.fetch(descriptor))?.first(where: { $0.persistentModelID == driveID }) else { return }
+    let classifierService = await resolvedClassifierService()
+    await reclassify(drive, using: classifierService)
+    saveModelContext()
   }
 
   // MARK: - Private
+
+  private func reclassify(_ drive: Drive, using classifierService: any DriveClassifierServiceProtocol) async {
+    let input = DriveClassificationInput(drive: drive)
+    drive.category = await classifierService.classify(input)
+    drive.categoryModelVersion = Constants.Configuration.driveCategoryModelVersion
+  }
 
   private func resolvedClassifierService() async -> any DriveClassifierServiceProtocol {
     if let classifierService { return classifierService }
     let service = await MainActor.run { DriveClassifierService() }
     classifierService = service
     return service
+  }
+
+  private func saveModelContext() {
+    do {
+      try modelContext.save()
+    } catch {
+      Log.data.error("Failed to save model context during category prediction sweep: \(error.localizedDescription)")
+    }
   }
 }

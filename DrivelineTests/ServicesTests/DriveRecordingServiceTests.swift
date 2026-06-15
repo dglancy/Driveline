@@ -189,16 +189,17 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
 
   @Test
   func finishDriveSetsDriveCategory() async throws {
-    let (service, _, _) = await makeServices()
+    let mockClassifier = MockDriveClassifierService()
+    let (service, _, _) = await makeServices(classifierService: mockClassifier)
 
     try service.startDrive()
     let drive = service.drive!
     service.finishDrive()
 
-    await Task.yield()
-    await Task.yield()
+    let reloaded = try await reload(drive, until: { $0.category != .none })
 
-    #expect(drive.category != .none)
+    #expect(reloaded.category == mockClassifier.categoryToSet)
+    #expect(reloaded.categoryModelVersion == Constants.Configuration.driveCategoryModelVersion)
   }
 
   // MARK: - finishDrive spotlight
@@ -585,14 +586,16 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     weatherService: (any WeatherFetchServiceProtocol)? = nil,
     locationDataRecorder: (any LocationDataRecorderServiceProtocol)? = nil,
     spotlightIndexingService: SpotlightIndexingService? = nil,
-    driveClassifierService: (any DriveClassifierServiceProtocol)? = nil,
+    classifierService: (any DriveClassifierServiceProtocol)? = nil,
     userPreferences: UserPreferences? = nil
   ) async -> (DriveRecordingService, LocationService, any LocationDataRecorderServiceProtocol) {
     let mockGeo = geocodingService ?? MockGeocodingService()
     let mockWeather = weatherService ?? MockWeatherFetchService()
-    let mockClassifier = driveClassifierService ?? MockDriveClassifierService()
+    let mockClassifier = classifierService ?? MockDriveClassifierService()
     let placeNameSweepService = PlaceNameSweepService(modelContainer: container!)
     await placeNameSweepService.configure(geocodingService: mockGeo)
+    let categoryPredictionSweepService = CategoryPredictionSweepService(modelContainer: container!)
+    await categoryPredictionSweepService.configure(classifierService: mockClassifier)
     let locationService = LocationService()
     let recorder = locationDataRecorder ?? LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
@@ -603,7 +606,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       weatherService: mockWeather,
       placeNameSweepService: placeNameSweepService,
       spotlightIndexingService: spotlightIndexingService,
-      driveClassifierService: mockClassifier,
+      categoryPredictionSweepService: categoryPredictionSweepService,
       userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)
