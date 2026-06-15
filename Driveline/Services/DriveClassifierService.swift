@@ -34,20 +34,23 @@ struct DriveClassificationInput: Sendable {
   // MARK: - Lifecycle
 
   nonisolated init(drive: Drive) {
+    let stats = drive.routeStatistics()
+    let activeDuration = drive.activeDurationSeconds
+
     distanceMetres = drive.displayDistanceMetres
-    durationSeconds = Int64(drive.activeDurationSeconds)
-    averageSpeedKilometresPerHour = drive.avgSpeedMetresPerSecond * Constants.Statistics.metresPerSecondToKilometresPerHour
-    meanSpeedKilometresPerHour = drive.meanSpeedMetresPerSecond * Constants.Statistics.metresPerSecondToKilometresPerHour
-    speedStandardDeviationKilometresPerHour = drive.speedStandardDeviationMetresPerSecond * Constants.Statistics.metresPerSecondToKilometresPerHour
-    speedVarianceKilometresPerHourSquared = drive.speedVarianceMetresPerSecondSquared * pow(Constants.Statistics.metresPerSecondToKilometresPerHour, 2)
-    percentageTimeAtHighSpeed = drive.fractionOfTimeAboveHighSpeed * 100
-    sustainedHighSpeedSegmentCount = Int64(drive.sustainedHighSpeedSegmentCount)
-    stopCount = Int64(drive.stopCount)
-    percentageTimeStopped = drive.fractionOfTimeStopped * 100
-    sinuosity = drive.sinuosity
-    bearingChangeRateDegreesPerKilometre = drive.bearingChangeRateDegreesPerKilometre
-    elevationGainMetres = drive.elevationGainMetres
-    elevationLossMetres = drive.elevationLossMetres
+    durationSeconds = Int64(activeDuration)
+    averageSpeedKilometresPerHour = (activeDuration > 0 ? stats.distanceMetres / activeDuration : 0) * Constants.Statistics.metresPerSecondToKilometresPerHour
+    meanSpeedKilometresPerHour = stats.meanSpeedMetresPerSecond * Constants.Statistics.metresPerSecondToKilometresPerHour
+    speedStandardDeviationKilometresPerHour = stats.speedStandardDeviationMetresPerSecond * Constants.Statistics.metresPerSecondToKilometresPerHour
+    speedVarianceKilometresPerHourSquared = stats.speedVarianceMetresPerSecondSquared * pow(Constants.Statistics.metresPerSecondToKilometresPerHour, 2)
+    percentageTimeAtHighSpeed = stats.fractionOfTimeAboveHighSpeed * 100
+    sustainedHighSpeedSegmentCount = Int64(stats.sustainedHighSpeedSegmentCount)
+    stopCount = Int64(stats.stopCount)
+    percentageTimeStopped = stats.fractionOfTimeStopped * 100
+    sinuosity = stats.sinuosity
+    bearingChangeRateDegreesPerKilometre = stats.bearingChangeRateDegreesPerKilometre
+    elevationGainMetres = stats.elevationGainMetres
+    elevationLossMetres = stats.elevationLossMetres
   }
 }
 

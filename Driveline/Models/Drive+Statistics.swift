@@ -13,12 +13,7 @@ extension Drive {
   // MARK: - Distance & Duration
 
   var distanceMetres: Double {
-    let sorted = orderedPositions
-    return zip(sorted, sorted.dropFirst()).reduce(0.0) { total, pair in
-      let from = CLLocation(latitude: pair.0.latitude, longitude: pair.0.longitude)
-      let to = CLLocation(latitude: pair.1.latitude, longitude: pair.1.longitude)
-      return total + from.distance(from: to)
-    }
+    Self.distanceMetres(for: orderedPositions)
   }
 
   /// Distance for display purposes. Uses the incrementally-tracked `accumulatedDistanceMetres`
@@ -154,6 +149,41 @@ extension Drive {
     }
   }
 
+  // MARK: - Route Statistics (single-pass)
+
+  /// All route-derived statistics, computed from a single sorted snapshot of `orderedPositions`.
+  ///
+  /// Prefer this over the individual computed properties above when several statistics are
+  /// needed at once (e.g. for ML feature extraction): each of those properties independently
+  /// re-sorts and re-faults the full position list, which is prohibitively expensive for drives
+  /// with thousands of recorded positions.
+  func routeStatistics() -> RouteStatistics {
+    let positions = orderedPositions
+    let duration = activeDurationSeconds
+    let distance = Self.distanceMetres(for: positions)
+
+    let speed = Self.speedStatistics(for: positions)
+    let segments = Self.segmentStatistics(for: positions, duration: duration)
+    let shape = Self.shapeStatistics(for: positions, distanceMetres: distance)
+    let elevation = Self.elevationStatistics(for: positions)
+
+    return RouteStatistics(
+      distanceMetres: distance,
+      meanSpeedMetresPerSecond: speed.mean,
+      speedVarianceMetresPerSecondSquared: speed.variance,
+      speedStandardDeviationMetresPerSecond: speed.variance.squareRoot(),
+      fractionOfTimeAboveHighSpeed: segments.fractionAboveHighSpeed,
+      sustainedHighSpeedSegmentCount: segments.highSpeedSegmentCount,
+      stopCount: segments.stopCount,
+      stoppedDurationSeconds: segments.stoppedDuration,
+      fractionOfTimeStopped: segments.fractionStopped,
+      sinuosity: shape.sinuosity,
+      bearingChangeRateDegreesPerKilometre: shape.bearingChangeRate,
+      elevationGainMetres: elevation.gain,
+      elevationLossMetres: elevation.loss
+    )
+  }
+
   // MARK: - Private
 
   private var validSpeeds: [CLLocationSpeed] {
@@ -185,6 +215,92 @@ extension Drive {
     matching predicate: (CLLocationSpeed) -> Bool,
     minimumSeconds: TimeInterval
   ) -> [ClosedRange<Date>] {
+    Self.sustainedSegments(in: orderedPositions, matching: predicate, minimumSeconds: minimumSeconds)
+  }
+
+  private static func distanceMetres(for positions: [Position]) -> Double {
+    zip(positions, positions.dropFirst()).reduce(0.0) { total, pair in
+      let from = CLLocation(latitude: pair.0.latitude, longitude: pair.0.longitude)
+      let to = CLLocation(latitude: pair.1.latitude, longitude: pair.1.longitude)
+      return total + from.distance(from: to)
+    }
+  }
+
+  private static func speedStatistics(for positions: [Position]) -> (mean: CLLocationSpeed, variance: Double) {
+    let validSpeeds = positions.compactMap { $0.speed >= 0 ? $0.speed : nil }
+    let mean = validSpeeds.isEmpty ? 0 : validSpeeds.reduce(0, +) / Double(validSpeeds.count)
+    guard validSpeeds.count > 1 else { return (mean, 0) }
+    let sumOfSquares = validSpeeds.reduce(0.0) { $0 + ($1 - mean) * ($1 - mean) }
+    return (mean, sumOfSquares / Double(validSpeeds.count))
+  }
+
+  private static func segmentStatistics(
+    for positions: [Position],
+    duration: TimeInterval
+  ) -> (fractionAboveHighSpeed: Double, highSpeedSegmentCount: Int, stopCount: Int, stoppedDuration: TimeInterval, fractionStopped: Double) {
+    let speedSegments = zip(positions, positions.dropFirst()).compactMap { current, next -> (speed: CLLocationSpeed, duration: TimeInterval)? in
+      guard current.speed >= 0 else { return nil }
+      let segmentDuration = next.timestamp.timeIntervalSince(current.timestamp)
+      guard segmentDuration > 0 else { return nil }
+      return (current.speed, segmentDuration)
+    }
+    let aboveHighSpeedDuration = speedSegments
+      .filter { $0.speed > Constants.Statistics.highSpeedMetresPerSecond }
+      .reduce(0.0) { $0 + $1.duration }
+    let fractionAboveHighSpeed = duration > 0 ? min(1, aboveHighSpeedDuration / duration) : 0
+
+    let highSpeedSegmentCount = sustainedSegments(
+      in: positions,
+      matching: { $0 > Constants.Statistics.highSpeedMetresPerSecond },
+      minimumSeconds: Constants.Statistics.sustainedMinimumSeconds
+    ).count
+
+    let stopSegments = sustainedSegments(
+      in: positions,
+      matching: { $0 < Constants.Statistics.stoppedSpeedMetresPerSecond },
+      minimumSeconds: Constants.Statistics.sustainedMinimumSeconds
+    )
+    let stoppedDuration = stopSegments.reduce(0.0) { $0 + $1.upperBound.timeIntervalSince($1.lowerBound) }
+    let fractionStopped = duration > 0 ? min(1, stoppedDuration / duration) : 0
+
+    return (fractionAboveHighSpeed, highSpeedSegmentCount, stopSegments.count, stoppedDuration, fractionStopped)
+  }
+
+  private static func shapeStatistics(for positions: [Position], distanceMetres: Double) -> (sinuosity: Double, bearingChangeRate: Double) {
+    let straightLine = (positions.first.map { first in positions.last.map { first.location.distance(from: $0.location) } ?? 0 }) ?? 0
+    let sinuosity = distanceMetres / max(straightLine, Constants.Configuration.minimumLocationAccuracy)
+
+    let bearings = zip(positions, positions.dropFirst()).compactMap { bearing(from: $0.0, to: $0.1) }
+    let totalBearingChange = bearings.count > 1
+      ? zip(bearings, bearings.dropFirst()).reduce(0.0) { $0 + angularDifference($1.0, $1.1) }
+      : 0
+    let kilometres = distanceMetres / 1000
+    let bearingChangeRate = kilometres > 0 ? totalBearingChange / kilometres : 0
+
+    return (sinuosity, bearingChangeRate)
+  }
+
+  private static func elevationStatistics(for positions: [Position]) -> (gain: Double, loss: Double) {
+    var gain = 0.0
+    var loss = 0.0
+    for (current, next) in zip(positions, positions.dropFirst()) {
+      let delta = next.altitude - current.altitude
+      if delta > 0 {
+        gain += delta
+      } else {
+        loss += -delta
+      }
+    }
+    return (gain, loss)
+  }
+
+  /// Returns the time ranges of consecutive samples whose speed satisfies `predicate` for longer
+  /// than `minimumSeconds`.
+  private static func sustainedSegments(
+    in positions: [Position],
+    matching predicate: (CLLocationSpeed) -> Bool,
+    minimumSeconds: TimeInterval
+  ) -> [ClosedRange<Date>] {
     var segments: [ClosedRange<Date>] = []
     var runStart: Date?
     var runEnd: Date?
@@ -197,7 +313,7 @@ extension Drive {
       runEnd = nil
     }
 
-    for position in orderedPositions {
+    for position in positions {
       if position.speed >= 0 && predicate(position.speed) {
         if runStart == nil { runStart = position.timestamp }
         runEnd = position.timestamp
@@ -223,5 +339,25 @@ extension Drive {
   private static func angularDifference(_ first: Double, _ second: Double) -> Double {
     let difference = abs(first - second).truncatingRemainder(dividingBy: 360)
     return difference > 180 ? 360 - difference : difference
+  }
+}
+
+// MARK: - Drive.RouteStatistics
+
+extension Drive {
+  struct RouteStatistics: Sendable {
+    let distanceMetres: Double
+    let meanSpeedMetresPerSecond: CLLocationSpeed
+    let speedVarianceMetresPerSecondSquared: Double
+    let speedStandardDeviationMetresPerSecond: CLLocationSpeed
+    let fractionOfTimeAboveHighSpeed: Double
+    let sustainedHighSpeedSegmentCount: Int
+    let stopCount: Int
+    let stoppedDurationSeconds: TimeInterval
+    let fractionOfTimeStopped: Double
+    let sinuosity: Double
+    let bearingChangeRateDegreesPerKilometre: Double
+    let elevationGainMetres: Double
+    let elevationLossMetres: Double
   }
 }
