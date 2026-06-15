@@ -173,6 +173,24 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
     #expect(mockWeather.fetchedDates.count == 4)
   }
 
+  // MARK: - Reentrancy
+
+  @Test
+  func concurrentSweepCallsAddAtMostOneStartAndEndWeather() async throws {
+    let mockWeather = MockWeatherFetchService()
+    mockWeather.delay = .milliseconds(50)
+    let service = await makeSweepService(weatherService: mockWeather)
+    let drive = try insertFinishedDrive(positions: [makePosition()])
+
+    async let first = service.sweep()
+    async let second = service.sweep()
+    _ = await (first, second)
+
+    let reloaded = try reload(drive)
+    #expect(reloaded.weatherReadings?.filter { $0.type == .start }.count == 1)
+    #expect(reloaded.weatherReadings?.filter { $0.type == .end }.count == 1)
+  }
+
   // MARK: - Cancellation
 
   @Test

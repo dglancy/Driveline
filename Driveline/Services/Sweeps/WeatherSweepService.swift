@@ -15,6 +15,7 @@ actor WeatherSweepService: SweepServiceProtocol {
   // MARK: - Properties
 
   private var weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()
+  private var isSweeping = false
   nonisolated var taskIdentifier: String { Constants.Configuration.weatherSweepTaskIdentifier }
 
   // MARK: - Configuration
@@ -26,6 +27,10 @@ actor WeatherSweepService: SweepServiceProtocol {
   // MARK: - Actions
 
   func sweep() async {
+    guard !isSweeping else { return }
+    isSweeping = true
+    defer { isSweeping = false }
+
     let needsProcessing = modelContext.finishedDrives(since: Constants.Configuration.driveWeatherSweepCutoff) {
       $0.startWeather == nil || $0.endWeather == nil
     }
