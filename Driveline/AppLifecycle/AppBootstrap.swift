@@ -38,6 +38,7 @@ enum AppBootstrap {
       placeNameSweepService: placeNameSweepService,
       weatherSweepService: weatherSweepService,
       spotlightIndexingService: spotlightIndexingService,
+      categoryPredictionSweepService: categoryPredictionSweepService,
       initialDrive: activeDrive
     )
     
