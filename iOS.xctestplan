@@ -18,6 +18,7 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Driveline.xcodeproj",
         "identifier" : "6D47A51E2FCAD20800E6C7B7",
@@ -35,6 +36,7 @@
       }
     },
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Driveline.xcodeproj",
         "identifier" : "6D7000000000000000000002",

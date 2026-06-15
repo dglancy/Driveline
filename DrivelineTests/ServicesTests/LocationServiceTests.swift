@@ -36,9 +36,11 @@ struct LocationServiceTests {
 
   @Test
   @MainActor
-  func publishesValidLocationThroughPublisher() async {
+  func publishesValidLocationThroughPublisher() async throws {
     let streamProvider = MockLocationStreamProvider()
     let service = LocationService(streamProvider: streamProvider, sessionProvider: MockBackgroundActivitySessionProvider())
+    var receivedLocations = [CLLocation]()
+    let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
 
     let validLocation = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
@@ -46,17 +48,14 @@ struct LocationServiceTests {
       course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date()
     )
 
-    let received = await withCheckedContinuation { continuation in
-      var cancellable: AnyCancellable?
-      cancellable = service.locationPublisher.sink { location in
-        cancellable?.cancel()
-        continuation.resume(returning: location)
-      }
-      service.start()
-      streamProvider.send(validLocation)
-    }
+    service.start()
+    streamProvider.send(validLocation)
+    try await Task.sleep(for: .milliseconds(200))
 
-    #expect(received.coordinate.latitude == validLocation.coordinate.latitude)
+    #expect(receivedLocations.count == 1)
+    #expect(receivedLocations.first?.coordinate.latitude == validLocation.coordinate.latitude)
+
+    cancellable.cancel()
   }
 
   @Test
