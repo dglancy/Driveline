@@ -22,7 +22,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   override init() async throws {
     try await super.init()
-    let locationService = LocationService()
+    let locationService = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let categoryPredictionSweepService = CategoryPredictionSweepService(modelContainer: container!)
     await categoryPredictionSweepService.configure(classifierService: MockDriveClassifierService())

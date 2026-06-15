@@ -19,7 +19,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   // MARK: - Types
 
   enum LocationServiceStatus {
-    case stopped, started, paused
+    case stopped, started
   }
 
   // MARK: - Properties
@@ -29,16 +29,22 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   @ObservationIgnored let locationPublisher = PassthroughSubject<CLLocation, Never>()
   @ObservationIgnored private let manager = CLLocationManager()
   @ObservationIgnored private var alwaysAuthorizationRequested = false
+  @ObservationIgnored private let streamProvider: any LocationStreaming
+  @ObservationIgnored private let sessionProvider: any BackgroundActivitySessionProviding
+  @ObservationIgnored private var streamTask: Task<Void, Never>?
+  @ObservationIgnored private var backgroundSession: (any BackgroundActivitySession)?
 
   // MARK: - Lifecycle
 
-  init(preferences: UserPreferences = UserPreferences()) {
+  init(
+    preferences: UserPreferences = UserPreferences(),
+    streamProvider: (any LocationStreaming)? = nil,
+    sessionProvider: any BackgroundActivitySessionProviding = SystemBackgroundActivitySessionProvider()
+  ) {
+    self.streamProvider = streamProvider ?? LiveLocationStreamProvider(configuration: preferences.activityType.liveConfiguration)
+    self.sessionProvider = sessionProvider
     super.init()
     manager.delegate = self
-    manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-    manager.activityType = preferences.activityType
-    manager.pausesLocationUpdatesAutomatically = false
-    manager.allowsBackgroundLocationUpdates = true
   }
 
   // MARK: - Actions
@@ -55,8 +61,24 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
       manager.requestWhenInUseAuthorization()
     }
 
+    backgroundSession = sessionProvider.begin()
     status = .started
-    manager.startUpdatingLocation()
+
+    streamTask = Task { @MainActor [weak self] in
+      guard let self else { return }
+      Log.location.info("Stream task started; awaiting locations")
+      for await location in self.streamProvider.locations() {
+        Log.location.info("Stream task received a location")
+        guard self.isUsable(location) else {
+          Log.location.info("Location was not usable")
+          continue
+        }
+        Log.location.info("Publishing location")
+        self.locationPublisher.send(location)
+      }
+      Log.location.info("Stream task ended")
+    }
+
     Log.location.info("Started monitoring locations")
   }
 
@@ -67,21 +89,18 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     Log.location.info("Stopping monitoring locations")
-    manager.stopUpdatingLocation()
+    streamTask?.cancel()
+    streamTask = nil
+    backgroundSession?.invalidate()
+    backgroundSession = nil
     status = .stopped
     Log.location.info("Stopped monitoring locations")
   }
 
-  func resume() {
-    guard status == .paused else {
-      Log.location.info("resume() called while status=\(status); ignoring.")
-      return
-    }
-
-    Log.location.info("Resuming monitoring locations")
-    manager.startUpdatingLocation()
-    status = .started
-    Log.location.info("Resumed monitoring locations")
+  nonisolated func isUsable(_ location: CLLocation) -> Bool {
+    location.horizontalAccuracy >= 0 &&
+    location.horizontalAccuracy < Constants.Configuration.minimumLocationAccuracy &&
+    -location.timestamp.timeIntervalSinceNow < Constants.Configuration.maxLocationAge
   }
 
   // MARK: - CLLocationManagerDelegate callback functions
@@ -97,24 +116,4 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
       self.manager.requestAlwaysAuthorization()
     }
   }
-
-  nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    Task { @MainActor in
-      handleLocations(locations)
-    }
-  }
-
-  func handleLocations(_ locations: [CLLocation]) {
-    Log.location.info("\(locations.count) new location(s) received")
-    for location in locations where isUsable(location) {
-      locationPublisher.send(location)
-    }
-  }
-
-  nonisolated func isUsable(_ location: CLLocation) -> Bool {
-    location.horizontalAccuracy >= 0 &&
-    location.horizontalAccuracy < Constants.Configuration.minimumLocationAccuracy &&
-    -location.timestamp.timeIntervalSinceNow < Constants.Configuration.maxLocationAge
-  }
-
 }

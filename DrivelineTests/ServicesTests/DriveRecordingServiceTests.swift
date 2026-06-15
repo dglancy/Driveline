@@ -596,7 +596,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     await placeNameSweepService.configure(geocodingService: mockGeo)
     let categoryPredictionSweepService = CategoryPredictionSweepService(modelContainer: container!)
     await categoryPredictionSweepService.configure(classifierService: mockClassifier)
-    let locationService = LocationService()
+    let locationService = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let recorder = locationDataRecorder ?? LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
       modelContext: context!,
