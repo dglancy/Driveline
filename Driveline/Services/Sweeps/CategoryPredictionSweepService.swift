@@ -32,12 +32,12 @@ actor CategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
     let currentModelVersion = Constants.Configuration.driveCategoryModelVersion
     let descriptor = FetchDescriptor<Drive>()
     guard let drives = try? modelContext.fetch(descriptor) else { return }
-    let needsClassification = drives.filter {
+    let needsReclassification = drives.filter {
       $0.status == .finished && $0.categoryModelVersion != currentModelVersion
     }
-    guard !needsClassification.isEmpty else { return }
+    guard !needsReclassification.isEmpty else { return }
 
-    for drive in needsClassification {
+    for drive in needsReclassification {
       guard !Task.isCancelled else { return }
       let input = DriveClassificationInput(drive: drive)
       drive.category = await classifierService.classify(input)
