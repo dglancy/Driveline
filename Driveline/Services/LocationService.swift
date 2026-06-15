@@ -97,6 +97,12 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     Log.location.info("Stopped monitoring locations")
   }
 
+  nonisolated func isUsable(_ location: CLLocation) -> Bool {
+    location.horizontalAccuracy >= 0 &&
+    location.horizontalAccuracy < Constants.Configuration.minimumLocationAccuracy &&
+    -location.timestamp.timeIntervalSinceNow < Constants.Configuration.maxLocationAge
+  }
+
   // MARK: - CLLocationManagerDelegate callback functions
 
   nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -110,11 +116,4 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
       self.manager.requestAlwaysAuthorization()
     }
   }
-
-  nonisolated func isUsable(_ location: CLLocation) -> Bool {
-    location.horizontalAccuracy >= 0 &&
-    location.horizontalAccuracy < Constants.Configuration.minimumLocationAccuracy &&
-    -location.timestamp.timeIntervalSinceNow < Constants.Configuration.maxLocationAge
-  }
-
 }
