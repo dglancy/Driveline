@@ -8,21 +8,17 @@
 import Foundation
 import SwiftData
 
-actor CategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
+@ModelActor
+actor CategoryPredictionSweepService: SweepServiceProtocol {
 
   // MARK: - Properties
 
-  nonisolated let modelContainer: ModelContainer
-  nonisolated let modelExecutor: any ModelExecutor
-  private let classifierService: any DriveClassifierServiceProtocol
+  private var classifierService: (any DriveClassifierServiceProtocol)?
   nonisolated var taskIdentifier: String { Constants.Configuration.categoryPredictionSweepTaskIdentifier }
 
-  // MARK: - Lifecycle
+  // MARK: - Configuration
 
-  init(modelContainer: ModelContainer, classifierService: any DriveClassifierServiceProtocol) {
-    self.modelContainer = modelContainer
-    let modelContext = ModelContext(modelContainer)
-    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
+  func configure(classifierService: any DriveClassifierServiceProtocol) {
     self.classifierService = classifierService
   }
 
@@ -37,6 +33,7 @@ actor CategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
     }
     guard !needsReclassification.isEmpty else { return }
 
+    let classifierService = await resolvedClassifierService()
     for drive in needsReclassification {
       guard !Task.isCancelled else { return }
       let input = DriveClassificationInput(drive: drive)
@@ -50,5 +47,14 @@ actor CategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
     } catch {
       Log.data.error("Failed to save model context during debug category prediction sweep: \(error.localizedDescription)")
     }
+  }
+
+  // MARK: - Private
+
+  private func resolvedClassifierService() async -> any DriveClassifierServiceProtocol {
+    if let classifierService { return classifierService }
+    let service = await MainActor.run { DriveClassifierService() }
+    classifierService = service
+    return service
   }
 }

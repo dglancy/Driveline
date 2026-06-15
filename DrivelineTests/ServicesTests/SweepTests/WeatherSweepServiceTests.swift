@@ -19,7 +19,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSetsStartWeatherForDriveWithNilStartWeather() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let drive = try insertFinishedDrive(positions: [makePosition()])
 
     await service.sweep()
@@ -32,7 +32,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSetsEndWeatherForDriveWithNilEndWeather() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let drive = try insertFinishedDrive(positions: [makePosition()])
 
     await service.sweep()
@@ -45,7 +45,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepPassesStartedAtDateForStartWeather() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let startDate = Date().addingTimeInterval(-3600)
     let _ = try insertFinishedDrive(startedAt: startDate, positions: [makePosition()])
 
@@ -57,7 +57,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepPassesEndedAtDateForEndWeather() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let endDate = Date().addingTimeInterval(-300)
     let _ = try insertFinishedDrive(endedAt: endDate, positions: [makePosition()])
 
@@ -71,7 +71,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSkipsDrivesOlderThan30Days() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let oldDate = Date().addingTimeInterval(-2_700_000)
     try insertFinishedDrive(startedAt: oldDate, positions: [makePosition()])
 
@@ -83,7 +83,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSkipsDrivesWithCompleteWeather() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let startWeather = Weather(temperatureCelsius: 20, conditionDescription: "Clear", symbolName: "sun.max.fill", type: .start)
     let endWeather = Weather(temperatureCelsius: 18, conditionDescription: "Cloudy", symbolName: "cloud.fill", type: .end)
     try insertFinishedDrive(weatherReadings: [startWeather, endWeather], positions: [makePosition()])
@@ -96,7 +96,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSkipsNonFinishedDrives() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let drive = Drive(trigger: .manual)
     drive.status = .recording
     context!.insert(drive)
@@ -110,7 +110,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepSkipsDrivesWithNoPositions() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     try insertFinishedDrive(positions: [])
 
     await service.sweep()
@@ -121,7 +121,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepOnlyFetchesStartWeatherWhenEndAlreadyPresent() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let endWeather = Weather(temperatureCelsius: 18, conditionDescription: "Cloudy", symbolName: "cloud.fill", type: .end)
     let drive = try insertFinishedDrive(weatherReadings: [endWeather], positions: [makePosition()])
 
@@ -136,7 +136,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepOnlyFetchesEndWeatherWhenStartAlreadyPresent() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let startWeather = Weather(temperatureCelsius: 20, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)
     let drive = try insertFinishedDrive(weatherReadings: [startWeather], positions: [makePosition()])
 
@@ -152,7 +152,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   func sweepContinuesWhenWeatherFetchThrows() async throws {
     let mockWeather = MockWeatherFetchService()
     mockWeather.shouldThrow = true
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let drive = try insertFinishedDrive(positions: [makePosition()])
 
     await service.sweep()
@@ -164,7 +164,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepProcessesMultipleDrivesWithMissingWeather() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     try insertFinishedDrive(positions: [makePosition()])
     try insertFinishedDrive(positions: [makePosition(latitude: 52.0, longitude: -0.2)])
 
@@ -179,7 +179,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   func sweepDoesNotWriteWeatherWhenCancelledMidFetch() async throws {
     let mockWeather = MockWeatherFetchService()
     mockWeather.delay = .milliseconds(50)
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let drive = try insertFinishedDrive(positions: [makePosition()])
 
     let task = Task { await service.sweep() }
@@ -194,7 +194,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   @Test
   func sweepDoesNoWorkWhenTaskAlreadyCancelled() async throws {
     let mockWeather = MockWeatherFetchService()
-    let service = makeSweepService(weatherService: mockWeather)
+    let service = await makeSweepService(weatherService: mockWeather)
     let drive = try insertFinishedDrive(positions: [makePosition()])
 
     let task = Task { await service.sweep() }
@@ -207,8 +207,10 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeSweepService(weatherService: any WeatherFetchServiceProtocol = MockWeatherFetchService()) -> WeatherSweepService {
-    WeatherSweepService(modelContainer: container!, weatherService: weatherService)
+  private func makeSweepService(weatherService: any WeatherFetchServiceProtocol = MockWeatherFetchService()) async -> WeatherSweepService {
+    let service = WeatherSweepService(modelContainer: container!)
+    await service.configure(weatherService: weatherService)
+    return service
   }
 
   private func makePosition(latitude: CLLocationDegrees = 51.5, longitude: CLLocationDegrees = -0.1) -> Position {

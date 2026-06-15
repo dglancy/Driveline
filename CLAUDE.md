@@ -101,6 +101,25 @@ nonisolated func process(trip: sending Trip) { ... }
 - Any `Task.detached` or `async` work touching SwiftData models.
 - Background import, classification, and export pipelines.
 
+### Injecting Collaborators into `@ModelActor` Types
+
+The `@ModelActor` macro owns `init(modelContainer:)`, so it can't take extra `init` parameters.
+Inject collaborators as actor-isolated `private var` properties with production defaults,
+overridden in tests via an `async configure(...)` method:
+
+```swift
+@ModelActor
+actor WeatherSweepService: SweepServiceProtocol {
+  private var weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()
+
+  func configure(weatherService: any WeatherFetchServiceProtocol) {
+    self.weatherService = weatherService
+  }
+
+  func sweep() async { … }
+}
+```
+
 ---
 
 ## Builds & Tests
