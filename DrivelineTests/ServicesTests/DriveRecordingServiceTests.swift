@@ -246,9 +246,9 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
 
     service.finishDrive()
 
-    try await Task.sleep(for: .milliseconds(500))
+    let reloaded = try await reload(drive, until: { $0.endPlaceName != nil })
 
-    #expect(try reload(drive).endPlaceName == "Test Place")
+    #expect(reloaded.endPlaceName == "Test Place")
   }
 
   @Test

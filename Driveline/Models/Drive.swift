@@ -88,11 +88,8 @@ final class Drive {
 
   var trigger: RecordingTrigger = RecordingTrigger.manual
   var status: DriveStatus = DriveStatus.recording
+  
   var category: Category = Category.none
-
-  /// The `Constants.Configuration.driveCategoryModelVersion` that produced `category`. Used by
-  /// `CategoryPredictionSweepService` to reclassify only drives that haven't yet seen the
-  /// current model.
   var categoryModelVersion: Int?
 
   @Relationship(deleteRule: .cascade, inverse: \Position.drive)

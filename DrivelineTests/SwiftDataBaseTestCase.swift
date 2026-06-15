@@ -45,6 +45,19 @@ class SwiftDataBaseTestCase {
     return reloaded
   }
 
+  /// Repeatedly reloads `drive` until `predicate` is satisfied or `timeout` elapses, for
+  /// asserting on the result of work performed by a detached `Task` (e.g. a sweep service).
+  func reload(_ drive: Drive, until predicate: (Drive) -> Bool, timeout: Duration = .seconds(10)) async throws -> Drive {
+    let deadline = ContinuousClock.now + timeout
+    while true {
+      let reloaded = try reload(drive)
+      if predicate(reloaded) || ContinuousClock.now >= deadline {
+        return reloaded
+      }
+      try await Task.sleep(for: .milliseconds(20))
+    }
+  }
+
   enum TestError: Error {
     case driveNotFound
   }
