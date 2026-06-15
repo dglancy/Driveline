@@ -80,8 +80,8 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
   // MARK: - Helpers
 
-  private func makeSweepService(classifierService: any DriveClassifierServiceProtocol) -> DebugCategoryPredictionSweepService {
-    DebugCategoryPredictionSweepService(modelContainer: container!, classifierService: classifierService)
+  private func makeSweepService(classifierService: any DriveClassifierServiceProtocol) -> CategoryPredictionSweepService {
+    CategoryPredictionSweepService(modelContainer: container!, classifierService: classifierService)
   }
 
   @discardableResult

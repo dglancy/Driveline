@@ -17,8 +17,7 @@ struct Driveline: App {
   @State private var driveService: DriveRecordingService
   @State private var placeNameSweepService: PlaceNameSweepService
   @State private var weatherSweepService: WeatherSweepService
-  // TODO: Remove once the DriveCategoryClassifier model is finalized.
-  @State private var debugCategoryPredictionSweepService: DebugCategoryPredictionSweepService
+  @State private var categoryPredictionSweepService: CategoryPredictionSweepService
   @State private var spotlightIndexingService: SpotlightIndexingService
   @State private var metricKitService: MetricKitService
   @Environment(\.scenePhase) private var scenePhase
@@ -26,7 +25,7 @@ struct Driveline: App {
   private let modelContainer: ModelContainer
 
   private var sweepServices: [any SweepServiceProtocol] {
-    [placeNameSweepService, weatherSweepService, debugCategoryPredictionSweepService]
+    [placeNameSweepService, weatherSweepService, categoryPredictionSweepService]
   }
 
   // MARK: - Lifecycle
@@ -37,7 +36,7 @@ struct Driveline: App {
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
     _weatherSweepService = State(initialValue: env.weatherSweepService)
-    _debugCategoryPredictionSweepService = State(initialValue: env.debugCategoryPredictionSweepService)
+    _categoryPredictionSweepService = State(initialValue: env.categoryPredictionSweepService)
     _spotlightIndexingService = State(initialValue: env.spotlightIndexingService)
     _metricKitService = State(initialValue: env.metricKitService)
   }

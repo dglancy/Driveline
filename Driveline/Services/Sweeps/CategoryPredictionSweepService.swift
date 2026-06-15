@@ -8,15 +8,14 @@
 import Foundation
 import SwiftData
 
-// TODO: Remove this sweep once the DriveCategoryClassifier model is production-ready.
-actor DebugCategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
+actor CategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
 
   // MARK: - Properties
 
   nonisolated let modelContainer: ModelContainer
   nonisolated let modelExecutor: any ModelExecutor
   private let classifierService: any DriveClassifierServiceProtocol
-  nonisolated var taskIdentifier: String { Constants.Configuration.debugCategoryPredictionSweepTaskIdentifier }
+  nonisolated var taskIdentifier: String { Constants.Configuration.categoryPredictionSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 

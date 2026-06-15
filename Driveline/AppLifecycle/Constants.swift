@@ -23,8 +23,7 @@ enum Constants {
     nonisolated static let recentDriveCutoff: TimeInterval = -1800
     nonisolated static let placeNameSweepTaskIdentifier = "com.targatrips.Driveline.placename-sweep"
     nonisolated static let weatherSweepTaskIdentifier = "com.targatrips.Driveline.weather-sweep"
-    // TODO: Remove once the DriveCategoryClassifier model is finalized.
-    nonisolated static let debugCategoryPredictionSweepTaskIdentifier = "com.targatrips.Driveline.debug-category-prediction-sweep"
+    nonisolated static let categoryPredictionSweepTaskIdentifier = "com.targatrips.Driveline.category-prediction-sweep"
   }
   
   enum Statistics {

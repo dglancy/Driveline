@@ -28,9 +28,8 @@ enum AppBootstrap {
     let spotlightIndexingService = SpotlightIndexingService()
     let placeNameSweepService = PlaceNameSweepService(modelContainer: modelContainer, spotlightIndexingService: spotlightIndexingService)
     let weatherSweepService = WeatherSweepService(modelContainer: modelContainer)
-    // TODO: Remove debugCategoryPredictionSweepService once the ML model is finalized.
     let driveClassifierService = DriveClassifierService()
-    let debugCategoryPredictionSweepService = DebugCategoryPredictionSweepService(
+    let debugCategoryPredictionSweepService = CategoryPredictionSweepService(
       modelContainer: modelContainer,
       classifierService: driveClassifierService
     )
@@ -54,7 +53,7 @@ enum AppBootstrap {
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
 
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, debugCategoryPredictionSweepService: debugCategoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: debugCategoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
   }
 
   // MARK: - Private
