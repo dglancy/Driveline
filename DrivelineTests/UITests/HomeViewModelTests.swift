@@ -676,7 +676,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   }
 
   private func makeDriveRecordingService(locationDataRecorder: (any LocationDataRecorderServiceProtocol)? = nil) -> DriveRecordingService {
-    let locationService = LocationService()
+    let locationService = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let recorder = locationDataRecorder ?? LocationDataRecorderService(locationService: locationService, modelContext: context!)
     return DriveRecordingService(
       modelContext: context!,

@@ -151,7 +151,7 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
   // MARK: - Helpers
 
   private func makeService() -> (DriveRecordingService, LocationService) {
-    let locationService = LocationService()
+    let locationService = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
       modelContext: context!,

@@ -19,42 +19,51 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func updatesStatusOnLifecycleCalls() throws {
-    let service = LocationService()
+    let streamProvider = MockLocationStreamProvider()
+    let sessionProvider = MockBackgroundActivitySessionProvider()
+    let service = LocationService(streamProvider: streamProvider, sessionProvider: sessionProvider)
 
     #expect(service.status == .stopped)
 
     service.start()
     #expect(service.status == .started)
-
-    service.resume()
-    #expect(service.status == .started)
+    #expect(sessionProvider.beginCallCount == 1)
 
     service.stop()
     #expect(service.status == .stopped)
+    #expect(sessionProvider.session.invalidateCallCount == 1)
   }
 
   @Test
   @MainActor
-  func publishesValidLocationThroughPublisher() {
-    let service = LocationService()
-    var receivedLocations = [CLLocation]()
-    let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
+  func publishesValidLocationThroughPublisher() async {
+    let streamProvider = MockLocationStreamProvider()
+    let service = LocationService(streamProvider: streamProvider, sessionProvider: MockBackgroundActivitySessionProvider())
 
     let validLocation = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: Date()
     )
-    service.handleLocations([validLocation])
 
-    #expect(receivedLocations.count == 1)
-    cancellable.cancel()
+    let received = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
+      cancellable = service.locationPublisher.sink { location in
+        cancellable?.cancel()
+        continuation.resume(returning: location)
+      }
+      service.start()
+      streamProvider.send(validLocation)
+    }
+
+    #expect(received.coordinate.latitude == validLocation.coordinate.latitude)
   }
 
   @Test
   @MainActor
   func doesNotPublishLocationWithNegativeAccuracy() async throws {
-    let service = LocationService()
+    let streamProvider = MockLocationStreamProvider()
+    let service = LocationService(streamProvider: streamProvider, sessionProvider: MockBackgroundActivitySessionProvider())
     var receivedLocations = [CLLocation]()
     let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
 
@@ -63,9 +72,10 @@ struct LocationServiceTests {
       altitude: 0, horizontalAccuracy: -1, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
     )
-    service.locationManager(CLLocationManager(), didUpdateLocations: [staleLocation])
 
-    await Task.yield()
+    service.start()
+    streamProvider.send(staleLocation)
+    try await Task.sleep(for: .milliseconds(200))
 
     #expect(receivedLocations.isEmpty)
 
@@ -75,7 +85,8 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func doesNotPublishLocationBeyondAccuracyThreshold() async throws {
-    let service = LocationService()
+    let streamProvider = MockLocationStreamProvider()
+    let service = LocationService(streamProvider: streamProvider, sessionProvider: MockBackgroundActivitySessionProvider())
     var receivedLocations = [CLLocation]()
     let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
 
@@ -84,9 +95,10 @@ struct LocationServiceTests {
       altitude: 0, horizontalAccuracy: 200, verticalAccuracy: 10,
       course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
     )
-    service.locationManager(CLLocationManager(), didUpdateLocations: [poorLocation])
 
-    await Task.yield()
+    service.start()
+    streamProvider.send(poorLocation)
+    try await Task.sleep(for: .milliseconds(200))
 
     #expect(receivedLocations.isEmpty)
 
@@ -96,7 +108,8 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func doesNotPublishStaleLocation() async throws {
-    let service = LocationService()
+    let streamProvider = MockLocationStreamProvider()
+    let service = LocationService(streamProvider: streamProvider, sessionProvider: MockBackgroundActivitySessionProvider())
     var receivedLocations = [CLLocation]()
     let cancellable = service.locationPublisher.sink { receivedLocations.append($0) }
 
@@ -106,9 +119,10 @@ struct LocationServiceTests {
       altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
       course: 0, courseAccuracy: 1, speed: 10, speedAccuracy: 0.5, timestamp: staleTimestamp
     )
-    service.locationManager(CLLocationManager(), didUpdateLocations: [staleLocation])
 
-    await Task.yield()
+    service.start()
+    streamProvider.send(staleLocation)
+    try await Task.sleep(for: .milliseconds(200))
 
     #expect(receivedLocations.isEmpty)
 
@@ -120,7 +134,7 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func isUsableReturnsTrueForValidLocation() {
-    let service = LocationService()
+    let service = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
@@ -132,7 +146,7 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func isUsableReturnsFalseForNegativeAccuracy() {
-    let service = LocationService()
+    let service = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: -1, verticalAccuracy: 5,
@@ -144,7 +158,7 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func isUsableReturnsFalseForAccuracyAtThreshold() {
-    let service = LocationService()
+    let service = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
       altitude: 0, horizontalAccuracy: Constants.Configuration.minimumLocationAccuracy, verticalAccuracy: 5,
@@ -156,7 +170,7 @@ struct LocationServiceTests {
   @Test
   @MainActor
   func isUsableReturnsFalseForStaleTimestamp() {
-    let service = LocationService()
+    let service = LocationService(streamProvider: MockLocationStreamProvider(), sessionProvider: MockBackgroundActivitySessionProvider())
     let staleTimestamp = Date().addingTimeInterval(-(Constants.Configuration.maxLocationAge + 1))
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.0, longitude: -0.1),
