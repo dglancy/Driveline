@@ -14,6 +14,7 @@ actor CategoryPredictionSweepService: SweepServiceProtocol {
   // MARK: - Properties
 
   private var classifierService: (any DriveClassifierServiceProtocol)?
+  private var isSweeping = false
   nonisolated var taskIdentifier: String { Constants.Configuration.categoryPredictionSweepTaskIdentifier }
 
   // MARK: - Configuration
@@ -25,6 +26,10 @@ actor CategoryPredictionSweepService: SweepServiceProtocol {
   // MARK: - Actions
 
   func sweep() async {
+    guard !isSweeping else { return }
+    isSweeping = true
+    defer { isSweeping = false }
+
     let currentModelVersion = Constants.Configuration.driveCategoryModelVersion
     let descriptor = FetchDescriptor<Drive>()
     guard let drives = try? modelContext.fetch(descriptor) else { return }

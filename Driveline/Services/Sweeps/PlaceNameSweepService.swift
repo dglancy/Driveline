@@ -16,6 +16,7 @@ actor PlaceNameSweepService: SweepServiceProtocol {
 
   private var geocodingService: any GeocodingServiceProtocol = GeocodingService()
   private var spotlightIndexingService: SpotlightIndexingService?
+  private var isSweeping = false
   nonisolated var taskIdentifier: String { Constants.Configuration.placeNameSweepTaskIdentifier }
 
   // MARK: - Configuration
@@ -31,6 +32,10 @@ actor PlaceNameSweepService: SweepServiceProtocol {
   // MARK: - Actions
 
   func sweep() async {
+    guard !isSweeping else { return }
+    isSweeping = true
+    defer { isSweeping = false }
+
     let needsProcessing = modelContext.finishedDrives(since: Constants.Configuration.drivePlaceNameSweepCutoff) {
       $0.startPlaceName == nil || $0.endPlaceName == nil
     }

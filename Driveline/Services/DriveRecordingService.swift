@@ -27,7 +27,6 @@ final class DriveRecordingService {
   @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
   @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
   @ObservationIgnored private let placeNameSweepService: PlaceNameSweepService
-  @ObservationIgnored private let weatherSweepService: WeatherSweepService
   @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
   @ObservationIgnored private let categoryPredictionSweepService: CategoryPredictionSweepService
   @ObservationIgnored private var userPreferences: UserPreferences
@@ -47,7 +46,6 @@ final class DriveRecordingService {
        geocodingService: any GeocodingServiceProtocol = GeocodingService(),
        weatherService: any WeatherFetchServiceProtocol = WeatherFetchService(),
        placeNameSweepService: PlaceNameSweepService? = nil,
-       weatherSweepService: WeatherSweepService? = nil,
        spotlightIndexingService: SpotlightIndexingService? = nil,
        categoryPredictionSweepService: CategoryPredictionSweepService? = nil,
        userPreferences: UserPreferences = UserPreferences(),
@@ -58,7 +56,6 @@ final class DriveRecordingService {
     self.geocodingService = geocodingService
     self.weatherService = weatherService
     self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContainer: modelContext.container)
-    self.weatherSweepService = weatherSweepService ?? WeatherSweepService(modelContainer: modelContext.container)
     self.spotlightIndexingService = spotlightIndexingService
     self.categoryPredictionSweepService = categoryPredictionSweepService ?? CategoryPredictionSweepService(modelContainer: modelContext.container)
     self.userPreferences = userPreferences
@@ -98,7 +95,6 @@ final class DriveRecordingService {
     self.drive = nil
 
     finishTasks.append(Task { await placeNameSweepService.sweep() })
-    finishTasks.append(Task { await weatherSweepService.sweep() })
 
     #if os(iOS)
     finishTasks.append(Task { await activityService.endActivity() })
