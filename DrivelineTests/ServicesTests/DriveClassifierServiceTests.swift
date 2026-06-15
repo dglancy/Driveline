@@ -17,31 +17,29 @@ final class DriveClassifierServiceTests: SwiftDataBaseTestCase {
 
   @Test
   func classifySetsDriveCategoryFromModelPrediction() async throws {
-    let service = DriveClassifierService(modelContext: context!)
+    let service = DriveClassifierService()
     let drive = Drive(name: "Test")
     drive.status = .finished
     drive.endedAt = drive.startedAt.addingTimeInterval(600)
     context!.insert(drive)
     try context!.save()
 
-    await service.classify(drive)
+    let category = service.classify(DriveClassificationInput(drive: drive))
 
-    #expect(drive.category != .none)
+    #expect(category != .none)
   }
 
   @Test
-  func classifyPersistsUpdatedCategory() async throws {
-    let service = DriveClassifierService(modelContext: context!)
+  func classifyDoesNotMutateDrive() async throws {
+    let service = DriveClassifierService()
     let drive = Drive(name: "Test")
     drive.status = .finished
     drive.endedAt = drive.startedAt.addingTimeInterval(600)
     context!.insert(drive)
     try context!.save()
 
-    await service.classify(drive)
+    _ = service.classify(DriveClassificationInput(drive: drive))
 
-    let descriptor = FetchDescriptor<Drive>()
-    let persisted = try context!.fetch(descriptor).first
-    #expect(persisted?.category == drive.category)
+    #expect(drive.category == .none)
   }
 }

@@ -9,21 +9,22 @@ import CoreLocation
 import Foundation
 import SwiftData
 
-@MainActor
-@Observable
-final class PlaceNameSweepService: SweepServiceProtocol {
+actor PlaceNameSweepService: ModelActor, SweepServiceProtocol {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let modelContext: ModelContext
-  @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
-  @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
+  nonisolated let modelContainer: ModelContainer
+  nonisolated let modelExecutor: any ModelExecutor
+  private let geocodingService: any GeocodingServiceProtocol
+  private let spotlightIndexingService: SpotlightIndexingService?
   nonisolated var taskIdentifier: String { Constants.Configuration.placeNameSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, geocodingService: any GeocodingServiceProtocol = GeocodingService(), spotlightIndexingService: SpotlightIndexingService? = nil) {
-    self.modelContext = modelContext
+  init(modelContainer: ModelContainer, geocodingService: any GeocodingServiceProtocol = GeocodingService(), spotlightIndexingService: SpotlightIndexingService? = nil) {
+    self.modelContainer = modelContainer
+    let modelContext = ModelContext(modelContainer)
+    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
     self.geocodingService = geocodingService
     self.spotlightIndexingService = spotlightIndexingService
   }
@@ -31,19 +32,12 @@ final class PlaceNameSweepService: SweepServiceProtocol {
   // MARK: - Actions
 
   func sweep() async {
-    let cutoff = Date().addingTimeInterval(Constants.Configuration.drivePlaceNameSweepCutoff)
-    let descriptor = FetchDescriptor<Drive>(
-      predicate: #Predicate<Drive> { drive in
-        drive.startedAt >= cutoff
-      }
-    )
-    guard let candidates = try? modelContext.fetch(descriptor) else { return }
-    let needsRetry = candidates.filter {
-      $0.status == .finished && ($0.startPlaceName == nil || $0.endPlaceName == nil)
+    let needsProcessing = modelContext.finishedDrives(since: Constants.Configuration.drivePlaceNameSweepCutoff) {
+      $0.startPlaceName == nil || $0.endPlaceName == nil
     }
-    guard !needsRetry.isEmpty else { return }
+    guard !needsProcessing.isEmpty else { return }
 
-    for drive in needsRetry {
+    for drive in needsProcessing {
       guard !Task.isCancelled else { return }
       if drive.startPlaceName == nil, let first = drive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
@@ -58,7 +52,8 @@ final class PlaceNameSweepService: SweepServiceProtocol {
         drive.endPlaceName = placeName
       }
       saveModelContext()
-      await spotlightIndexingService?.indexDrive(drive)
+      let item = SpotlightIndexingService.searchableItem(for: drive)
+      await spotlightIndexingService?.indexItems([item])
     }
   }
 

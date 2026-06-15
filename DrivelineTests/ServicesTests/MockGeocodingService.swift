@@ -9,8 +9,9 @@
 import CoreLocation
 import Foundation
 
-@MainActor
-final class MockGeocodingService: GeocodingServiceProtocol {
+// Test double: each test exercises it from a single sweep actor (or the main actor) at a time,
+// never concurrently, so @unchecked Sendable is safe here.
+final class MockGeocodingService: GeocodingServiceProtocol, @unchecked Sendable {
 
   // MARK: - Properties
 

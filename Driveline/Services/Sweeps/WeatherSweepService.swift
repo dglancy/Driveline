@@ -9,39 +9,33 @@ import CoreLocation
 import Foundation
 import SwiftData
 
-@MainActor
-@Observable
-final class WeatherSweepService: SweepServiceProtocol {
+actor WeatherSweepService: ModelActor, SweepServiceProtocol {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let modelContext: ModelContext
-  @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
+  nonisolated let modelContainer: ModelContainer
+  nonisolated let modelExecutor: any ModelExecutor
+  private let weatherService: any WeatherFetchServiceProtocol
   nonisolated var taskIdentifier: String { Constants.Configuration.weatherSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()) {
-    self.modelContext = modelContext
+  init(modelContainer: ModelContainer, weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()) {
+    self.modelContainer = modelContainer
+    let modelContext = ModelContext(modelContainer)
+    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
     self.weatherService = weatherService
   }
 
   // MARK: - Actions
 
   func sweep() async {
-    let cutoff = Date().addingTimeInterval(Constants.Configuration.driveWeatherSweepCutoff)
-    let descriptor = FetchDescriptor<Drive>(
-      predicate: #Predicate<Drive> { drive in
-        drive.startedAt >= cutoff
-      }
-    )
-    guard let candidates = try? modelContext.fetch(descriptor) else { return }
-    let needsRetry = candidates.filter {
-      $0.status == .finished && ($0.startWeather == nil || $0.endWeather == nil)
+    let needsProcessing = modelContext.finishedDrives(since: Constants.Configuration.driveWeatherSweepCutoff) {
+      $0.startWeather == nil || $0.endWeather == nil
     }
-    guard !needsRetry.isEmpty else { return }
+    guard !needsProcessing.isEmpty else { return }
 
-    for drive in needsRetry {
+    for drive in needsProcessing {
       guard !Task.isCancelled else { return }
       if drive.startWeather == nil, let first = drive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)

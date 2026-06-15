@@ -24,8 +24,9 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(drive.startWeather != nil)
-    #expect(drive.startWeather?.conditionDescription == "Sunny")
+    let reloaded = try reload(drive)
+    #expect(reloaded.startWeather != nil)
+    #expect(reloaded.startWeather?.conditionDescription == "Sunny")
   }
 
   @Test
@@ -36,8 +37,9 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(drive.endWeather != nil)
-    #expect(drive.endWeather?.conditionDescription == "Sunny")
+    let reloaded = try reload(drive)
+    #expect(reloaded.endWeather != nil)
+    #expect(reloaded.endWeather?.conditionDescription == "Sunny")
   }
 
   @Test
@@ -125,9 +127,10 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
+    let reloaded = try reload(drive)
     #expect(mockWeather.fetchedDates.count == 1)
-    #expect(drive.startWeather != nil)
-    #expect(drive.endWeather?.conditionDescription == "Cloudy")
+    #expect(reloaded.startWeather != nil)
+    #expect(reloaded.endWeather?.conditionDescription == "Cloudy")
   }
 
   @Test
@@ -139,9 +142,10 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
+    let reloaded = try reload(drive)
     #expect(mockWeather.fetchedDates.count == 1)
-    #expect(drive.startWeather?.conditionDescription == "Sunny")
-    #expect(drive.endWeather != nil)
+    #expect(reloaded.startWeather?.conditionDescription == "Sunny")
+    #expect(reloaded.endWeather != nil)
   }
 
   @Test
@@ -204,7 +208,7 @@ final class WeatherSweepServiceTests: SwiftDataBaseTestCase {
   // MARK: - Helpers
 
   private func makeSweepService(weatherService: any WeatherFetchServiceProtocol = MockWeatherFetchService()) -> WeatherSweepService {
-    WeatherSweepService(modelContext: context!, weatherService: weatherService)
+    WeatherSweepService(modelContainer: container!, weatherService: weatherService)
   }
 
   private func makePosition(latitude: CLLocationDegrees = 51.5, longitude: CLLocationDegrees = -0.1) -> Position {

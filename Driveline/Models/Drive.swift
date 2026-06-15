@@ -88,7 +88,9 @@ final class Drive {
 
   var trigger: RecordingTrigger = RecordingTrigger.manual
   var status: DriveStatus = DriveStatus.recording
+  
   var category: Category = Category.none
+  var categoryModelVersion: Int?
 
   @Relationship(deleteRule: .cascade, inverse: \Position.drive)
   var positions: [Position]?

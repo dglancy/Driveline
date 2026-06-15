@@ -246,10 +246,9 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
 
     service.finishDrive()
 
-    await Task.yield()
-    await Task.yield()
+    let reloaded = try await reload(drive, until: { $0.endPlaceName != nil })
 
-    #expect(drive.endPlaceName == "Test Place")
+    #expect(reloaded.endPlaceName == "Test Place")
   }
 
   @Test
@@ -592,7 +591,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockGeo = geocodingService ?? MockGeocodingService()
     let mockWeather = weatherService ?? MockWeatherFetchService()
     let mockClassifier = driveClassifierService ?? MockDriveClassifierService()
-    let placeNameSweepService = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeo)
+    let placeNameSweepService = PlaceNameSweepService(modelContainer: container!, geocodingService: mockGeo)
     let locationService = LocationService()
     let recorder = locationDataRecorder ?? LocationDataRecorderService(locationService: locationService, modelContext: context!)
     let service = DriveRecordingService(
