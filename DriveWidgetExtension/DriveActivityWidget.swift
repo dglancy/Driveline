@@ -30,12 +30,12 @@ struct DriveActivityWidget: Widget {
         }
       } compactLeading: {
         Image(systemName: Icons.Widgets.car)
-          .foregroundStyle(Color.brand)
+          .foregroundStyle(Color.green)
       } compactTrailing: {
         DriveActivityCompactTrailingView(context: context)
       } minimal: {
         Image(systemName: Icons.Widgets.car)
-          .foregroundStyle(Color.brand)
+          .foregroundStyle(Color.green)
       }
     }
   }
@@ -61,7 +61,7 @@ struct DriveActivityLockScreenView: View {
   private var headerRow: some View {
     HStack(spacing: 8) {
       Image(systemName: Icons.Widgets.car)
-        .foregroundStyle(Color.brand)
+        .foregroundStyle(Color.green)
       Text(String(localized: "Recording Drive", comment: "Live Activity title"))
         .font(.headline.weight(.semibold))
     }
@@ -92,7 +92,7 @@ struct DriveActivityLockScreenView: View {
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 9)
-        .background(Color.brand)
+        .background(Color.green)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     .buttonStyle(.plain)
@@ -173,7 +173,7 @@ struct DriveActivityExpandedBottomView: View {
           .foregroundStyle(.white)
           .padding(.horizontal, 12)
           .padding(.vertical, 6)
-          .background(Color.brand)
+          .background(Color.green)
           .clipShape(Capsule())
       }
       .buttonStyle(.plain)
