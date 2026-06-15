@@ -33,24 +33,6 @@ The app records drives and exports them. That is all it does. The GPX files it p
 
 Eric S. Raymond's [*The Art of Unix Programming*](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html) describes this as the Rule of Modularity and the Rule of Composition — build simple parts connected by clean interfaces, and design programs to be connected with other programs. Driveline tries to follow both.
 
-## Setting up Shortcuts automations
-
-The app exposes two actions to the Shortcuts app: `Start drive` and `Finish drive`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
-
-For each trigger type you want to use:
-
-1. Open the Shortcuts app and create a new Automation.
-2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
-3. Add the action "Start drive" from Driveline.
-4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish drive" action.
-
-If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
-
-If you stop the car and forget to end the route, Driveline will automatically finish it after a timeout period once it detects it has been paused long enough.
-
-You can also enable an option in the Settings app that automatically reopens a recently finished route if driving resumes within a short period — useful if you are briefly interrupted and want to keep the drive as a single continuous record.
-
-
 ## Why no live map during recording?
 
 Driveline is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and continuously redrawing the UI, which is not a good trade for a drive that could last several hours. Instead, the app writes GPS points directly to the database as they arrive and renders the full map only after the drive is complete.
@@ -88,6 +70,12 @@ Driveline/
 
 Each screen-level View has a paired `<Screen>ViewModel` living alongside it, following the MVVM conventions.
 
+## Architecture
+
+Driveline follows MVVM throughout, with `@Observable` view models owning all UI state and formatted output so views stay declarative. SwiftData models (`Drive`, `Position`, `Weather`) sit behind a service layer that handles recording, merging, geocoding, weather lookups, and ML classification — views and view models never touch SwiftData directly. 
+
+Long-running background work (place name and weather backfill, drive category prediction) runs on dedicated `@ModelActor` sweep services, keeping the main actor free for UI while still operating safely on the shared persistence store. Cross-actor work follows an ID-fetch pattern: only `PersistentIdentifier` values cross actor boundaries, with each actor fetching its own models from its own `ModelContext`.
+
 ## Tech
 
 **Language and frameworks**
@@ -121,6 +109,8 @@ Each screen-level View has a paired `<Screen>ViewModel` living alongside it, fol
 Driveline includes an on-device `DriveCategoryClassifier` CoreML model, used by `DriveClassifierService` to automatically assign each finished drive a category — `none`, `errand`, `urban`, `roadTrip`, `scenic`, or `mixed` — based on 14 computed driving statistics (distance, duration, speed averages and variance, time at high speed, stop counts, sinuosity, bearing change rate, and elevation gain/loss).
 
 The model is trained using the `DriveCategoryClassifier.mlproj` Create ML project, with training and testing datasets stored as CSV files in `MLTrainingData/`.
+
+Each drive stores the model version that produced its category. When a retrained model ships with a bumped `driveCategoryModelVersion`, a background sweep automatically reclassifies any drive last categorized by an older model version.
 
 ### ML training data prep tool
 
@@ -164,6 +154,23 @@ Run `./build-MLTrainingDataPrepTool.sh` from the repo root to build the tool and
 3. Select your development team under **Signing & Capabilities** for the `Driveline` target. The bundle identifier is `com.targatrips.Driveline`; you can change it to match your own prefix if you prefer.
 
 4. Build and run on a connected device. The first launch will ask for location permission; choose "Always Allow" so recording works when the screen is off.
+
+## Setting up Shortcuts automations
+
+The app exposes two actions to the Shortcuts app: `Start drive` and `Finish drive`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
+
+For each trigger type you want to use:
+
+1. Open the Shortcuts app and create a new Automation.
+2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
+3. Add the action "Start drive" from Driveline.
+4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish drive" action.
+
+If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
+
+If you stop the car and forget to end the route, Driveline will automatically finish it after a timeout period once it detects it has been paused long enough.
+
+You can also enable an option in the Settings app that automatically reopens a recently finished route if driving resumes within a short period — useful if you are briefly interrupted and want to keep the drive as a single continuous record.
 
 ## License
 
