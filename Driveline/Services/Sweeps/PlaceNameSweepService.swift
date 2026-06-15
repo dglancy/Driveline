@@ -9,21 +9,22 @@ import CoreLocation
 import Foundation
 import SwiftData
 
-@MainActor
-@Observable
-final class PlaceNameSweepService: SweepServiceProtocol {
+actor PlaceNameSweepService: ModelActor, SweepServiceProtocol {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let modelContext: ModelContext
-  @ObservationIgnored private let geocodingService: any GeocodingServiceProtocol
-  @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
+  nonisolated let modelContainer: ModelContainer
+  nonisolated let modelExecutor: any ModelExecutor
+  private let geocodingService: any GeocodingServiceProtocol
+  private let spotlightIndexingService: SpotlightIndexingService?
   nonisolated var taskIdentifier: String { Constants.Configuration.placeNameSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, geocodingService: any GeocodingServiceProtocol = GeocodingService(), spotlightIndexingService: SpotlightIndexingService? = nil) {
-    self.modelContext = modelContext
+  init(modelContainer: ModelContainer, geocodingService: any GeocodingServiceProtocol = GeocodingService(), spotlightIndexingService: SpotlightIndexingService? = nil) {
+    self.modelContainer = modelContainer
+    let modelContext = ModelContext(modelContainer)
+    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
     self.geocodingService = geocodingService
     self.spotlightIndexingService = spotlightIndexingService
   }
@@ -58,7 +59,8 @@ final class PlaceNameSweepService: SweepServiceProtocol {
         drive.endPlaceName = placeName
       }
       saveModelContext()
-      await spotlightIndexingService?.indexDrive(drive)
+      let item = SpotlightIndexingService.searchableItem(for: drive)
+      await spotlightIndexingService?.indexItems([item])
     }
   }
 

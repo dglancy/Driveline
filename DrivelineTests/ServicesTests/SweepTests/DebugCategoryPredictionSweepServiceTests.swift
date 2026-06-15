@@ -23,7 +23,8 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(mockClassifier.classifiedDrives == [drive])
+    #expect(mockClassifier.classifiedInputs.count == 1)
+    #expect(try reload(drive).category == mockClassifier.categoryToSet)
   }
 
   @Test
@@ -34,7 +35,8 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(mockClassifier.classifiedDrives == [drive])
+    #expect(mockClassifier.classifiedInputs.count == 1)
+    #expect(try reload(drive).category == mockClassifier.categoryToSet)
   }
 
   @Test
@@ -45,7 +47,7 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(mockClassifier.classifiedDrives.isEmpty)
+    #expect(mockClassifier.classifiedInputs.isEmpty)
   }
 
   @Test
@@ -58,7 +60,7 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(mockClassifier.classifiedDrives.count == 2)
+    #expect(mockClassifier.classifiedInputs.count == 2)
   }
 
   // MARK: - Cancellation
@@ -73,13 +75,13 @@ final class DebugCategoryPredictionSweepServiceTests: SwiftDataBaseTestCase {
     task.cancel()
     await task.value
 
-    #expect(mockClassifier.classifiedDrives.isEmpty)
+    #expect(mockClassifier.classifiedInputs.isEmpty)
   }
 
   // MARK: - Helpers
 
   private func makeSweepService(classifierService: any DriveClassifierServiceProtocol) -> DebugCategoryPredictionSweepService {
-    DebugCategoryPredictionSweepService(modelContext: context!, classifierService: classifierService)
+    DebugCategoryPredictionSweepService(modelContainer: container!, classifierService: classifierService)
   }
 
   @discardableResult

@@ -24,7 +24,7 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(drive.endPlaceName == "Test Place")
+    #expect(try reload(drive).endPlaceName == "Test Place")
   }
 
   @Test
@@ -35,7 +35,7 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(drive.startPlaceName == "Test Place")
+    #expect(try reload(drive).startPlaceName == "Test Place")
   }
 
   @Test
@@ -127,8 +127,9 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
 
     await service.sweep()
 
-    #expect(drive.startPlaceName == "Test Place")
-    #expect(drive.endPlaceName == "Test Place")
+    let reloaded = try reload(drive)
+    #expect(reloaded.startPlaceName == "Test Place")
+    #expect(reloaded.endPlaceName == "Test Place")
     #expect(mockGeocoding.geocodedLocations.count == 2)
   }
 
@@ -150,7 +151,7 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
   func sweepIndexesDriveAfterResolvingPlaceNames() async throws {
     let mockSpotlight = MockSpotlightIndex()
     let spotlightService = SpotlightIndexingService(index: mockSpotlight)
-    let service = PlaceNameSweepService(modelContext: context!, spotlightIndexingService: spotlightService)
+    let service = PlaceNameSweepService(modelContainer: container!, spotlightIndexingService: spotlightService)
     try insertFinishedDrive(positions: [makePosition()])
 
     await service.sweep()
@@ -164,7 +165,7 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
     mockGeocoding.result = nil
     let mockSpotlight = MockSpotlightIndex()
     let spotlightService = SpotlightIndexingService(index: mockSpotlight)
-    let service = PlaceNameSweepService(modelContext: context!, geocodingService: mockGeocoding, spotlightIndexingService: spotlightService)
+    let service = PlaceNameSweepService(modelContainer: container!, geocodingService: mockGeocoding, spotlightIndexingService: spotlightService)
     try insertFinishedDrive(positions: [makePosition()])
 
     await service.sweep()
@@ -221,7 +222,7 @@ final class PlaceNameSweepServiceTests: SwiftDataBaseTestCase {
   // MARK: - Helpers
 
   private func makeSweepService(geocodingService: any GeocodingServiceProtocol = MockGeocodingService()) -> PlaceNameSweepService {
-    PlaceNameSweepService(modelContext: context!, geocodingService: geocodingService)
+    PlaceNameSweepService(modelContainer: container!, geocodingService: geocodingService)
   }
 
   private func makePosition(latitude: CLLocationDegrees = 51.5, longitude: CLLocationDegrees = -0.1) -> Position {

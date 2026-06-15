@@ -18,63 +18,63 @@ final class SpotlightIndexingServiceTests {
   @Test
   func searchableItemHasCorrectIdentifier() {
     let drive = makeDrive()
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.uniqueIdentifier == drive.id.uuidString)
   }
 
   @Test
   func searchableItemHasCorrectDomainIdentifier() {
     let drive = makeDrive()
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.domainIdentifier == SpotlightIndexingService.domainIdentifier)
   }
 
   @Test
   func searchableItemTitleIsDisplayName() {
     let drive = makeDrive(name: "My Road Trip")
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.title == "My Road Trip")
   }
 
   @Test
   func searchableItemKeywordsContainsBothPlaceNames() {
     let drive = makeDrive(startPlaceName: "Home", endPlaceName: "Work")
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.keywords == ["Home", "Work"])
   }
 
   @Test
   func searchableItemKeywordsContainsOnlyStartPlaceWhenEndIsNil() {
     let drive = makeDrive(startPlaceName: "Home")
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.keywords == ["Home"])
   }
 
   @Test
   func searchableItemKeywordsIsNilWhenNeitherPlaceNameSet() {
     let drive = makeDrive()
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.keywords == nil)
   }
 
   @Test
   func searchableItemContentDescriptionShowsBothPlaceNames() {
     let drive = makeDrive(startPlaceName: "Home", endPlaceName: "Work")
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.contentDescription == "Home → Work")
   }
 
   @Test
   func searchableItemContentDescriptionShowsOnlyStartWhenEndIsNil() {
     let drive = makeDrive(startPlaceName: "Home")
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.contentDescription == "Home")
   }
 
   @Test
   func searchableItemContentDescriptionIsNilWhenNoPlaceNames() {
     let drive = makeDrive()
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.contentDescription == nil)
   }
 
@@ -82,7 +82,7 @@ final class SpotlightIndexingServiceTests {
   func searchableItemStartDateMatchesDrive() {
     let date = Date(timeIntervalSince1970: 1_700_000_000)
     let drive = makeDrive(startedAt: date)
-    let item = makeService().searchableItem(for: drive)
+    let item = SpotlightIndexingService.searchableItem(for: drive)
     #expect(item.attributeSet.startDate == date)
   }
 

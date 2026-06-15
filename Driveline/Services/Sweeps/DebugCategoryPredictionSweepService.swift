@@ -9,20 +9,21 @@ import Foundation
 import SwiftData
 
 // TODO: Remove this sweep once the DriveCategoryClassifier model is production-ready.
-@MainActor
-@Observable
-final class DebugCategoryPredictionSweepService: SweepServiceProtocol {
+actor DebugCategoryPredictionSweepService: ModelActor, SweepServiceProtocol {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let modelContext: ModelContext
-  @ObservationIgnored private let classifierService: any DriveClassifierServiceProtocol
+  nonisolated let modelContainer: ModelContainer
+  nonisolated let modelExecutor: any ModelExecutor
+  private let classifierService: any DriveClassifierServiceProtocol
   nonisolated var taskIdentifier: String { Constants.Configuration.debugCategoryPredictionSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, classifierService: any DriveClassifierServiceProtocol) {
-    self.modelContext = modelContext
+  init(modelContainer: ModelContainer, classifierService: any DriveClassifierServiceProtocol) {
+    self.modelContainer = modelContainer
+    let modelContext = ModelContext(modelContainer)
+    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
     self.classifierService = classifierService
   }
 
@@ -32,10 +33,18 @@ final class DebugCategoryPredictionSweepService: SweepServiceProtocol {
     let descriptor = FetchDescriptor<Drive>()
     guard let drives = try? modelContext.fetch(descriptor) else { return }
     let finished = drives.filter { $0.status == .finished }
+    guard !finished.isEmpty else { return }
 
     for drive in finished {
       guard !Task.isCancelled else { return }
-      await classifierService.classify(drive)
+      let input = DriveClassificationInput(drive: drive)
+      drive.category = await classifierService.classify(input)
+    }
+
+    do {
+      try modelContext.save()
+    } catch {
+      Log.data.error("Failed to save model context during debug category prediction sweep: \(error.localizedDescription)")
     }
   }
 }

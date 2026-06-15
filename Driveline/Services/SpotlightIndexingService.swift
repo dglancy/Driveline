@@ -27,7 +27,7 @@ final class SpotlightIndexingService {
 
   // MARK: - Properties
 
-  static let domainIdentifier = Constants.App.bundleIdentifier
+  nonisolated static let domainIdentifier = Constants.App.bundleIdentifier
 
   @ObservationIgnored private let index: any SpotlightIndexProtocol
 
@@ -40,7 +40,11 @@ final class SpotlightIndexingService {
   // MARK: - Actions
 
   func indexDrive(_ drive: Drive) async {
-    try? await index.indexSearchableItems([searchableItem(for: drive)])
+    await indexItems([Self.searchableItem(for: drive)])
+  }
+
+  func indexItems(_ items: [CSSearchableItem]) async {
+    try? await index.indexSearchableItems(items)
   }
 
   func deindexDrives(_ ids: [UUID]) async {
@@ -50,7 +54,7 @@ final class SpotlightIndexingService {
 
   // MARK: - Internal
 
-  func searchableItem(for drive: Drive) -> CSSearchableItem {
+  nonisolated static func searchableItem(for drive: Drive) -> CSSearchableItem {
     let attributeSet = CSSearchableItemAttributeSet(contentType: .item)
     attributeSet.title = drive.displayName
     let keywords = [drive.startPlaceName, drive.endPlaceName].compactMap { $0 }
@@ -67,7 +71,7 @@ final class SpotlightIndexingService {
 
   // MARK: - Private
 
-  private func contentDescription(for drive: Drive) -> String? {
+  nonisolated private static func contentDescription(for drive: Drive) -> String? {
     switch (drive.startPlaceName, drive.endPlaceName) {
     case (let start?, let end?): return "\(start) → \(end)"
     case (let start?, nil): return start

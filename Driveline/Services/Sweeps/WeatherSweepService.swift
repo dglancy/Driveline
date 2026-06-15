@@ -9,20 +9,21 @@ import CoreLocation
 import Foundation
 import SwiftData
 
-@MainActor
-@Observable
-final class WeatherSweepService: SweepServiceProtocol {
+actor WeatherSweepService: ModelActor, SweepServiceProtocol {
 
   // MARK: - Properties
 
-  @ObservationIgnored private let modelContext: ModelContext
-  @ObservationIgnored private let weatherService: any WeatherFetchServiceProtocol
+  nonisolated let modelContainer: ModelContainer
+  nonisolated let modelExecutor: any ModelExecutor
+  private let weatherService: any WeatherFetchServiceProtocol
   nonisolated var taskIdentifier: String { Constants.Configuration.weatherSweepTaskIdentifier }
 
   // MARK: - Lifecycle
 
-  init(modelContext: ModelContext, weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()) {
-    self.modelContext = modelContext
+  init(modelContainer: ModelContainer, weatherService: any WeatherFetchServiceProtocol = WeatherFetchService()) {
+    self.modelContainer = modelContainer
+    let modelContext = ModelContext(modelContainer)
+    self.modelExecutor = DefaultSerialModelExecutor(modelContext: modelContext)
     self.weatherService = weatherService
   }
 

@@ -17,20 +17,18 @@ enum WeatherFetchError: Error {
 
 // MARK: - Protocol
 
-@MainActor
-protocol WeatherFetchServiceProtocol {
-  func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather
-  func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather
+protocol WeatherFetchServiceProtocol: Sendable {
+  nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather
+  nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather
 }
 
 // MARK: - WeatherFetchService
 
-@MainActor
-final class WeatherFetchService: WeatherFetchServiceProtocol {
+final class WeatherFetchService: WeatherFetchServiceProtocol, Sendable {
 
   // MARK: - Actions
 
-  func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather {
+  nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather {
     let weather = try await WeatherService.shared.weather(for: location, including: .current)
     return Weather(
       temperatureCelsius: weather.temperature.converted(to: .celsius).value,
@@ -40,7 +38,7 @@ final class WeatherFetchService: WeatherFetchServiceProtocol {
     )
   }
 
-  func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather {
+  nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather {
     let startDate = date.addingTimeInterval(-3600)
     let endDate = date.addingTimeInterval(3600)
     let hourlyForecast = try await WeatherService.shared.weather(for: location, including: .hourly(startDate: startDate, endDate: endDate))

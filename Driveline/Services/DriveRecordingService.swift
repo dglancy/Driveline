@@ -57,10 +57,10 @@ final class DriveRecordingService {
     self.locationDataRecorder = locationDataRecorder
     self.geocodingService = geocodingService
     self.weatherService = weatherService
-    self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContext: modelContext)
-    self.weatherSweepService = weatherSweepService ?? WeatherSweepService(modelContext: modelContext)
+    self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContainer: modelContext.container)
+    self.weatherSweepService = weatherSweepService ?? WeatherSweepService(modelContainer: modelContext.container)
     self.spotlightIndexingService = spotlightIndexingService
-    self.driveClassifierService = driveClassifierService ?? DriveClassifierService(modelContext: modelContext)
+    self.driveClassifierService = driveClassifierService ?? DriveClassifierService()
     self.userPreferences = userPreferences
     self.drive = initialDrive
   }
@@ -91,7 +91,8 @@ final class DriveRecordingService {
       saveModelContext()
       fetchEndWeather(for: drive)
       finishTasks.append(Task { await spotlightIndexingService?.indexDrive(drive) })
-      finishTasks.append(Task { await driveClassifierService.classify(drive) })
+      drive.category = driveClassifierService.classify(DriveClassificationInput(drive: drive))
+      saveModelContext()
     }
 
     self.drive = nil

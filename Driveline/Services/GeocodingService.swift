@@ -11,15 +11,13 @@ import MapKit
 
 // MARK: - Protocol
 
-@MainActor
-protocol GeocodingServiceProtocol {
+protocol GeocodingServiceProtocol: Sendable {
   func reverseGeocode(location: CLLocation) async -> String?
 }
 
 // MARK: - GeocodingService
 
-@MainActor
-final class GeocodingService: GeocodingServiceProtocol {
+final class GeocodingService: GeocodingServiceProtocol, Sendable {
 
   // MARK: - Types
 
