@@ -57,7 +57,8 @@ Driveline/
 │       ├── FullScreenMap/           Full-screen map view
 │       ├── Home/                    Home/route list screen
 │       ├── MergeDrives/             Merge drives screen
-│       └── Recording/               In-progress recording screen
+│       ├── Recording/               In-progress recording screen
+│       └── Tips/                    TipKit tip definitions
 ├── DriveCategoryClassifier.mlproj/ Create ML project for training the drive category classifier
 ├── DriveWidgetExtension/           Lock Screen / Dynamic Island Live Activity widget
 ├── DrivelineTests/                 Unit tests (Swift Testing), mirroring the app's folder structure
