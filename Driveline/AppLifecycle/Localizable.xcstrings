@@ -1448,6 +1448,9 @@
         }
       }
     },
+    "Edit Your Drive" : {
+      "comment" : "TipKit tip title for the drive detail options button"
+    },
     "Elapsed" : {
       "comment" : "Label above the elapsed time timer on the recording screen",
       "localizations" : {
@@ -3369,6 +3372,9 @@
           }
         }
       }
+    },
+    "Tap the options button to edit the name and other details." : {
+      "comment" : "TipKit tip message for the drive detail options button"
     },
     "Tap to start manually tracking a new journey." : {
       "comment" : "TipKit tip message for the home screen record button",

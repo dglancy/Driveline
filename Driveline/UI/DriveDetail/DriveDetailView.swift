@@ -9,6 +9,7 @@ import CoreLocation
 import MapKit
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct DriveDetailView: View {
 
@@ -19,6 +20,8 @@ struct DriveDetailView: View {
   @State private var showingMoreMenu = false
   @State private var showingDeleteConfirmation = false
   @State private var showingEditDrive = false
+
+  private let renameDriveTip = EditDriveTip()
 
   @Environment(\.dismiss) private var dismiss
   @Environment(\.colorScheme) private var colorScheme
@@ -51,9 +54,11 @@ struct DriveDetailView: View {
           }
           .overlay(alignment: .topTrailing) {
             GlassButton(systemImage: Icons.Options.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
+              renameDriveTip.invalidate(reason: .actionPerformed)
               showingMoreMenu = true
             }
             .padding(14)
+            .popoverTip(renameDriveTip)
           }
           .overlay(alignment: .bottomTrailing) {
             GlassButton(systemImage: Icons.Options.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
