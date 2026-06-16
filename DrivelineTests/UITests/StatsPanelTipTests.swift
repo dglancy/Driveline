@@ -12,18 +12,33 @@ import Testing
 @MainActor
 struct StatsPanelTipTests {
 
-  // MARK: - hasDrives parameter
+  // MARK: - driveCount parameter
 
   @Test
-  func hasDrivesDefaultsToFalse() {
-    StatsPanelTip.hasDrives = false
-    #expect(StatsPanelTip.hasDrives == false)
+  func driveCountDefaultsToZero() {
+    StatsPanelTip.driveCount = 0
+    #expect(StatsPanelTip.driveCount == 0)
   }
 
   @Test
-  func hasDrivesCanBeSetToTrue() {
-    StatsPanelTip.hasDrives = true
-    defer { StatsPanelTip.hasDrives = false }
-    #expect(StatsPanelTip.hasDrives == true)
+  func driveCountCanBeSet() {
+    StatsPanelTip.driveCount = 5
+    defer { StatsPanelTip.driveCount = 0 }
+    #expect(StatsPanelTip.driveCount == 5)
+  }
+
+  // MARK: - isRecording parameter
+
+  @Test
+  func isRecordingDefaultsToFalse() {
+    StatsPanelTip.isRecording = false
+    #expect(StatsPanelTip.isRecording == false)
+  }
+
+  @Test
+  func isRecordingCanBeSetToTrue() {
+    StatsPanelTip.isRecording = true
+    defer { StatsPanelTip.isRecording = false }
+    #expect(StatsPanelTip.isRecording == true)
   }
 }

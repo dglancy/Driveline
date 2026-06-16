@@ -9,6 +9,8 @@ import XCTest
 
 final class HomeScreenUITests: BaseXCTestCase {
   
+  // MARK: - Tests
+  
   @MainActor
   func testHomeScreen() throws {
     navigateToHomeScreen()

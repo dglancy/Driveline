@@ -9,6 +9,8 @@ import XCTest
 
 final class DrivelineNavigationUITests: BaseXCTestCase {
   
+  // MARK: - Tests
+  
   @MainActor
   func testNoDrivesEmptyScreen() throws {
     XCTAssertTrue(app.navigationBars["Drives"].waitForExistence(timeout: 5))

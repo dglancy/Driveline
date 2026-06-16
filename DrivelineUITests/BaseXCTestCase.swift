@@ -13,7 +13,7 @@ class BaseXCTestCase: XCTestCase {
   // MARK: - Properties
 
   var app: XCUIApplication!
-  var extraLaunchArguments: [String] { [] }
+  var extraLaunchArguments: [String] = []
   
   // MARK: - Lifecycle
 
@@ -39,7 +39,7 @@ class BaseXCTestCase: XCTestCase {
     try await super.tearDown()
   }
   
-  // MARK: - Helper functions
+  // MARK: - Navigation functions
   
   func navigatePastEmptyState() {
     app.buttons["NewDriveButton"].tap()
@@ -53,5 +53,11 @@ class BaseXCTestCase: XCTestCase {
   func navigateToHomeScreen() {
     navigatePastEmptyState()
     app.buttons["FinishDriveButton"].tap()
+  }
+  
+  // MARK: - Options functions
+  
+  func enableTips() {
+    extraLaunchArguments = ["-tip-testing"]
   }
 }

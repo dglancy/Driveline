@@ -9,16 +9,38 @@ import XCTest
 
 final class TipUITests: BaseXCTestCase {
 
-  override var extraLaunchArguments: [String] { ["-tip-testing"] }
+  // MARK: - Lifecycle
+  
+  override func setUp() async throws {
+    enableTips()
+    try await super.setUp()
+  }
+  
+  // MARK: - Tests
 
   @MainActor
   func testRecordButtonTipAppearsOnFirstLaunch() throws {
     XCTAssertTrue(app.staticTexts["Record a Drive"].waitForExistence(timeout: 3))
+    XCTAssertTrue(app.staticTexts["Tap to start manually tracking a new journey."].exists)
   }
 
-//  @MainActor
-//  func testStatsPanelTipAppearsOnFirstLaunch() throws {
-//    navigateToHomeScreen()
-//    XCTAssertTrue(app.staticTexts["Switch Stats View"].waitForExistence(timeout: 3))
-//  }
+  @MainActor
+  func testStatsPanelTipAppearsAfterThreeDrivesRecorded() throws {
+    app.buttons["Close"].tap() // close the record button tip
+    navigatePastEmptyState()
+    
+    XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
+    app.buttons["FinishDriveButton"].tap()
+    
+    app.buttons["NewDriveButton"].tap()
+    XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
+    app.buttons["FinishDriveButton"].tap()
+    
+    app.buttons["NewDriveButton"].tap()
+    XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
+    app.buttons["FinishDriveButton"].tap()
+    
+    XCTAssertTrue(app.staticTexts["Switch Stats View"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Tap to toggle between the last 30 days and all time."].waitForExistence(timeout: 5))
+  }
 }
