@@ -41,7 +41,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 
 ```
 Driveline/
-├── Driveline/                      Main app target (MVVM, SwiftUI, SwiftData)
+├── Driveline/                      Main app target (SwiftUI, SwiftData)
 │   ├── AppIntents/                  Shortcuts/App Intents actions (start, finish)
 │   ├── AppLifecycle/                App entry point, bootstrap, environment, logging, constants, localization
 │   ├── Assets.xcassets/             App icons, colors, and widget background
@@ -68,11 +68,13 @@ Driveline/
 └── Settings.bundle/                In-app Settings.app bundle
 ```
 
-Each screen-level View has a paired `<Screen>ViewModel` living alongside it, following the MVVM conventions.
-
 ## Architecture
 
-Driveline follows MVVM throughout, with `@Observable` view models owning all UI state and formatted output so views stay declarative. SwiftData models (`Drive`, `Position`, `Weather`) sit behind a service layer that handles recording, merging, geocoding, weather lookups, and ML classification — views and view models never touch SwiftData directly. 
+Driveline follows Apple-native SwiftUI patterns throughout. Views fetch persisted models directly with `@Query` and hold local UI state in `@State` properties. Shared services (`DriveRecordingService`, `SpotlightIndexingService`, and others) are injected at app root via `.environment()` and read with `@Environment` wherever they are needed — never threaded through view initialisers.
+
+Formatted output is handled by dedicated presenter types (`DriveStatsPresenter`, `DriveDetailPresenter`, and others) rather than inline in views. Stateless logic such as section building and stat aggregation lives in pure value-type namespaces that can be tested without a view or SwiftData container. `@Observable` model classes are introduced only when a screen needs async state that changes independently of its inputs — for example, loading a route or waiting on a WeatherKit response.
+
+SwiftData models (`Drive`, `Position`, `Weather`) sit behind a service layer that handles recording, merging, geocoding, weather lookups, and ML classification — views never write to SwiftData directly; they call services, which own the context.
 
 Long-running background work (place name and weather backfill, drive category prediction) runs on dedicated `@ModelActor` sweep services, keeping the main actor free for UI while still operating safely on the shared persistence store. Cross-actor work follows an ID-fetch pattern: only `PersistentIdentifier` values cross actor boundaries, with each actor fetching its own models from its own `ModelContext`.
 

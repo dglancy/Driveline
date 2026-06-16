@@ -12,13 +12,7 @@ struct RecordingView: View {
 
   // MARK: - Properties
 
-  @State private var viewModel: RecordingViewModel
-
-  // MARK: - Lifecycle
-
-  init(driveService: DriveRecordingService) {
-    _viewModel = State(initialValue: RecordingViewModel(driveService: driveService))
-  }
+  @Environment(DriveRecordingService.self) private var driveService
 
   // MARK: - Body
 
@@ -36,7 +30,7 @@ struct RecordingView: View {
       header
       Spacer()
       TimelineView(.periodic(from: .now, by: 1.0)) { _ in
-        heroSection
+        heroSection(presenter: RecordingStatsPresenter(driveService: driveService))
       }
       Spacer()
       batteryNote
@@ -72,7 +66,7 @@ struct RecordingView: View {
     .clipShape(Capsule())
   }
 
-  private var heroSection: some View {
+  private func heroSection(presenter: RecordingStatsPresenter) -> some View {
     VStack(spacing: 0) {
       Text(String(localized: "Elapsed", comment: "Label above the elapsed time timer on the recording screen"))
         .font(.subheadline.weight(.semibold))
@@ -84,7 +78,7 @@ struct RecordingView: View {
         .accessibilityIdentifier("Elapsed")
         .dynamicTypeSize(.large ... .accessibility2)
 
-      Text(viewModel.elapsedDisplay)
+      Text(presenter.elapsedDisplay)
         .font(.system(size: 74, weight: .semibold, design: .default).monospacedDigit())
         .lineLimit(1)
         .minimumScaleFactor(0.6)
@@ -92,15 +86,15 @@ struct RecordingView: View {
         .foregroundStyle(Color(.label))
         .accessibilityLabel(String(localized: "Elapsed time", comment: "Timer accessibility label"))
         .accessibilityIdentifier("ElapsedTime")
-        .accessibilityValue(viewModel.elapsedSpeechValue)
+        .accessibilityValue(presenter.elapsedSpeechValue)
 
       VStack(spacing: -6) {
-        Text(viewModel.distanceValue)
+        Text(presenter.distanceValue)
           .font(.largeTitle.weight(.semibold))
           .monospacedDigit()
           .foregroundStyle(.primary)
           .accessibilityIdentifier("DistanceValue")
-        Text(viewModel.distanceUnit)
+        Text(presenter.distanceUnit)
           .font(.title2.weight(.medium))
           .foregroundStyle(Color(.secondaryLabel))
           .accessibilityIdentifier("DistanceUnit")
@@ -108,20 +102,20 @@ struct RecordingView: View {
       }
       .padding(.top, 22)
 
-      secondaryStats
+      secondaryStats(presenter: presenter)
         .padding(.top, 30)
     }
   }
 
-  private var secondaryStats: some View {
+  private func secondaryStats(presenter: RecordingStatsPresenter) -> some View {
     HStack(spacing: 0) {
-      StatColumn(value: viewModel.formattedPositionCount,
+      StatColumn(value: presenter.formattedPositionCount,
                  label: String(localized: "logged",
                                comment: "Label for the count of GPS positions logged during a drive"),
                  valueAccessibilityIdentifier: "PositionsCountValue",
                  labelAccessibilityIdentifier: "PositionCountLabel")
       Divider().frame(height: 36)
-      StatColumn(value: viewModel.startedAt, label: String(localized: "started", comment: "Label for the time the drive started"),
+      StatColumn(value: presenter.startedAt, label: String(localized: "started", comment: "Label for the time the drive started"),
                  valueAccessibilityIdentifier: "DriveStartedAtValue",
                  labelAccessibilityIdentifier: "DriveStartedAtLabel")
     }
@@ -157,7 +151,7 @@ struct RecordingView: View {
       buttonAccessibilityIdentifier: "FinishDriveButton",
       background: .red,
       iconColor: .white,
-      action: viewModel.finishDrive
+      action: driveService.finishDrive
     )
     .padding(.bottom, 42)
   }
@@ -184,9 +178,9 @@ private struct RecordingControlButton: View {
   let background: Background
   let iconColor: Color
   let action: () -> Void
-  
+
   // MARK: - Body
-  
+
   var body: some View {
     VStack(spacing: 9) {
       Button(action: action) {
@@ -211,7 +205,7 @@ private struct RecordingControlButton: View {
       .accessibilityLabel(label)
       .accessibilityIdentifier(buttonAccessibilityIdentifier)
       .dynamicTypeSize(.large ... .xxxLarge)
-      
+
       Text(label)
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
@@ -265,6 +259,7 @@ private struct StatColumn: View {
     locationDataRecorder: locationDataRecorder,
     initialDrive: drive
   )
-  RecordingView(driveService: driveService)
+  RecordingView()
     .modelContainer(container)
+    .environment(driveService)
 }

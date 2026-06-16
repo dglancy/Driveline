@@ -11,13 +11,22 @@ struct EditDriveView: View {
 
   // MARK: - Properties
 
-  @State private var viewModel: EditDriveViewModel
+  @State private var driveName: String
+  @State private var startPlaceName: String
+  @State private var endPlaceName: String
+
   @Environment(\.dismiss) private var dismiss
+  @Environment(SpotlightIndexingService.self) private var spotlightIndexingService
+
+  private let drive: Drive
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, spotlightIndexingService: SpotlightIndexingService) {
-    _viewModel = State(initialValue: EditDriveViewModel(drive: drive, spotlightIndexingService: spotlightIndexingService))
+  init(drive: Drive) {
+    self.drive = drive
+    _driveName = State(initialValue: drive.name ?? "")
+    _startPlaceName = State(initialValue: drive.startPlaceName ?? "")
+    _endPlaceName = State(initialValue: drive.endPlaceName ?? "")
   }
 
   // MARK: - Body
@@ -28,25 +37,25 @@ struct EditDriveView: View {
         Section(String(localized: "Drive Name", comment: "Edit drive section header")) {
           TextField(
             String(localized: "Drive name", comment: "Drive name text field placeholder"),
-            text: $viewModel.driveName
+            text: $driveName
           )
-          .clearable($viewModel.driveName)
+          .clearable($driveName)
         }
 
         Section(String(localized: "Start Location", comment: "Edit drive section header")) {
           TextField(
             String(localized: "Start location name", comment: "Start location text field placeholder"),
-            text: $viewModel.startPlaceName
+            text: $startPlaceName
           )
-          .clearable($viewModel.startPlaceName)
+          .clearable($startPlaceName)
         }
 
         Section(String(localized: "End Location", comment: "Edit drive section header")) {
           TextField(
             String(localized: "End location name", comment: "End location text field placeholder"),
-            text: $viewModel.endPlaceName
+            text: $endPlaceName
           )
-          .clearable($viewModel.endPlaceName)
+          .clearable($endPlaceName)
         }
       }
       .navigationTitle(String(localized: "Edit Drive", comment: "Edit drive sheet title"))
@@ -57,7 +66,8 @@ struct EditDriveView: View {
         }
         ToolbarItem(placement: .topBarTrailing) {
           Button.save {
-            viewModel.save()
+            DriveEditor.apply(name: driveName, startPlace: startPlaceName, endPlace: endPlaceName, to: drive)
+            Task { await spotlightIndexingService.indexDrive(drive) }
             dismiss()
           }
           .fontWeight(.semibold)

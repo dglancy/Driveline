@@ -12,15 +12,22 @@ struct MergeDrivesView: View {
   // MARK: - Properties
 
   @Environment(\.dismiss) private var dismiss
-  @State private var viewModel: MergeDrivesViewModel
+  @State private var orderedDrives: [Drive]
+  @State private var mergedName: String
+
   let onConfirm: ([Drive], String) -> Void
 
   // MARK: - Lifecycle
 
   init(drives: [Drive], onConfirm: @escaping ([Drive], String) -> Void) {
-    _viewModel = State(initialValue: MergeDrivesViewModel(drives: drives))
+    _orderedDrives = State(initialValue: drives)
+    _mergedName = State(initialValue: MergeDrivesPresenter.defaultMergedName(for: drives))
     self.onConfirm = onConfirm
   }
+
+  // MARK: - Computed Properties
+
+  private var presenter: MergeDrivesPresenter { MergeDrivesPresenter(drives: orderedDrives) }
 
   // MARK: - Body
 
@@ -44,7 +51,7 @@ struct MergeDrivesView: View {
         }
         ToolbarItem(placement: .confirmationAction) {
           Button(String(localized: "Merge", comment: "Confirm drive merge")) {
-            onConfirm(viewModel.orderedDrives, viewModel.mergedName)
+            onConfirm(orderedDrives, mergedName)
             dismiss()
           }
           .fontWeight(.semibold)
@@ -60,8 +67,8 @@ struct MergeDrivesView: View {
       sectionHeader(String(localized: "Order", comment: "Merge order section header"))
       ZStack(alignment: .trailing) {
         VStack(spacing: 8) {
-          DriveRowView(drive: viewModel.orderedDrives[0], display: viewModel.firstDisplay, style: .card(index: 1))
-          DriveRowView(drive: viewModel.orderedDrives[1], display: viewModel.secondDisplay, style: .card(index: 2))
+          DriveRowView(drive: orderedDrives[0], display: presenter.firstDisplay, style: .card(index: 1))
+          DriveRowView(drive: orderedDrives[1], display: presenter.secondDisplay, style: .card(index: 2))
         }
         swapButton
           .padding(.trailing, 14)
@@ -74,7 +81,8 @@ struct MergeDrivesView: View {
   private var swapButton: some View {
     Button {
       withAnimation(.easeInOut(duration: 0.2)) {
-        viewModel.swapOrder()
+        orderedDrives = [orderedDrives[1], orderedDrives[0]]
+        mergedName = MergeDrivesPresenter.defaultMergedName(for: orderedDrives)
       }
     } label: {
       Image(systemName: Icons.Drive.reorderDrives)
@@ -95,7 +103,7 @@ struct MergeDrivesView: View {
       sectionHeader(String(localized: "Merged Drive Name", comment: "Merge name section header"))
       TextField(
         String(localized: "Drive name", comment: "Merge name text field placeholder"),
-        text: $viewModel.mergedName
+        text: $mergedName
       )
       .font(.body)
       .padding(.horizontal, 15)
@@ -112,17 +120,17 @@ struct MergeDrivesView: View {
       sectionHeader(String(localized: "Combined Result", comment: "Merge combined result section header"))
       HStack(spacing: 0) {
         statColumn(
-          value: viewModel.formattedTotalDistance,
+          value: presenter.formattedTotalDistance,
           label: String(localized: "Total distance", comment: "Merge stat: total combined distance")
         )
         Divider().frame(height: 38)
         statColumn(
-          value: viewModel.formattedTotalDuration,
+          value: presenter.formattedTotalDuration,
           label: String(localized: "Total duration", comment: "Merge stat: total combined duration")
         )
         Divider().frame(height: 38)
         statColumn(
-          value: viewModel.formattedTotalPositionCount,
+          value: presenter.formattedTotalPositionCount,
           label: String(localized: "Track points", comment: "Merge stat: combined GPS track point count")
         )
       }
