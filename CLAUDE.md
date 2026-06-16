@@ -104,6 +104,7 @@ Begin every new Swift file with:
 //
 //  Created by Damien Glancy on DD/MM/YYYY.
 //
+```
 
 ---
 SwiftUI
