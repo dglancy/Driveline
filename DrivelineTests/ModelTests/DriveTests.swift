@@ -119,33 +119,6 @@ final class DriveTests: SwiftDataBaseTestCase {
     #expect(try context!.fetch(FetchDescriptor<Position>()).isEmpty)
   }
 
-  // MARK: - positionLocationCoordinatesIn2D
-
-  @Test
-  func positionLocationCoordinatesIsEmptyWithNoPositions() {
-    let drive = Drive(name: "Test")
-    #expect(drive.positionLocationCoordinatesIn2D.isEmpty)
-  }
-
-  @Test
-  func positionLocationCoordinatesCountMatchesPositionCount() {
-    let drive = Drive(name: "Test")
-    drive.positions = [
-      makePosition(latitude: 37.0, longitude: -122.0),
-      makePosition(latitude: 38.0, longitude: -121.0)
-    ]
-    #expect(drive.positionLocationCoordinatesIn2D.count == 2)
-  }
-
-  @Test
-  func positionLocationCoordinatesPreservesLatitudeAndLongitude() {
-    let drive = Drive(name: "Test")
-    drive.positions = [makePosition(latitude: 37.5, longitude: -122.4)]
-    let coords = drive.positionLocationCoordinatesIn2D
-    #expect(coords[0].latitude == 37.5)
-    #expect(coords[0].longitude == -122.4)
-  }
-
   // MARK: - RecordingTrigger.displayName
 
   @Test

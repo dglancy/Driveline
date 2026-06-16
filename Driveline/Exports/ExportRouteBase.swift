@@ -16,7 +16,7 @@ protocol ExportingDrive {
 
 extension ExportingDrive {
   func validatedCoordinates(for drive: Drive) throws -> [CLLocationCoordinate2D] {
-    let coords = drive.positionLocationCoordinatesIn2D
+    let coords = drive.orderedPositions.map(\.location.coordinate)
     guard !coords.isEmpty else { throw ExportError.emptyDrive }
     return coords
   }
