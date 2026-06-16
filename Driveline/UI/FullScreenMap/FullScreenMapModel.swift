@@ -1,8 +1,8 @@
 //
-//  FullScreenMapViewModel.swift
+//  FullScreenMapModel.swift
 //  Driveline
 //
-//  Created by Damien Glancy on 31/05/2026.
+//  Created by Damien Glancy on 16/06/2026.
 //
 
 import CoreLocation
@@ -14,34 +14,21 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class FullScreenMapViewModel {
+final class FullScreenMapModel {
 
   // MARK: - Properties
 
   @ObservationIgnored let drive: Drive
-  @ObservationIgnored private let stats: DriveStatsPresenter
   @ObservationIgnored private let modelContainer: ModelContainer
   @ObservationIgnored private var didLoadRoute = false
 
   var coordinates: [CLLocationCoordinate2D] = []
   var cameraPosition: MapCameraPosition = .automatic
 
-  // MARK: - Computed Properties
-
-  var name: String { drive.displayName }
-
-  var distanceValue: String { stats.distanceValue }
-  var distanceUnit: String { stats.distanceUnit }
-  var durationValue: String { stats.durationValue }
-  var durationUnit: String { stats.durationUnit }
-  var avgSpeedValue: String { stats.avgSpeedValue }
-  var avgSpeedUnit: String { stats.avgSpeedUnit }
-
   // MARK: - Lifecycle
 
   init(drive: Drive, modelContainer: ModelContainer) {
     self.drive = drive
-    self.stats = DriveStatsPresenter(drive: drive)
     self.modelContainer = modelContainer
   }
 

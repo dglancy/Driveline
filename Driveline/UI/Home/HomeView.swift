@@ -13,63 +13,106 @@ struct HomeView: View {
 
   // MARK: - Properties
 
-  @Environment(DriveRecordingService.self)
-  private var driveService
-  
-  @Environment(\.openURL)
-  private var openURL
+  @Environment(DriveRecordingService.self) private var driveService
+  @Environment(SpotlightIndexingService.self) private var spotlightIndexingService
+  @Environment(\.modelContext) private var modelContext
+  @Environment(\.openURL) private var openURL
 
   @Query(sort: \Drive.startedAt, order: .reverse)
   private var drives: [Drive]
 
-  @State private var viewModel: HomeViewModel
-  
-  private let modelContext: ModelContext
-  private let spotlightIndexingService: SpotlightIndexingService
-  
-  // MARK: - Lifecycle
+  @State private var navigationPath: NavigationPath = NavigationPath()
+  @State private var searchText: String = ""
+  @State private var statsScope: StatsScope = .last30Days
+  @State private var isSelectMode: Bool = false
+  @State private var selectedDriveIDs: Set<UUID> = []
+  @State private var startDriveErrorMessage: String?
+  @State private var drivesToMerge: [Drive] = []
+  @State private var showingDeleteConfirmation: Bool = false
+  @State private var showingStartDriveError: Bool = false
+  @State private var showingMergeSheet: Bool = false
 
-  init(spotlightIndexingService: SpotlightIndexingService, modelContext: ModelContext) {
-    self.spotlightIndexingService = spotlightIndexingService
-    self.modelContext = modelContext
-    _viewModel = State(initialValue: HomeViewModel(spotlightIndexingService: spotlightIndexingService, modelContext: modelContext))
+  // MARK: - Computed Properties
+
+  private var sections: [DriveSection] {
+    DriveSectionBuilder.sections(from: drives, searchText: searchText)
   }
+
+  private var recentStats: DriveStats { DriveStats.recent(from: drives) }
+  private var allTimeStats: DriveStats { DriveStats.allTime(from: drives) }
+  private var activeStats: DriveStats { statsScope == .last30Days ? recentStats : allTimeStats }
+
+  private var isSearchActive: Bool { !searchText.isEmpty }
+  private var canMerge: Bool { selectedDriveIDs.count == 2 }
+  private var canDelete: Bool { !selectedDriveIDs.isEmpty }
 
   // MARK: - Body
 
   var body: some View {
-    @Bindable var viewModel = viewModel
-    NavigationStack(path: $viewModel.navigationPath) {
+    NavigationStack(path: $navigationPath) {
       content
         .navigationTitle("Drives")
-        .searchable(text: $viewModel.searchText, prompt: "Search")
+        .searchable(text: $searchText, prompt: "Search")
         .searchDictationBehavior(.inline(activation: .onSelect))
-        .toolbar { toolbarItems }
-        .onChange(of: drives, initial: true) { _, newDrives in
-          viewModel.update(with: newDrives)
+        .toolbar {
+          HomeToolbar(
+            isSelectMode: isSelectMode,
+            isSectionsEmpty: sections.isEmpty,
+            onExitSelectMode: exitSelectMode,
+            onEnterSelectMode: enterSelectMode,
+            onOpenSettings: {
+              if let url = URL(string: UIApplication.openSettingsURLString) {
+                openURL(url)
+              }
+            },
+            onRecord: { startDrive() }
+          )
         }
         .onChange(of: driveService.isRecording) { _, isRecording in
-          if isRecording {
-            viewModel.exitSelectMode()
-          }
+          if isRecording { exitSelectMode() }
         }
     }
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
       guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
-      viewModel.openDrive(fromSpotlightIdentifier: identifier)
+      openDrive(fromSpotlightIdentifier: identifier)
     }
-    .modifier(RecordingScreenModifier(driveService: driveService))
-    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingDeleteConfirmation))
-    .modifier(StartDriveErrorAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingStartDriveError))
-    .modifier(MergeDrivesSheetModifier(viewModel: viewModel, isPresented: $viewModel.showingMergeSheet))
+    .modifier(RecordingScreenModifier())
+    .alert(
+      String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
+      isPresented: $showingDeleteConfirmation
+    ) {
+      Button.delete {
+        let selected = selectedDrives()
+        exitSelectMode()
+        deleteDrives(selected)
+      }
+      Button.cancel()
+    } message: {
+      Text(HomePresenter.deleteConfirmationMessage(selectedDriveIDs.count))
+    }
+    .alert(
+      String(localized: "Couldn't Start Recording", comment: "Start drive failure alert title"),
+      isPresented: $showingStartDriveError
+    ) {
+      Button(String(localized: "OK", comment: "Dismiss start drive error alert"), role: .cancel) { }
+    } message: {
+      Text(startDriveErrorMessage ?? "")
+    }
+    .sheet(isPresented: $showingMergeSheet) {
+      if drivesToMerge.count == 2 {
+        MergeDrivesView(drives: drivesToMerge) { orderedDrives, mergedName in
+          mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName)
+        }
+      }
+    }
   }
 
   // MARK: - Private Views
 
   @ViewBuilder
   private var content: some View {
-    if viewModel.sections.isEmpty {
-      if !viewModel.isSearchActive {
+    if sections.isEmpty {
+      if !isSearchActive {
         emptyState
       } else {
         ContentUnavailableView.search
@@ -90,14 +133,14 @@ struct HomeView: View {
   private var driveList: some View {
     ZStack(alignment: .bottom) {
       List {
-        if viewModel.recentStats.driveCount > 0 && !viewModel.isSelectMode && !viewModel.isSearchActive {
+        if recentStats.driveCount > 0 && !isSelectMode && !isSearchActive {
           Section {
             HomeStatsPanelView(
-              driveCount: viewModel.statsDriveCount,
-              distanceValue: viewModel.statsDistanceValue,
-              distanceUnit: viewModel.statsDistanceUnit,
-              scopeLabel: viewModel.statsScopeLabel,
-              onTap: viewModel.toggleStatsScope
+              driveCount: activeStats.driveCount,
+              distanceValue: activeStats.distanceValue,
+              distanceUnit: activeStats.distanceUnit,
+              scopeLabel: HomePresenter.statsScopeLabel(statsScope),
+              onTap: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
             )
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
@@ -106,14 +149,14 @@ struct HomeView: View {
           .listSectionSpacing(8)
         }
 
-        ForEach(viewModel.sections) { section in
+        ForEach(sections) { section in
           Section(section.title) {
             ForEach(section.rows) { row in
-              if viewModel.isSelectMode {
+              if isSelectMode {
                 Button {
-                  viewModel.toggleSelection(for: row.drive.id)
+                  toggleSelection(for: row.drive.id)
                 } label: {
-                  DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: viewModel.selectedDriveIDs.contains(row.drive.id)))
+                  DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: selectedDriveIDs.contains(row.drive.id)))
                 }
                 .buttonStyle(.plain)
               } else {
@@ -122,13 +165,13 @@ struct HomeView: View {
                 }
               }
             }
-            .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
-              viewModel.deleteDrives(at: indexSet, in: section)
+            .onDelete(perform: isSelectMode ? nil : { indexSet in
+              deleteDrives(at: indexSet, in: section)
             })
           }
         }
 
-        if viewModel.isSelectMode {
+        if isSelectMode {
           Color.clear
             .frame(height: 70)
             .listRowBackground(Color.clear)
@@ -137,157 +180,157 @@ struct HomeView: View {
       }
       .contentMargins(.top, 0, for: .scrollContent)
       .navigationDestination(for: Drive.self) { drive in
-        DriveDetailView(drive: drive, spotlightIndexingService: spotlightIndexingService, modelContext: modelContext)
+        DriveDetailView(drive: drive, modelContainer: modelContext.container)
       }
 
-      if viewModel.isSelectMode {
+      if isSelectMode {
         SelectionToolbar(
-          canMerge: viewModel.canMerge,
-          canDelete: viewModel.canDelete,
-          selectionCountText: viewModel.selectionCountText
+          canMerge: canMerge,
+          canDelete: canDelete,
+          selectionCountText: HomePresenter.selectionCountText(selectedDriveIDs.count)
         ) {
-          viewModel.triggerMerge()
+          triggerMerge()
         } onDelete: {
-          viewModel.showingDeleteConfirmation = true
+          showingDeleteConfirmation = true
         }
       }
     }
   }
 
-  // MARK: - Toolbar
+  // MARK: - Actions
 
-  @ToolbarContentBuilder
-  private var toolbarItems: some ToolbarContent {
-    cancelToolbarItem
+  private func startDrive(trigger: Drive.RecordingTrigger = .manual) {
+    do {
+      try driveService.startDrive(trigger: trigger)
+    } catch {
+      startDriveErrorMessage = error.localizedDescription
+      showingStartDriveError = true
+    }
+  }
 
-    if !viewModel.isSelectMode {
-      overflowMenuItem
+  private func enterSelectMode() {
+    isSelectMode = true
+    selectedDriveIDs = []
+  }
+
+  private func exitSelectMode() {
+    isSelectMode = false
+    selectedDriveIDs = []
+  }
+
+  private func triggerMerge() {
+    drivesToMerge = selectedDrives().sorted { $0.startedAt < $1.startedAt }
+    showingMergeSheet = true
+  }
+
+  private func toggleSelection(for id: UUID) {
+    if selectedDriveIDs.contains(id) {
+      selectedDriveIDs.remove(id)
+    } else {
+      selectedDriveIDs.insert(id)
+    }
+  }
+
+  private func selectedDrives() -> [Drive] {
+    sections.flatMap(\.rows).map(\.drive).filter { selectedDriveIDs.contains($0.id) }
+  }
+
+  private func deleteDrives(_ drives: [Drive]) {
+    DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete(drives)
+  }
+
+  private func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
+    deleteDrives(indexSet.map { section.rows[$0].drive })
+  }
+
+  private func mergeDrives(orderedDrives: [Drive], mergedName: String) {
+    DriveMergeService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).merge(orderedDrives: orderedDrives, mergedName: mergedName)
+  }
+
+  private func openDrive(fromSpotlightIdentifier identifier: String) {
+    guard let uuid = UUID(uuidString: identifier),
+          let drive = drives.first(where: { $0.id == uuid }) else { return }
+    navigationPath = NavigationPath()
+    navigationPath.append(drive)
+  }
+}
+
+// MARK: - HomeToolbar
+
+private struct HomeToolbar: ToolbarContent {
+
+  let isSelectMode: Bool
+  let isSectionsEmpty: Bool
+  let onExitSelectMode: () -> Void
+  let onEnterSelectMode: () -> Void
+  let onOpenSettings: () -> Void
+  let onRecord: () -> Void
+
+  var body: some ToolbarContent {
+    ToolbarItem(placement: .topBarLeading) {
+      if isSelectMode {
+        Button.cancel { onExitSelectMode() }
+      }
+    }
+
+    if !isSelectMode {
+      ToolbarItem(placement: .topBarTrailing) {
+        Menu {
+          Button(
+            String(localized: "Select Drives", comment: "Menu item to enter multiselect mode"),
+            systemImage: "checkmark.circle"
+          ) {
+            onEnterSelectMode()
+          }
+          .disabled(isSectionsEmpty)
+
+          Button(
+            String(localized: "Settings", comment: "Menu item to open settings"),
+            systemImage: "gear"
+          ) {
+            onOpenSettings()
+          }
+        } label: {
+          Image(systemName: "ellipsis")
+        }
+        .accessibilityLabel(String(localized: "More options", comment: "Ellipsis menu accessibility label"))
+      }
+
       DefaultToolbarItem(kind: .search, placement: .bottomBar)
       ToolbarSpacer(.fixed, placement: .bottomBar)
-      recordButtonItem
-    }
-  }
 
-  @ToolbarContentBuilder
-  private var cancelToolbarItem: some ToolbarContent {
-    ToolbarItem(placement: .topBarLeading) {
-      if viewModel.isSelectMode {
-        Button.cancel { viewModel.exitSelectMode() }
-      }
-    }
-  }
-
-  @ToolbarContentBuilder
-  private var overflowMenuItem: some ToolbarContent {
-    ToolbarItem(placement: .topBarTrailing) {
-      Menu {
-        Button(
-          String(localized: "Select Drives", comment: "Menu item to enter multiselect mode"),
-          systemImage: "checkmark.circle"
-        ) {
-          viewModel.enterSelectMode()
-        }
-        .disabled(viewModel.sections.isEmpty)
-
-        Button(
-          String(localized: "Settings", comment: "Menu item to open settings"),
-          systemImage: "gear"
-        ) {
-          if let url = URL(string: UIApplication.openSettingsURLString) {
-            openURL(url)
+      ToolbarItem(placement: .bottomBar) {
+        Button {
+          onRecord()
+        } label: {
+          ZStack {
+            Circle().fill(Color(.systemFill))
+            Image(systemName: Icons.Selection.record)
+              .font(.title2)
+              .foregroundStyle(.red)
           }
+          .frame(width: 36, height: 36)
         }
-      } label: {
-        Image(systemName: "ellipsis")
+        .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
+        .accessibilityIdentifier("NewDriveButton")
       }
-      .accessibilityLabel(String(localized: "More options", comment: "Ellipsis menu accessibility label"))
-    }
-  }
-
-  @ToolbarContentBuilder
-  private var recordButtonItem: some ToolbarContent {
-    ToolbarItem(placement: .bottomBar) {
-      Button {
-        viewModel.startDrive(using: driveService)
-      } label: {
-        ZStack {
-          Circle().fill(Color(.systemFill))
-          Image(systemName: Icons.Selection.record)
-            .font(.title2)
-            .foregroundStyle(.red)
-        }
-        .frame(width: 36, height: 36)
-      }
-      .buttonStyle(.plain)
-      .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
-      .accessibilityIdentifier("NewDriveButton")
     }
   }
 }
 
-// MARK: - Presentation Modifiers
+// MARK: - RecordingScreenModifier
 
 private struct RecordingScreenModifier: ViewModifier {
-  let driveService: DriveRecordingService
+
+  @Environment(DriveRecordingService.self) private var driveService
 
   func body(content: Content) -> some View {
     content.fullScreenCover(isPresented: Binding(
       get: { driveService.isRecording },
       set: { _ in }
     )) {
-      RecordingView(driveService: driveService)
-    }
-  }
-}
-
-private struct DeleteDrivesAlertModifier: ViewModifier {
-  let viewModel: HomeViewModel
-  var isPresented: Binding<Bool>
-
-  func body(content: Content) -> some View {
-    content.alert(
-      String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
-      isPresented: isPresented
-    ) {
-      Button.delete {
-        let selected = viewModel.selectedDrives(from: viewModel.sections)
-        viewModel.exitSelectMode()
-        viewModel.deleteDrives(selected)
-      }
-      Button.cancel()
-    } message: {
-      Text(viewModel.deleteConfirmationMessage)
-    }
-  }
-}
-
-private struct StartDriveErrorAlertModifier: ViewModifier {
-  let viewModel: HomeViewModel
-  var isPresented: Binding<Bool>
-
-  func body(content: Content) -> some View {
-    content.alert(
-      String(localized: "Couldn't Start Recording", comment: "Start drive failure alert title"),
-      isPresented: isPresented
-    ) {
-      Button(String(localized: "OK", comment: "Dismiss start drive error alert"), role: .cancel) { }
-    } message: {
-      Text(viewModel.startDriveErrorMessage ?? "")
-    }
-  }
-}
-
-private struct MergeDrivesSheetModifier: ViewModifier {
-  let viewModel: HomeViewModel
-  var isPresented: Binding<Bool>
-
-  func body(content: Content) -> some View {
-    content.sheet(isPresented: isPresented) {
-      if viewModel.drivesToMerge.count == 2 {
-        MergeDrivesView(drives: viewModel.drivesToMerge) { orderedDrives, mergedName in
-          viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName)
-        }
-      }
+      RecordingView()
     }
   }
 }
@@ -302,7 +345,8 @@ private struct MergeDrivesSheetModifier: ViewModifier {
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let driveService = DriveRecordingService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
-  return HomeView(spotlightIndexingService: SpotlightIndexingService(), modelContext: container.mainContext)
+  return HomeView()
     .modelContainer(container)
     .environment(driveService)
+    .environment(SpotlightIndexingService())
 }

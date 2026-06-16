@@ -42,19 +42,27 @@ types for all formatted output and pass the resulting strings into subviews as p
 Presenter types in this project:
 - `DriveStatsPresenter(drive:)` — formats per-drive distance, duration, speed, time.
 - `DriveRowDisplay` — formatted strings for a single list row.
+- `DriveDetailPresenter(drive:)` — formats all strings for the drive detail screen.
+- `HomePresenter` — static label and confirmation-message strings for the home screen.
+- `RecordingStatsPresenter(driveService:)` — snapshots and formats live recording stats.
+- `MergeDrivesPresenter(drives:)` — formats merge-preview strings and combined totals.
 
 ### Extracted subviews
 
 Extract views exceeding 100 lines. Tightly related private subviews may live in the
 same file as their parent and do not need their own logic objects.
 
+SwiftLint enforces a 250-line limit on type bodies (excluding comments and whitespace).
+Stay under this by extracting private `View` or `ToolbarContent` structs into the same
+file — they don't count toward the parent type's body length.
+
 ### When to extract a separate `@Observable` object
 
 Extract a `@MainActor @Observable final class` when one or more of the following apply:
 
 1. **Async state that changes independently of the view's inputs** — an ongoing async
-   task, live timer, or streaming location updates (e.g. `RecordingViewModel`,
-   `DriveDetailViewModel`).
+   task, live timer, or streaming location updates (e.g. `DriveDetailModel`,
+   `FullScreenMapModel`).
 2. **State shared across multiple views** that are not in a direct parent-child
    relationship.
 3. **A meaningful precondition or invariant at construction time** that benefits from
@@ -62,6 +70,19 @@ Extract a `@MainActor @Observable final class` when one or more of the following
 4. **App-scope lifetime** — these belong in the environment, not per-screen.
 
 If none of these apply, keep state in the View.
+
+When a model class needs `ModelContainer` at construction time, `@Environment` cannot
+be read inside `init`. Pass `modelContainer` as an `init` parameter and store the model
+in `@State`:
+
+```swift
+init(drive: Drive, modelContainer: ModelContainer) {
+  _model = State(initialValue: DriveDetailModel(drive: drive, modelContainer: modelContainer))
+}
+```
+
+The calling view reads `modelContext.container` from its own `@Environment(\.modelContext)`
+and passes it through.
 
 ### Pure logic types
 

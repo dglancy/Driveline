@@ -13,26 +13,26 @@ struct FullScreenMapView: View {
 
   // MARK: - Properties
 
-  @State private var viewModel: FullScreenMapViewModel
+  @State private var model: FullScreenMapModel
 
   @Environment(\.dismiss) private var dismiss
 
   // MARK: - Lifecycle
 
   init(drive: Drive, modelContainer: ModelContainer) {
-    _viewModel = State(initialValue: FullScreenMapViewModel(drive: drive, modelContainer: modelContainer))
+    _model = State(initialValue: FullScreenMapModel(drive: drive, modelContainer: modelContainer))
   }
 
   // MARK: - Body
 
   var body: some View {
     ZStack {
-      Map(position: $viewModel.cameraPosition) {
-        DriveMapContent(coordinates: viewModel.coordinates)
+      Map(position: $model.cameraPosition) {
+        DriveMapContent(coordinates: model.coordinates)
       }
       .mapStyle(.standard(emphasis: .muted))
       .ignoresSafeArea()
-      .task { await viewModel.loadRoute() }
+      .task { await model.loadRoute() }
 
       VStack {
         HStack {
@@ -55,8 +55,9 @@ struct FullScreenMapView: View {
   // MARK: - Private Views
 
   private var infoCard: some View {
-    VStack(spacing: 10) {
-      Text(viewModel.name)
+    let stats = DriveStatsPresenter(drive: model.drive)
+    return VStack(spacing: 10) {
+      Text(model.drive.displayName)
         .font(.body.weight(.semibold))
         .foregroundStyle(Color(.label))
         .dynamicTypeSize(.xSmall ... .accessibility1)
@@ -65,11 +66,11 @@ struct FullScreenMapView: View {
         .multilineTextAlignment(.center)
 
       HStack(spacing: 0) {
-        statChip(value: viewModel.distanceValue, unit: viewModel.distanceUnit)
+        statChip(value: stats.distanceValue, unit: stats.distanceUnit)
         Divider().frame(height: 28).padding(.horizontal, 12)
-        statChip(value: viewModel.durationValue, unit: viewModel.durationUnit)
+        statChip(value: stats.durationValue, unit: stats.durationUnit)
         Divider().frame(height: 28).padding(.horizontal, 12)
-        statChip(value: viewModel.avgSpeedValue, unit: viewModel.avgSpeedUnit)
+        statChip(value: stats.avgSpeedValue, unit: stats.avgSpeedUnit)
       }
     }
     .padding(.horizontal, 16)
