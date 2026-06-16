@@ -1,5 +1,5 @@
 //
-//  DriveMergeServiceTests.swift
+//  DriveMergeTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 06/06/2026.
@@ -12,14 +12,14 @@ import Testing
 internal import CoreSpotlight
 
 @MainActor
-final class DriveMergeServiceTests: SwiftDataBaseTestCase {
+final class DriveMergeTests: SwiftDataBaseTestCase {
 
   // MARK: - merge name
 
   @Test
   func mergeCreatesNewDriveWithCorrectName() throws {
     let (first, second) = makeDrivePair()
-    makeService().merge(orderedDrives: [first, second], mergedName: "Long Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Long Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.name == "Long Trip")
   }
@@ -30,7 +30,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeUsesFirstDriveStartedAt() throws {
     let start = Date(timeIntervalSinceReferenceDate: 1000)
     let (first, second) = makeDrivePair(firstStartedAt: start)
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.startedAt == start)
   }
@@ -39,7 +39,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeUsesSecondDriveEndedAt() throws {
     let end = Date(timeIntervalSinceReferenceDate: 5000)
     let (first, second) = makeDrivePair(secondEndedAt: end)
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endedAt == end)
   }
@@ -48,7 +48,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeFallsBackToFirstEndedAtWhenSecondEndedAtIsNil() throws {
     let end = Date(timeIntervalSinceReferenceDate: 3000)
     let (first, second) = makeDrivePair(firstEndedAt: end, secondEndedAt: nil)
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endedAt == end)
   }
@@ -58,7 +58,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   @Test
   func mergeSetsStatusToFinished() throws {
     let (first, second) = makeDrivePair()
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.status == .finished)
   }
@@ -70,7 +70,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = makeDrivePair()
     first.startPlaceName = "Home"
     second.startPlaceName = "Café"
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.startPlaceName == "Home")
   }
@@ -80,7 +80,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = makeDrivePair()
     first.endPlaceName = "Midpoint"
     second.endPlaceName = "Office"
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endPlaceName == "Office")
   }
@@ -104,7 +104,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.positions = [p1, p2]
     second.positions = [p3, p4]
 
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
 
     let merged = try fetchMerged(excluding: [first.id, second.id])
     let timestamps = merged?.orderedPositions.map(\.timestamp)
@@ -117,7 +117,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeInsertsNewDriveIntoContext() throws {
     let (first, second) = makeDrivePair()
     let beforeCount = try context!.fetchCount(FetchDescriptor<Drive>())
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let afterCount = try context!.fetchCount(FetchDescriptor<Drive>())
     #expect(afterCount == beforeCount - 1)
   }
@@ -127,7 +127,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = makeDrivePair()
     let firstID = first.id
     let secondID = second.id
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let remaining = try count(where: #Predicate<Drive> { $0.id == firstID || $0.id == secondID })
     #expect(remaining == 0)
   }
@@ -151,7 +151,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.positions = [p1, p2]
     second.positions = [p3, p4]
 
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
 
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect((merged?.accumulatedDistanceMetres ?? 0) > 0)
@@ -165,7 +165,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = makeDrivePair()
     first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
     second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.startWeather?.temperatureCelsius == 10)
   }
@@ -175,7 +175,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = makeDrivePair()
     first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
     second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endWeather?.temperatureCelsius == 20)
   }
@@ -185,7 +185,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = makeDrivePair()
     first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
     second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
-    makeService().merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect((merged?.weatherReadings?.count ?? 0) <= 2)
   }
@@ -197,7 +197,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let drive = Drive(name: "Solo")
     context!.insert(drive)
     let beforeCount = try context!.fetchCount(FetchDescriptor<Drive>())
-    makeService().merge(orderedDrives: [drive], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [drive], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let afterCount = try context!.fetchCount(FetchDescriptor<Drive>())
     #expect(afterCount == beforeCount)
   }
@@ -207,7 +207,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let d1 = Drive(name: "A"); let d2 = Drive(name: "B"); let d3 = Drive(name: "C")
     context!.insert(d1); context!.insert(d2); context!.insert(d3)
     let beforeCount = try context!.fetchCount(FetchDescriptor<Drive>())
-    makeService().merge(orderedDrives: [d1, d2, d3], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [d1, d2, d3], mergedName: "Trip", in: context!, deindexing: SpotlightIndexingService())
     let afterCount = try context!.fetchCount(FetchDescriptor<Drive>())
     #expect(afterCount == beforeCount)
   }
@@ -222,7 +222,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let firstID = first.id
     let secondID = second.id
 
-    makeService(spotlightIndexingService: spotlightService).merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: spotlightService)
 
     await Task.yield()
     await Task.yield()
@@ -236,7 +236,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let spotlightService = SpotlightIndexingService(index: mockSpotlight)
     let (first, second) = makeDrivePair()
 
-    makeService(spotlightIndexingService: spotlightService).merge(orderedDrives: [first, second], mergedName: "Trip")
+    DriveMerge.merge(orderedDrives: [first, second], mergedName: "Trip", in: context!, deindexing: spotlightService)
 
     await Task.yield()
     await Task.yield()
@@ -246,10 +246,6 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   }
 
   // MARK: - Helpers
-
-  private func makeService(spotlightIndexingService: SpotlightIndexingService? = nil) -> DriveMergeService {
-    DriveMergeService(modelContext: context!, spotlightIndexingService: spotlightIndexingService)
-  }
 
   private func makeDrivePair(
     firstStartedAt: Date = Date(timeIntervalSinceReferenceDate: 1000),

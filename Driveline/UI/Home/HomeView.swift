@@ -236,7 +236,7 @@ struct HomeView: View {
   }
 
   private func deleteDrives(_ drives: [Drive]) {
-    DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete(drives)
+    DriveDeletion.delete(drives, in: modelContext, deindexing: spotlightIndexingService)
   }
 
   private func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
@@ -244,7 +244,7 @@ struct HomeView: View {
   }
 
   private func mergeDrives(orderedDrives: [Drive], mergedName: String) {
-    DriveMergeService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).merge(orderedDrives: orderedDrives, mergedName: mergedName)
+    DriveMerge.merge(orderedDrives: orderedDrives, mergedName: mergedName, in: modelContext, deindexing: spotlightIndexingService)
   }
 
   private func openDrive(fromSpotlightIdentifier identifier: String) {

@@ -1,5 +1,5 @@
 //
-//  DriveMergeService.swift
+//  DriveMerge.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 06/06/2026.
@@ -9,23 +9,14 @@ import Foundation
 import SwiftData
 
 @MainActor
-final class DriveMergeService {
+enum DriveMerge {
 
-  // MARK: - Properties
-
-  private let modelContext: ModelContext
-  private let spotlightIndexingService: SpotlightIndexingService?
-
-  // MARK: - Lifecycle
-
-  init(modelContext: ModelContext, spotlightIndexingService: SpotlightIndexingService? = nil) {
-    self.modelContext = modelContext
-    self.spotlightIndexingService = spotlightIndexingService
-  }
-
-  // MARK: - Actions
-
-  func merge(orderedDrives: [Drive], mergedName: String) {
+  static func merge(
+    orderedDrives: [Drive],
+    mergedName: String,
+    in context: ModelContext,
+    deindexing spotlight: SpotlightIndexingService
+  ) {
     guard orderedDrives.count == 2 else { return }
     let first = orderedDrives[0]
     let second = orderedDrives[1]
@@ -40,14 +31,14 @@ final class DriveMergeService {
     merged.weatherReadings = [first.startWeather, second.endWeather].compactMap { $0 }
     merged.accumulatedDistanceMetres = merged.distanceMetres
 
-    modelContext.insert(merged)
+    context.insert(merged)
     do {
-      try modelContext.save()
+      try context.save()
     } catch {
       Log.ui.error("Failed to save model context: \(error.localizedDescription)")
     }
 
-    DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete([first, second])
-    Task { await spotlightIndexingService?.indexDrive(merged) }
+    DriveDeletion.delete([first, second], in: context, deindexing: spotlight)
+    Task { await spotlight.indexDrive(merged) }
   }
 }

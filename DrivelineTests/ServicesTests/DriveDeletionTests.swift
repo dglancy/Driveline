@@ -1,5 +1,5 @@
 //
-//  DriveDeletionServiceTests.swift
+//  DriveDeletionTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 11/06/2026.
@@ -11,14 +11,14 @@ import SwiftData
 import Testing
 
 @MainActor
-final class DriveDeletionServiceTests: SwiftDataBaseTestCase {
+final class DriveDeletionTests: SwiftDataBaseTestCase {
 
   // MARK: - delete(_:)
 
   @Test
   func deleteRemovesDrivesFromContext() throws {
     let drive = insertDrive()
-    makeService().delete([drive])
+    DriveDeletion.delete([drive], in: context!, deindexing: SpotlightIndexingService())
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 0)
   }
 
@@ -29,7 +29,7 @@ final class DriveDeletionServiceTests: SwiftDataBaseTestCase {
     let drive = insertDrive()
     let driveID = drive.id
 
-    makeService(spotlightIndexingService: spotlightService).delete([drive])
+    DriveDeletion.delete([drive], in: context!, deindexing: spotlightService)
 
     await Task.yield()
     await Task.yield()
@@ -40,15 +40,11 @@ final class DriveDeletionServiceTests: SwiftDataBaseTestCase {
   @Test
   func deleteWithEmptyArrayDoesNothing() throws {
     insertDrive()
-    makeService().delete([])
+    DriveDeletion.delete([], in: context!, deindexing: SpotlightIndexingService())
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 1)
   }
 
   // MARK: - Helpers
-
-  private func makeService(spotlightIndexingService: SpotlightIndexingService? = nil) -> DriveDeletionService {
-    DriveDeletionService(modelContext: context!, spotlightIndexingService: spotlightIndexingService)
-  }
 
   @discardableResult
   private func insertDrive() -> Drive {

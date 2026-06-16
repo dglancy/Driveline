@@ -89,7 +89,7 @@ struct DriveDetailView: View {
       isPresented: $showingDeleteConfirmation
     ) {
       Button.delete {
-        DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete([model.drive])
+        DriveDeletion.delete([model.drive], in: modelContext, deindexing: spotlightIndexingService)
         dismiss()
       }
       Button.cancel()

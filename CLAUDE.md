@@ -89,7 +89,10 @@ and passes it through.
 Stateless transformation logic with no SwiftUI dependency lives in value-type namespaces.
 Test these with plain inputs — no View or SwiftData container needed.
 
-Examples: `DriveSectionBuilder`, `DriveStats`.
+Use a caseless `enum` (not a `struct`) for namespaces of static functions — it is
+uninhabitable by design, making it clear the type is not meant to be instantiated.
+
+Examples: `DriveSectionBuilder`, `DriveStats`, `DriveEditor`, `DriveDeletion`, `DriveMerge`.
 
 ---
 
