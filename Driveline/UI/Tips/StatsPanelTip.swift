@@ -9,10 +9,12 @@ import SwiftUI
 import TipKit
 
 struct StatsPanelTip: Tip {
-  @Parameter static var hasDrives: Bool = false
+  @Parameter static var driveCount: Int = 0
+  @Parameter static var isRecording: Bool = false
 
   var rules: [Rule] {
-    #Rule(Self.$hasDrives) { $0 == true }
+    #Rule(Self.$driveCount) { $0 >= 3 }
+    #Rule(Self.$isRecording) { $0 == false }
   }
 
   var title: Text {

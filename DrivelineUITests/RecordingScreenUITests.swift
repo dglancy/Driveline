@@ -9,6 +9,8 @@ import XCTest
 
 final class RecordingScreenUITests: BaseXCTestCase {
   
+  // MARK: - Tests
+  
   @MainActor
   func testShowRecordScreen() throws {
     let beforeStart = Date.now
