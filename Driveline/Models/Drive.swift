@@ -121,10 +121,6 @@ final class Drive {
     return positions.sorted(by: { $0.timestamp < $1.timestamp })
   }
 
-  var positionLocationCoordinatesIn2D: [CLLocationCoordinate2D] {
-    orderedPositions.map(\.location.coordinate)
-  }
-
   // MARK: - Lifecycle
 
   init(name: String? = nil, trigger: RecordingTrigger = .manual) {
