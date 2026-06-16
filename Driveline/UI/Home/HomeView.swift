@@ -13,15 +13,20 @@ struct HomeView: View {
 
   // MARK: - Properties
 
-  @Environment(DriveRecordingService.self) private var driveService
-  @Environment(\.openURL) private var openURL
+  @Environment(DriveRecordingService.self)
+  private var driveService
+  
+  @Environment(\.openURL)
+  private var openURL
 
-  @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
+  @Query(sort: \Drive.startedAt, order: .reverse)
+  private var drives: [Drive]
 
+  @State private var viewModel: HomeViewModel
+  
   private let modelContext: ModelContext
   private let spotlightIndexingService: SpotlightIndexingService
-  @State private var viewModel: HomeViewModel
-
+  
   // MARK: - Lifecycle
 
   init(spotlightIndexingService: SpotlightIndexingService, modelContext: ModelContext) {

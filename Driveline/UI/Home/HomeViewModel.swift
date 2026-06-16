@@ -28,8 +28,18 @@ final class HomeViewModel {
 
   struct DriveRow: Identifiable {
     let drive: Drive
-    let display: DriveRowDisplay
     var id: UUID { drive.id }
+
+    var display: DriveRowDisplay {
+      let duration = drive.endedAt != nil ? drive.activeDurationSeconds.localizedHoursMinutesString() : nil
+      let distance = Measurement(value: drive.displayDistanceMetres, unit: UnitLength.meters)
+      return DriveRowDisplay(
+        dateTimeLabel: DriveStatsPresenter(drive: drive).startTimeLabel,
+        formattedDistance: distance.localizedDistanceString(),
+        formattedDuration: duration,
+        iconName: DriveRowDisplay.iconName(for: drive.startedAt)
+      )
+    }
   }
 
   struct DriveSection: Identifiable {
@@ -195,7 +205,7 @@ final class HomeViewModel {
 
     for drive in drives.sorted(by: { $0.startedAt > $1.startedAt }) {
       let key = sectionTitle(for: drive.startedAt, today: today, calendar: calendar)
-      let row = DriveRow(drive: drive, display: makeDisplay(for: drive))
+      let row = DriveRow(drive: drive)
       if groupMap[key] == nil {
         orderedKeys.append(key)
       }
@@ -203,17 +213,6 @@ final class HomeViewModel {
     }
 
     return orderedKeys.map { DriveSection(title: $0, rows: groupMap[$0] ?? []) }
-  }
-
-  private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
-    let duration = drive.endedAt != nil ? drive.activeDurationSeconds.localizedHoursMinutesString() : nil
-    let distance = Measurement(value: drive.displayDistanceMetres, unit: UnitLength.meters)
-    return DriveRowDisplay(
-      dateTimeLabel: DriveStatsPresenter(drive: drive).startTimeLabel,
-      formattedDistance: distance.localizedDistanceString(),
-      formattedDuration: duration,
-      iconName: DriveRowDisplay.iconName(for: drive.startedAt)
-    )
   }
 
   private func buildStats(from drives: [Drive]) {
