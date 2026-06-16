@@ -107,7 +107,7 @@ Begin every new Swift file with:
 ```
 
 ---
-SwiftUI
+## SwiftUI
 
 - Extract views exceeding 100 lines.
 - @State for local view state.
@@ -116,11 +116,11 @@ SwiftUI
 - @Bindable for bindings to @Observable objects.
 
 ---
-SwiftData: Cross-Actor Model Access
+## SwiftData: Cross-Actor Model Access
 
 Always use the ID-fetch pattern. Never pass model instances across actor boundaries.
 
-Pattern
+### Pattern
 
 1. Extract PersistentIdentifier on the originating actor.
 2. Pass only the identifier across the boundary — it is Sendable.
@@ -142,7 +142,7 @@ func process(id: PersistentIdentifier) {
 // ❌ Never
 nonisolated func process(trip: sending Trip) { ... }
 
-Why
+### Why
 
 - ModelContext is not Sendable; a model is bound to the context it was fetched in.
 Passing instances risks context mismatch, data races, or silent staleness.
@@ -175,13 +175,13 @@ actor WeatherSweepService: SweepServiceProtocol {
 }
 
 ---
-Builds & Tests
+## Builds & Tests
 
 - Simulator destination: platform=iOS Simulator,name=iPhone 17
 - Never git commit any change.
 
 ---
-Xcode
+## Xcode
 
 - The project uses Xcode's File System Synchronized Groups — new files are picked up
 automatically, no need to add them to the project.
