@@ -15,6 +15,11 @@ final class HomeScreenUITests: BaseXCTestCase {
   }
   
   @MainActor
+  func testRecordButtonTipAppearsOnFirstLaunch() throws {
+    XCTAssertTrue(app.staticTexts["Record a Drive"].waitForExistence(timeout: 3))
+  }
+
+  @MainActor
   func testSearchNoResults() throws {
     navigateToHomeScreen()
     

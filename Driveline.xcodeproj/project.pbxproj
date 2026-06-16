@@ -17,6 +17,7 @@
 		6D645D0B2FD597CB008E8086 /* WeatherKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D645D0A2FD597CA008E8086 /* WeatherKit.framework */; };
 		6DAB000000000000000015 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6DAB000000000000000014 /* ArgumentParser */; };
 		6DAB000000000000000019 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6DAB00000000000000001A /* ArgumentParser */; };
+		6DDB8DCD2FE1F3900065AA99 /* TipKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DDB8DCC2FE1F3900065AA99 /* TipKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		6DAB000000000000000003 /* MLTrainingDataPrepTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MLTrainingDataPrepTool; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DAB000000000000000004 /* MLTrainingDataPrepToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MLTrainingDataPrepToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB7778A2FDB5EC20093240A /* MacOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MacOS.xctestplan; sourceTree = "<group>"; };
+		6DDB8DCC2FE1F3900065AA99 /* TipKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TipKit.framework; path = System/Library/Frameworks/TipKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -239,6 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D645D0B2FD597CB008E8086 /* WeatherKit.framework in Frameworks */,
+				6DDB8DCD2FE1F3900065AA99 /* TipKit.framework in Frameworks */,
 				6D47A5A12FCB2B1500E6C7B7 /* CoreLocation.framework in Frameworks */,
 				6D1E962F2FDC929F006943C4 /* CoreML.framework in Frameworks */,
 			);
@@ -336,6 +339,7 @@
 		6D47A59F2FCB2B1400E6C7B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6DDB8DCC2FE1F3900065AA99 /* TipKit.framework */,
 				6D1E962E2FDC929F006943C4 /* CoreML.framework */,
 				6D645D0A2FD597CA008E8086 /* WeatherKit.framework */,
 				6D47A5A02FCB2B1500E6C7B7 /* CoreLocation.framework */,

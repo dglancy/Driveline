@@ -8,6 +8,7 @@
 import CoreSpotlight
 import SwiftUI
 import SwiftData
+import TipKit
 
 struct HomeView: View {
 
@@ -314,6 +315,7 @@ private struct HomeToolbar: ToolbarContent {
         .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
         .accessibilityIdentifier("NewDriveButton")
+        .popoverTip(RecordButtonTip())
       }
     }
   }

@@ -8,6 +8,7 @@
 import BackgroundTasks
 import Foundation
 import SwiftData
+import TipKit
 
 @MainActor
 enum AppBootstrap {
@@ -45,6 +46,7 @@ enum AppBootstrap {
     registerIntentDependencies(driveService: driveService)
 
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
+    configureTips(isUITesting: isUITesting)
 
     Log.lifecycle.info("App started")
     return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: categoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
@@ -54,6 +56,11 @@ enum AppBootstrap {
 
   private static func isUITesting() -> Bool {
     ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
+  }
+
+  private static func configureTips(isUITesting: Bool) {
+    if isUITesting { try? Tips.resetDatastore() }
+    try? Tips.configure()
   }
 
   private static func createModelContainer(inMemoryOnly: Bool) -> ModelContainer {
