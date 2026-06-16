@@ -2484,6 +2484,35 @@
         }
       }
     },
+    "Record a Drive" : {
+      "comment" : "TipKit tip title for the home screen record button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrt aufnehmen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record a Drive"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer un trajet"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rit opnemen"
+          }
+        }
+      }
+    },
     "RECORDING" : {
       "comment" : "Status badge text — translators may lowercase if appropriate",
       "localizations" : {
@@ -3308,6 +3337,93 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Volgorde omwisselen"
+          }
+        }
+      }
+    },
+    "Switch Stats View" : {
+      "comment" : "TipKit tip title for the home screen stats panel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistikansicht wechseln"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch Stats View"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer la vue des statistiques"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistieken wisselen"
+          }
+        }
+      }
+    },
+    "Tap to start manually tracking a new journey." : {
+      "comment" : "TipKit tip message for the home screen record button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen, um eine neue Fahrt manuell aufzuzeichnen."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to start manually tracking a new journey."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez pour commencer à enregistrer manuellement un nouveau trajet."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om handmatig een nieuwe rit op te nemen."
+          }
+        }
+      }
+    },
+    "Tap to toggle between the last 30 days and all time." : {
+      "comment" : "TipKit tip message for the home screen stats panel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen, um zwischen den letzten 30 Tagen und allen Fahrten zu wechseln."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to toggle between the last 30 days and all time."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez pour basculer entre les 30 derniers jours et toutes les statistiques."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om te wisselen tussen de laatste 30 dagen en alle ritten."
           }
         }
       }

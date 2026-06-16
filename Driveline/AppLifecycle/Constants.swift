@@ -40,5 +40,6 @@ enum Constants {
 
   enum Testing {
     nonisolated static let UITestingFlag = "-ui-testing"
+    nonisolated static let TipTestingFlag = "-tip-testing"
   }
 }

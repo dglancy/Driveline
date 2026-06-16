@@ -8,6 +8,7 @@
 import CoreSpotlight
 import SwiftUI
 import SwiftData
+import TipKit
 
 struct HomeView: View {
 
@@ -70,6 +71,9 @@ struct HomeView: View {
         }
         .onChange(of: driveService.isRecording) { _, isRecording in
           if isRecording { exitSelectMode() }
+        }
+        .onChange(of: recentStats.driveCount > 0, initial: true) { _, hasDrives in
+          StatsPanelTip.hasDrives = hasDrives
         }
     }
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
@@ -145,6 +149,7 @@ struct HomeView: View {
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
+            .popoverTip(StatsPanelTip())
           }
           .listSectionSpacing(8)
         }
@@ -314,6 +319,7 @@ private struct HomeToolbar: ToolbarContent {
         .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
         .accessibilityIdentifier("NewDriveButton")
+        .popoverTip(RecordButtonTip())
       }
     }
   }
