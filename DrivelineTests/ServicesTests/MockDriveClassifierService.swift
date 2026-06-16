@@ -8,8 +8,6 @@
 @testable import Driveline
 import Foundation
 
-// Test double: each test exercises it from a single sweep actor (or the main actor) at a time,
-// never concurrently, so @unchecked Sendable is safe here.
 final class MockDriveClassifierService: DriveClassifierServiceProtocol, @unchecked Sendable {
 
   // MARK: - Properties

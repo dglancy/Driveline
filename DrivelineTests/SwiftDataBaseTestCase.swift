@@ -34,8 +34,6 @@ class SwiftDataBaseTestCase {
     return try context!.fetchCount(descriptor)
   }
 
-  /// Fetches a fresh copy of `drive` from a new `ModelContext`, reflecting any changes saved by
-  /// other contexts (e.g. a `@ModelActor` sweep service's own context) since it was fetched.
   func reload(_ drive: Drive) throws -> Drive {
     let driveID = drive.id
     let descriptor = FetchDescriptor<Drive>(predicate: #Predicate { $0.id == driveID })
@@ -45,8 +43,6 @@ class SwiftDataBaseTestCase {
     return reloaded
   }
 
-  /// Repeatedly reloads `drive` until `predicate` is satisfied or `timeout` elapses, for
-  /// asserting on the result of work performed by a detached `Task` (e.g. a sweep service).
   func reload(_ drive: Drive, until predicate: (Drive) -> Bool, timeout: Duration = .seconds(30)) async throws -> Drive {
     let deadline = ContinuousClock.now + timeout
     while true {

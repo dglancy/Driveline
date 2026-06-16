@@ -16,9 +16,6 @@ extension Drive {
     Self.distanceMetres(for: orderedPositions)
   }
 
-  /// Distance for display purposes. Uses the incrementally-tracked `accumulatedDistanceMetres`
-  /// for finished drives (O(1)) to avoid re-walking all positions; falls back to the live
-  /// `distanceMetres` walk while a drive is still recording.
   var displayDistanceMetres: Double {
     status == .finished ? accumulatedDistanceMetres : distanceMetres
   }
@@ -47,14 +44,12 @@ extension Drive {
 
   // MARK: - Speed Distribution
 
-  /// Arithmetic mean of the valid instantaneous speed samples.
   var meanSpeedMetresPerSecond: CLLocationSpeed {
     let speeds = validSpeeds
     guard !speeds.isEmpty else { return 0 }
     return speeds.reduce(0, +) / Double(speeds.count)
   }
 
-  /// Population variance of the valid instantaneous speed samples.
   var speedVarianceMetresPerSecondSquared: Double {
     let speeds = validSpeeds
     guard speeds.count > 1 else { return 0 }
@@ -63,12 +58,10 @@ extension Drive {
     return sumOfSquares / Double(speeds.count)
   }
 
-  /// Population standard deviation of the valid instantaneous speed samples.
   var speedStandardDeviationMetresPerSecond: CLLocationSpeed {
     speedVarianceMetresPerSecondSquared.squareRoot()
   }
 
-  /// Fraction (0...1) of trip time spent above the high-speed threshold (80 km/h).
   var fractionOfTimeAboveHighSpeed: Double {
     let duration = activeDurationSeconds
     guard duration > 0 else { return 0 }
@@ -80,7 +73,6 @@ extension Drive {
 
   // MARK: - High-Speed & Stop Segments
 
-  /// Number of sustained runs (> 10s) spent above the high-speed threshold (80 km/h).
   var sustainedHighSpeedSegmentCount: Int {
     sustainedSegments(
       matching: { $0 > Constants.Statistics.highSpeedMetresPerSecond },
@@ -88,17 +80,14 @@ extension Drive {
     ).count
   }
 
-  /// Number of stops: sustained runs (> 10s) below 5 km/h.
   var stopCount: Int {
     stopSegments.count
   }
 
-  /// Total time spent stopped, in seconds, across all qualifying stop segments.
   var stoppedDurationSeconds: TimeInterval {
     stopSegments.reduce(0.0) { $0 + $1.upperBound.timeIntervalSince($1.lowerBound) }
   }
 
-  /// Fraction (0...1) of trip time spent stopped.
   var fractionOfTimeStopped: Double {
     let duration = activeDurationSeconds
     guard duration > 0 else { return 0 }
@@ -118,7 +107,6 @@ extension Drive {
     return distanceMetres / denominator
   }
 
-  /// Total absolute heading change per kilometre travelled — a proxy for corner frequency.
   var bearingChangeRateDegreesPerKilometre: Double {
     let positions = orderedPositions
     let bearings = zip(positions, positions.dropFirst())
@@ -133,7 +121,6 @@ extension Drive {
 
   // MARK: - Elevation
 
-  /// Total cumulative climb, in metres.
   var elevationGainMetres: Double {
     let positions = orderedPositions
     return zip(positions, positions.dropFirst()).reduce(0.0) { total, pair in
@@ -141,7 +128,6 @@ extension Drive {
     }
   }
 
-  /// Total cumulative descent, in metres (positive value).
   var elevationLossMetres: Double {
     let positions = orderedPositions
     return zip(positions, positions.dropFirst()).reduce(0.0) { total, pair in
@@ -190,8 +176,6 @@ extension Drive {
     orderedPositions.compactMap { $0.speed >= 0 ? $0.speed : nil }
   }
 
-  /// Instantaneous speed paired with the duration until the next sample. Invalid speeds and
-  /// non-positive intervals are dropped.
   private var speedSegments: [(speed: CLLocationSpeed, duration: TimeInterval)] {
     let positions = orderedPositions
     return zip(positions, positions.dropFirst()).compactMap { current, next in
@@ -209,8 +193,6 @@ extension Drive {
     )
   }
 
-  /// Returns the time ranges of consecutive samples whose speed satisfies `predicate` for longer
-  /// than `minimumSeconds`.
   private func sustainedSegments(
     matching predicate: (CLLocationSpeed) -> Bool,
     minimumSeconds: TimeInterval
@@ -294,8 +276,6 @@ extension Drive {
     return (gain, loss)
   }
 
-  /// Returns the time ranges of consecutive samples whose speed satisfies `predicate` for longer
-  /// than `minimumSeconds`.
   private static func sustainedSegments(
     in positions: [Position],
     matching predicate: (CLLocationSpeed) -> Bool,
