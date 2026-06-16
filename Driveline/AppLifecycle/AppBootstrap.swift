@@ -9,9 +9,6 @@ import BackgroundTasks
 import Foundation
 import SwiftData
 
-// BGTask.setTaskCompleted(success:) is documented thread-safe; Sendable allows crossing actor boundaries.
-extension BGTask: @retroactive @unchecked Sendable {}
-
 @MainActor
 enum AppBootstrap {
 
@@ -92,7 +89,7 @@ enum AppBootstrap {
   }
 
   private static func findActiveDrive(in modelContext: ModelContext) -> Drive? {
-    Log.lifecycle.info("Setting up drive service")
+    Log.lifecycle.info("Finding active drive")
     var descriptor = FetchDescriptor<Drive>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
     descriptor.fetchLimit = 1
     return (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
@@ -125,3 +122,6 @@ enum AppBootstrap {
     IntentDependencyResolver.provider = { driveService }
   }
 }
+
+// BGTask.setTaskCompleted(success:) is documented thread-safe; Sendable allows crossing actor boundaries.
+extension BGTask: @retroactive @unchecked Sendable {}
