@@ -14,8 +14,6 @@ protocol ExportingDrive {
   func export(drive: Drive) async throws -> URL
 }
 
-// MARK: - Protocol extension
-
 extension ExportingDrive {
   func validatedCoordinates(for drive: Drive) throws -> [CLLocationCoordinate2D] {
     let coords = drive.positionLocationCoordinatesIn2D
