@@ -3341,6 +3341,35 @@
         }
       }
     },
+    "Switch Stats View" : {
+      "comment" : "TipKit tip title for the home screen stats panel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistikansicht wechseln"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch Stats View"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer la vue des statistiques"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistieken wisselen"
+          }
+        }
+      }
+    },
     "Tap to start manually tracking a new journey." : {
       "comment" : "TipKit tip message for the home screen record button",
       "localizations" : {
@@ -3366,6 +3395,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tik om handmatig een nieuwe rit op te nemen."
+          }
+        }
+      }
+    },
+    "Tap to toggle between the last 30 days and all time." : {
+      "comment" : "TipKit tip message for the home screen stats panel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen, um zwischen den letzten 30 Tagen und allen Fahrten zu wechseln."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to toggle between the last 30 days and all time."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez pour basculer entre les 30 derniers jours et toutes les statistiques."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik om te wisselen tussen de laatste 30 dagen en alle ritten."
           }
         }
       }

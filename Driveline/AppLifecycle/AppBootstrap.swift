@@ -46,7 +46,7 @@ enum AppBootstrap {
     registerIntentDependencies(driveService: driveService)
 
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
-    configureTips(isUITesting: isUITesting)
+    configureTips(isUITesting: isUITesting, isTipTesting: isTipTesting())
 
     Log.lifecycle.info("App started")
     return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: categoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
@@ -58,8 +58,13 @@ enum AppBootstrap {
     ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
   }
 
-  private static func configureTips(isUITesting: Bool) {
-    if isUITesting { try? Tips.resetDatastore() }
+  private static func isTipTesting() -> Bool {
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.TipTestingFlag)
+  }
+
+  private static func configureTips(isUITesting: Bool, isTipTesting: Bool) {
+    guard !isUITesting || isTipTesting else { return }
+    if isTipTesting { try? Tips.resetDatastore() }
     try? Tips.configure()
   }
 

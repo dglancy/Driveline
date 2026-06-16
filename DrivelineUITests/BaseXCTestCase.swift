@@ -13,14 +13,15 @@ class BaseXCTestCase: XCTestCase {
   // MARK: - Properties
 
   var app: XCUIApplication!
-
+  var extraLaunchArguments: [String] { [] }
+  
   // MARK: - Lifecycle
 
   override func setUp() async throws {
     try await super.setUp()
     continueAfterFailure = false
     app = XCUIApplication()
-    app.launchArguments += ["-ui-testing"]
+    app.launchArguments += ["-ui-testing"] + extraLaunchArguments
 
     addUIInterruptionMonitor(withDescription: "System permission alert") { alert in
       for label in ["Allow While Using App", "Allow Once", "Allow"] where alert.buttons[label].exists {

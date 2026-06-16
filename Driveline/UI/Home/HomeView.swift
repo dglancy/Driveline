@@ -72,6 +72,9 @@ struct HomeView: View {
         .onChange(of: driveService.isRecording) { _, isRecording in
           if isRecording { exitSelectMode() }
         }
+        .onChange(of: recentStats.driveCount > 0, initial: true) { _, hasDrives in
+          StatsPanelTip.hasDrives = hasDrives
+        }
     }
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
       guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
@@ -146,6 +149,7 @@ struct HomeView: View {
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
+            .popoverTip(StatsPanelTip())
           }
           .listSectionSpacing(8)
         }
