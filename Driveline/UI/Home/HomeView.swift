@@ -40,6 +40,7 @@ struct HomeView: View {
   private var recentStats: DriveStats { DriveStats.recent(from: drives) }
   private var allTimeStats: DriveStats { DriveStats.allTime(from: drives) }
   private var activeStats: DriveStats { statsScope == .last30Days ? recentStats : allTimeStats }
+  private var activeStatsPresenter: HomeStatsPresenter { HomeStatsPresenter(stats: activeStats) }
 
   private var isSearchActive: Bool { !searchText.isEmpty }
   private var canMerge: Bool { selectedDriveIDs.count == 2 }
@@ -131,9 +132,9 @@ struct HomeView: View {
         if recentStats.driveCount > 0 && !isSelectMode && !isSearchActive {
           Section {
             HomeStatsPanelView(
-              driveCount: activeStats.driveCount,
-              distanceValue: activeStats.distanceValue,
-              distanceUnit: activeStats.distanceUnit,
+              driveCount: activeStatsPresenter.driveCount,
+              distanceValue: activeStatsPresenter.distanceValue,
+              distanceUnit: activeStatsPresenter.distanceUnit,
               scopeLabel: HomePresenter.statsScopeLabel(statsScope),
               onTap: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
             )

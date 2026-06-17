@@ -28,21 +28,19 @@ struct DriveStatsTests {
   }
 
   @Test
-  func distanceUnitMatchesLocale() {
-    let stats = DriveStats(drives: [makeDrive(daysAgo: 0)])
-    let expected = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
-    #expect(stats.distanceUnit == expected)
+  func emptyDrivesProducesZeroDistance() {
+    let stats = DriveStats(drives: [])
+    #expect(stats.totalDistanceMetres == 0)
   }
 
   @Test
-  func distanceValueAccumulatesDisplayDistances() {
+  func totalDistanceAccumulatesDisplayDistances() {
     let drive = makeDrive(daysAgo: 0)
     drive.status = .finished
     drive.endedAt = drive.startedAt.addingTimeInterval(600)
     drive.accumulatedDistanceMetres = 12_345
     let stats = DriveStats(drives: [drive])
-    let expected = Measurement(value: 12_345, unit: UnitLength.meters).localizedDistanceValueString()
-    #expect(stats.distanceValue == expected)
+    #expect(stats.totalDistanceMetres == 12_345)
   }
 
   // MARK: - recent(from:)
