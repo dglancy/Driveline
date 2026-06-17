@@ -96,9 +96,12 @@ struct HomeView: View {
     }
     .sheet(isPresented: $showingMergeSheet) {
       if drivesToMerge.count == 2 {
-        MergeDrivesView(drives: drivesToMerge) { orderedDrives, mergedName in
-          mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName)
-        }
+        MergeDrivesView(
+          drives: drivesToMerge,
+          modelContainer: modelContext.container,
+          spotlight: spotlightIndexingService,
+          onMerged: { exitSelectMode() }
+        )
       }
     }
   }
@@ -233,10 +236,6 @@ struct HomeView: View {
 
   private func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
     deleteDrives(indexSet.map { section.rows[$0].drive })
-  }
-
-  private func mergeDrives(orderedDrives: [Drive], mergedName: String) {
-    DriveMerge.merge(orderedDrives: orderedDrives, mergedName: mergedName, in: modelContext, deindexing: spotlightIndexingService)
   }
 
   private func openDrive(fromSpotlightIdentifier identifier: String) {

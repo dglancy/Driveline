@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 31/05/2026.
 //
 
+import SwiftData
 import SwiftUI
 
 struct MergeDrivesView: View {
@@ -14,15 +15,22 @@ struct MergeDrivesView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var orderedDrives: [Drive]
   @State private var mergedName: String
+  @State private var mergeState: MergeDrivesState
 
-  let onConfirm: ([Drive], String) -> Void
+  private let onMerged: () -> Void
 
   // MARK: - Lifecycle
 
-  init(drives: [Drive], onConfirm: @escaping ([Drive], String) -> Void) {
+  init(
+    drives: [Drive],
+    modelContainer: ModelContainer,
+    spotlight: SpotlightIndexingService,
+    onMerged: @escaping () -> Void
+  ) {
     _orderedDrives = State(initialValue: drives)
     _mergedName = State(initialValue: MergeDrivesPresenter.defaultMergedName(for: drives))
-    self.onConfirm = onConfirm
+    _mergeState = State(initialValue: MergeDrivesState(modelContainer: modelContainer, spotlight: spotlight))
+    self.onMerged = onMerged
   }
 
   // MARK: - Computed Properties
@@ -48,19 +56,65 @@ struct MergeDrivesView: View {
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button.cancel { dismiss() }
+            .disabled(mergeState.isMerging)
         }
         ToolbarItem(placement: .confirmationAction) {
           Button(String(localized: "Merge", comment: "Confirm drive merge")) {
-            onConfirm(orderedDrives, mergedName)
-            dismiss()
+            performMerge()
           }
           .fontWeight(.semibold)
+          .disabled(mergeState.isMerging)
+        }
+      }
+      .interactiveDismissDisabled(mergeState.isMerging)
+      .overlay {
+        if mergeState.isMerging {
+          mergeProgressOverlay
         }
       }
     }
   }
 
+  // MARK: - Actions
+
+  private func performMerge() {
+    Task {
+      await mergeState.merge(
+        firstID: orderedDrives[0].id,
+        secondID: orderedDrives[1].id,
+        mergedName: mergedName
+      )
+      onMerged()
+      dismiss()
+    }
+  }
+
   // MARK: - Private Views
+
+  private var mergeProgressOverlay: some View {
+    ZStack {
+      Color(.systemBackground).opacity(0.85).ignoresSafeArea()
+      VStack(spacing: 16) {
+        HStack {
+          Text(String(localized: "Merging…", comment: "Label shown while two drives are being merged"))
+            .font(.headline)
+          Spacer()
+          Text(mergeState.progress.formatted(.percent.precision(.fractionLength(0))))
+            .font(.headline.monospacedDigit())
+            .foregroundStyle(.secondary)
+        }
+        ProgressView(value: mergeState.progress)
+          .progressViewStyle(.linear)
+      }
+      .padding(20)
+      .frame(maxWidth: 320)
+      .cardBackground()
+      .padding(.horizontal, 40)
+    }
+    .accessibilityElement(children: .combine)
+    .accessibilityLabel(String(localized: "Merging drives", comment: "Accessibility label for the merge progress indicator"))
+    .accessibilityValue(mergeState.progress.formatted(.percent.precision(.fractionLength(0))))
+  }
 
   private var orderSection: some View {
     VStack(alignment: .leading, spacing: 0) {
