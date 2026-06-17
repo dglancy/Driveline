@@ -17,7 +17,7 @@ enum AppBootstrap {
 
   static func boot() -> AppEnvironment {
     Log.lifecycle.info("App starting")
-    let modelContainer = createModelContainer(inMemoryOnly: Driveline.isTipTesting())
+    let modelContainer = createModelContainer(inMemoryOnly: Driveline.isUITesting())
     let locationService = setupLocationService()
     let locationDataRecorder = setupLocationDataRecorderService(
       locationService: locationService,
@@ -45,8 +45,8 @@ enum AppBootstrap {
     registerBGTasks([placeNameSweepService, weatherSweepService, categoryPredictionSweepService])
     registerIntentDependencies(driveService: driveService)
 
-    if Driveline.isTipTesting() { Log.lifecycle.info("Running in UI Testing mode") }
-    configureTips(isUITesting: Driveline.isTipTesting(), isTipTesting: Driveline.isTipTesting())
+    if Driveline.isUITesting() { Log.lifecycle.info("Running in UI Testing mode") }
+    configureTips(isUITesting: Driveline.isUITesting(), isTipTesting: Driveline.isTipTesting())
     configureOnboarding(isOnboardingTesting: Driveline.isOnboardingTesting())
 
     Log.lifecycle.info("App started")
