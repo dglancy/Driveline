@@ -17,11 +17,7 @@ enum DriveDeletion {
     for drive in drives {
       context.delete(drive)
     }
-    do {
-      try context.save()
-    } catch {
-      Log.data.error("Failed to delete drives: \(error.localizedDescription)")
-    }
+    context.saveChanges("drive deletion")
     Task { await spotlight.deindexDrives(ids) }
   }
 }

@@ -16,7 +16,7 @@ import SwiftData
 @MainActor
 protocol LocationDataRecorderServiceProtocol {
   var drive: Drive? { get }
-  func startRecording(with drive: Drive) throws
+  func startRecording(with drive: Drive)
   func stopRecording()
 }
 
@@ -47,7 +47,7 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
 
   // MARK: - Actions
 
-  func startRecording(with drive: Drive) throws {
+  func startRecording(with drive: Drive) {
     guard self.drive == nil else {
       Log.data.error("startRecording called while already recording; ignoring.")
       return
@@ -58,15 +58,7 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
 
     if drive.modelContext == nil {
       modelContext.insert(drive)
-      do {
-        try modelContext.save()
-        Log.data.info("Saved starting recording locations")
-      } catch {
-        modelContext.delete(drive)
-        self.drive = nil
-        Log.data.error("Failed to save starting recording locations: \(error)")
-        throw error
-      }
+      modelContext.saveChanges("starting recording locations")
     }
 
     locationCancellable = locationService.locationPublisher
@@ -125,12 +117,8 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
 
   private func saveIfNeeded() {
     guard hasPendingPositions else { return }
-    do {
-      try modelContext.save()
+    if modelContext.saveChanges("pending positions") {
       hasPendingPositions = false
-      Log.data.info("Saved pending positions")
-    } catch {
-      Log.data.error("Failed to save positions: \(error)")
     }
   }
 }

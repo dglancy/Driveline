@@ -23,7 +23,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
 
     #expect(recorder.drive != nil)
   }
@@ -34,7 +34,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -53,7 +53,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let drive = Drive(name: "Test drive")
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
 
     let first = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.500, longitude: -0.100),
@@ -92,7 +92,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
     recorder.stopRecording()
 
     #expect(recorder.drive == nil)
@@ -104,7 +104,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -122,7 +122,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!, saveInterval: 0.1)
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,
@@ -144,7 +144,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     context!.insert(drive)
     try context!.save()
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
 
     #expect(recorder.drive != nil)
     let driveCount = try! count(where: #Predicate<Drive> { _ in true })
@@ -165,7 +165,7 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
-    try recorder.startRecording(with: drive)
+    recorder.startRecording(with: drive)
     recorder.stopRecording()
 
     let location = CLLocation(

@@ -12,18 +12,12 @@ import Foundation
 final class MockLocationDataRecorderService: LocationDataRecorderServiceProtocol {
 
   var drive: Drive?
-  var shouldThrow = false
 
-  func startRecording(with drive: Drive) throws {
-    if shouldThrow { throw MockRecorderError.startFailed }
+  func startRecording(with drive: Drive) {
     self.drive = drive
   }
 
   func stopRecording() {
     drive = nil
   }
-}
-
-enum MockRecorderError: Error {
-  case startFailed
 }

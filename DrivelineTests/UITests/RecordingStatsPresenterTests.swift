@@ -125,7 +125,7 @@ final class RecordingStatsPresenterTests: SwiftDataBaseTestCase {
 
   private func makePresenter() -> RecordingStatsPresenter {
     let (service, _) = makeService()
-    try! service.startDrive()
+    service.startDrive()
     return RecordingStatsPresenter(driveService: service)
   }
 }

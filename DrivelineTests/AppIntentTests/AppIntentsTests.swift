@@ -76,7 +76,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   @Test
   func startDriveIntentIsNoOpWhenAlreadyRecording() async throws {
-    try driveService.startDrive()
+    driveService.startDrive()
 
     _ = try await StartDriveIntent().perform()
 
@@ -87,7 +87,7 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
 
   @Test
   func finishDriveIntentFinishesDriveWhenRecording() async throws {
-    try driveService.startDrive()
+    driveService.startDrive()
 
     _ = try await FinishDriveIntent().perform()
 

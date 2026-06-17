@@ -921,6 +921,7 @@
     },
     "Couldn't Start Recording" : {
       "comment" : "Start drive failure alert title",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2430,7 +2431,7 @@
       "comment" : "Drive category: not categorized"
     },
     "OK" : {
-      "comment" : "Dismiss export error alert\nDismiss start drive error alert",
+      "comment" : "Dismiss export error alert",
       "localizations" : {
         "de" : {
           "stringUnit" : {

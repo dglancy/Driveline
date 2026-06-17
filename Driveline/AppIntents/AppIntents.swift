@@ -59,7 +59,7 @@ struct StartDriveIntent: AppIntent {
 
     let driveService = try await resolveDriveRecordingService()
     if await !driveService.isRecording {
-      try await driveService.startDrive(trigger: .automatic)
+      await driveService.startDrive(trigger: .automatic)
     }
     return .result()
   }

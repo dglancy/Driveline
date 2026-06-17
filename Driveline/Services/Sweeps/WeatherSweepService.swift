@@ -54,17 +54,7 @@ actor WeatherSweepService: SweepServiceProtocol {
           drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
         }
       }
-      saveModelContext()
-    }
-  }
-
-  // MARK: - Private
-
-  private func saveModelContext() {
-    do {
-      try modelContext.save()
-    } catch {
-      Log.ui.error("Failed to save model context during weather sweep: \(error.localizedDescription)")
+      modelContext.saveChanges("weather sweep")
     }
   }
 }

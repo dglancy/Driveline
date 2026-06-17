@@ -27,10 +27,8 @@ struct HomeView: View {
   @State private var statsScope: StatsScope = .last30Days
   @State private var isSelectMode: Bool = false
   @State private var selectedDriveIDs: Set<UUID> = []
-  @State private var startDriveErrorMessage: String?
   @State private var drivesToMerge: [Drive] = []
   @State private var showingDeleteConfirmation: Bool = false
-  @State private var showingStartDriveError: Bool = false
   @State private var showingMergeSheet: Bool = false
 
   // MARK: - Computed Properties
@@ -94,14 +92,6 @@ struct HomeView: View {
       Button.cancel()
     } message: {
       Text(HomePresenter.deleteConfirmationMessage(selectedDriveIDs.count))
-    }
-    .alert(
-      String(localized: "Couldn't Start Recording", comment: "Start drive failure alert title"),
-      isPresented: $showingStartDriveError
-    ) {
-      Button(String(localized: "OK", comment: "Dismiss start drive error alert"), role: .cancel) { }
-    } message: {
-      Text(startDriveErrorMessage ?? "")
     }
     .sheet(isPresented: $showingMergeSheet) {
       if drivesToMerge.count == 2 {
@@ -206,12 +196,7 @@ struct HomeView: View {
   // MARK: - Actions
 
   private func startDrive(trigger: Drive.RecordingTrigger = .manual) {
-    do {
-      try driveService.startDrive(trigger: trigger)
-    } catch {
-      startDriveErrorMessage = error.localizedDescription
-      showingStartDriveError = true
-    }
+    driveService.startDrive(trigger: trigger)
   }
 
   private func enterSelectMode() {
