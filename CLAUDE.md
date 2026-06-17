@@ -140,6 +140,22 @@ Begin every new Swift file with:
 - @Bindable for bindings to @Observable objects.
 
 ---
+## SwiftData: Saving
+
+Never call `modelContext.save()` directly. All saves go through the
+`ModelContext.saveChanges(_:)` extension in `Extensions/ModelContext+Saving.swift`, which
+guards on `hasChanges`, logs any failure under `Log.data`, and returns a `Bool` indicating
+success (the result is `@discardableResult`). It is `nonisolated`, so both `@MainActor` and
+`@ModelActor` callers use the same method.
+
+```swift
+modelContext.saveChanges("weather sweep")            // logs failure, ignores result
+if modelContext.saveChanges() { clearPendingFlag() } // act on success
+```
+
+Pass an optional operation label to give the log message context. Save failures are logged,
+never surfaced to the user or propagated as `throws`.
+
 ## SwiftData: Cross-Actor Model Access
 
 Always use the ID-fetch pattern. Never pass model instances across actor boundaries.
