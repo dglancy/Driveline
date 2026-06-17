@@ -2219,6 +2219,12 @@
         }
       }
     },
+    "Merging drives" : {
+      "comment" : "Accessibility label for the merge progress indicator"
+    },
+    "Merging…" : {
+      "comment" : "Label shown while two drives are being merged"
+    },
     "Minimize recording screen" : {
       "comment" : "Dismiss button accessibility label",
       "extractionState" : "stale",

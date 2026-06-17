@@ -58,11 +58,16 @@ file — they don't count toward the parent type's body length.
 
 ### When to extract a separate `@Observable` object
 
+Name these view-state objects with a `State` suffix (e.g. `DriveDetailState`,
+`FullScreenMapState`, `MergeDrivesState`), and name the property that holds them with a
+matching `State` suffix (e.g. `driveState`, `mapState`, `mergeState`). Reserve the `Model`
+suffix for actual SwiftData `@Model` data types — never for `@Observable` view state.
+
 Extract a `@MainActor @Observable final class` when one or more of the following apply:
 
 1. **Async state that changes independently of the view's inputs** — an ongoing async
-   task, live timer, or streaming location updates (e.g. `DriveDetailModel`,
-   `FullScreenMapModel`).
+   task, live timer, or streaming location updates (e.g. `DriveDetailState`,
+   `FullScreenMapState`).
 2. **State shared across multiple views** that are not in a direct parent-child
    relationship.
 3. **A meaningful precondition or invariant at construction time** that benefits from
@@ -71,13 +76,13 @@ Extract a `@MainActor @Observable final class` when one or more of the following
 
 If none of these apply, keep state in the View.
 
-When a model class needs `ModelContainer` at construction time, `@Environment` cannot
-be read inside `init`. Pass `modelContainer` as an `init` parameter and store the model
+When a state class needs `ModelContainer` at construction time, `@Environment` cannot
+be read inside `init`. Pass `modelContainer` as an `init` parameter and store the state
 in `@State`:
 
 ```swift
 init(drive: Drive, modelContainer: ModelContainer) {
-  _model = State(initialValue: DriveDetailModel(drive: drive, modelContainer: modelContainer))
+  _driveState = State(initialValue: DriveDetailState(drive: drive, modelContainer: modelContainer))
 }
 ```
 
@@ -92,7 +97,7 @@ Test these with plain inputs — no View or SwiftData container needed.
 Use a caseless `enum` (not a `struct`) for namespaces of static functions — it is
 uninhabitable by design, making it clear the type is not meant to be instantiated.
 
-Examples: `DriveSectionBuilder`, `DriveStats`, `DriveEditor`, `DriveDeletion`, `DriveMerge`.
+Examples: `DriveSectionBuilder`, `DriveStats`, `DriveEditor`, `DriveDeletion`.
 
 ---
 
