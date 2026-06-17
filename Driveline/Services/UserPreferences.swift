@@ -53,6 +53,14 @@ struct UserPreferences {
     Log.settings.debug("Continue drive if recently finished set to \"\(value)\" from user settings")
     return value
   }
+
+  var hasCompletedOnboarding: Bool {
+    defaults.bool(forKey: Keys.hasCompletedOnboarding)
+  }
+
+  mutating func setHasCompletedOnboarding(_ value: Bool) {
+    defaults.set(value, forKey: Keys.hasCompletedOnboarding)
+  }
 }
 
 // MARK: - Keys
@@ -64,5 +72,6 @@ private extension UserPreferences {
     static let alwaysUseLightMapAppearance = "AlwaysUseLightMapAppearance"
     static let driveWidth = "DriveWidth"
     static let continueDriveIfRecentlyFinished = "ContinueDriveIfRecentlyFinished"
+    static let hasCompletedOnboarding = "HasCompletedOnboarding"
   }
 }

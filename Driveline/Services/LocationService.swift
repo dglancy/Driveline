@@ -25,6 +25,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
   // MARK: - Properties
 
   var status: LocationServiceStatus = .stopped
+  var authorizationStatus: CLAuthorizationStatus = .notDetermined
 
   @ObservationIgnored let locationPublisher = PassthroughSubject<CLLocation, Never>()
   @ObservationIgnored private let manager = CLLocationManager()
@@ -45,9 +46,19 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     self.sessionProvider = sessionProvider
     super.init()
     manager.delegate = self
+    authorizationStatus = manager.authorizationStatus
   }
 
   // MARK: - Actions
+
+  func requestWhenInUseAuthorization() {
+    guard authorizationStatus == .notDetermined else { return }
+    manager.requestWhenInUseAuthorization()
+  }
+
+  func requestAlwaysAuthorization() {
+    manager.requestAlwaysAuthorization()
+  }
 
   func start() {
     guard status != .started else {
@@ -109,6 +120,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     let status = manager.authorizationStatus
     Task { @MainActor in
       Log.location.info("Location authorisation changed to \(status.rawValue)")
+      self.authorizationStatus = status
       guard self.status == .started,
             status == .authorizedWhenInUse,
             !self.alwaysAuthorizationRequested else { return }

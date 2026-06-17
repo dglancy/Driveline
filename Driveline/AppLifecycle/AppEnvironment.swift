@@ -13,6 +13,7 @@ struct AppEnvironment {
   // MARK: - Properties
 
   let modelContainer: ModelContainer
+  let locationService: LocationService
   let driveService: DriveRecordingService
   let placeNameSweepService: PlaceNameSweepService
   let weatherSweepService: WeatherSweepService
