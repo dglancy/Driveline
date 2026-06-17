@@ -43,4 +43,15 @@ final class TipUITests: BaseXCTestCase {
     XCTAssertTrue(app.staticTexts["Switch Stats View"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Tap to toggle between the last 30 days and all time."].waitForExistence(timeout: 5))
   }
+
+  @MainActor
+  func testEditDriveTipAppearsOnDriveDetail() throws {
+    app.buttons["Close"].tap() // close the record button tip
+    navigateToHomeScreen()
+
+    app.buttons["Drive row 0"].tap()
+
+    XCTAssertTrue(app.staticTexts["Edit Your Drive"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Tap the options button to edit the name and other details."].exists)
+  }
 }

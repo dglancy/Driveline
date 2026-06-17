@@ -157,7 +157,7 @@ struct HomeView: View {
 
         ForEach(sections) { section in
           Section(section.title) {
-            ForEach(section.rows) { row in
+            ForEach(Array(section.rows.enumerated()), id: \.element.id) { index, row in
               if isSelectMode {
                 Button {
                   toggleSelection(for: row.drive.id)
@@ -168,7 +168,7 @@ struct HomeView: View {
               } else {
                 NavigationLink(value: row.drive) {
                   DriveRowView(drive: row.drive, display: row.display)
-                }
+                }.accessibilityIdentifier("Drive row \(index)")
               }
             }
             .onDelete(perform: isSelectMode ? nil : { indexSet in
