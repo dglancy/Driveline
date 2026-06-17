@@ -206,6 +206,53 @@ struct DriveDetailPresenterTests {
     #expect(stats.distanceUnit == DriveStatsPresenter(drive: drive).distanceUnit)
   }
 
+  // MARK: - Route Accessibility
+
+  @Test
+  func routeAccessibilityLabelIncludesBothPlacesAndDistance() {
+    let drive = makeDrive()
+    drive.startPlaceName = "Home"
+    drive.endPlaceName = "Office"
+    let presenter = DriveDetailPresenter(drive: drive)
+    let label = presenter.routeAccessibilityLabel
+    let distance = DriveStatsPresenter(drive: drive).distanceValue
+    #expect(label.contains("Home"))
+    #expect(label.contains("Office"))
+    #expect(label.contains(distance))
+  }
+
+  @Test
+  func routeAccessibilityLabelUsesFromFormWhenOnlyStartSet() {
+    let drive = makeDrive()
+    drive.startPlaceName = "Home"
+    drive.endPlaceName = nil
+    let presenter = DriveDetailPresenter(drive: drive)
+    let label = presenter.routeAccessibilityLabel
+    #expect(label.contains("Home"))
+    #expect(label.contains(DriveStatsPresenter(drive: drive).distanceValue))
+  }
+
+  @Test
+  func routeAccessibilityLabelUsesToFormWhenOnlyEndSet() {
+    let drive = makeDrive()
+    drive.startPlaceName = nil
+    drive.endPlaceName = "Office"
+    let presenter = DriveDetailPresenter(drive: drive)
+    let label = presenter.routeAccessibilityLabel
+    #expect(label.contains("Office"))
+    #expect(label.contains(DriveStatsPresenter(drive: drive).distanceValue))
+  }
+
+  @Test
+  func routeAccessibilityLabelOmitsPlacesWhenNeitherSet() {
+    let drive = makeDrive()
+    drive.startPlaceName = nil
+    drive.endPlaceName = nil
+    let presenter = DriveDetailPresenter(drive: drive)
+    let label = presenter.routeAccessibilityLabel
+    #expect(label.contains(DriveStatsPresenter(drive: drive).distanceValue))
+  }
+
   // MARK: - Helpers
 
   private func makeDrive(name: String = "Test Drive") -> Drive {

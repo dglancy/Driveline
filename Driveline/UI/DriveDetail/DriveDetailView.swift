@@ -45,7 +45,7 @@ struct DriveDetailView: View {
         .ignoresSafeArea()
 
       VStack(spacing: 0) {
-        DriveDetailMapView(coordinates: driveState.coordinates, cameraPosition: $driveState.cameraPosition)
+        DriveDetailMapView(coordinates: driveState.coordinates, cameraPosition: $driveState.cameraPosition, accessibilityLabel: presenter.routeAccessibilityLabel)
           .frame(height: mapHeight)
           .task { await driveState.loadRoute() }
           .overlay(alignment: .topLeading) {

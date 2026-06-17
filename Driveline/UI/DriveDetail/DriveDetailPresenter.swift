@@ -41,6 +41,27 @@ struct DriveDetailPresenter {
   var endWeatherDescription: String? { drive.endWeather?.conditionDescription }
   var endWeatherTemperature: String? { drive.endWeather.map { formatTemperature($0.temperatureCelsius) } }
 
+  // MARK: - Accessibility
+
+  var routeAccessibilityLabel: String {
+    let stats = DriveStatsPresenter(drive: drive)
+    let distance = "\(stats.distanceValue) \(stats.distanceUnit)"
+    switch (startPlace, endPlace) {
+    case let (start?, end?):
+      return String(localized: "Route from \(start) to \(end), \(distance)",
+                    comment: "Accessibility label summarising a drive's route on the map")
+    case let (start?, nil):
+      return String(localized: "Route from \(start), \(distance)",
+                    comment: "Accessibility label for a route map with only a known start place")
+    case let (nil, end?):
+      return String(localized: "Route to \(end), \(distance)",
+                    comment: "Accessibility label for a route map with only a known end place")
+    case (nil, nil):
+      return String(localized: "Route, \(distance)",
+                    comment: "Accessibility label for a route map with no known place names")
+    }
+  }
+
   // MARK: - Route-Derived Formatting
 
   func topSpeed(maxSpeedMPS: CLLocationSpeed) -> String {
