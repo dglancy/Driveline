@@ -13,26 +13,26 @@ struct FullScreenMapView: View {
 
   // MARK: - Properties
 
-  @State private var model: FullScreenMapModel
+  @State private var mapState: FullScreenMapState
 
   @Environment(\.dismiss) private var dismiss
 
   // MARK: - Lifecycle
 
   init(drive: Drive, modelContainer: ModelContainer) {
-    _model = State(initialValue: FullScreenMapModel(drive: drive, modelContainer: modelContainer))
+    _mapState = State(initialValue: FullScreenMapState(drive: drive, modelContainer: modelContainer))
   }
 
   // MARK: - Body
 
   var body: some View {
     ZStack {
-      Map(position: $model.cameraPosition) {
-        DriveMapContent(coordinates: model.coordinates)
+      Map(position: $mapState.cameraPosition) {
+        DriveMapContent(coordinates: mapState.coordinates)
       }
       .mapStyle(.standard(emphasis: .muted))
       .ignoresSafeArea()
-      .task { await model.loadRoute() }
+      .task { await mapState.loadRoute() }
 
       VStack {
         HStack {
@@ -55,9 +55,9 @@ struct FullScreenMapView: View {
   // MARK: - Private Views
 
   private var infoCard: some View {
-    let stats = DriveStatsPresenter(drive: model.drive)
+    let stats = DriveStatsPresenter(drive: mapState.drive)
     return VStack(spacing: 10) {
-      Text(model.drive.displayName)
+      Text(mapState.drive.displayName)
         .font(.body.weight(.semibold))
         .foregroundStyle(Color(.label))
         .dynamicTypeSize(.xSmall ... .accessibility1)

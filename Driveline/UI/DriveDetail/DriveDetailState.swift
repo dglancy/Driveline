@@ -1,5 +1,5 @@
 //
-//  DriveDetailModel.swift
+//  DriveDetailState.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 16/06/2026.
@@ -20,7 +20,7 @@ struct ShareItem: Identifiable {
 
 @MainActor
 @Observable
-final class DriveDetailModel {
+final class DriveDetailState {
 
   // MARK: - Properties
 

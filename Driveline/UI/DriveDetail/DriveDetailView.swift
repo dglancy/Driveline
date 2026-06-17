@@ -15,7 +15,7 @@ struct DriveDetailView: View {
 
   // MARK: - Properties
 
-  @State private var model: DriveDetailModel
+  @State private var driveState: DriveDetailState
   @State private var showingFullScreenMap = false
   @State private var showingMoreMenu = false
   @State private var showingDeleteConfirmation = false
@@ -33,21 +33,21 @@ struct DriveDetailView: View {
   // MARK: - Lifecycle
 
   init(drive: Drive, modelContainer: ModelContainer) {
-    _model = State(initialValue: DriveDetailModel(drive: drive, modelContainer: modelContainer))
+    _driveState = State(initialValue: DriveDetailState(drive: drive, modelContainer: modelContainer))
   }
 
   // MARK: - Body
 
   var body: some View {
-    let presenter = DriveDetailPresenter(drive: model.drive)
+    let presenter = DriveDetailPresenter(drive: driveState.drive)
     ZStack(alignment: .top) {
       Color(.systemGroupedBackground)
         .ignoresSafeArea()
 
       VStack(spacing: 0) {
-        DriveDetailMapView(coordinates: model.coordinates, cameraPosition: $model.cameraPosition)
+        DriveDetailMapView(coordinates: driveState.coordinates, cameraPosition: $driveState.cameraPosition)
           .frame(height: mapHeight)
-          .task { await model.loadRoute() }
+          .task { await driveState.loadRoute() }
           .overlay(alignment: .topLeading) {
             GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
               .padding(14)
@@ -72,8 +72,8 @@ struct DriveDetailView: View {
             driveHeader(presenter: presenter)
             statTiles
             endpointsCard(presenter: presenter)
-            DriveDetailWeatherCard(presenter: presenter) { model.loadWeatherAttribution() }
-            DriveDetailMetadataCard(presenter: presenter, maxSpeedMPS: model.maxSpeedMetresPerSecond, positionCount: model.positionCount)
+            DriveDetailWeatherCard(presenter: presenter) { driveState.loadWeatherAttribution() }
+            DriveDetailMetadataCard(presenter: presenter, maxSpeedMPS: driveState.maxSpeedMetresPerSecond, positionCount: driveState.positionCount)
             shareDriveButton
             Spacer()
             weatherAttributionFooter
@@ -87,14 +87,14 @@ struct DriveDetailView: View {
     }
     .toolbar(.hidden, for: .navigationBar)
     .navigationDestination(isPresented: $showingFullScreenMap) {
-      FullScreenMapView(drive: model.drive, modelContainer: model.drive.modelContext?.container ?? modelContext.container)
+      FullScreenMapView(drive: driveState.drive, modelContainer: driveState.drive.modelContext?.container ?? modelContext.container)
     }
     .alert(
       String(localized: "Delete Drive", comment: "Delete confirmation alert title"),
       isPresented: $showingDeleteConfirmation
     ) {
       Button.delete {
-        DriveDeletion.delete([model.drive], in: modelContext, deindexing: spotlightIndexingService)
+        DriveDeletion.delete([driveState.drive], in: modelContext, deindexing: spotlightIndexingService)
         dismiss()
       }
       Button.cancel()
@@ -102,7 +102,7 @@ struct DriveDetailView: View {
       Text(String(localized: "This drive and all its data will be permanently deleted.", comment: "Delete drive confirmation message"))
     }
     .sheet(isPresented: $showingEditDrive) {
-      EditDriveView(drive: model.drive)
+      EditDriveView(drive: driveState.drive)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
@@ -118,16 +118,16 @@ struct DriveDetailView: View {
       }
       Button.cancel()
     }
-    .sheet(item: $model.shareItem) { item in
+    .sheet(item: $driveState.shareItem) { item in
       ActivityView(activityItems: [item.url])
     }
     .alert(
       String(localized: "Couldn't Share Drive", comment: "Export failure alert title"),
-      isPresented: $model.showingExportError
+      isPresented: $driveState.showingExportError
     ) {
       Button(String(localized: "OK", comment: "Dismiss export error alert"), role: .cancel) { }
     } message: {
-      Text(model.exportErrorMessage ?? "")
+      Text(driveState.exportErrorMessage ?? "")
     }
   }
 
@@ -149,7 +149,7 @@ struct DriveDetailView: View {
   }
 
   private var statTiles: some View {
-    let stats = DriveStatsPresenter(drive: model.drive)
+    let stats = DriveStatsPresenter(drive: driveState.drive)
     return HStack(spacing: 10) {
       DriveStatTile(
         icon: "ruler",
@@ -204,9 +204,9 @@ struct DriveDetailView: View {
 
   @ViewBuilder
   private var weatherAttributionFooter: some View {
-    if let legalURL = model.weatherAttributionLegalURL,
-       let lightMarkURL = model.weatherAttributionLightMarkURL,
-       let darkMarkURL = model.weatherAttributionDarkMarkURL {
+    if let legalURL = driveState.weatherAttributionLegalURL,
+       let lightMarkURL = driveState.weatherAttributionLightMarkURL,
+       let darkMarkURL = driveState.weatherAttributionDarkMarkURL {
       VStack(spacing: 4) {
         Link(destination: legalURL) {
           AsyncImage(url: colorScheme == .dark ? darkMarkURL : lightMarkURL) { image in
@@ -228,12 +228,12 @@ struct DriveDetailView: View {
   private var shareDriveButton: some View {
     Menu {
       Button {
-        Task { await model.share(.gpx) }
+        Task { await driveState.share(.gpx) }
       } label: {
         Label(String(localized: "Share as GPX", comment: "Share drive as GPX"), systemImage: Icons.Options.gpxFile)
       }
       Button {
-        Task { await model.share(.png) }
+        Task { await driveState.share(.png) }
       } label: {
         Label(String(localized: "Share as PNG", comment: "Share drive as PNG"), systemImage: Icons.Options.pngImage)
       }
@@ -243,12 +243,12 @@ struct DriveDetailView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
         .overlay(alignment: .trailing) {
-          if model.isPreparingExport {
+          if driveState.isPreparingExport {
             ProgressView().padding(.trailing, 16)
           }
         }
     }
-    .disabled(!model.canExport || model.isPreparingExport)
+    .disabled(!driveState.canExport || driveState.isPreparingExport)
     .cardBackground(cornerRadius: 16)
   }
 }

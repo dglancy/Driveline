@@ -1,5 +1,5 @@
 //
-//  DriveDetailModelTests.swift
+//  DriveDetailStateTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 16/06/2026.
@@ -11,9 +11,9 @@ import Foundation
 import SwiftData
 import Testing
 
-@Suite("DriveDetailModel")
+@Suite("DriveDetailState")
 @MainActor
-struct DriveDetailModelTests {
+struct DriveDetailStateTests {
 
   // MARK: - Initial State
 
@@ -115,11 +115,11 @@ struct DriveDetailModelTests {
     return ModelContext(container)
   }
 
-  private func buildModel(drive: Drive) -> DriveDetailModel {
+  private func buildModel(drive: Drive) -> DriveDetailState {
     let context = try! makeContext()
     context.insert(drive)
     try? context.save()
-    return DriveDetailModel(drive: drive, modelContainer: context.container)
+    return DriveDetailState(drive: drive, modelContainer: context.container)
   }
 
   private func makeDrive(name: String = "Test Drive") -> Drive {
