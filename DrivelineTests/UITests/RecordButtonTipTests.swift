@@ -1,5 +1,5 @@
 //
-//  EditDriveTipTests.swift
+//  RecordButtonTipTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 17/06/2026.
@@ -8,26 +8,26 @@
 import Testing
 @testable import Driveline
 
-@Suite("EditDriveTip")
+@Suite("RecordButtonTip")
 @MainActor
-struct EditDriveTipTests {
+struct RecordButtonTipTests {
 
   @Test
   func tipCanBeInstantiated() {
-    _ = EditDriveTip()
+    _ = RecordButtonTip()
   }
 
   // MARK: - isOnboardingPresented parameter
 
   @Test
   func isOnboardingPresentedDefaultsToTrue() {
-    #expect(EditDriveTip.isOnboardingPresented == true)
+    #expect(RecordButtonTip.isOnboardingPresented == true)
   }
 
   @Test
   func isOnboardingPresentedCanBeSetToFalse() {
-    EditDriveTip.isOnboardingPresented = false
-    defer { EditDriveTip.isOnboardingPresented = true }
-    #expect(EditDriveTip.isOnboardingPresented == false)
+    RecordButtonTip.isOnboardingPresented = false
+    defer { RecordButtonTip.isOnboardingPresented = true }
+    #expect(RecordButtonTip.isOnboardingPresented == false)
   }
 }

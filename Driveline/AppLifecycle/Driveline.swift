@@ -33,9 +33,6 @@ struct Driveline: App {
   // MARK: - Lifecycle
 
   init() {
-//    var prefs = UserPreferences()
-//    prefs.setHasCompletedOnboarding(false)
-    
     let env = AppBootstrap.boot()
     self.modelContainer = env.modelContainer
     _isOnboardingPresented = State(initialValue: !Driveline.isUITesting() && !UserPreferences().hasCompletedOnboarding)
@@ -63,6 +60,11 @@ struct Driveline: App {
             isOnboardingPresented = false
           })
           .environment(locationService)
+        }
+        .onChange(of: isOnboardingPresented, initial: true) { _, isPresented in
+          RecordButtonTip.isOnboardingPresented = isPresented
+          StatsPanelTip.isOnboardingPresented = isPresented
+          EditDriveTip.isOnboardingPresented = isPresented
         }
         .onChange(of: scenePhase) {
           switch scenePhase {

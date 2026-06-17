@@ -11,10 +11,12 @@ import TipKit
 struct StatsPanelTip: Tip {
   @Parameter static var driveCount: Int = 0
   @Parameter static var isRecording: Bool = false
+  @Parameter static var isOnboardingPresented: Bool = true
 
   var rules: [Rule] {
     #Rule(Self.$driveCount) { $0 >= 3 }
     #Rule(Self.$isRecording) { $0 == false }
+    #Rule(Self.$isOnboardingPresented) { $0 == false }
   }
 
   var title: Text {
