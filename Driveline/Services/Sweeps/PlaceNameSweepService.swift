@@ -55,19 +55,9 @@ actor PlaceNameSweepService: SweepServiceProtocol {
         guard !Task.isCancelled else { return }
         drive.endPlaceName = placeName
       }
-      saveModelContext()
+      modelContext.saveChanges("place name sweep")
       let item = SpotlightIndexingService.searchableItem(for: drive)
       await spotlightIndexingService?.indexItems([item])
-    }
-  }
-
-  // MARK: - Private
-
-  private func saveModelContext() {
-    do {
-      try modelContext.save()
-    } catch {
-      Log.ui.error("Failed to save model context during place name sweep: \(error.localizedDescription)")
     }
   }
 }

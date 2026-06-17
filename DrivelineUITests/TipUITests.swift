@@ -26,7 +26,7 @@ final class TipUITests: BaseXCTestCase {
 
   @MainActor
   func testStatsPanelTipAppearsAfterThreeDrivesRecorded() throws {
-    app.buttons["Close"].tap() // close the record button tip
+    closeRecordButtonTip()
     navigatePastEmptyState()
     
     XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
@@ -46,12 +46,18 @@ final class TipUITests: BaseXCTestCase {
 
   @MainActor
   func testEditDriveTipAppearsOnDriveDetail() throws {
-    app.buttons["Close"].tap() // close the record button tip
+    closeRecordButtonTip()
     navigateToHomeScreen()
 
     app.buttons["Drive row 0"].tap()
 
     XCTAssertTrue(app.staticTexts["Edit Your Drive"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Tap the options button to edit the name and other details."].exists)
+  }
+  
+  // MARK: - Private
+  
+  private func closeRecordButtonTip() {
+    app.buttons["Close"].tap()
   }
 }

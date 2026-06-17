@@ -64,14 +64,14 @@ final class DriveRecordingService {
 
   // MARK: - Actions
 
-  func startDrive(trigger: Drive.RecordingTrigger = .manual) throws {
+  func startDrive(trigger: Drive.RecordingTrigger = .manual) {
     cancelFinishTasks()
 
     if trigger == .automatic && userPreferences.continueDriveIfRecentlyFinished,
        let recentDrive = findRecentlyFinishedDrive() {
-      try resumeDrive(recentDrive)
+      resumeDrive(recentDrive)
     } else {
-      try createNewDrive(trigger: trigger)
+      createNewDrive(trigger: trigger)
     }
   }
   
@@ -85,7 +85,7 @@ final class DriveRecordingService {
       drive.endedAt = Date()
       drive.status = .finished
       locationDataRecorder.stopRecording()
-      saveModelContext()
+      modelContext.saveChanges()
       fetchEndWeather(for: drive)
       finishTasks.append(Task { await spotlightIndexingService?.indexDrive(drive) })
       let driveID = drive.persistentModelID
@@ -108,41 +108,20 @@ final class DriveRecordingService {
     finishTasks.removeAll()
   }
 
-  private func createNewDrive(trigger: Drive.RecordingTrigger) throws {
+  private func createNewDrive(trigger: Drive.RecordingTrigger) {
     let drive = Drive(trigger: trigger)
     self.drive = drive
-
-    do {
-      try locationDataRecorder.startRecording(with: drive)
-    } catch {
-      self.drive = nil
-      throw error
-    }
-
+    locationDataRecorder.startRecording(with: drive)
     beginTracking(drive)
   }
 
-  private func resumeDrive(_ drive: Drive) throws {
-    let previousStatus = drive.status
-    let previousEndedAt = drive.endedAt
-    let previousEndPlaceName = drive.endPlaceName
-
+  private func resumeDrive(_ drive: Drive) {
     drive.status = .recording
     drive.endedAt = nil
     drive.endPlaceName = nil
     self.drive = drive
-    saveModelContext()
-
-    do {
-      try locationDataRecorder.startRecording(with: drive)
-    } catch {
-      drive.status = previousStatus
-      drive.endedAt = previousEndedAt
-      drive.endPlaceName = previousEndPlaceName
-      self.drive = nil
-      throw error
-    }
-
+    modelContext.saveChanges()
+    locationDataRecorder.startRecording(with: drive)
     beginTracking(drive)
   }
 
@@ -171,7 +150,7 @@ final class DriveRecordingService {
           guard let self, let drive = self.drive else { return }
           if let placeName = await self.geocodingService.reverseGeocode(location: location) {
             drive.startPlaceName = placeName
-            self.saveModelContext()
+            self.modelContext.saveChanges()
             self.updateLiveActivity()
           }
         }
@@ -217,7 +196,7 @@ final class DriveRecordingService {
           do {
             let weather = try await self.weatherService.fetchWeather(at: location, type: .start)
             drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
-            self.saveModelContext()
+            self.modelContext.saveChanges()
             Log.data.info("Start weather fetched: \(weather.conditionDescription), \(weather.temperatureCelsius)°C")
           } catch {
             Log.data.error("Start weather fetch failed: \(error)")
@@ -234,19 +213,11 @@ final class DriveRecordingService {
       do {
         let weather = try await self.weatherService.fetchWeather(at: location, type: .end)
         drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
-        self.saveModelContext()
+        self.modelContext.saveChanges()
         Log.data.info("End weather fetched: \(weather.conditionDescription), \(weather.temperatureCelsius)°C")
       } catch {
         Log.data.error("End weather fetch failed: \(error)")
       }
     })
-  }
-
-  private func saveModelContext() {
-    do {
-      try modelContext.save()
-    } catch {
-      Log.ui.error("Failed to save model context: \(error.localizedDescription)")
-    }
   }
 }

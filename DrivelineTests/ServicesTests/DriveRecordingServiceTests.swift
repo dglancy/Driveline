@@ -21,7 +21,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   func startDriveCreatesRecordingDrive() async throws {
     let (service, locationService, recorder) = await makeServices()
 
-    try service.startDrive()
+    service.startDrive()
 
     #expect(service.drive != nil)
     #expect(locationService.status == .started)
@@ -32,37 +32,9 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   func startDriveSetsIsRecordingToTrue() async throws {
     let (service, _, _) = await makeServices()
 
-    try service.startDrive()
+    service.startDrive()
 
     #expect(service.isRecording == true)
-  }
-
-  @Test
-  func startDriveClearsStateWhenRecorderThrows() async throws {
-    let mockRecorder = MockLocationDataRecorderService()
-    mockRecorder.shouldThrow = true
-    let (service, _, _) = await makeServices(locationDataRecorder: mockRecorder)
-
-    #expect(throws: MockRecorderError.startFailed) { try service.startDrive() }
-    #expect(service.drive == nil)
-    #expect(service.isRecording == false)
-  }
-
-  @Test
-  func resumeDriveClearsStateAndThrowsWhenRecorderFails() async throws {
-    let finishedDrive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: "Work")
-    let mockRecorder = MockLocationDataRecorderService()
-    mockRecorder.shouldThrow = true
-    let (service, _, _) = await makeServices(
-      locationDataRecorder: mockRecorder,
-      userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
-    )
-
-    #expect(throws: MockRecorderError.startFailed) { try service.startDrive(trigger: .automatic) }
-    #expect(service.drive == nil)
-    #expect(finishedDrive.status == .finished)
-    #expect(finishedDrive.endedAt != nil)
-    #expect(finishedDrive.endPlaceName == "Work")
   }
 
   // MARK: - finishDrive
@@ -71,7 +43,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   func finishDriveStopsRecordingAndPersists() async throws {
     let (service, locationService, recorder) = await makeServices()
 
-    try service.startDrive()
+    service.startDrive()
     let startedDrive = service.drive!
     service.finishDrive()
 
@@ -87,7 +59,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   func finishDriveSetsIsRecordingToFalse() async throws {
     let (service, _, _) = await makeServices()
 
-    try service.startDrive()
+    service.startDrive()
     service.finishDrive()
 
     #expect(service.isRecording == false)
@@ -143,7 +115,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockGeocoding = MockGeocodingService()
     let (service, locationService, _) = await makeServices(geocodingService: mockGeocoding)
 
-    try service.startDrive()
+    service.startDrive()
 
     let goodLocation = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -163,7 +135,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockGeocoding = MockGeocodingService()
     let (service, locationService, _) = await makeServices(geocodingService: mockGeocoding)
 
-    try service.startDrive()
+    service.startDrive()
 
     let firstGood = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -192,7 +164,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockClassifier = MockDriveClassifierService()
     let (service, _, _) = await makeServices(classifierService: mockClassifier)
 
-    try service.startDrive()
+    service.startDrive()
     let drive = service.drive!
     service.finishDrive()
 
@@ -210,7 +182,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let spotlightService = SpotlightIndexingService(index: mockSpotlight)
     let (service, _, _) = await makeServices(spotlightIndexingService: spotlightService)
 
-    try service.startDrive()
+    service.startDrive()
     service.finishDrive()
 
     await Task.yield()
@@ -239,7 +211,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockGeocoding = MockGeocodingService()
     let (service, _, _) = await makeServices(geocodingService: mockGeocoding)
 
-    try service.startDrive()
+    service.startDrive()
     let drive = service.drive!
     let position = makePosition()
     context!.insert(position)
@@ -258,7 +230,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     mockGeocoding.result = nil
     let (service, locationService, _) = await makeServices(geocodingService: mockGeocoding)
 
-    try service.startDrive()
+    service.startDrive()
     let drive = service.drive!
     drive.startPlaceName = "Retry Result"
 
@@ -286,7 +258,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
     )
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -310,7 +282,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
     )
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -341,7 +313,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
     )
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -365,7 +337,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
     )
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -388,7 +360,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let finishedDrive = try insertFinishedDrive(startPlaceName: "Home", endPlaceName: "Work")
     let (service, locationService, _) = await makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     #expect(service.drive?.id == finishedDrive.id)
     #expect(service.drive?.status == .recording)
@@ -402,7 +374,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   func startDriveWithToggleOnCreatesNewDriveIfNoneRecentlyFinished() async throws {
     let (service, _, _) = await makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     #expect(service.drive != nil)
     let driveCount = try count(where: #Predicate<Drive> { _ in true })
@@ -414,7 +386,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let oldDrive = try insertFinishedDrive(endedAt: .now.addingTimeInterval(-3600))
     let (service, _, _) = await makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     #expect(service.drive?.id != oldDrive.id)
     let driveCount = try count(where: #Predicate<Drive> { _ in true })
@@ -426,7 +398,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     try insertFinishedDrive()
     let (service, _, _) = await makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: true))
 
-    try service.startDrive(trigger: .manual)
+    service.startDrive(trigger: .manual)
 
     let driveCount = try count(where: #Predicate<Drive> { _ in true })
     #expect(driveCount == 2)
@@ -437,7 +409,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     try insertFinishedDrive()
     let (service, _, _) = await makeServices(userPreferences: makePreferences(continueDriveIfRecentlyFinished: false))
 
-    try service.startDrive(trigger: .automatic)
+    service.startDrive(trigger: .automatic)
 
     let driveCount = try count(where: #Predicate<Drive> { _ in true })
     #expect(driveCount == 2)
@@ -450,7 +422,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockWeather = MockWeatherFetchService()
     let (service, locationService, _) = await makeServices(weatherService: mockWeather)
 
-    try service.startDrive()
+    service.startDrive()
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -473,7 +445,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockWeather = MockWeatherFetchService()
     let (service, locationService, _) = await makeServices(weatherService: mockWeather)
 
-    try service.startDrive()
+    service.startDrive()
 
     let first = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -501,7 +473,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     mockWeather.shouldThrow = true
     let (service, locationService, _) = await makeServices(weatherService: mockWeather)
 
-    try service.startDrive()
+    service.startDrive()
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
@@ -535,7 +507,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     await Task.yield()
     await Task.yield()
 
-    try service.startDrive()
+    service.startDrive()
 
     try await Task.sleep(for: .milliseconds(100))
 
@@ -549,7 +521,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockWeather = MockWeatherFetchService()
     let (service, _, _) = await makeServices(weatherService: mockWeather)
 
-    try service.startDrive()
+    service.startDrive()
     let drive = service.drive!
     let position = makePosition()
     context!.insert(position)
@@ -570,7 +542,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let mockWeather = MockWeatherFetchService()
     let (service, _, _) = await makeServices(weatherService: mockWeather)
 
-    try service.startDrive()
+    service.startDrive()
     service.finishDrive()
 
     await Task.yield()

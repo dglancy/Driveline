@@ -32,11 +32,7 @@ enum DriveMerge {
     merged.accumulatedDistanceMetres = merged.distanceMetres
 
     context.insert(merged)
-    do {
-      try context.save()
-    } catch {
-      Log.ui.error("Failed to save model context: \(error.localizedDescription)")
-    }
+    context.saveChanges("drive merge")
 
     DriveDeletion.delete([first, second], in: context, deindexing: spotlight)
     Task { await spotlight.indexDrive(merged) }
