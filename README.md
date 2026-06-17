@@ -46,7 +46,7 @@ Driveline/
 │   ├── AppLifecycle/                App entry point, bootstrap, environment, logging, constants, localization
 │   ├── Assets.xcassets/             App icons, colors, and widget background
 │   ├── Exports/                     GPX/PNG export rendering and Transferable conformances
-│   ├── Extensions/                  Small extensions on Foundation/CoreLocation/MapKit types
+│   ├── Extensions/                  Small extensions on Foundation/CoreLocation/MapKit/SwiftData types
 │   ├── LiveActivity/                Live Activity attributes shared with the widget extension
 │   ├── Models/                      SwiftData models: Drive, Position, Weather
 │   ├── Services/                    Business logic: recording, merging, deletion, geocoding, weather, indexing
