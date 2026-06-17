@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 import Testing
+internal import CoreSpotlight
 
 @MainActor
 final class MergeDrivesStateTests: SwiftDataBaseTestCase {

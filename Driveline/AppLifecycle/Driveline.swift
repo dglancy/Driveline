@@ -14,12 +14,14 @@ struct Driveline: App {
 
   // MARK: - Properties
 
+  @State private var locationService: LocationService
   @State private var driveService: DriveRecordingService
   @State private var placeNameSweepService: PlaceNameSweepService
   @State private var weatherSweepService: WeatherSweepService
   @State private var categoryPredictionSweepService: CategoryPredictionSweepService
   @State private var spotlightIndexingService: SpotlightIndexingService
   @State private var metricKitService: MetricKitService
+  @State private var isOnboardingPresented: Bool
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
@@ -33,6 +35,8 @@ struct Driveline: App {
   init() {
     let env = AppBootstrap.boot()
     self.modelContainer = env.modelContainer
+    _isOnboardingPresented = State(initialValue: (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) && !UserPreferences().hasCompletedOnboarding)
+    _locationService = State(initialValue: env.locationService)
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
     _weatherSweepService = State(initialValue: env.weatherSweepService)
@@ -46,8 +50,22 @@ struct Driveline: App {
   var body: some Scene {
     WindowGroup {
       HomeView()
+        .environment(locationService)
         .environment(driveService)
         .environment(spotlightIndexingService)
+        .fullScreenCover(isPresented: $isOnboardingPresented) {
+          OnboardingView(onComplete: {
+            var prefs = UserPreferences()
+            prefs.setHasCompletedOnboarding(true)
+            isOnboardingPresented = false
+          })
+          .environment(locationService)
+        }
+        .onChange(of: isOnboardingPresented, initial: true) { _, isPresented in
+          RecordButtonTip.isOnboardingPresented = isPresented
+          StatsPanelTip.isOnboardingPresented = isPresented
+          EditDriveTip.isOnboardingPresented = isPresented
+        }
         .onChange(of: scenePhase) {
           switch scenePhase {
           case .active:
@@ -68,5 +86,21 @@ struct Driveline: App {
     let request = BGProcessingTaskRequest(identifier: service.taskIdentifier)
     request.requiresNetworkConnectivity = true
     try? BGTaskScheduler.shared.submit(request)
+  }
+}
+
+// MARK: – Testing Extensions
+
+extension Driveline {
+  static func isUITesting() -> Bool {
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
+  }
+
+  static func isTipTesting() -> Bool {
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.TipTestingFlag)
+  }
+
+  static func isOnboardingTesting() -> Bool {
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.OnboardingTestingFlag)
   }
 }

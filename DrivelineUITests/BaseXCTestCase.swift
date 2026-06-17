@@ -60,4 +60,8 @@ class BaseXCTestCase: XCTestCase {
   func enableTips() {
     extraLaunchArguments = ["-tip-testing"]
   }
+
+  func enableOnboarding() {
+    extraLaunchArguments = ["-onboarding-testing"]
+  }
 }

@@ -9,6 +9,12 @@ import SwiftUI
 import TipKit
 
 struct RecordButtonTip: Tip {
+  @Parameter static var isOnboardingPresented: Bool = true
+
+  var rules: [Rule] {
+    #Rule(Self.$isOnboardingPresented) { $0 == false }
+  }
+
   var title: Text {
     Text("Record a Drive", comment: "TipKit tip title for the home screen record button")
   }

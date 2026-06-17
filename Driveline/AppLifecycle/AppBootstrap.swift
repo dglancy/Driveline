@@ -15,9 +15,9 @@ enum AppBootstrap {
 
   // MARK: - Boot
 
-  static func boot(isUITesting: Bool = Self.isUITesting()) -> AppEnvironment {
+  static func boot() -> AppEnvironment {
     Log.lifecycle.info("App starting")
-    let modelContainer = createModelContainer(inMemoryOnly: isUITesting)
+    let modelContainer = createModelContainer(inMemoryOnly: Driveline.isUITesting())
     let locationService = setupLocationService()
     let locationDataRecorder = setupLocationDataRecorderService(
       locationService: locationService,
@@ -45,21 +45,20 @@ enum AppBootstrap {
     registerBGTasks([placeNameSweepService, weatherSweepService, categoryPredictionSweepService])
     registerIntentDependencies(driveService: driveService)
 
-    if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
-    configureTips(isUITesting: isUITesting, isTipTesting: isTipTesting())
+    if Driveline.isUITesting() { Log.lifecycle.info("Running in UI Testing mode") }
+    configureTips(isUITesting: Driveline.isUITesting(), isTipTesting: Driveline.isTipTesting())
+    configureOnboarding(isOnboardingTesting: Driveline.isOnboardingTesting())
 
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: categoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
+    return AppEnvironment(modelContainer: modelContainer, locationService: locationService, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: categoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
   }
 
   // MARK: - Private
 
-  private static func isUITesting() -> Bool {
-    ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
-  }
-
-  private static func isTipTesting() -> Bool {
-    ProcessInfo.processInfo.arguments.contains(Constants.Testing.TipTestingFlag)
+  private static func configureOnboarding(isOnboardingTesting: Bool) {
+    guard isOnboardingTesting else { return }
+    var prefs = UserPreferences()
+    prefs.setHasCompletedOnboarding(false)
   }
 
   private static func configureTips(isUITesting: Bool, isTipTesting: Bool) {

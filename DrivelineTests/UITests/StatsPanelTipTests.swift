@@ -41,4 +41,18 @@ struct StatsPanelTipTests {
     defer { StatsPanelTip.isRecording = false }
     #expect(StatsPanelTip.isRecording == true)
   }
+
+  // MARK: - isOnboardingPresented parameter
+
+  @Test
+  func isOnboardingPresentedDefaultsToTrue() {
+    #expect(StatsPanelTip.isOnboardingPresented == true)
+  }
+
+  @Test
+  func isOnboardingPresentedCanBeSetToFalse() {
+    StatsPanelTip.isOnboardingPresented = false
+    defer { StatsPanelTip.isOnboardingPresented = true }
+    #expect(StatsPanelTip.isOnboardingPresented == false)
+  }
 }
