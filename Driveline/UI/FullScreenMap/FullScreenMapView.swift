@@ -32,6 +32,7 @@ struct FullScreenMapView: View {
       }
       .mapStyle(.standard(emphasis: .muted))
       .ignoresSafeArea()
+      .accessibilityLabel(Text(DriveDetailPresenter(drive: mapState.drive).routeAccessibilityLabel))
       .task { await mapState.loadRoute() }
 
       VStack {

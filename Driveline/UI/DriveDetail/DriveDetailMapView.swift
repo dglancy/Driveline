@@ -15,6 +15,7 @@ struct DriveDetailMapView: View {
 
   let coordinates: [CLLocationCoordinate2D]
   @Binding var cameraPosition: MapCameraPosition
+  let accessibilityLabel: String
 
   // MARK: - Body
 
@@ -23,5 +24,7 @@ struct DriveDetailMapView: View {
       DriveMapContent(coordinates: coordinates)
     }
     .mapStyle(.standard(emphasis: .muted))
+    .accessibilityElement()
+    .accessibilityLabel(Text(accessibilityLabel))
   }
 }

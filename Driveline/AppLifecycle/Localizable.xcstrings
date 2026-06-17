@@ -2613,6 +2613,42 @@
     "Road Trip" : {
       "comment" : "Drive category: long-distance journey"
     },
+    "Route from %@ to %@, %@" : {
+      "comment" : "Accessibility label summarising a drive's route on the map",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Route from %1$@ to %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "Route from %@, %@" : {
+      "comment" : "Accessibility label for a route map with only a known start place",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Route from %1$@, %2$@"
+          }
+        }
+      }
+    },
+    "Route to %@, %@" : {
+      "comment" : "Accessibility label for a route map with only a known end place",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Route to %1$@, %2$@"
+          }
+        }
+      }
+    },
+    "Route, %@" : {
+      "comment" : "Accessibility label for a route map with no known place names"
+    },
     "Running in the background to save battery. Your full drive map appears here when the drive ends." : {
       "comment" : "Battery saving note shown on the recording screen while a drive is in progress",
       "localizations" : {
