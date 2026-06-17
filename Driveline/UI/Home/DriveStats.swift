@@ -13,16 +13,13 @@ struct DriveStats {
   // MARK: - Properties
 
   let driveCount: Int
-  let distanceValue: String
-  let distanceUnit: String
+  let totalDistanceMetres: Double
 
   // MARK: - Lifecycle
 
   init(drives: [Drive]) {
-    let measurement = Measurement(value: drives.reduce(0.0) { $0 + $1.displayDistanceMetres }, unit: UnitLength.meters)
     driveCount = drives.count
-    distanceValue = measurement.localizedDistanceValueString()
-    distanceUnit = measurement.localizedDistanceUnitSymbol()
+    totalDistanceMetres = drives.reduce(0.0) { $0 + $1.displayDistanceMetres }
   }
 
   // MARK: - Convenience
