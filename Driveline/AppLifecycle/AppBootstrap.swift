@@ -47,12 +47,19 @@ enum AppBootstrap {
 
     if Driveline.isTipTesting() { Log.lifecycle.info("Running in UI Testing mode") }
     configureTips(isUITesting: Driveline.isTipTesting(), isTipTesting: Driveline.isTipTesting())
+    configureOnboarding(isOnboardingTesting: Driveline.isOnboardingTesting())
 
     Log.lifecycle.info("App started")
     return AppEnvironment(modelContainer: modelContainer, locationService: locationService, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, categoryPredictionSweepService: categoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService, metricKitService: metricKitService)
   }
 
   // MARK: - Private
+
+  private static func configureOnboarding(isOnboardingTesting: Bool) {
+    guard isOnboardingTesting else { return }
+    var prefs = UserPreferences()
+    prefs.setHasCompletedOnboarding(false)
+  }
 
   private static func configureTips(isUITesting: Bool, isTipTesting: Bool) {
     guard !isUITesting || isTipTesting else { return }

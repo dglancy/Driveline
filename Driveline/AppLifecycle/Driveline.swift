@@ -35,7 +35,7 @@ struct Driveline: App {
   init() {
     let env = AppBootstrap.boot()
     self.modelContainer = env.modelContainer
-    _isOnboardingPresented = State(initialValue: !Driveline.isUITesting() && !UserPreferences().hasCompletedOnboarding)
+    _isOnboardingPresented = State(initialValue: (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) && !UserPreferences().hasCompletedOnboarding)
     _locationService = State(initialValue: env.locationService)
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
@@ -98,5 +98,9 @@ extension Driveline {
 
   static func isTipTesting() -> Bool {
     ProcessInfo.processInfo.arguments.contains(Constants.Testing.TipTestingFlag)
+  }
+
+  static func isOnboardingTesting() -> Bool {
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.OnboardingTestingFlag)
   }
 }
