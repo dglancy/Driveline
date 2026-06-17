@@ -1,5 +1,5 @@
 //
-//  FullScreenMapModelTests.swift
+//  FullScreenMapStateTests.swift
 //  DrivelineTests
 //
 //  Created by Damien Glancy on 16/06/2026.
@@ -12,9 +12,9 @@ import SwiftData
 import SwiftUI
 @testable import Driveline
 
-@Suite("FullScreenMapModel")
+@Suite("FullScreenMapState")
 @MainActor
-struct FullScreenMapModelTests {
+struct FullScreenMapStateTests {
 
   // MARK: - coordinates
 
@@ -74,11 +74,11 @@ struct FullScreenMapModelTests {
 
   // MARK: - Helpers
 
-  private func buildModel(drive: Drive) -> FullScreenMapModel {
+  private func buildModel(drive: Drive) -> FullScreenMapState {
     let container = makeContainer()
     container.mainContext.insert(drive)
     try? container.mainContext.save()
-    return FullScreenMapModel(drive: drive, modelContainer: container)
+    return FullScreenMapState(drive: drive, modelContainer: container)
   }
 
   private func makeContainer() -> ModelContainer {

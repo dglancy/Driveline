@@ -1,5 +1,5 @@
 //
-//  FullScreenMapModel.swift
+//  FullScreenMapState.swift
 //  Driveline
 //
 //  Created by Damien Glancy on 16/06/2026.
@@ -14,7 +14,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class FullScreenMapModel {
+final class FullScreenMapState {
 
   // MARK: - Properties
 
