@@ -11,7 +11,7 @@ struct OnboardingView: View {
 
   // MARK: - Types
 
-  enum Step { case welcome, location, always }
+  enum Step { case welcome, location, always, automationIntro, automationStart, automationFinish }
 
   // MARK: - Properties
 
@@ -28,7 +28,13 @@ struct OnboardingView: View {
       case .location:
         OnboardingLocationView { step = .always }
       case .always:
-        OnboardingAlwaysView(onComplete: onComplete)
+        OnboardingAlwaysView { step = .automationIntro }
+      case .automationIntro:
+        OnboardingAutomationsIntroView { step = .automationStart }
+      case .automationStart:
+        OnboardingAutomationDetailView(kind: .start) { step = .automationFinish }
+      case .automationFinish:
+        OnboardingAutomationDetailView(kind: .finish, onNext: onComplete)
       }
     }
     .animation(.easeInOut(duration: 0.3), value: step)

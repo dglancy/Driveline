@@ -99,6 +99,122 @@ enum OnboardingPresenter {
     String(localized: "Always Allow enabled", comment: "Onboarding confirmation that Always location access is granted")
   }
 
+  // MARK: - Automations Intro
+
+  static var automationsIntroTitle: String {
+    String(localized: "Two quick automations", comment: "Onboarding automations intro screen title")
+  }
+
+  static var automationsIntroBody: String {
+    String(localized: "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment you connect or disconnect from CarPlay.", comment: "Onboarding automations intro screen body")
+  }
+
+  static var automationsIntroRow1Title: String {
+    String(localized: "CarPlay connects", comment: "Onboarding automations intro row 1 title")
+  }
+
+  static var automationsIntroRow1Body: String {
+    String(localized: "Driveline starts recording your drive.", comment: "Onboarding automations intro row 1 body")
+  }
+
+  static var automationsIntroRow2Title: String {
+    String(localized: "CarPlay disconnects", comment: "Onboarding automations intro row 2 title")
+  }
+
+  static var automationsIntroRow2Body: String {
+    String(localized: "Driveline stops and saves your drive.", comment: "Onboarding automations intro row 2 body")
+  }
+
+  static var setUpAutomations: String {
+    String(localized: "Set Up Automations", comment: "Onboarding automations intro primary button")
+  }
+
+  // MARK: - Automation Detail (Start)
+
+  static var automationStartTitle: String {
+    String(localized: "Set up “Start Drive”", comment: "Onboarding automation start screen title")
+  }
+
+  static var automationStartBody: String {
+    String(localized: "This automation starts recording the moment CarPlay connects — no button needed.", comment: "Onboarding automation start screen body")
+  }
+
+  static var automationStartStep1: String {
+    String(localized: "Open the **Shortcuts** app", comment: "Onboarding automation start step 1")
+  }
+
+  static var automationStartStep2: String {
+    String(localized: "Tap **Automation** at the bottom", comment: "Onboarding automation start step 2")
+  }
+
+  static var automationStartStep3: String {
+    String(localized: "Tap **+** then **New Automation**", comment: "Onboarding automation start step 3")
+  }
+
+  static var automationStartStep4: String {
+    String(localized: "Choose **CarPlay** → **Connects**", comment: "Onboarding automation start step 4")
+  }
+
+  static var automationStartStep5: String {
+    String(localized: "Tap **Add Action**, search **Start Drive** and select it", comment: "Onboarding automation start step 5")
+  }
+
+  static var automationStartStep6: String {
+    String(localized: "Turn off **Ask Before Running**", comment: "Onboarding automation start step 6")
+  }
+
+  static var automationStartStep7: String {
+    String(localized: "Tap **Done**", comment: "Onboarding automation start step 7")
+  }
+
+  // MARK: - Automation Detail (Finish)
+
+  static var automationFinishTitle: String {
+    String(localized: "Set up “Finish Drive”", comment: "Onboarding automation finish screen title")
+  }
+
+  static var automationFinishBody: String {
+    String(localized: "This automation stops and saves your drive the moment CarPlay disconnects.", comment: "Onboarding automation finish screen body")
+  }
+
+  static var automationFinishStep1: String {
+    String(localized: "Open the **Shortcuts** app", comment: "Onboarding automation finish step 1")
+  }
+
+  static var automationFinishStep2: String {
+    String(localized: "Tap **Automation** at the bottom", comment: "Onboarding automation finish step 2")
+  }
+
+  static var automationFinishStep3: String {
+    String(localized: "Tap **+** then **New Automation**", comment: "Onboarding automation finish step 3")
+  }
+
+  static var automationFinishStep4: String {
+    String(localized: "Choose **CarPlay** → **Disconnects**", comment: "Onboarding automation finish step 4")
+  }
+
+  static var automationFinishStep5: String {
+    String(localized: "Tap **Add Action**, search **Finish Drive** and select it", comment: "Onboarding automation finish step 5")
+  }
+
+  static var automationFinishStep6: String {
+    String(localized: "Turn off **Ask Before Running**", comment: "Onboarding automation finish step 6")
+  }
+
+  static var automationFinishStep7: String {
+    String(localized: "Tap **Done**", comment: "Onboarding automation finish step 7")
+  }
+
+  // MARK: - Shared Automation
+
+  static var openShortcuts: String {
+    String(localized: "Open Shortcuts", comment: "Onboarding button to open the Shortcuts app")
+  }
+
+  static var startUsingDriveline: String {
+    String(localized: "Start Using Driveline", comment: "Onboarding final completion button")
+  }
+
   // MARK: - Shared
 
   static var continueAction: String {

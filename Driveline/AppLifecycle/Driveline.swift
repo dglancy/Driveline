@@ -33,6 +33,9 @@ struct Driveline: App {
   // MARK: - Lifecycle
 
   init() {
+    var prefs = UserPreferences()
+    prefs.setHasCompletedOnboarding(false)
+    
     let env = AppBootstrap.boot()
     self.modelContainer = env.modelContainer
     _isOnboardingPresented = State(initialValue: (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) && !UserPreferences().hasCompletedOnboarding)

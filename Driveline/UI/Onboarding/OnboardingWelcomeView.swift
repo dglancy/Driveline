@@ -91,16 +91,3 @@ struct OnboardingWelcomeView: View {
 #Preview {
   return OnboardingWelcomeView(onNext: {})
 }
-
-struct AppIconView: View {
-  var body: some View {
-    if let name = Bundle.main.iconFileName, let ui = UIImage(named: name) {
-      Image(uiImage: ui)
-        .resizable()
-        .frame(width: 92, height: 92)
-        .clipShape(RoundedRectangle(cornerRadius: 21))
-        .shadow(color: .accentColor.opacity(0.4), radius: 15, y: 8)
-        .accessibilityHidden(true)
-    }
-  }
-}
