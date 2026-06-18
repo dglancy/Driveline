@@ -57,6 +57,7 @@ Driveline/
 │       ├── FullScreenMap/           Full-screen map view
 │       ├── Home/                    Home/route list screen
 │       ├── MergeDrives/             Merge drives screen
+│       ├── Onboarding/              First-launch onboarding flow (location permissions, automations setup)
 │       ├── Recording/               In-progress recording screen
 │       └── Tips/                    TipKit tip definitions
 ├── DriveCategoryClassifier.mlproj/ Create ML project for training the drive category classifier
@@ -156,18 +157,18 @@ Run `./build-MLTrainingDataPrepTool.sh` from the repo root to build the tool and
 
 3. Select your development team under **Signing & Capabilities** for the `Driveline` target. The bundle identifier is `com.targatrips.Driveline`; you can change it to match your own prefix if you prefer.
 
-4. Build and run on a connected device. The first launch will ask for location permission; choose "Always Allow" so recording works when the screen is off.
+4. Build and run on a connected device. The first launch presents an onboarding flow that walks through location permissions and setting up the two required Shortcuts automations. Follow the steps in the app to grant "Always Allow" location access and create the CarPlay automations.
 
 ## Setting up Shortcuts automations
 
-The app exposes two actions to the Shortcuts app: `Start drive` and `Finish drive`. You can trigger these from Bluetooth events, CarPlay events, or both, depending on what your car supports.
-
-For each trigger type you want to use:
+The app exposes two actions to the Shortcuts app: `Start drive` and `Finish drive`. On first launch, the onboarding flow guides you through creating these automations step by step. If you need to set them up manually later:
 
 1. Open the Shortcuts app and create a new Automation.
 2. Choose a connect trigger: "When I connect to a Car Bluetooth" for Bluetooth, or "CarPlay connects" for CarPlay.
-3. Add the action "Start drive" from Driveline.
-4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish drive" action.
+3. Add the action "Start drive" from Driveline. Turn off "Ask Before Running".
+4. Create a second Automation using the matching disconnect trigger ("Car Bluetooth disconnects" or "CarPlay disconnects") with the "Finish drive" action. Turn off "Ask Before Running".
+
+Note: iOS does not allow apps to create Shortcuts automations on your behalf — they must be set up manually in the Shortcuts app.
 
 If your car supports both Bluetooth and CarPlay, you can set up all four automations and they will each fire independently without interfering with each other.
 
