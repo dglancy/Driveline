@@ -13,7 +13,7 @@ struct OnboardingAlwaysView: View {
   // MARK: - Properties
 
   @Environment(LocationService.self) private var locationService
-  let onComplete: () -> Void
+  let onNext: () -> Void
 
   // MARK: - Computed Properties
 
@@ -94,7 +94,7 @@ struct OnboardingAlwaysView: View {
   private var footer: some View {
     OnboardingPrimaryButton(
       title: isGranted ? OnboardingPresenter.continueAction : OnboardingPresenter.enableBackgroundLocation,
-      action: isGranted ? onComplete : { locationService.requestAlwaysAuthorization() }
+      action: isGranted ? onNext : { locationService.requestAlwaysAuthorization() }
     )
   }
 }
