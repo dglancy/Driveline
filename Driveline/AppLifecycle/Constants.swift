@@ -27,6 +27,7 @@ enum Constants {
     nonisolated static let driveWeatherSweepCutoff: TimeInterval = -2_592_000 // 30 days
     nonisolated static let recentDriveCutoff: TimeInterval = -1800
     nonisolated static let driveMergeProgressBatchSize = 250
+    nonisolated static let trackSegmentGapThreshold: TimeInterval = 60
     nonisolated static let placeNameSweepTaskIdentifier = "com.targatrips.Driveline.placename-sweep"
     nonisolated static let weatherSweepTaskIdentifier = "com.targatrips.Driveline.weather-sweep"
     nonisolated static let categoryPredictionSweepTaskIdentifier = "com.targatrips.Driveline.category-prediction-sweep"

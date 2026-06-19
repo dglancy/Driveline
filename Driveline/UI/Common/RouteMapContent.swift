@@ -13,23 +13,25 @@ struct DriveMapContent: MapContent {
 
   // MARK: - Properties
 
-  let coordinates: [CLLocationCoordinate2D]
+  let segments: [[CLLocationCoordinate2D]]
 
   // MARK: - Body
 
   var body: some MapContent {
-    if coordinates.count > 1 {
-      MapPolyline(coordinates: coordinates)
+    let renderableSegments = segments.filter { $0.count > 1 }
+    ForEach(renderableSegments.indices, id: \.self) { index in
+      MapPolyline(coordinates: renderableSegments[index])
         .stroke(Color.blue, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
     }
 
-    if let start = coordinates.first {
+    if let start = segments.first?.first {
       Annotation("", coordinate: start, anchor: .center) {
         DriveStartAnnotation()
       }
     }
 
-    if let end = coordinates.last, coordinates.count > 1 {
+    let allCoords = segments.flatMap { $0 }
+    if let end = allCoords.last, allCoords.count > 1 {
       Annotation("", coordinate: end, anchor: .bottom) {
         DriveEndAnnotation()
       }

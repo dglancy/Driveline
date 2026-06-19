@@ -137,6 +137,42 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func gpxFileWritesMultipleSegmentsWhenGapExceedsThreshold() async throws {
+    let drive = Drive(name: "Gap Drive")
+    let base = Date(timeIntervalSinceReferenceDate: 0)
+    let positions: [Position] = [
+      Position(timestamp: base, latitude: 51.5, longitude: -0.1, altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 3, course: 0, courseAccuracy: 5, speed: 10, speedAccuracy: 1),
+      Position(timestamp: base.addingTimeInterval(1), latitude: 51.501, longitude: -0.1, altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 3, course: 0, courseAccuracy: 5, speed: 10, speedAccuracy: 1),
+      Position(timestamp: base.addingTimeInterval(120), latitude: 51.6, longitude: -0.2, altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 3, course: 0, courseAccuracy: 5, speed: 10, speedAccuracy: 1)
+    ]
+    drive.positions = positions
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.components(separatedBy: "<trkseg>").count - 1 == 2)
+    #expect(content.components(separatedBy: "</trkseg>").count - 1 == 2)
+  }
+
+  @Test
+  func gpxFileWritesSingleSegmentWhenNoGapsExceedThreshold() async throws {
+    let drive = Drive(name: "No Gap Drive")
+    let base = Date(timeIntervalSinceReferenceDate: 0)
+    let positions: [Position] = [
+      Position(timestamp: base, latitude: 51.5, longitude: -0.1, altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 3, course: 0, courseAccuracy: 5, speed: 10, speedAccuracy: 1),
+      Position(timestamp: base.addingTimeInterval(59), latitude: 51.501, longitude: -0.1, altitude: 10, horizontalAccuracy: 5, verticalAccuracy: 3, course: 0, courseAccuracy: 5, speed: 10, speedAccuracy: 1)
+    ]
+    drive.positions = positions
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let content = try String(contentsOf: outputURL, encoding: .utf8)
+    #expect(content.components(separatedBy: "<trkseg>").count - 1 == 1)
+  }
+
+  @Test
   func gpxURLExtensionIsGpx() async throws {
     let drive = driveWithOnePosition()
 

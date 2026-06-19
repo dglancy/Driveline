@@ -23,8 +23,8 @@ struct DrivePositionsLoaderTests {
     try? container.mainContext.save()
 
     let loader = DrivePositionsLoader(modelContainer: container)
-    let coordinates = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 5)
-    #expect(coordinates.isEmpty)
+    let segments = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 5)
+    #expect(segments.isEmpty)
   }
 
   @Test
@@ -32,17 +32,18 @@ struct DrivePositionsLoaderTests {
     let container = makeContainer()
     let drive = makeDrive()
     drive.positions = [
-      makePosition(latitude: 38.0, longitude: -121.0, timestamp: Date(timeIntervalSinceReferenceDate: 200)),
-      makePosition(latitude: 37.0, longitude: -122.0, timestamp: Date(timeIntervalSinceReferenceDate: 100))
+      makePosition(latitude: 38.0, longitude: -121.0, timestamp: Date(timeIntervalSinceReferenceDate: 50)),
+      makePosition(latitude: 37.0, longitude: -122.0, timestamp: Date(timeIntervalSinceReferenceDate: 0))
     ]
     container.mainContext.insert(drive)
     try? container.mainContext.save()
 
     let loader = DrivePositionsLoader(modelContainer: container)
-    let coordinates = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
-    #expect(coordinates.count == 2)
-    #expect(coordinates[0].latitude == 37.0)
-    #expect(coordinates[1].latitude == 38.0)
+    let segments = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
+    #expect(segments.count == 1)
+    #expect(segments[0].count == 2)
+    #expect(segments[0][0].latitude == 37.0)
+    #expect(segments[0][1].latitude == 38.0)
   }
 
   @Test
@@ -59,9 +60,48 @@ struct DrivePositionsLoaderTests {
     try? container.mainContext.save()
 
     let loader = DrivePositionsLoader(modelContainer: container)
-    let coordinates = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
-    #expect(coordinates.count == 1)
-    #expect(coordinates[0].latitude == 37.0)
+    let segments = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
+    #expect(segments.count == 1)
+    #expect(segments[0].count == 1)
+    #expect(segments[0][0].latitude == 37.0)
+  }
+
+  @Test
+  func splitsIntoMultipleSegmentsWhenGapExceedsThreshold() async {
+    let container = makeContainer()
+    let drive = makeDrive()
+    let base = Date(timeIntervalSinceReferenceDate: 0)
+    drive.positions = [
+      makePosition(latitude: 37.0, longitude: -122.0, timestamp: base),
+      makePosition(latitude: 37.001, longitude: -122.0, timestamp: base.addingTimeInterval(1)),
+      makePosition(latitude: 38.0, longitude: -121.0, timestamp: base.addingTimeInterval(120))
+    ]
+    container.mainContext.insert(drive)
+    try? container.mainContext.save()
+
+    let loader = DrivePositionsLoader(modelContainer: container)
+    let segments = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
+    #expect(segments.count == 2)
+    #expect(segments[0].count == 2)
+    #expect(segments[1].count == 1)
+  }
+
+  @Test
+  func keepsSingleSegmentWhenGapIsBelowThreshold() async {
+    let container = makeContainer()
+    let drive = makeDrive()
+    let base = Date(timeIntervalSinceReferenceDate: 0)
+    drive.positions = [
+      makePosition(latitude: 37.0, longitude: -122.0, timestamp: base),
+      makePosition(latitude: 37.001, longitude: -122.0, timestamp: base.addingTimeInterval(59))
+    ]
+    container.mainContext.insert(drive)
+    try? container.mainContext.save()
+
+    let loader = DrivePositionsLoader(modelContainer: container)
+    let segments = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 0)
+    #expect(segments.count == 1)
+    #expect(segments[0].count == 2)
   }
 
   // MARK: - routeData
@@ -75,7 +115,7 @@ struct DrivePositionsLoaderTests {
 
     let loader = DrivePositionsLoader(modelContainer: container)
     let routeData = await loader.routeData(forDriveID: drive.id, toleranceMeters: 5)
-    #expect(routeData.coordinates.isEmpty)
+    #expect(routeData.segments.isEmpty)
     #expect(routeData.positionCount == 0)
     #expect(routeData.maxSpeedMetresPerSecond == 0)
   }
@@ -95,7 +135,7 @@ struct DrivePositionsLoaderTests {
     let routeData = await loader.routeData(forDriveID: drive.id, toleranceMeters: 0)
     #expect(routeData.positionCount == 2)
     #expect(routeData.maxSpeedMetresPerSecond == 20)
-    #expect(routeData.coordinates.count == 2)
+    #expect(routeData.segments.flatMap { $0 }.count == 2)
   }
 
   // MARK: - Helpers

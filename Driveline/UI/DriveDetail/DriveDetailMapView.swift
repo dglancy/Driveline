@@ -13,7 +13,7 @@ struct DriveDetailMapView: View {
 
   // MARK: - Properties
 
-  let coordinates: [CLLocationCoordinate2D]
+  let segments: [[CLLocationCoordinate2D]]
   @Binding var cameraPosition: MapCameraPosition
   let accessibilityLabel: String
 
@@ -21,7 +21,7 @@ struct DriveDetailMapView: View {
 
   var body: some View {
     Map(position: $cameraPosition, interactionModes: []) {
-      DriveMapContent(coordinates: coordinates)
+      DriveMapContent(segments: segments)
     }
     .mapStyle(.standard(emphasis: .muted))
     .accessibilityElement()

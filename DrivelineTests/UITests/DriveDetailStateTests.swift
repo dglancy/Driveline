@@ -20,7 +20,7 @@ struct DriveDetailStateTests {
   @Test
   func coordinatesAreEmptyByDefault() {
     let model = buildModel(drive: makeDrive())
-    #expect(model.coordinates.isEmpty)
+    #expect(model.coordinateSegments.isEmpty)
   }
 
   @Test
@@ -47,16 +47,16 @@ struct DriveDetailStateTests {
   func coordinatesIsEmptyWhenDriveHasNoPositions() async {
     let model = buildModel(drive: makeDrive())
     await model.loadRoute()
-    #expect(model.coordinates.isEmpty)
+    #expect(model.coordinateSegments.isEmpty)
   }
 
   @Test
   func coordinatesMatchDriveOrderedPositions() async {
     let model = buildModel(drive: driveWithOnePosition())
     await model.loadRoute()
-    #expect(model.coordinates.count == 1)
-    #expect(model.coordinates[0].latitude == 51.5074)
-    #expect(model.coordinates[0].longitude == -0.1278)
+    #expect(model.coordinateSegments.count == 1)
+    #expect(model.coordinateSegments[0][0].latitude == 51.5074)
+    #expect(model.coordinateSegments[0][0].longitude == -0.1278)
   }
 
   @Test
@@ -78,7 +78,7 @@ struct DriveDetailStateTests {
     let model = buildModel(drive: driveWithOnePosition())
     await model.loadRoute()
     await model.loadRoute()
-    #expect(model.coordinates.count == 1)
+    #expect(model.coordinateSegments.count == 1)
   }
 
   // MARK: - share
