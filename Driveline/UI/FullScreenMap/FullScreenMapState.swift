@@ -22,7 +22,7 @@ final class FullScreenMapState {
   @ObservationIgnored private let modelContainer: ModelContainer
   @ObservationIgnored private var didLoadRoute = false
 
-  var coordinates: [CLLocationCoordinate2D] = []
+  var coordinateSegments: [[CLLocationCoordinate2D]] = []
   var cameraPosition: MapCameraPosition = .automatic
 
   // MARK: - Lifecycle
@@ -38,8 +38,8 @@ final class FullScreenMapState {
     guard !didLoadRoute else { return }
     didLoadRoute = true
     let loader = DrivePositionsLoader(modelContainer: modelContainer)
-    let simplified = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 5)
-    coordinates = simplified
-    cameraPosition = .fit(to: simplified, paddingMultiplier: 2.0)
+    let segments = await loader.simplifiedCoordinates(forDriveID: drive.id, toleranceMeters: 5)
+    coordinateSegments = segments
+    cameraPosition = .fit(to: segments, paddingMultiplier: 2.0)
   }
 }

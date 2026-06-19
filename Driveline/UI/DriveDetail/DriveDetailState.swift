@@ -37,7 +37,7 @@ final class DriveDetailState {
   private(set) var positionCount = 0
   private(set) var maxSpeedMetresPerSecond: CLLocationSpeed = 0
 
-  var coordinates: [CLLocationCoordinate2D] = []
+  var coordinateSegments: [[CLLocationCoordinate2D]] = []
   var cameraPosition: MapCameraPosition = .automatic
 
   // MARK: - Computed Properties
@@ -61,10 +61,10 @@ final class DriveDetailState {
     didLoadRoute = true
     let loader = DrivePositionsLoader(modelContainer: modelContainer)
     let routeData = await loader.routeData(forDriveID: drive.id, toleranceMeters: 15)
-    coordinates = routeData.coordinates
+    coordinateSegments = routeData.segments
     positionCount = routeData.positionCount
     maxSpeedMetresPerSecond = routeData.maxSpeedMetresPerSecond
-    cameraPosition = .fit(to: routeData.coordinates, paddingMultiplier: 1.5)
+    cameraPosition = .fit(to: routeData.segments, paddingMultiplier: 1.5)
   }
 
   func loadWeatherAttribution() {

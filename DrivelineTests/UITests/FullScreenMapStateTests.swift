@@ -22,7 +22,7 @@ struct FullScreenMapStateTests {
   func coordinatesAreEmptyWithNoPositions() async {
     let model = buildModel(drive: makeDrive())
     await model.loadRoute()
-    #expect(model.coordinates.isEmpty)
+    #expect(model.coordinateSegments.isEmpty)
   }
 
   @Test
@@ -31,7 +31,7 @@ struct FullScreenMapStateTests {
     drive.positions = [makePosition(latitude: 37.0, longitude: -122.0), makePosition(latitude: 38.0, longitude: -121.0)]
     let model = buildModel(drive: drive)
     await model.loadRoute()
-    #expect(model.coordinates.count == 2)
+    #expect(model.coordinateSegments.flatMap { $0 }.count == 2)
   }
 
   @Test
@@ -40,8 +40,8 @@ struct FullScreenMapStateTests {
     drive.positions = [makePosition(latitude: 37.5, longitude: -122.4)]
     let model = buildModel(drive: drive)
     await model.loadRoute()
-    #expect(model.coordinates[0].latitude == 37.5)
-    #expect(model.coordinates[0].longitude == -122.4)
+    #expect(model.coordinateSegments[0][0].latitude == 37.5)
+    #expect(model.coordinateSegments[0][0].longitude == -122.4)
   }
 
   // MARK: - cameraPosition
@@ -69,7 +69,7 @@ struct FullScreenMapStateTests {
     let model = buildModel(drive: drive)
     await model.loadRoute()
     await model.loadRoute()
-    #expect(model.coordinates.count == 1)
+    #expect(model.coordinateSegments.flatMap { $0 }.count == 1)
   }
 
   // MARK: - Helpers

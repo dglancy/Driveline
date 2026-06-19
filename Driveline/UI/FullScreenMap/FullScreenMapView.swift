@@ -28,7 +28,7 @@ struct FullScreenMapView: View {
   var body: some View {
     ZStack {
       Map(position: $mapState.cameraPosition) {
-        DriveMapContent(coordinates: mapState.coordinates)
+        DriveMapContent(segments: mapState.coordinateSegments)
       }
       .mapStyle(.standard(emphasis: .muted))
       .ignoresSafeArea()

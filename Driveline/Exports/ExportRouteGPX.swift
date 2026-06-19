@@ -30,6 +30,21 @@ final class ExportDriveGPX: ExportingDrive {
 
   private func xmlString(title: String, positions: [Position], drive: Drive) -> String {
     let iso = ISO8601DateFormatter()
+    let trksegs = splitIntoSegments(positions).map { trksegsXML(for: $0, iso: iso) }.joined(separator: "\n")
+
+    return """
+    <?xml version="1.0" encoding="UTF-8"?>
+    <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:drv="https://www.targatrips.com/gpx/v1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" version="1.1" creator="\(Constants.App.GPXCreator)">
+      <trk>
+        <name>\(xmlEscaped(title))</name>
+    \(extensionsXML(for: drive))
+    \(trksegs)
+      </trk>
+    </gpx>
+    """
+  }
+
+  private func trksegsXML(for positions: [Position], iso: ISO8601DateFormatter) -> String {
     let trkpts = positions.map { pos in
       """
             <trkpt lat="\(pos.latitude)" lon="\(pos.longitude)">
@@ -43,19 +58,25 @@ final class ExportDriveGPX: ExportingDrive {
             </trkpt>
       """
     }.joined(separator: "\n")
-
     return """
-    <?xml version="1.0" encoding="UTF-8"?>
-    <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:drv="https://www.targatrips.com/gpx/v1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" version="1.1" creator="\(Constants.App.GPXCreator)">
-      <trk>
-        <name>\(xmlEscaped(title))</name>
-    \(extensionsXML(for: drive))
         <trkseg>
     \(trkpts)
         </trkseg>
-      </trk>
-    </gpx>
     """
+  }
+
+  private func splitIntoSegments(_ positions: [Position]) -> [[Position]] {
+    guard !positions.isEmpty else { return [] }
+    var segments: [[Position]] = [[positions[0]]]
+    for i in 1..<positions.count {
+      let gap = positions[i].timestamp.timeIntervalSince(positions[i - 1].timestamp)
+      if gap > Constants.Configuration.trackSegmentGapThreshold {
+        segments.append([positions[i]])
+      } else {
+        segments[segments.count - 1].append(positions[i])
+      }
+    }
+    return segments
   }
 
   private func extensionsXML(for drive: Drive) -> String {

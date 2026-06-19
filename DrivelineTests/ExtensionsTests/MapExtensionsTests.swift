@@ -158,7 +158,12 @@ struct MapCameraPositionFitTests {
 
   @Test
   func returnsAutomaticForEmptyCoordinates() {
-    #expect(MapCameraPosition.fit(to: []) == .automatic)
+    #expect(MapCameraPosition.fit(to: [] as [CLLocationCoordinate2D]) == .automatic)
+  }
+
+  @Test
+  func returnsAutomaticForEmptySegments() {
+    #expect(MapCameraPosition.fit(to: [] as [[CLLocationCoordinate2D]]) == .automatic)
   }
 
   @Test

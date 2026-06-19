@@ -18,4 +18,11 @@ extension MapCameraPosition {
     guard !coordinates.isEmpty else { return .automatic }
     return .region(.fitting(coordinates, paddingMultiplier: paddingMultiplier))
   }
+
+  static func fit(
+    to segments: [[CLLocationCoordinate2D]],
+    paddingMultiplier: CLLocationDegrees = 1.5
+  ) -> MapCameraPosition {
+    fit(to: segments.flatMap { $0 }, paddingMultiplier: paddingMultiplier)
+  }
 }
