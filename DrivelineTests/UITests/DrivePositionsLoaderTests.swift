@@ -32,8 +32,8 @@ struct DrivePositionsLoaderTests {
     let container = makeContainer()
     let drive = makeDrive()
     drive.positions = [
-      makePosition(latitude: 38.0, longitude: -121.0, timestamp: Date(timeIntervalSinceReferenceDate: 200)),
-      makePosition(latitude: 37.0, longitude: -122.0, timestamp: Date(timeIntervalSinceReferenceDate: 100))
+      makePosition(latitude: 38.0, longitude: -121.0, timestamp: Date(timeIntervalSinceReferenceDate: 50)),
+      makePosition(latitude: 37.0, longitude: -122.0, timestamp: Date(timeIntervalSinceReferenceDate: 0))
     ]
     container.mainContext.insert(drive)
     try? container.mainContext.save()
