@@ -21,6 +21,13 @@ struct EditDriveTipTests {
     _ = EditDriveTip()
   }
 
+  // MARK: - Rules
+
+  @Test
+  func gatesOnOnboardingDismissed() {
+    #expect(EditDriveTip().rules.count == 1)
+  }
+
   // MARK: - isOnboardingPresented parameter
 
   @Test

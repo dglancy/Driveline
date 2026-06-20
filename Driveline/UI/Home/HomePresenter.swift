@@ -36,7 +36,7 @@ enum HomePresenter {
   }
 
   static var newDriveButtonTitle: String {
-    String(localized: "New Drive", comment: "Button on empty state to start a new drive")
+    String(localized: "Record Your First Drive", comment: "Button on empty state to start a new drive")
   }
 
   static var automationSetupTitle: String {
@@ -44,6 +44,6 @@ enum HomePresenter {
   }
 
   static var automationSetupSubtitle: String {
-    String(localized: "Record drives hands-free when CarPlay connects.", comment: "Subtitle of the automation setup panel on the home screen")
+    String(localized: "Record drives hands-free when Bluetooth or CarPlay connects.", comment: "Subtitle of the automation setup panel on the home screen")
   }
 }

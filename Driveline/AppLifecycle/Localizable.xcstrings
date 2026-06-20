@@ -471,7 +471,33 @@
       }
     },
     "A Shortcut fires the moment you join CarPlay or your car's Bluetooth." : {
-      "comment" : "Onboarding welcome feature row 2 body"
+      "comment" : "Onboarding welcome feature row 2 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Kurzbefehl wird ausgelöst, sobald du dich mit CarPlay oder dem Bluetooth deines Autos verbindest."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Shortcut fires the moment you join CarPlay or your car's Bluetooth."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un raccourci se déclenche dès que vous vous connectez à CarPlay ou au Bluetooth de votre voiture."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een opdracht wordt geactiveerd zodra je verbinding maakt met CarPlay of de bluetooth van je auto."
+          }
+        }
+      }
     },
     "active" : {
       "comment" : "Label for the active driving duration stat",
@@ -590,13 +616,91 @@
       }
     },
     "Allow location “Always”" : {
-      "comment" : "Onboarding Always-location primer title"
+      "comment" : "Onboarding Always-location primer title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standort „Immer“ erlauben"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow location “Always”"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser la localisation « Toujours »"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie “Altijd” toestaan"
+          }
+        }
+      }
     },
     "Allow Location Access" : {
-      "comment" : "Onboarding location primer button — not yet granted"
+      "comment" : "Onboarding location primer button — not yet granted",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standortzugriff erlauben"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow Location Access"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser l'accès à la localisation"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatietoegang toestaan"
+          }
+        }
+      }
     },
     "Always Allow enabled" : {
-      "comment" : "Onboarding confirmation that Always location access is granted"
+      "comment" : "Onboarding confirmation that Always location access is granted",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Immer erlauben“ aktiviert"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always Allow enabled"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "« Toujours autoriser » activé"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Altijd toestaan” ingeschakeld"
+          }
+        }
+      }
     },
     "Arrival" : {
       "comment" : "Endpoint row subtitle",
@@ -686,7 +790,33 @@
       }
     },
     "Automatic drive tracking — connect, drive, done." : {
-      "comment" : "Onboarding welcome screen subtitle"
+      "comment" : "Onboarding welcome screen subtitle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatische Fahrtaufzeichnung — verbinden, fahren, fertig."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic drive tracking — connect, drive, done."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivi automatique des trajets — connectez, conduisez, c'est fait."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatische ritregistratie — verbinden, rijden, klaar."
+          }
+        }
+      }
     },
     "Automatically" : {
       "comment" : "Recording trigger: started automatically by automation",
@@ -776,7 +906,33 @@
       }
     },
     "Background location activates around your trips, not all day." : {
-      "comment" : "Onboarding Always-location info row 2 body"
+      "comment" : "Onboarding Always-location info row 2 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Hintergrundstandort wird rund um deine Fahrten aktiviert, nicht den ganzen Tag."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Background location activates around your trips, not all day."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La localisation en arrière-plan s'active autour de vos trajets, pas toute la journée."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie op de achtergrond is actief rond je ritten, niet de hele dag."
+          }
+        }
+      }
     },
     "Cancel" : {
       "comment" : "Cancel or dismiss",
@@ -836,12 +992,6 @@
         }
       }
     },
-    "CarPlay connects" : {
-      "comment" : "Onboarding automations intro row 1 title"
-    },
-    "CarPlay disconnects" : {
-      "comment" : "Onboarding automations intro row 2 title"
-    },
     "Category" : {
       "comment" : "Metadata row",
       "localizations" : {
@@ -870,12 +1020,6 @@
           }
         }
       }
-    },
-    "Choose **CarPlay** → **Connects**" : {
-      "comment" : "Onboarding automation start step 4"
-    },
-    "Choose **CarPlay** → **Disconnects**" : {
-      "comment" : "Onboarding automation finish step 4"
     },
     "Clear text" : {
       "comment" : "Accessibility label for button that clears a text field",
@@ -907,7 +1051,33 @@
       }
     },
     "Close" : {
-      "comment" : "Close button to dismiss the automation setup flow\nClose button to dismiss the location permission flow"
+      "comment" : "Close button to dismiss the automation setup flow\nClose button to dismiss the location permission flow",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluiten"
+          }
+        }
+      }
     },
     "Combined Result" : {
       "comment" : "Merge combined result section header",
@@ -939,7 +1109,33 @@
       }
     },
     "Continue" : {
-      "comment" : "Onboarding continue button — shown after permission is granted"
+      "comment" : "Onboarding continue button — shown after permission is granted",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortfahren"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doorgaan"
+          }
+        }
+      }
     },
     "Couldn't Share Drive" : {
       "comment" : "Export failure alert title",
@@ -1145,7 +1341,33 @@
       }
     },
     "Done" : {
-      "comment" : "Final button on automation setup flow"
+      "comment" : "Final button on automation setup flow",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gereed"
+          }
+        }
+      }
     },
     "Double tap to switch between last 30 days and all time" : {
       "comment" : "Accessibility hint for toggling stats panel scope",
@@ -1324,16 +1546,120 @@
       }
     },
     "Driveline needs your location" : {
-      "comment" : "Onboarding location primer title"
+      "comment" : "Onboarding location primer title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline benötigt deinen Standort"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline needs your location"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline a besoin de votre position"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline heeft je locatie nodig"
+          }
+        }
+      }
     },
     "Driveline starts recording your drive." : {
-      "comment" : "Onboarding automations intro row 1 body"
+      "comment" : "Onboarding automations intro row 1 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline beginnt mit der Aufzeichnung deiner Fahrt."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline starts recording your drive."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline commence à enregistrer votre trajet."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline begint je rit op te nemen."
+          }
+        }
+      }
     },
     "Driveline stops and saves your drive." : {
-      "comment" : "Onboarding automations intro row 2 body"
+      "comment" : "Onboarding automations intro row 2 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline stoppt und speichert deine Fahrt."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline stops and saves your drive."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline arrête et enregistre votre trajet."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline stopt en bewaart je rit."
+          }
+        }
+      }
     },
     "Driveline uses your location to record the route, distance, and duration of each drive. Without it, trips can't be tracked." : {
-      "comment" : "Onboarding location primer body paragraph 1"
+      "comment" : "Onboarding location primer body paragraph 1",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline verwendet deinen Standort, um Route, Distanz und Dauer jeder Fahrt aufzuzeichnen. Ohne ihn können Fahrten nicht erfasst werden."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline uses your location to record the route, distance, and duration of each drive. Without it, trips can't be tracked."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline utilise votre position pour enregistrer l'itinéraire, la distance et la durée de chaque trajet. Sans elle, les trajets ne peuvent pas être suivis."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline gebruikt je locatie om de route, afstand en duur van elke rit vast te leggen. Zonder locatie kunnen ritten niet worden geregistreerd."
+          }
+        }
+      }
     },
     "Drives" : {
       "comment" : "A title for the list of drives.",
@@ -1395,7 +1721,33 @@
       }
     },
     "Drives capture without opening the app." : {
-      "comment" : "Onboarding Always-location info row 1 body"
+      "comment" : "Onboarding Always-location info row 1 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahrten werden erfasst, ohne die App zu öffnen."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drives capture without opening the app."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les trajets sont enregistrés sans ouvrir l'app."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ritten worden vastgelegd zonder de app te openen."
+          }
+        }
+      }
     },
     "Duration" : {
       "comment" : "Stat tile label",
@@ -1572,7 +1924,33 @@
       }
     },
     "Enable Background Location" : {
-      "comment" : "Onboarding Always-location primer button — not yet granted"
+      "comment" : "Onboarding Always-location primer button — not yet granted",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hintergrundstandort aktivieren"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Background Location"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer la localisation en arrière-plan"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie op de achtergrond inschakelen"
+          }
+        }
+      }
     },
     "End Location" : {
       "comment" : "Edit drive section header",
@@ -2072,9 +2450,6 @@
         }
       }
     },
-    "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment you connect or disconnect from CarPlay." : {
-      "comment" : "Onboarding automations intro screen body"
-    },
     "Full screen map" : {
       "comment" : "Accessibility label for the button that opens the full screen map on the drive detail screen",
       "localizations" : {
@@ -2105,10 +2480,62 @@
       }
     },
     "Get Started" : {
-      "comment" : "Onboarding welcome primary button"
+      "comment" : "Onboarding welcome primary button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loslegen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aan de slag"
+          }
+        }
+      }
     },
     "Hands-free recording" : {
-      "comment" : "Onboarding Always-location info row 1 title"
+      "comment" : "Onboarding Always-location info row 1 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Freihändige Aufzeichnung"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hands-free recording"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement mains libres"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handsfree opnemen"
+          }
+        }
+      }
     },
     "last 30 days" : {
       "comment" : "Stats scope label for recent period",
@@ -2140,13 +2567,91 @@
       }
     },
     "Location access granted" : {
-      "comment" : "Onboarding confirmation that When In Use location access is granted"
+      "comment" : "Onboarding confirmation that When In Use location access is granted",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standortzugriff erteilt"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location access granted"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès à la localisation accordé"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatietoegang verleend"
+          }
+        }
+      }
     },
     "Location access was denied. Open Settings and choose Always to enable background recording." : {
-      "comment" : "Explanation shown on the Always location screen when access is denied"
+      "comment" : "Explanation shown on the Always location screen when access is denied",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Standortzugriff wurde verweigert. Öffne die Einstellungen und wähle „Immer“, um die Aufzeichnung im Hintergrund zu aktivieren."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location access was denied. Open Settings and choose Always to enable background recording."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'accès à la localisation a été refusé. Ouvrez Réglages et choisissez Toujours pour activer l'enregistrement en arrière-plan."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatietoegang is geweigerd. Open Instellingen en kies Altijd om opnemen op de achtergrond in te schakelen."
+          }
+        }
+      }
     },
     "Location access was denied. Open Settings to enable it." : {
-      "comment" : "Explanation shown on location permission screen when access is denied"
+      "comment" : "Explanation shown on location permission screen when access is denied",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Standortzugriff wurde verweigert. Öffne die Einstellungen, um ihn zu aktivieren."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location access was denied. Open Settings to enable it."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'accès à la localisation a été refusé. Ouvrez Réglages pour l'activer."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatietoegang is geweigerd. Open Instellingen om dit in te schakelen."
+          }
+        }
+      }
     },
     "logged" : {
       "comment" : "Label for the count of GPS positions logged during a drive",
@@ -2467,9 +2972,6 @@
         }
       }
     },
-    "New Drive" : {
-      "comment" : "Button on empty state to start a new drive"
-    },
     "Night" : {
       "comment" : "Time-of-day word in drive name",
       "localizations" : {
@@ -2529,7 +3031,33 @@
       }
     },
     "No buttons to remember. Driveline logs each trip from start to finish." : {
-      "comment" : "Onboarding welcome feature row 1 body"
+      "comment" : "Onboarding welcome feature row 1 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Knöpfe, an die du denken musst. Driveline zeichnet jede Fahrt von Anfang bis Ende auf."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No buttons to remember. Driveline logs each trip from start to finish."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun bouton à retenir. Driveline enregistre chaque trajet du début à la fin."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen knoppen om te onthouden. Driveline legt elke rit van begin tot eind vast."
+          }
+        }
+      }
     },
     "No Drives" : {
       "comment" : "A title shown when the user has not yet recorded any drives.",
@@ -2621,20 +3149,150 @@
     },
     "On the next screen, choose **Allow While Using App** to continue." : {
       "comment" : "A description of the location access request.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle auf dem nächsten Bildschirm **Beim Verwenden der App erlauben**, um fortzufahren."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the next screen, choose **Allow While Using App** to continue."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sur l'écran suivant, choisissez **Autoriser lorsque l'app est active** pour continuer."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies op het volgende scherm **Sta toe tijdens gebruik van app** om door te gaan."
+          }
+        }
+      }
     },
     "On the next screen, choose **Change to Always Allow**. This is what lets a trip record start the moment you get in the car." : {
       "comment" : "A description of the benefits of allowing background location.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle auf dem nächsten Bildschirm **Auf „Immer erlauben“ ändern**. Damit kann eine Fahrt aufgezeichnet werden, sobald du ins Auto steigst."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the next screen, choose **Change to Always Allow**. This is what lets a trip record start the moment you get in the car."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sur l'écran suivant, choisissez **Toujours autoriser**. C'est ce qui permet à un enregistrement de démarrer dès que vous montez dans la voiture."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies op het volgende scherm **Wijzig naar Altijd toestaan**. Hierdoor kan een rit beginnen met opnemen zodra je instapt."
+          }
+        }
+      }
     },
     "Open Settings" : {
-      "comment" : "Button shown when location permission is denied — opens iOS Settings"
+      "comment" : "Button shown when location permission is denied — opens iOS Settings",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen öffnen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir Réglages"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Instellingen"
+          }
+        }
+      }
     },
     "Open Shortcuts" : {
-      "comment" : "Onboarding button to open the Shortcuts app"
+      "comment" : "Onboarding button to open the Shortcuts app",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurzbefehle öffnen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Shortcuts"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir Raccourcis"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Opdrachten"
+          }
+        }
+      }
     },
     "Open the **Shortcuts** app" : {
-      "comment" : "Onboarding automation finish step 1\nOnboarding automation start step 1"
+      "comment" : "Onboarding automation finish step 1\nOnboarding automation start step 1",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne die App **Kurzbefehle**"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the **Shortcuts** app"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez l'app **Raccourcis**"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open de app **Opdrachten**"
+          }
+        }
+      }
     },
     "Order" : {
       "comment" : "Merge order section header",
@@ -2666,7 +3324,33 @@
       }
     },
     "Private by design" : {
-      "comment" : "Onboarding welcome feature row 3 title"
+      "comment" : "Onboarding welcome feature row 3 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Grund auf privat"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Private by design"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confidentiel par conception"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privé door ontwerp"
+          }
+        }
+      }
     },
     "Record a Drive" : {
       "comment" : "TipKit tip title for the home screen record button",
@@ -2697,8 +3381,34 @@
         }
       }
     },
-    "Record drives hands-free when CarPlay connects." : {
-      "comment" : "Subtitle of the automation setup panel on the home screen"
+    "Record Your First Drive" : {
+      "comment" : "Button on empty state to start a new drive",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeichne deine erste Fahrt auf"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record Your First Drive"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrez votre premier trajet"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neem je eerste rit op"
+          }
+        }
+      }
     },
     "RECORDING" : {
       "comment" : "Status badge text — translators may lowercase if appropriate",
@@ -2759,7 +3469,33 @@
       }
     },
     "Records every drive automatically" : {
-      "comment" : "Onboarding welcome feature row 1 title"
+      "comment" : "Onboarding welcome feature row 1 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeichnet jede Fahrt automatisch auf"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Records every drive automatically"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistre chaque trajet automatiquement"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neemt elke rit automatisch op"
+          }
+        }
+      }
     },
     "Road Trip" : {
       "comment" : "Drive category: long-distance journey",
@@ -2801,7 +3537,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Route from %1$@ to %2$@, %3$@"
           }
         },
@@ -2836,7 +3572,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Route from %1$@, %2$@"
           }
         },
@@ -2871,7 +3607,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Route to %1$@, %2$@"
           }
         },
@@ -3100,16 +3836,120 @@
       }
     },
     "Set up “Finish Drive”" : {
-      "comment" : "Onboarding automation finish screen title"
+      "comment" : "Onboarding automation finish screen title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Fahrt beenden“ einrichten"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up “Finish Drive”"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurer « Terminer le trajet »"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Rit beëindigen” instellen"
+          }
+        }
+      }
     },
     "Set up “Start Drive”" : {
-      "comment" : "Onboarding automation start screen title"
+      "comment" : "Onboarding automation start screen title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Fahrt starten“ einrichten"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up “Start Drive”"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurer « Démarrer le trajet »"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Rit starten” instellen"
+          }
+        }
+      }
     },
     "Set Up Automated Recording" : {
-      "comment" : "Title of the automation setup panel on the home screen"
+      "comment" : "Title of the automation setup panel on the home screen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatische Aufzeichnung einrichten"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Up Automated Recording"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurer l'enregistrement automatique"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch opnemen instellen"
+          }
+        }
+      }
     },
     "Set Up Automations" : {
-      "comment" : "Onboarding automations intro primary button"
+      "comment" : "Onboarding automations intro primary button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automationen einrichten"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Up Automations"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurer les automatisations"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatiseringen instellen"
+          }
+        }
+      }
     },
     "Settings" : {
       "comment" : "Menu item to open settings",
@@ -3524,7 +4364,33 @@
       }
     },
     "Start Using Driveline" : {
-      "comment" : "Onboarding final completion button"
+      "comment" : "Onboarding final completion button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline verwenden"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Using Driveline"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer à utiliser Driveline"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driveline gebruiken"
+          }
+        }
+      }
     },
     "started" : {
       "comment" : "Label for the time the drive started",
@@ -3585,7 +4451,33 @@
       }
     },
     "Starts when your car connects" : {
-      "comment" : "Onboarding welcome feature row 2 title"
+      "comment" : "Onboarding welcome feature row 2 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startet, wenn dein Auto sich verbindet"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts when your car connects"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarre quand votre voiture se connecte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start wanneer je auto verbinding maakt"
+          }
+        }
+      }
     },
     "Swap order" : {
       "comment" : "Accessibility label for button that swaps the order of the two drives being merged",
@@ -3646,19 +4538,149 @@
       }
     },
     "Tap **+** then **New Automation**" : {
-      "comment" : "Onboarding automation finish step 3\nOnboarding automation start step 3"
+      "comment" : "Onboarding automation finish step 3\nOnboarding automation start step 3",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe auf **+** und dann auf **Neue Automation**"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap **+** then **New Automation**"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez **+** puis **Nouvelle automatisation**"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op **+** en daarna op **Nieuwe automatisering**"
+          }
+        }
+      }
     },
     "Tap **Add Action**, search **Finish Drive** and select it" : {
-      "comment" : "Onboarding automation finish step 5"
+      "comment" : "Onboarding automation finish step 5",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe auf **Aktion hinzufügen**, suche nach **Fahrt beenden** und wähle sie aus"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap **Add Action**, search **Finish Drive** and select it"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez **Ajouter une action**, recherchez **Terminer le trajet** et sélectionnez-la"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op **Actie toevoegen**, zoek **Rit beëindigen** en selecteer deze"
+          }
+        }
+      }
     },
     "Tap **Add Action**, search **Start Drive** and select it" : {
-      "comment" : "Onboarding automation start step 5"
+      "comment" : "Onboarding automation start step 5",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe auf **Aktion hinzufügen**, suche nach **Fahrt starten** und wähle sie aus"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap **Add Action**, search **Start Drive** and select it"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez **Ajouter une action**, recherchez **Démarrer le trajet** et sélectionnez-la"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op **Actie toevoegen**, zoek **Rit starten** en selecteer deze"
+          }
+        }
+      }
     },
     "Tap **Automation** at the bottom" : {
-      "comment" : "Onboarding automation finish step 2\nOnboarding automation start step 2"
+      "comment" : "Onboarding automation finish step 2\nOnboarding automation start step 2",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe unten auf **Automation**"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap **Automation** at the bottom"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez **Automatisation** en bas"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik onderaan op **Automatisering**"
+          }
+        }
+      }
     },
     "Tap **Done**" : {
-      "comment" : "Onboarding automation finish step 7\nOnboarding automation start step 7"
+      "comment" : "Onboarding automation finish step 7\nOnboarding automation start step 7",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe auf **Fertig**"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap **Done**"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez **OK**"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op **Gereed**"
+          }
+        }
+      }
     },
     "Tap the options button to edit the name and other details." : {
       "comment" : "TipKit tip message for the drive detail options button",
@@ -3776,12 +4798,6 @@
         }
       }
     },
-    "This automation starts recording the moment CarPlay connects — no button needed." : {
-      "comment" : "Onboarding automation start screen body"
-    },
-    "This automation stops and saves your drive the moment CarPlay disconnects." : {
-      "comment" : "Onboarding automation finish screen body"
-    },
     "This drive and all its data will be permanently deleted." : {
       "comment" : "Delete drive confirmation message",
       "localizations" : {
@@ -3812,7 +4828,33 @@
       }
     },
     "To record drives automatically — even when Driveline isn't open — your location needs to be available in the background." : {
-      "comment" : "Onboarding Always-location primer body paragraph 1"
+      "comment" : "Onboarding Always-location primer body paragraph 1",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Damit Fahrten automatisch aufgezeichnet werden — auch wenn Driveline nicht geöffnet ist — muss dein Standort im Hintergrund verfügbar sein."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To record drives automatically — even when Driveline isn't open — your location needs to be available in the background."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour enregistrer les trajets automatiquement — même lorsque Driveline n'est pas ouverte — votre position doit être disponible en arrière-plan."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om ritten automatisch op te nemen — ook wanneer Driveline niet open is — moet je locatie op de achtergrond beschikbaar zijn."
+          }
+        }
+      }
     },
     "Today" : {
       "comment" : "Title of a drive section for today.",
@@ -3990,10 +5032,62 @@
       }
     },
     "Turn off **Ask Before Running**" : {
-      "comment" : "Onboarding automation finish step 6\nOnboarding automation start step 6"
+      "comment" : "Onboarding automation finish step 6\nOnboarding automation start step 6",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schalte **Vor Ausführung fragen** aus"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn off **Ask Before Running**"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivez **Demander avant d'exécuter**"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel **Vraag voor uitvoering** uit"
+          }
+        }
+      }
     },
     "Two quick automations" : {
-      "comment" : "Onboarding automations intro screen title"
+      "comment" : "Onboarding automations intro screen title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwei schnelle Automationen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Two quick automations"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deux automatisations rapides"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twee snelle automatiseringen"
+          }
+        }
+      }
     },
     "Unknown" : {
       "comment" : "Unknown place name",
@@ -4054,7 +5148,33 @@
       }
     },
     "Used only while driving" : {
-      "comment" : "Onboarding Always-location info row 2 title"
+      "comment" : "Onboarding Always-location info row 2 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird nur während der Fahrt verwendet"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Used only while driving"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisée uniquement pendant la conduite"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alleen gebruikt tijdens het rijden"
+          }
+        }
+      }
     },
     "Weather data provided by Apple Weather" : {
       "comment" : "Weather attribution footer link",
@@ -4086,7 +5206,33 @@
       }
     },
     "Welcome to Driveline" : {
-      "comment" : "Onboarding welcome screen title"
+      "comment" : "Onboarding welcome screen title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Willkommen bei Driveline"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to Driveline"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue dans Driveline"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welkom bij Driveline"
+          }
+        }
+      }
     },
     "Yesterday" : {
       "comment" : "Title of the section for drives from yesterday.",
@@ -4148,7 +5294,265 @@
       }
     },
     "Your routes stay on your device. Location is used only to record drives." : {
-      "comment" : "Onboarding welcome feature row 3 body"
+      "comment" : "Onboarding welcome feature row 3 body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Routen bleiben auf deinem Gerät. Der Standort wird nur zur Aufzeichnung von Fahrten verwendet."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your routes stay on your device. Location is used only to record drives."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos itinéraires restent sur votre appareil. La position n'est utilisée que pour enregistrer les trajets."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je routes blijven op je apparaat. Locatie wordt alleen gebruikt om ritten op te nemen."
+          }
+        }
+      }
+    },
+    "Record drives hands-free when Bluetooth or CarPlay connects." : {
+      "comment" : "Subtitle of the automation setup panel on the home screen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeichne Fahrten freihändig auf, wenn Bluetooth oder CarPlay sich verbindet."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record drives hands-free when Bluetooth or CarPlay connects."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrez des trajets en mains libres dès que le Bluetooth ou CarPlay se connecte."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neem ritten handsfree op zodra bluetooth of CarPlay verbinding maakt."
+          }
+        }
+      }
+    },
+    "When your car connects" : {
+      "comment" : "Onboarding automations intro row 1 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn dein Auto sich verbindet"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When your car connects"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand votre voiture se connecte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer je auto verbinding maakt"
+          }
+        }
+      }
+    },
+    "When your car disconnects" : {
+      "comment" : "Onboarding automations intro row 2 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn dein Auto die Verbindung trennt"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When your car disconnects"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand votre voiture se déconnecte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer je auto de verbinding verbreekt"
+          }
+        }
+      }
+    },
+    "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)" : {
+      "comment" : "Onboarding automation start step 4",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle **CarPlay** → **Wird verbunden** (oder **Bluetooth** → dein Auto)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez **CarPlay** → **Se connecte** (ou **Bluetooth** → votre voiture)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies **CarPlay** → **Maakt verbinding** (of **Bluetooth** → je auto)"
+          }
+        }
+      }
+    },
+    "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)" : {
+      "comment" : "Onboarding automation finish step 4",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle **CarPlay** → **Wird getrennt** (oder **Bluetooth** → dein Auto)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez **CarPlay** → **Se déconnecte** (ou **Bluetooth** → votre voiture)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies **CarPlay** → **Verbreekt verbinding** (of **Bluetooth** → je auto)"
+          }
+        }
+      }
+    },
+    "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth." : {
+      "comment" : "Onboarding automations intro screen body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für wirklich freihändige Aufzeichnung richte zwei Automationen in der App „Kurzbefehle“ ein. Sie starten und stoppen Driveline, sobald sich dein iPhone mit deinem Auto verbindet — über CarPlay oder Bluetooth."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour un enregistrement vraiment mains libres, configurez deux automatisations dans l'app Raccourcis. Elles démarrent et arrêtent Driveline dès que votre iPhone se connecte à votre voiture — via CarPlay ou Bluetooth."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voor echt handsfree opnemen stel je twee automatiseringen in de app Opdrachten in. Ze starten en stoppen Driveline zodra je iPhone verbinding maakt met je auto — via CarPlay of bluetooth."
+          }
+        }
+      }
+    },
+    "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs." : {
+      "comment" : "Onboarding automation start screen body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Automation startet die Aufzeichnung, sobald CarPlay sich verbindet — oder das Bluetooth deines Autos koppelt."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette automatisation démarre l'enregistrement dès que CarPlay se connecte — ou que le Bluetooth de votre voiture s'appaire."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze automatisering start de opname zodra CarPlay verbinding maakt — of de bluetooth van je auto koppelt."
+          }
+        }
+      }
+    },
+    "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops." : {
+      "comment" : "Onboarding automation finish screen body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Automation stoppt und speichert deine Fahrt, sobald CarPlay die Verbindung trennt — oder das Bluetooth deines Autos abbricht."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette automatisation arrête et enregistre votre trajet dès que CarPlay se déconnecte — ou que le Bluetooth de votre voiture se coupe."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze automatisering stopt en bewaart je rit zodra CarPlay de verbinding verbreekt — of de bluetooth van je auto wegvalt."
+          }
+        }
+      }
     }
   },
   "version" : "1.2"

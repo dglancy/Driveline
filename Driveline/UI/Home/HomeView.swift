@@ -76,9 +76,13 @@ struct HomeView: View {
         .onChange(of: driveService.isRecording, initial: true) { _, isRecording in
           if isRecording { exitSelectMode() }
           StatsPanelTip.isRecording = isRecording
+          RecordButtonTip.isRecording = isRecording
         }
         .onChange(of: recentStats.driveCount, initial: true) { _, count in
           StatsPanelTip.driveCount = count
+        }
+        .onChange(of: drives.isEmpty, initial: true) { _, isEmpty in
+          RecordButtonTip.hasDrives = !isEmpty
         }
     }
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
