@@ -8,9 +8,13 @@
 import Testing
 @testable import Driveline
 
-@Suite("EditDriveTip")
+@Suite("EditDriveTip", .serialized)
 @MainActor
 struct EditDriveTipTests {
+
+  init() {
+    EditDriveTip.isOnboardingPresented = true
+  }
 
   @Test
   func tipCanBeInstantiated() {

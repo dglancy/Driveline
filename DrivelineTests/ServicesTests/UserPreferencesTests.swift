@@ -36,4 +36,40 @@ struct UserPreferencesTests {
     prefs.setHasCompletedOnboarding(false)
     #expect(prefs.hasCompletedOnboarding == false)
   }
+
+  @Test func hasSeenWelcomeDefaultsToFalse() {
+    let prefs = makePreferences()
+    #expect(prefs.hasSeenWelcome == false)
+  }
+
+  @Test func setHasSeenWelcomePersistsTrue() {
+    var prefs = makePreferences()
+    prefs.setHasSeenWelcome(true)
+    #expect(prefs.hasSeenWelcome == true)
+  }
+
+  @Test func setHasSeenWelcomeCanBeReset() {
+    var prefs = makePreferences()
+    prefs.setHasSeenWelcome(true)
+    prefs.setHasSeenWelcome(false)
+    #expect(prefs.hasSeenWelcome == false)
+  }
+
+  @Test func hasSeenAutomationSetupDefaultsToFalse() {
+    let prefs = makePreferences()
+    #expect(prefs.hasSeenAutomationSetup == false)
+  }
+
+  @Test func setHasSeenAutomationSetupPersistsTrue() {
+    var prefs = makePreferences()
+    prefs.setHasSeenAutomationSetup(true)
+    #expect(prefs.hasSeenAutomationSetup == true)
+  }
+
+  @Test func setHasSeenAutomationSetupCanBeReset() {
+    var prefs = makePreferences()
+    prefs.setHasSeenAutomationSetup(true)
+    prefs.setHasSeenAutomationSetup(false)
+    #expect(prefs.hasSeenAutomationSetup == false)
+  }
 }

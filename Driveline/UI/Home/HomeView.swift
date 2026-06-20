@@ -5,6 +5,7 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
+import CoreLocation
 import CoreSpotlight
 import SwiftUI
 import SwiftData
@@ -16,6 +17,7 @@ struct HomeView: View {
 
   @Environment(DriveRecordingService.self) private var driveService
   @Environment(SpotlightIndexingService.self) private var spotlightIndexingService
+  @Environment(LocationService.self) private var locationService
   @Environment(\.modelContext) private var modelContext
   @Environment(\.openURL) private var openURL
 
@@ -30,6 +32,9 @@ struct HomeView: View {
   @State private var drivesToMerge: [Drive] = []
   @State private var showingDeleteConfirmation: Bool = false
   @State private var showingMergeSheet: Bool = false
+  @State private var showingLocationPrimer: Bool = false
+  @State private var showingAutomationSetup: Bool = false
+  @State private var hasSeenAutomationSetup: Bool = UserPreferences().hasSeenAutomationSetup
 
   // MARK: - Computed Properties
 
@@ -65,7 +70,7 @@ struct HomeView: View {
                 openURL(url)
               }
             },
-            onRecord: { startDrive() }
+            onRecord: { attemptManualRecord() }
           )
         }
         .onChange(of: driveService.isRecording, initial: true) { _, isRecording in
@@ -81,6 +86,14 @@ struct HomeView: View {
       openDrive(fromSpotlightIdentifier: identifier)
     }
     .modifier(RecordingScreenModifier())
+    .modifier(LocationPrimerModifier(
+      isPresented: $showingLocationPrimer,
+      onStartDrive: { startDrive() }
+    ))
+    .modifier(AutomationSetupModifier(
+      isPresented: $showingAutomationSetup,
+      hasSeenAutomationSetup: $hasSeenAutomationSetup
+    ))
     .alert(
       String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
       isPresented: $showingDeleteConfirmation
@@ -122,11 +135,16 @@ struct HomeView: View {
   }
 
   private var emptyState: some View {
-    ContentUnavailableView(
-      "No Drives",
-      systemImage: Icons.Widgets.car,
-      description: Text(String(localized: "Your recorded drives will appear here.", comment: "Empty state description shown on the home screen when no drives have been recorded yet"))
-    )
+    ContentUnavailableView {
+      Label("No Drives", systemImage: Icons.Widgets.car)
+    } description: {
+      Text(String(localized: "Your recorded drives will appear here.", comment: "Empty state description shown on the home screen when no drives have been recorded yet"))
+    } actions: {
+      Button(HomePresenter.newDriveButtonTitle) {
+        attemptManualRecord()
+      }
+      .buttonStyle(.borderedProminent)
+    }
   }
 
   private var driveList: some View {
@@ -145,6 +163,17 @@ struct HomeView: View {
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
             .popoverTip(StatsPanelTip())
+          }
+          .listSectionSpacing(8)
+        }
+
+        if !hasSeenAutomationSetup && !isSelectMode && !isSearchActive
+            && (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) {
+          Section {
+            HomeAutomationSetupPanelView { showingAutomationSetup = true }
+              .listRowInsets(EdgeInsets())
+              .listRowBackground(Color.clear)
+              .listRowSeparator(.hidden)
           }
           .listSectionSpacing(8)
         }
@@ -198,6 +227,18 @@ struct HomeView: View {
   }
 
   // MARK: - Actions
+
+  private func attemptManualRecord() {
+    guard !Driveline.isUITesting() else {
+      startDrive()
+      return
+    }
+    if locationService.authorizationStatus == .authorizedAlways {
+      startDrive()
+    } else {
+      showingLocationPrimer = true
+    }
+  }
 
   private func startDrive(trigger: Drive.RecordingTrigger = .manual) {
     driveService.startDrive(trigger: trigger)
@@ -327,6 +368,51 @@ private struct RecordingScreenModifier: ViewModifier {
   }
 }
 
+// MARK: - LocationPrimerModifier
+
+private struct LocationPrimerModifier: ViewModifier {
+
+  @Environment(LocationService.self) private var locationService
+  @Binding var isPresented: Bool
+  let onStartDrive: () -> Void
+
+  func body(content: Content) -> some View {
+    content.fullScreenCover(isPresented: $isPresented) {
+      LocationPermissionFlowView(
+        initialStatus: locationService.authorizationStatus,
+        onComplete: {
+          isPresented = false
+          onStartDrive()
+        },
+        onCancel: { isPresented = false }
+      )
+      .environment(locationService)
+    }
+  }
+}
+
+// MARK: - AutomationSetupModifier
+
+private struct AutomationSetupModifier: ViewModifier {
+
+  @Binding var isPresented: Bool
+  @Binding var hasSeenAutomationSetup: Bool
+
+  func body(content: Content) -> some View {
+    content.fullScreenCover(isPresented: $isPresented) {
+      AutomationSetupFlowView(
+        onComplete: {
+          var prefs = UserPreferences()
+          prefs.setHasSeenAutomationSetup(true)
+          hasSeenAutomationSetup = true
+          isPresented = false
+        },
+        onCancel: { isPresented = false }
+      )
+    }
+  }
+}
+
 // MARK: - Preview
 
 #Preview {
@@ -340,5 +426,6 @@ private struct RecordingScreenModifier: ViewModifier {
   return HomeView()
     .modelContainer(container)
     .environment(driveService)
+    .environment(locationService)
     .environment(SpotlightIndexingService())
 }

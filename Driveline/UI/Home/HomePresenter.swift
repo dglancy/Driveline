@@ -34,4 +34,16 @@ enum HomePresenter {
       comment: "Confirmation message for deleting selected drives."
     )
   }
+
+  static var newDriveButtonTitle: String {
+    String(localized: "New Drive", comment: "Button on empty state to start a new drive")
+  }
+
+  static var automationSetupTitle: String {
+    String(localized: "Set Up Automated Recording", comment: "Title of the automation setup panel on the home screen")
+  }
+
+  static var automationSetupSubtitle: String {
+    String(localized: "Record drives hands-free when CarPlay connects.", comment: "Subtitle of the automation setup panel on the home screen")
+  }
 }

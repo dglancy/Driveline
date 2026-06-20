@@ -61,6 +61,22 @@ struct UserPreferences {
   mutating func setHasCompletedOnboarding(_ value: Bool) {
     defaults.set(value, forKey: Keys.hasCompletedOnboarding)
   }
+
+  var hasSeenWelcome: Bool {
+    defaults.bool(forKey: Keys.hasSeenWelcome)
+  }
+
+  mutating func setHasSeenWelcome(_ value: Bool) {
+    defaults.set(value, forKey: Keys.hasSeenWelcome)
+  }
+
+  var hasSeenAutomationSetup: Bool {
+    defaults.bool(forKey: Keys.hasSeenAutomationSetup)
+  }
+
+  mutating func setHasSeenAutomationSetup(_ value: Bool) {
+    defaults.set(value, forKey: Keys.hasSeenAutomationSetup)
+  }
 }
 
 // MARK: - Keys
@@ -73,5 +89,7 @@ private extension UserPreferences {
     static let driveWidth = "DriveWidth"
     static let continueDriveIfRecentlyFinished = "ContinueDriveIfRecentlyFinished"
     static let hasCompletedOnboarding = "HasCompletedOnboarding"
+    static let hasSeenWelcome = "HasSeenWelcome"
+    static let hasSeenAutomationSetup = "HasSeenAutomationSetup"
   }
 }

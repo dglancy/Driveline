@@ -35,7 +35,7 @@ struct Driveline: App {
   init() {
     let env = AppBootstrap.boot()
     self.modelContainer = env.modelContainer
-    _isOnboardingPresented = State(initialValue: (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) && !UserPreferences().hasCompletedOnboarding)
+    _isOnboardingPresented = State(initialValue: (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) && !UserPreferences().hasSeenWelcome)
     _locationService = State(initialValue: env.locationService)
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
@@ -54,12 +54,11 @@ struct Driveline: App {
         .environment(driveService)
         .environment(spotlightIndexingService)
         .fullScreenCover(isPresented: $isOnboardingPresented) {
-          OnboardingView(onComplete: {
+          OnboardingWelcomeView {
             var prefs = UserPreferences()
-            prefs.setHasCompletedOnboarding(true)
+            prefs.setHasSeenWelcome(true)
             isOnboardingPresented = false
-          })
-          .environment(locationService)
+          }
         }
         .onChange(of: isOnboardingPresented, initial: true) { _, isPresented in
           RecordButtonTip.isOnboardingPresented = isPresented

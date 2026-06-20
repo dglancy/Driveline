@@ -56,6 +56,18 @@ struct HomePresenterTests {
     #expect(message.contains("1 drive"))
     #expect(!message.contains("1 drives"))
   }
+
+  @Test func newDriveButtonTitleIsNonEmpty() {
+    #expect(!HomePresenter.newDriveButtonTitle.isEmpty)
+  }
+
+  @Test func automationSetupTitleIsNonEmpty() {
+    #expect(!HomePresenter.automationSetupTitle.isEmpty)
+  }
+
+  @Test func automationSetupSubtitleIsNonEmpty() {
+    #expect(!HomePresenter.automationSetupSubtitle.isEmpty)
+  }
 }
 
 // MARK: - Drive.displayName
