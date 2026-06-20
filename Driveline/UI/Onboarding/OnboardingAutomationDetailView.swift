@@ -35,15 +35,25 @@ struct OnboardingAutomationDetailView: View {
   }
   
   private var steps: [String] {
-    [
-      OnboardingPresenter.automationStartStep1,
-      OnboardingPresenter.automationStartStep2,
-      OnboardingPresenter.automationStartStep3,
-      OnboardingPresenter.automationStartStep4,
-      OnboardingPresenter.automationStartStep5,
-      OnboardingPresenter.automationStartStep6,
-      OnboardingPresenter.automationStartStep7
-    ]
+    isStart
+      ? [
+        OnboardingPresenter.automationStartStep1,
+        OnboardingPresenter.automationStartStep2,
+        OnboardingPresenter.automationStartStep3,
+        OnboardingPresenter.automationStartStep4,
+        OnboardingPresenter.automationStartStep5,
+        OnboardingPresenter.automationStartStep6,
+        OnboardingPresenter.automationStartStep7
+      ]
+      : [
+        OnboardingPresenter.automationFinishStep1,
+        OnboardingPresenter.automationFinishStep2,
+        OnboardingPresenter.automationFinishStep3,
+        OnboardingPresenter.automationFinishStep4,
+        OnboardingPresenter.automationFinishStep5,
+        OnboardingPresenter.automationFinishStep6,
+        OnboardingPresenter.automationFinishStep7
+      ]
   }
   
   private var primaryLabel: String {

@@ -14,24 +14,47 @@ struct RecordButtonTipTests {
 
   init() {
     RecordButtonTip.isOnboardingPresented = true
+    RecordButtonTip.hasDrives = false
+    RecordButtonTip.isRecording = false
   }
+
+  // MARK: - Instantiation
 
   @Test
   func tipCanBeInstantiated() {
     _ = RecordButtonTip()
   }
 
-  // MARK: - isOnboardingPresented parameter
+  // MARK: - Rules
+
+  @Test
+  func gatesOnOnboardingDismissedAndHavingDrivesAndNotRecording() {
+    #expect(RecordButtonTip().rules.count == 3)
+  }
+
+  // MARK: - Parameters
+
+  @Test
+  func hasDrivesDefaultsToFalse() {
+    #expect(RecordButtonTip.hasDrives == false)
+  }
 
   @Test
   func isOnboardingPresentedDefaultsToTrue() {
     #expect(RecordButtonTip.isOnboardingPresented == true)
   }
 
+  // MARK: - isRecording parameter
+
   @Test
-  func isOnboardingPresentedCanBeSetToFalse() {
-    RecordButtonTip.isOnboardingPresented = false
-    defer { RecordButtonTip.isOnboardingPresented = true }
-    #expect(RecordButtonTip.isOnboardingPresented == false)
+  func isRecordingDefaultsToFalse() {
+    #expect(RecordButtonTip.isRecording == false)
+  }
+
+  @Test
+  func isRecordingCanBeSetToTrue() {
+    RecordButtonTip.isRecording = true
+    defer { RecordButtonTip.isRecording = false }
+    #expect(RecordButtonTip.isRecording == true)
   }
 }

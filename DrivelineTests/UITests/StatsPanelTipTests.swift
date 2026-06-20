@@ -12,6 +12,13 @@ import Testing
 @MainActor
 struct StatsPanelTipTests {
 
+  // MARK: - Rules
+
+  @Test
+  func gatesOnDriveCountRecordingAndOnboarding() {
+    #expect(StatsPanelTip().rules.count == 3)
+  }
+
   // MARK: - driveCount parameter
 
   @Test

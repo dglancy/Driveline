@@ -106,11 +106,11 @@ enum OnboardingPresenter {
   }
 
   static var automationsIntroBody: String {
-    String(localized: "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment you connect or disconnect from CarPlay.", comment: "Onboarding automations intro screen body")
+    String(localized: "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth.", comment: "Onboarding automations intro screen body")
   }
 
   static var automationsIntroRow1Title: String {
-    String(localized: "CarPlay connects", comment: "Onboarding automations intro row 1 title")
+    String(localized: "When your car connects", comment: "Onboarding automations intro row 1 title")
   }
 
   static var automationsIntroRow1Body: String {
@@ -118,7 +118,7 @@ enum OnboardingPresenter {
   }
 
   static var automationsIntroRow2Title: String {
-    String(localized: "CarPlay disconnects", comment: "Onboarding automations intro row 2 title")
+    String(localized: "When your car disconnects", comment: "Onboarding automations intro row 2 title")
   }
 
   static var automationsIntroRow2Body: String {
@@ -136,7 +136,7 @@ enum OnboardingPresenter {
   }
 
   static var automationStartBody: String {
-    String(localized: "This automation starts recording the moment CarPlay connects — no button needed.", comment: "Onboarding automation start screen body")
+    String(localized: "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs.", comment: "Onboarding automation start screen body")
   }
 
   static var automationStartStep1: String {
@@ -152,7 +152,7 @@ enum OnboardingPresenter {
   }
 
   static var automationStartStep4: String {
-    String(localized: "Choose **CarPlay** → **Connects**", comment: "Onboarding automation start step 4")
+    String(localized: "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)", comment: "Onboarding automation start step 4")
   }
 
   static var automationStartStep5: String {
@@ -174,7 +174,7 @@ enum OnboardingPresenter {
   }
 
   static var automationFinishBody: String {
-    String(localized: "This automation stops and saves your drive the moment CarPlay disconnects.", comment: "Onboarding automation finish screen body")
+    String(localized: "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops.", comment: "Onboarding automation finish screen body")
   }
 
   static var automationFinishStep1: String {
@@ -190,7 +190,7 @@ enum OnboardingPresenter {
   }
 
   static var automationFinishStep4: String {
-    String(localized: "Choose **CarPlay** → **Disconnects**", comment: "Onboarding automation finish step 4")
+    String(localized: "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)", comment: "Onboarding automation finish step 4")
   }
 
   static var automationFinishStep5: String {

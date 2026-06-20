@@ -10,9 +10,13 @@ import TipKit
 
 struct RecordButtonTip: Tip {
   @Parameter static var isOnboardingPresented: Bool = true
+  @Parameter static var hasDrives: Bool = false
+  @Parameter static var isRecording: Bool = false
 
   var rules: [Rule] {
     #Rule(Self.$isOnboardingPresented) { $0 == false }
+    #Rule(Self.$hasDrives) { $0 == true }
+    #Rule(Self.$isRecording) { $0 == false }
   }
 
   var title: Text {
