@@ -13,6 +13,7 @@ struct OnboardingLocationView: View {
   // MARK: - Properties
 
   @Environment(LocationService.self) private var locationService
+  @Environment(\.openURL) private var openURL
   let onNext: () -> Void
 
   // MARK: - Computed Properties
@@ -20,6 +21,11 @@ struct OnboardingLocationView: View {
   private var isGranted: Bool {
     locationService.authorizationStatus == .authorizedWhenInUse
     || locationService.authorizationStatus == .authorizedAlways
+  }
+
+  private var isDenied: Bool {
+    locationService.authorizationStatus == .denied
+    || locationService.authorizationStatus == .restricted
   }
 
   // MARK: - Body
@@ -69,21 +75,34 @@ struct OnboardingLocationView: View {
         .font(.body)
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
-      locationBody2
+      if !isDenied {
+        Text("On the next screen, choose **Allow While Using App** to continue.")
+          .font(.body)
+          .foregroundStyle(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+      }
     }
   }
 
-  private var locationBody2: some View {
-    Text("On the next screen, choose **Allow While Using App** to continue.")
-      .font(.body)
-      .foregroundStyle(.secondary)
-      .fixedSize(horizontal: false, vertical: true)
-  }
-
+  @ViewBuilder
   private var footer: some View {
-    OnboardingPrimaryButton(
-      title: isGranted ? OnboardingPresenter.continueAction : OnboardingPresenter.allowLocationAccess,
-      action: isGranted ? onNext : { locationService.requestWhenInUseAuthorization() }
-    )
+    if isDenied {
+      VStack(spacing: 12) {
+        Text(OnboardingPresenter.locationDeniedBody)
+          .font(.footnote)
+          .foregroundStyle(.secondary)
+          .multilineTextAlignment(.center)
+        OnboardingPrimaryButton(title: OnboardingPresenter.openSettingsAction) {
+          if let url = URL(string: UIApplication.openSettingsURLString) {
+            openURL(url)
+          }
+        }
+      }
+    } else {
+      OnboardingPrimaryButton(
+        title: isGranted ? OnboardingPresenter.continueAction : OnboardingPresenter.allowLocationAccess,
+        action: isGranted ? onNext : { locationService.requestWhenInUseAuthorization() }
+      )
+    }
   }
 }

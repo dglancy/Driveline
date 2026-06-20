@@ -59,6 +59,8 @@ enum AppBootstrap {
     guard isOnboardingTesting else { return }
     var prefs = UserPreferences()
     prefs.setHasCompletedOnboarding(false)
+    prefs.setHasSeenWelcome(false)
+    prefs.setHasSeenAutomationSetup(false)
   }
 
   private static func configureTips(isUITesting: Bool, isTipTesting: Bool) {

@@ -99,6 +99,13 @@ struct OnboardingPresenterTests {
     #expect(!OnboardingPresenter.startUsingDriveline.isEmpty)
   }
 
+  @Test func newStringsAreNonEmpty() {
+    #expect(!OnboardingPresenter.doneAction.isEmpty)
+    #expect(!OnboardingPresenter.openSettingsAction.isEmpty)
+    #expect(!OnboardingPresenter.locationDeniedBody.isEmpty)
+    #expect(!OnboardingPresenter.alwaysDeniedBody.isEmpty)
+  }
+
   @Test func automationTitlesContainCurlyQuotes() {
     #expect(OnboardingPresenter.automationStartTitle.contains("\u{201C}"))
     #expect(OnboardingPresenter.automationStartTitle.contains("\u{201D}"))

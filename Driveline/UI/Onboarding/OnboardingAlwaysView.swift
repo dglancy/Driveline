@@ -13,12 +13,18 @@ struct OnboardingAlwaysView: View {
   // MARK: - Properties
 
   @Environment(LocationService.self) private var locationService
+  @Environment(\.openURL) private var openURL
   let onNext: () -> Void
 
   // MARK: - Computed Properties
 
   private var isGranted: Bool {
     locationService.authorizationStatus == .authorizedAlways
+  }
+
+  private var isDenied: Bool {
+    locationService.authorizationStatus == .denied
+    || locationService.authorizationStatus == .restricted
   }
 
   // MARK: - Body
@@ -69,10 +75,12 @@ struct OnboardingAlwaysView: View {
         .font(.body)
         .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
-      Text("On the next screen, choose **Change to Always Allow**. This is what lets a trip record start the moment you get in the car.")
-        .font(.body)
-        .foregroundStyle(.secondary)
-        .fixedSize(horizontal: false, vertical: true)
+      if !isDenied {
+        Text("On the next screen, choose **Change to Always Allow**. This is what lets a trip record start the moment you get in the car.")
+          .font(.body)
+          .foregroundStyle(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+      }
     }
   }
 
@@ -91,10 +99,25 @@ struct OnboardingAlwaysView: View {
     }
   }
 
+  @ViewBuilder
   private var footer: some View {
-    OnboardingPrimaryButton(
-      title: isGranted ? OnboardingPresenter.continueAction : OnboardingPresenter.enableBackgroundLocation,
-      action: isGranted ? onNext : { locationService.requestAlwaysAuthorization() }
-    )
+    if isDenied {
+      VStack(spacing: 12) {
+        Text(OnboardingPresenter.alwaysDeniedBody)
+          .font(.footnote)
+          .foregroundStyle(.secondary)
+          .multilineTextAlignment(.center)
+        OnboardingPrimaryButton(title: OnboardingPresenter.openSettingsAction) {
+          if let url = URL(string: UIApplication.openSettingsURLString) {
+            openURL(url)
+          }
+        }
+      }
+    } else {
+      OnboardingPrimaryButton(
+        title: isGranted ? OnboardingPresenter.continueAction : OnboardingPresenter.enableBackgroundLocation,
+        action: isGranted ? onNext : { locationService.requestAlwaysAuthorization() }
+      )
+    }
   }
 }

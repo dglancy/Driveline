@@ -16,6 +16,7 @@ struct OnboardingAutomationDetailView: View {
   // MARK: - Properties
 
   let kind: Kind
+  var finishTitle: String?
   let onNext: () -> Void
 
   @Environment(\.openURL) private var openURL
@@ -46,7 +47,7 @@ struct OnboardingAutomationDetailView: View {
   }
   
   private var primaryLabel: String {
-    isStart ? OnboardingPresenter.continueAction : OnboardingPresenter.startUsingDriveline
+    isStart ? OnboardingPresenter.continueAction : (finishTitle ?? OnboardingPresenter.startUsingDriveline)
   }
 
   // MARK: - Body

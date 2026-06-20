@@ -220,4 +220,20 @@ enum OnboardingPresenter {
   static var continueAction: String {
     String(localized: "Continue", comment: "Onboarding continue button — shown after permission is granted")
   }
+
+  static var doneAction: String {
+    String(localized: "Done", comment: "Final button on automation setup flow")
+  }
+
+  static var openSettingsAction: String {
+    String(localized: "Open Settings", comment: "Button shown when location permission is denied — opens iOS Settings")
+  }
+
+  static var locationDeniedBody: String {
+    String(localized: "Location access was denied. Open Settings to enable it.", comment: "Explanation shown on location permission screen when access is denied")
+  }
+
+  static var alwaysDeniedBody: String {
+    String(localized: "Location access was denied. Open Settings and choose Always to enable background recording.", comment: "Explanation shown on the Always location screen when access is denied")
+  }
 }

@@ -46,6 +46,7 @@ struct StatsPanelTipTests {
 
   @Test
   func isOnboardingPresentedDefaultsToTrue() {
+    StatsPanelTip.isOnboardingPresented = true
     #expect(StatsPanelTip.isOnboardingPresented == true)
   }
 

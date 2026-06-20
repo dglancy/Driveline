@@ -12,6 +12,10 @@ import Testing
 @MainActor
 struct RecordButtonTipTests {
 
+  init() {
+    RecordButtonTip.isOnboardingPresented = true
+  }
+
   @Test
   func tipCanBeInstantiated() {
     _ = RecordButtonTip()

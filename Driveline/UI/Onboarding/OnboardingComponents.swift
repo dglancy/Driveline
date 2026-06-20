@@ -1,47 +1,11 @@
 //
-//  OnboardingView.swift
+//  OnboardingComponents.swift
 //  Driveline
 //
-//  Created by Damien Glancy on 17/06/2026.
+//  Created by Damien Glancy on 20/06/2026.
 //
 
 import SwiftUI
-
-struct OnboardingView: View {
-
-  // MARK: - Types
-
-  enum Step { case welcome, location, always, automationIntro, automationStart, automationFinish }
-
-  // MARK: - Properties
-
-  @State private var step: Step = .welcome
-  let onComplete: () -> Void
-
-  // MARK: - Body
-
-  var body: some View {
-    Group {
-      switch step {
-      case .welcome:
-        OnboardingWelcomeView { step = .location }
-      case .location:
-        OnboardingLocationView { step = .always }
-      case .always:
-        OnboardingAlwaysView { step = .automationIntro }
-      case .automationIntro:
-        OnboardingAutomationsIntroView { step = .automationStart }
-      case .automationStart:
-        OnboardingAutomationDetailView(kind: .start) { step = .automationFinish }
-      case .automationFinish:
-        OnboardingAutomationDetailView(kind: .finish, onNext: onComplete)
-      }
-    }
-    .animation(.easeInOut(duration: 0.3), value: step)
-  }
-}
-
-// MARK: - Shared helpers
 
 struct OnboardingPrimaryButton: View {
   let title: String
