@@ -94,7 +94,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-onboarding-testing"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
