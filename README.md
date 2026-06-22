@@ -66,6 +66,8 @@ Driveline/
 ├── DrivelineUITests/               XCTest UI tests
 ├── MLTrainingData/                 CSV datasets used to train the drive category classifier
 ├── MLTrainingDataPrepTool/         Command-line tool for building ML training datasets from GPX exports
+├── Marketing/                      App Store and promotional assets
+│   └── App Store Assets/            Screenshots submitted to the App Store
 ├── MLTrainingDataPrepToolTests/    Unit tests for the ML training data prep tool
 └── Settings.bundle/                In-app Settings.app bundle
 ```
