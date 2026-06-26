@@ -646,6 +646,7 @@
     },
     "Allow Location Access" : {
       "comment" : "Onboarding location primer button — not yet granted",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1021,6 +1022,64 @@
         }
       }
     },
+    "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)" : {
+      "comment" : "Onboarding automation start step 4",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle **CarPlay** → **Wird verbunden** (oder **Bluetooth** → dein Auto)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez **CarPlay** → **Se connecte** (ou **Bluetooth** → votre voiture)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies **CarPlay** → **Maakt verbinding** (of **Bluetooth** → je auto)"
+          }
+        }
+      }
+    },
+    "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)" : {
+      "comment" : "Onboarding automation finish step 4",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle **CarPlay** → **Wird getrennt** (oder **Bluetooth** → dein Auto)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez **CarPlay** → **Se déconnecte** (ou **Bluetooth** → votre voiture)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies **CarPlay** → **Verbreekt verbinding** (of **Bluetooth** → je auto)"
+          }
+        }
+      }
+    },
     "Clear text" : {
       "comment" : "Accessibility label for button that clears a text field",
       "localizations" : {
@@ -1051,7 +1110,7 @@
       }
     },
     "Close" : {
-      "comment" : "Close button to dismiss the automation setup flow\nClose button to dismiss the location permission flow",
+      "comment" : "Button to dismiss the location permission flow when access is denied",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1109,7 +1168,7 @@
       }
     },
     "Continue" : {
-      "comment" : "Onboarding continue button — shown after permission is granted",
+      "comment" : "Onboarding Always-location primer button — not yet granted\nOnboarding continue button — shown after permission is granted\nOnboarding location primer button — not yet granted",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1925,6 +1984,7 @@
     },
     "Enable Background Location" : {
       "comment" : "Onboarding Always-location primer button — not yet granted",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2446,6 +2506,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opname van een rit beëindigen."
+          }
+        }
+      }
+    },
+    "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth." : {
+      "comment" : "Onboarding automations intro screen body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für wirklich freihändige Aufzeichnung richte zwei Automationen in der App „Kurzbefehle“ ein. Sie starten und stoppen Driveline, sobald sich dein iPhone mit deinem Auto verbindet — über CarPlay oder Bluetooth."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour un enregistrement vraiment mains libres, configurez deux automatisations dans l'app Raccourcis. Elles démarrent et arrêtent Driveline dès que votre iPhone se connecte à votre voiture — via CarPlay ou Bluetooth."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voor echt handsfree opnemen stel je twee automatiseringen in de app Opdrachten in. Ze starten en stoppen Driveline zodra je iPhone verbinding maakt met je auto — via CarPlay of bluetooth."
           }
         }
       }
@@ -3377,6 +3466,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rit opnemen"
+          }
+        }
+      }
+    },
+    "Record drives hands-free when Bluetooth or CarPlay connects." : {
+      "comment" : "Subtitle of the automation setup panel on the home screen",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeichne Fahrten freihändig auf, wenn Bluetooth oder CarPlay sich verbindet."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record drives hands-free when Bluetooth or CarPlay connects."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrez des trajets en mains libres dès que le Bluetooth ou CarPlay se connecte."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neem ritten handsfree op zodra bluetooth of CarPlay verbinding maakt."
           }
         }
       }
@@ -4798,6 +4916,64 @@
         }
       }
     },
+    "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs." : {
+      "comment" : "Onboarding automation start screen body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Automation startet die Aufzeichnung, sobald CarPlay sich verbindet — oder das Bluetooth deines Autos koppelt."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette automatisation démarre l'enregistrement dès que CarPlay se connecte — ou que le Bluetooth de votre voiture s'appaire."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze automatisering start de opname zodra CarPlay verbinding maakt — of de bluetooth van je auto koppelt."
+          }
+        }
+      }
+    },
+    "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops." : {
+      "comment" : "Onboarding automation finish screen body",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Automation stoppt und speichert deine Fahrt, sobald CarPlay die Verbindung trennt — oder das Bluetooth deines Autos abbricht."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette automatisation arrête et enregistre votre trajet dès que CarPlay se déconnecte — ou que le Bluetooth de votre voiture se coupe."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze automatisering stopt en bewaart je rit zodra CarPlay de verbinding verbreekt — of de bluetooth van je auto wegvalt."
+          }
+        }
+      }
+    },
     "This drive and all its data will be permanently deleted." : {
       "comment" : "Delete drive confirmation message",
       "localizations" : {
@@ -5234,6 +5410,64 @@
         }
       }
     },
+    "When your car connects" : {
+      "comment" : "Onboarding automations intro row 1 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn dein Auto sich verbindet"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When your car connects"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand votre voiture se connecte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer je auto verbinding maakt"
+          }
+        }
+      }
+    },
+    "When your car disconnects" : {
+      "comment" : "Onboarding automations intro row 2 title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn dein Auto die Verbindung trennt"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When your car disconnects"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand votre voiture se déconnecte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer je auto de verbinding verbreekt"
+          }
+        }
+      }
+    },
     "Yesterday" : {
       "comment" : "Title of the section for drives from yesterday.",
       "isCommentAutoGenerated" : true,
@@ -5318,238 +5552,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je routes blijven op je apparaat. Locatie wordt alleen gebruikt om ritten op te nemen."
-          }
-        }
-      }
-    },
-    "Record drives hands-free when Bluetooth or CarPlay connects." : {
-      "comment" : "Subtitle of the automation setup panel on the home screen",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zeichne Fahrten freihändig auf, wenn Bluetooth oder CarPlay sich verbindet."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Record drives hands-free when Bluetooth or CarPlay connects."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enregistrez des trajets en mains libres dès que le Bluetooth ou CarPlay se connecte."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neem ritten handsfree op zodra bluetooth of CarPlay verbinding maakt."
-          }
-        }
-      }
-    },
-    "When your car connects" : {
-      "comment" : "Onboarding automations intro row 1 title",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wenn dein Auto sich verbindet"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "When your car connects"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quand votre voiture se connecte"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wanneer je auto verbinding maakt"
-          }
-        }
-      }
-    },
-    "When your car disconnects" : {
-      "comment" : "Onboarding automations intro row 2 title",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wenn dein Auto die Verbindung trennt"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "When your car disconnects"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quand votre voiture se déconnecte"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wanneer je auto de verbinding verbreekt"
-          }
-        }
-      }
-    },
-    "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)" : {
-      "comment" : "Onboarding automation start step 4",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle **CarPlay** → **Wird verbunden** (oder **Bluetooth** → dein Auto)"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose **CarPlay** → **Connects** (or **Bluetooth** → your car)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisissez **CarPlay** → **Se connecte** (ou **Bluetooth** → votre voiture)"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kies **CarPlay** → **Maakt verbinding** (of **Bluetooth** → je auto)"
-          }
-        }
-      }
-    },
-    "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)" : {
-      "comment" : "Onboarding automation finish step 4",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle **CarPlay** → **Wird getrennt** (oder **Bluetooth** → dein Auto)"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose **CarPlay** → **Disconnects** (or **Bluetooth** → your car)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisissez **CarPlay** → **Se déconnecte** (ou **Bluetooth** → votre voiture)"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kies **CarPlay** → **Verbreekt verbinding** (of **Bluetooth** → je auto)"
-          }
-        }
-      }
-    },
-    "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth." : {
-      "comment" : "Onboarding automations intro screen body",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Für wirklich freihändige Aufzeichnung richte zwei Automationen in der App „Kurzbefehle“ ein. Sie starten und stoppen Driveline, sobald sich dein iPhone mit deinem Auto verbindet — über CarPlay oder Bluetooth."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "For truly hands-free recording, set up two automations in the Shortcuts app. They start and stop Driveline the moment your iPhone connects to your car — over CarPlay or Bluetooth."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pour un enregistrement vraiment mains libres, configurez deux automatisations dans l'app Raccourcis. Elles démarrent et arrêtent Driveline dès que votre iPhone se connecte à votre voiture — via CarPlay ou Bluetooth."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voor echt handsfree opnemen stel je twee automatiseringen in de app Opdrachten in. Ze starten en stoppen Driveline zodra je iPhone verbinding maakt met je auto — via CarPlay of bluetooth."
-          }
-        }
-      }
-    },
-    "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs." : {
-      "comment" : "Onboarding automation start screen body",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Automation startet die Aufzeichnung, sobald CarPlay sich verbindet — oder das Bluetooth deines Autos koppelt."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This automation starts recording the moment CarPlay connects — or your car's Bluetooth pairs."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette automatisation démarre l'enregistrement dès que CarPlay se connecte — ou que le Bluetooth de votre voiture s'appaire."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deze automatisering start de opname zodra CarPlay verbinding maakt — of de bluetooth van je auto koppelt."
-          }
-        }
-      }
-    },
-    "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops." : {
-      "comment" : "Onboarding automation finish screen body",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Automation stoppt und speichert deine Fahrt, sobald CarPlay die Verbindung trennt — oder das Bluetooth deines Autos abbricht."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This automation stops and saves your drive the moment CarPlay disconnects — or your car's Bluetooth drops."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette automatisation arrête et enregistre votre trajet dès que CarPlay se déconnecte — ou que le Bluetooth de votre voiture se coupe."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deze automatisering stopt en bewaart je rit zodra CarPlay de verbinding verbreekt — of de bluetooth van je auto wegvalt."
           }
         }
       }

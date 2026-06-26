@@ -17,31 +17,20 @@ struct AutomationSetupFlowView: View {
 
   @State private var step: Step = .intro
   let onComplete: () -> Void
-  let onCancel: () -> Void
 
   // MARK: - Body
 
   var body: some View {
-    ZStack(alignment: .topTrailing) {
-      Group {
-        switch step {
-        case .intro:
-          OnboardingAutomationsIntroView { step = .start }
-        case .start:
-          OnboardingAutomationDetailView(kind: .start) { step = .finish }
-        case .finish:
-          OnboardingAutomationDetailView(kind: .finish, finishTitle: OnboardingPresenter.doneAction, onNext: onComplete)
-        }
+    Group {
+      switch step {
+      case .intro:
+        OnboardingAutomationsIntroView { step = .start }
+      case .start:
+        OnboardingAutomationDetailView(kind: .start) { step = .finish }
+      case .finish:
+        OnboardingAutomationDetailView(kind: .finish, finishTitle: OnboardingPresenter.doneAction, onNext: onComplete)
       }
-      .animation(.easeInOut(duration: 0.3), value: step)
-
-      Button(action: onCancel) {
-        Image(systemName: "xmark.circle.fill")
-          .font(.title2)
-          .foregroundStyle(.secondary, .quaternary)
-      }
-      .padding()
-      .accessibilityLabel(String(localized: "Close", comment: "Close button to dismiss the automation setup flow"))
     }
+    .animation(.easeInOut(duration: 0.3), value: step)
   }
 }

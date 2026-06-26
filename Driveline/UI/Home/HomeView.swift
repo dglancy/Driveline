@@ -388,7 +388,7 @@ private struct LocationPrimerModifier: ViewModifier {
           isPresented = false
           onStartDrive()
         },
-        onCancel: { isPresented = false }
+        onDismiss: { isPresented = false }
       )
       .environment(locationService)
     }
@@ -410,8 +410,7 @@ private struct AutomationSetupModifier: ViewModifier {
           prefs.setHasSeenAutomationSetup(true)
           hasSeenAutomationSetup = true
           isPresented = false
-        },
-        onCancel: { isPresented = false }
+        }
       )
     }
   }

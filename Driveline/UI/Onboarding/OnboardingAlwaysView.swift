@@ -14,7 +14,9 @@ struct OnboardingAlwaysView: View {
 
   @Environment(LocationService.self) private var locationService
   @Environment(\.openURL) private var openURL
+  @State private var hasRequestedAlways = false
   let onNext: () -> Void
+  let onDismiss: () -> Void
 
   // MARK: - Computed Properties
 
@@ -25,6 +27,7 @@ struct OnboardingAlwaysView: View {
   private var isDenied: Bool {
     locationService.authorizationStatus == .denied
     || locationService.authorizationStatus == .restricted
+    || (hasRequestedAlways && !isGranted)
   }
 
   // MARK: - Body
@@ -112,11 +115,17 @@ struct OnboardingAlwaysView: View {
             openURL(url)
           }
         }
+        Button(OnboardingPresenter.closeAction, action: onDismiss)
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
       }
     } else {
       OnboardingPrimaryButton(
         title: isGranted ? OnboardingPresenter.continueAction : OnboardingPresenter.enableBackgroundLocation,
-        action: isGranted ? onNext : { locationService.requestAlwaysAuthorization() }
+        action: isGranted ? onNext : {
+          hasRequestedAlways = true
+          locationService.requestAlwaysAuthorization()
+        }
       )
     }
   }

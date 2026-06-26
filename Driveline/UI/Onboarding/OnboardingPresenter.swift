@@ -58,7 +58,7 @@ enum OnboardingPresenter {
   }
 
   static var allowLocationAccess: String {
-    String(localized: "Allow Location Access", comment: "Onboarding location primer button — not yet granted")
+    String(localized: "Continue", comment: "Onboarding location primer button — not yet granted")
   }
 
   static var locationGrantedLabel: String {
@@ -92,7 +92,7 @@ enum OnboardingPresenter {
   }
 
   static var enableBackgroundLocation: String {
-    String(localized: "Enable Background Location", comment: "Onboarding Always-location primer button — not yet granted")
+    String(localized: "Continue", comment: "Onboarding Always-location primer button — not yet granted")
   }
 
   static var alwaysGrantedLabel: String {
@@ -227,6 +227,10 @@ enum OnboardingPresenter {
 
   static var openSettingsAction: String {
     String(localized: "Open Settings", comment: "Button shown when location permission is denied — opens iOS Settings")
+  }
+
+  static var closeAction: String {
+    String(localized: "Close", comment: "Button to dismiss the location permission flow when access is denied")
   }
 
   static var locationDeniedBody: String {

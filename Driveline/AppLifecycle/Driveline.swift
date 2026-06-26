@@ -53,12 +53,13 @@ struct Driveline: App {
         .environment(locationService)
         .environment(driveService)
         .environment(spotlightIndexingService)
-        .fullScreenCover(isPresented: $isOnboardingPresented) {
+        .sheet(isPresented: $isOnboardingPresented) {
           OnboardingWelcomeView {
             var prefs = UserPreferences()
             prefs.setHasSeenWelcome(true)
             isOnboardingPresented = false
           }
+          .interactiveDismissDisabled()
         }
         .onChange(of: isOnboardingPresented, initial: true) { _, isPresented in
           RecordButtonTip.isOnboardingPresented = isPresented
