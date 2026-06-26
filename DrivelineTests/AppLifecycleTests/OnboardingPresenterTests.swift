@@ -120,4 +120,8 @@ struct OnboardingPresenterTests {
   @Test func enableBackgroundLocationButtonIsNeutral() {
     #expect(OnboardingPresenter.enableBackgroundLocation == "Continue")
   }
+
+  @Test func closeActionIsNonEmpty() {
+    #expect(!OnboardingPresenter.closeAction.isEmpty)
+  }
 }

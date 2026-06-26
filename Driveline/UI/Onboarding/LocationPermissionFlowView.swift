@@ -20,12 +20,14 @@ struct LocationPermissionFlowView: View {
 
   @State private var step: Step
   let onComplete: () -> Void
+  let onDismiss: () -> Void
 
   // MARK: - Lifecycle
 
-  init(initialStatus: CLAuthorizationStatus, onComplete: @escaping () -> Void) {
+  init(initialStatus: CLAuthorizationStatus, onComplete: @escaping () -> Void, onDismiss: @escaping () -> Void) {
     _step = State(initialValue: initialStatus == .authorizedWhenInUse ? .always : .whenInUse)
     self.onComplete = onComplete
+    self.onDismiss = onDismiss
   }
 
   // MARK: - Body
@@ -34,9 +36,9 @@ struct LocationPermissionFlowView: View {
     Group {
       switch step {
       case .whenInUse:
-        OnboardingLocationView { step = .always }
+        OnboardingLocationView(onNext: { step = .always }, onDismiss: onDismiss)
       case .always:
-        OnboardingAlwaysView(onNext: onComplete)
+        OnboardingAlwaysView(onNext: onComplete, onDismiss: onDismiss)
       }
     }
     .animation(.easeInOut(duration: 0.3), value: step)

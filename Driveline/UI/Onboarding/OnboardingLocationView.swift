@@ -15,6 +15,7 @@ struct OnboardingLocationView: View {
   @Environment(LocationService.self) private var locationService
   @Environment(\.openURL) private var openURL
   let onNext: () -> Void
+  let onDismiss: () -> Void
 
   // MARK: - Computed Properties
 
@@ -97,6 +98,9 @@ struct OnboardingLocationView: View {
             openURL(url)
           }
         }
+        Button(OnboardingPresenter.closeAction, action: onDismiss)
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
       }
     } else {
       OnboardingPrimaryButton(

@@ -229,6 +229,10 @@ enum OnboardingPresenter {
     String(localized: "Open Settings", comment: "Button shown when location permission is denied — opens iOS Settings")
   }
 
+  static var closeAction: String {
+    String(localized: "Close", comment: "Button to dismiss the location permission flow when access is denied")
+  }
+
   static var locationDeniedBody: String {
     String(localized: "Location access was denied. Open Settings to enable it.", comment: "Explanation shown on location permission screen when access is denied")
   }

@@ -1110,8 +1110,7 @@
       }
     },
     "Close" : {
-      "comment" : "Close button to dismiss the automation setup flow",
-      "extractionState" : "stale",
+      "comment" : "Button to dismiss the location permission flow when access is denied",
       "localizations" : {
         "de" : {
           "stringUnit" : {
