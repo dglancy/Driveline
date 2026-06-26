@@ -1111,6 +1111,7 @@
     },
     "Close" : {
       "comment" : "Close button to dismiss the automation setup flow",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

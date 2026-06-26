@@ -409,8 +409,7 @@ private struct AutomationSetupModifier: ViewModifier {
           prefs.setHasSeenAutomationSetup(true)
           hasSeenAutomationSetup = true
           isPresented = false
-        },
-        onCancel: { isPresented = false }
+        }
       )
     }
   }
