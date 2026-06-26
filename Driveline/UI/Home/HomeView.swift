@@ -387,8 +387,7 @@ private struct LocationPrimerModifier: ViewModifier {
         onComplete: {
           isPresented = false
           onStartDrive()
-        },
-        onCancel: { isPresented = false }
+        }
       )
       .environment(locationService)
     }

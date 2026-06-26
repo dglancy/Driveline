@@ -112,4 +112,12 @@ struct OnboardingPresenterTests {
     #expect(OnboardingPresenter.automationFinishTitle.contains("\u{201C}"))
     #expect(OnboardingPresenter.automationFinishTitle.contains("\u{201D}"))
   }
+
+  @Test func allowLocationAccessButtonIsNeutral() {
+    #expect(OnboardingPresenter.allowLocationAccess == "Continue")
+  }
+
+  @Test func enableBackgroundLocationButtonIsNeutral() {
+    #expect(OnboardingPresenter.enableBackgroundLocation == "Continue")
+  }
 }
