@@ -36,11 +36,21 @@ struct LocationPermissionFlowView: View {
     Group {
       switch step {
       case .whenInUse:
-        OnboardingLocationView(onNext: { step = .always }, onDismiss: onDismiss)
+        OnboardingLocationView(onNext: advanceToAlways, onDismiss: onDismiss)
       case .always:
         OnboardingAlwaysView(onNext: onComplete, onDismiss: onDismiss)
       }
     }
     .animation(.easeInOut(duration: 0.3), value: step)
+  }
+
+  // MARK: - Private
+
+  private func advanceToAlways() {
+    if locationService.authorizationStatus == .authorizedAlways {
+      onComplete()
+    } else {
+      step = .always
+    }
   }
 }
