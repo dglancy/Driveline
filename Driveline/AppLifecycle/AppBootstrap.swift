@@ -9,6 +9,7 @@ import BackgroundTasks
 import Foundation
 import SwiftData
 import TipKit
+import UIKit
 
 @MainActor
 enum AppBootstrap {
@@ -131,6 +132,7 @@ enum AppBootstrap {
   }
 
   private static func registerIntentDependencies(driveService: DriveRecordingService) {
+    guard RecordingAvailability.isSupported(UIDevice.current.userInterfaceIdiom) else { return }
     Log.lifecycle.info("Registering dependencies for App Intents")
     IntentDependencyResolver.provider = { driveService }
   }
