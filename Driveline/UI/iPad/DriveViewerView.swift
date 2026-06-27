@@ -131,7 +131,7 @@ private struct DriveBottomPanel: View {
       }
       .frame(maxWidth: .infinity)
       .frame(height: displayHeight, alignment: .top)
-      .background(.regularMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
+      .background(.ultraThinMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
       .onAppear {
         if currentHeight == 0 {
