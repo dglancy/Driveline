@@ -112,7 +112,9 @@ private struct DriveBottomPanel: View {
   @Binding var isPresented: Bool
 
   @AppStorage("iPadInfoPanelDetent") private var detent: Detent = .medium
-  @State private var dragOffset: CGFloat = 0
+  @State private var currentHeight: CGFloat = 0
+  @State private var dragStartHeight: CGFloat = 0
+  @State private var isDragging = false
 
   private enum Detent: String { case collapsed, medium, expanded }
 
@@ -120,17 +122,22 @@ private struct DriveBottomPanel: View {
 
   var body: some View {
     GeometryReader { geo in
-      let base = targetHeight(for: detent, in: geo.size.height)
-      let height = max(60, base - dragOffset)
+      let availableHeight = geo.size.height
+      let displayHeight = max(60, currentHeight > 0 ? currentHeight : targetHeight(for: detent, in: availableHeight))
 
       VStack(spacing: 0) {
-        handle
+        handle(availableHeight: availableHeight)
         DriveInfoPanel(state: state)
       }
       .frame(maxWidth: .infinity)
-      .frame(height: height, alignment: .top)
+      .frame(height: displayHeight, alignment: .top)
       .background(.regularMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+      .onAppear {
+        if currentHeight == 0 {
+          currentHeight = targetHeight(for: detent, in: availableHeight)
+        }
+      }
     }
   }
 
@@ -144,7 +151,16 @@ private struct DriveBottomPanel: View {
     }
   }
 
-  private var handle: some View {
+  private func nearestDetent(for height: CGFloat, in availableHeight: CGFloat) -> Detent {
+    let options: [(Detent, CGFloat)] = [
+      (.collapsed, targetHeight(for: .collapsed, in: availableHeight)),
+      (.medium, targetHeight(for: .medium, in: availableHeight)),
+      (.expanded, targetHeight(for: .expanded, in: availableHeight))
+    ]
+    return options.min(by: { abs($0.1 - height) < abs($1.1 - height) })?.0 ?? .medium
+  }
+
+  private func handle(availableHeight: CGFloat) -> some View {
     Capsule()
       .fill(Color.secondary.opacity(0.5))
       .frame(width: 36, height: 5)
@@ -154,29 +170,26 @@ private struct DriveBottomPanel: View {
       .gesture(
         DragGesture(minimumDistance: 5)
           .onChanged { value in
-            dragOffset = value.translation.height
+            if !isDragging {
+              isDragging = true
+              dragStartHeight = currentHeight
+            }
+            currentHeight = max(60, dragStartHeight - value.translation.height)
           }
           .onEnded { value in
-            let predicted = value.predictedEndTranslation.height
-            let prior = detent
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-              dragOffset = 0
-              if predicted > 120 {
-                switch prior {
-                case .expanded: detent = .medium
-                case .medium: detent = .collapsed
-                case .collapsed: break
-                }
-              } else if predicted < -120 {
-                switch prior {
-                case .collapsed: detent = .medium
-                case .medium: detent = .expanded
-                case .expanded: break
-                }
+            isDragging = false
+            let predictedTranslation = value.predictedEndTranslation.height
+            if detent == .collapsed && predictedTranslation > 120 {
+              withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                isPresented = false
               }
+              return
             }
-            if predicted > 120, prior == .collapsed {
-              isPresented = false
+            let predictedHeight = max(60, dragStartHeight - predictedTranslation)
+            let newDetent = nearestDetent(for: predictedHeight, in: availableHeight)
+            detent = newDetent
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+              currentHeight = targetHeight(for: newDetent, in: availableHeight)
             }
           }
       )
