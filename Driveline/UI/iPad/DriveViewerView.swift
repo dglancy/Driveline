@@ -13,9 +13,10 @@ struct DriveViewerView: View {
 
   // MARK: - Properties
 
+  @Binding private var columnVisibility: NavigationSplitViewVisibility
+
   @State private var driveState: DriveDetailState
   @State private var isInspectorPresented: Bool = true
-  @State private var showingFullScreenMap: Bool = false
   @State private var showingDeleteConfirmation: Bool = false
   @State private var showingEditDrive: Bool = false
   @State private var showingMoreMenu: Bool = false
@@ -26,36 +27,35 @@ struct DriveViewerView: View {
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, modelContainer: ModelContainer) {
+  init(drive: Drive, modelContainer: ModelContainer, columnVisibility: Binding<NavigationSplitViewVisibility>) {
     _driveState = State(initialValue: DriveDetailState(drive: drive, modelContainer: modelContainer))
+    _columnVisibility = columnVisibility
   }
 
   // MARK: - Body
 
   var body: some View {
     NavigationStack {
-      Map(position: $driveState.cameraPosition, interactionModes: .all) {
-        DriveMapContent(segments: driveState.coordinateSegments)
+      ZStack(alignment: .bottom) {
+        Map(position: $driveState.cameraPosition, interactionModes: .all) {
+          DriveMapContent(segments: driveState.coordinateSegments)
+        }
+        .mapStyle(.standard(emphasis: .muted))
+        .ignoresSafeArea()
+        .accessibilityLabel(Text(DriveDetailPresenter(drive: driveState.drive).routeAccessibilityLabel))
+        .task { await driveState.loadRoute() }
+
+        if isInspectorPresented {
+          DriveBottomPanel(state: driveState, isPresented: $isInspectorPresented)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+        }
       }
-      .mapStyle(.standard(emphasis: .muted))
-      .ignoresSafeArea()
-      .accessibilityLabel(Text(DriveDetailPresenter(drive: driveState.drive).routeAccessibilityLabel))
-      .task { await driveState.loadRoute() }
+      .animation(.spring(response: 0.3, dampingFraction: 0.85), value: isInspectorPresented)
       .toolbar {
         DriveViewerToolbar(
           isInspectorPresented: $isInspectorPresented,
-          showingFullScreenMap: $showingFullScreenMap,
           showingMoreMenu: $showingMoreMenu,
           driveState: driveState
-        )
-      }
-      .inspector(isPresented: $isInspectorPresented) {
-        DriveInfoPanel(state: driveState)
-      }
-      .navigationDestination(isPresented: $showingFullScreenMap) {
-        FullScreenMapView(
-          drive: driveState.drive,
-          modelContainer: driveState.drive.modelContext?.container ?? modelContext.container
         )
       }
       .alert(
@@ -69,11 +69,6 @@ struct DriveViewerView: View {
         Button.cancel()
       } message: {
         Text(String(localized: "This drive and all its data will be permanently deleted.", comment: "Delete drive confirmation message"))
-      }
-      .sheet(isPresented: $showingEditDrive) {
-        EditDriveView(drive: driveState.drive)
-          .presentationDetents([.medium, .large])
-          .presentationDragIndicator(.visible)
       }
       .confirmationDialog(
         String(localized: "Drive Options", comment: "More menu title"),
@@ -91,6 +86,11 @@ struct DriveViewerView: View {
     .sheet(item: $driveState.shareItem) { item in
       ActivityView(activityItems: [item.url])
     }
+    .sheet(isPresented: $showingEditDrive) {
+      EditDriveView(drive: driveState.drive)
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
     .alert(
       String(localized: "Couldn't Share Drive", comment: "Export failure alert title"),
       isPresented: $driveState.showingExportError
@@ -102,12 +102,92 @@ struct DriveViewerView: View {
   }
 }
 
+// MARK: - DriveBottomPanel
+
+private struct DriveBottomPanel: View {
+
+  // MARK: - Properties
+
+  let state: DriveDetailState
+  @Binding var isPresented: Bool
+
+  @State private var detent: Detent = .medium
+  @State private var dragOffset: CGFloat = 0
+
+  private enum Detent { case collapsed, medium, expanded }
+
+  // MARK: - Body
+
+  var body: some View {
+    GeometryReader { geo in
+      let base = targetHeight(for: detent, in: geo.size.height)
+      let height = max(60, base - dragOffset)
+
+      VStack(spacing: 0) {
+        handle
+        DriveInfoPanel(state: state)
+      }
+      .frame(maxWidth: .infinity)
+      .frame(height: height, alignment: .top)
+      .background(.regularMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+    }
+  }
+
+  // MARK: - Private
+
+  private func targetHeight(for detent: Detent, in availableHeight: CGFloat) -> CGFloat {
+    switch detent {
+    case .collapsed: return 80
+    case .medium: return availableHeight * 0.45
+    case .expanded: return availableHeight * 0.88
+    }
+  }
+
+  private var handle: some View {
+    Capsule()
+      .fill(Color.secondary.opacity(0.5))
+      .frame(width: 36, height: 5)
+      .padding(.vertical, 8)
+      .frame(maxWidth: .infinity)
+      .contentShape(Rectangle())
+      .gesture(
+        DragGesture(minimumDistance: 5)
+          .onChanged { value in
+            dragOffset = value.translation.height
+          }
+          .onEnded { value in
+            let predicted = value.predictedEndTranslation.height
+            let prior = detent
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+              dragOffset = 0
+              if predicted > 120 {
+                switch prior {
+                case .expanded: detent = .medium
+                case .medium: detent = .collapsed
+                case .collapsed: break
+                }
+              } else if predicted < -120 {
+                switch prior {
+                case .collapsed: detent = .medium
+                case .medium: detent = .expanded
+                case .expanded: break
+                }
+              }
+            }
+            if predicted > 120, prior == .collapsed {
+              isPresented = false
+            }
+          }
+      )
+  }
+}
+
 // MARK: - DriveViewerToolbar
 
 private struct DriveViewerToolbar: ToolbarContent {
 
   @Binding var isInspectorPresented: Bool
-  @Binding var showingFullScreenMap: Bool
   @Binding var showingMoreMenu: Bool
   let driveState: DriveDetailState
 
@@ -141,20 +221,11 @@ private struct DriveViewerToolbar: ToolbarContent {
 
     ToolbarItem(placement: .topBarTrailing) {
       Button {
-        showingFullScreenMap = true
-      } label: {
-        Image(systemName: Icons.Options.viewfinder)
-      }
-      .accessibilityLabel(String(localized: "Full screen map", comment: "Full screen map button accessibility label"))
-    }
-
-    ToolbarItem(placement: .topBarTrailing) {
-      Button {
         isInspectorPresented.toggle()
       } label: {
-        Image(systemName: "sidebar.right")
+        Image(systemName: "info.circle")
       }
-      .accessibilityLabel(String(localized: "Toggle drive info panel", comment: "Inspector toggle button accessibility label"))
+      .accessibilityLabel(String(localized: "Toggle drive info panel", comment: "Info panel toggle button accessibility label"))
     }
   }
 }

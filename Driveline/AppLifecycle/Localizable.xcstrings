@@ -2539,7 +2539,7 @@
       }
     },
     "Full screen map" : {
-      "comment" : "Accessibility label for the button that opens the full screen map on the drive detail screen\nFull screen map button accessibility label",
+      "comment" : "Accessibility label for the button that opens the full screen map on the drive detail screen",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5070,7 +5070,7 @@
       }
     },
     "Toggle drive info panel" : {
-      "comment" : "Inspector toggle button accessibility label"
+      "comment" : "Info panel toggle button accessibility label"
     },
     "Top Speed" : {
       "comment" : "Metadata row",

@@ -20,6 +20,7 @@ struct DrivesSplitView: View {
   @State private var searchText: String = ""
   @State private var statsScope: StatsScope = .last30Days
   @State private var managementState = DriveManagementState()
+  @State private var columnVisibility: NavigationSplitViewVisibility = .all
 
   @Environment(SpotlightIndexingService.self) private var spotlightIndexingService
   @Environment(\.modelContext) private var modelContext
@@ -55,7 +56,7 @@ struct DrivesSplitView: View {
   // MARK: - Private Views
 
   private var splitView: some View {
-    NavigationSplitView {
+    NavigationSplitView(columnVisibility: $columnVisibility) {
       ZStack(alignment: .bottom) {
         sidebarContent
           .searchable(text: $searchText, prompt: String(localized: "Search", comment: "Search field prompt"))
@@ -102,7 +103,7 @@ struct DrivesSplitView: View {
       }
     } detail: {
       if let drive = selectedDrive {
-        DriveViewerView(drive: drive, modelContainer: modelContext.container)
+        DriveViewerView(drive: drive, modelContainer: modelContext.container, columnVisibility: $columnVisibility)
           .id(drive.id)
       } else {
         DriveViewerPlaceholderView()
