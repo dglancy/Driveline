@@ -19,7 +19,6 @@ struct DriveViewerView: View {
   @AppStorage("iPadInfoPanelVisible") private var isInspectorPresented: Bool = true
   @State private var showingDeleteConfirmation: Bool = false
   @State private var showingEditDrive: Bool = false
-  @State private var showingMoreMenu: Bool = false
 
   @Environment(SpotlightIndexingService.self) private var spotlightIndexingService
   @Environment(\.modelContext) private var modelContext
@@ -54,7 +53,8 @@ struct DriveViewerView: View {
       .toolbar {
         DriveViewerToolbar(
           isInspectorPresented: $isInspectorPresented,
-          showingMoreMenu: $showingMoreMenu,
+          showingEditDrive: $showingEditDrive,
+          showingDeleteConfirmation: $showingDeleteConfirmation,
           driveState: driveState
         )
       }
@@ -69,18 +69,6 @@ struct DriveViewerView: View {
         Button.cancel()
       } message: {
         Text(String(localized: "This drive and all its data will be permanently deleted.", comment: "Delete drive confirmation message"))
-      }
-      .confirmationDialog(
-        String(localized: "Drive Options", comment: "More menu title"),
-        isPresented: $showingMoreMenu
-      ) {
-        Button(String(localized: "Edit Drive Details", comment: "More menu action")) {
-          showingEditDrive = true
-        }
-        Button(String(localized: "Delete Drive", comment: "More menu action"), role: .destructive) {
-          showingDeleteConfirmation = true
-        }
-        Button.cancel()
       }
     }
     .sheet(item: $driveState.shareItem) { item in
@@ -131,7 +119,7 @@ private struct DriveBottomPanel: View {
       }
       .frame(maxWidth: .infinity)
       .frame(height: displayHeight, alignment: .top)
-      .background(.ultraThinMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
+      .background(.regularMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
       .onAppear {
         if currentHeight == 0 {
@@ -201,7 +189,8 @@ private struct DriveBottomPanel: View {
 private struct DriveViewerToolbar: ToolbarContent {
 
   @Binding var isInspectorPresented: Bool
-  @Binding var showingMoreMenu: Bool
+  @Binding var showingEditDrive: Bool
+  @Binding var showingDeleteConfirmation: Bool
   let driveState: DriveDetailState
 
   var body: some ToolbarContent {
@@ -224,8 +213,13 @@ private struct DriveViewerToolbar: ToolbarContent {
     }
 
     ToolbarItem(placement: .topBarTrailing) {
-      Button {
-        showingMoreMenu = true
+      Menu {
+        Button(String(localized: "Edit Drive Details", comment: "More menu action")) {
+          showingEditDrive = true
+        }
+        Button(String(localized: "Delete Drive", comment: "More menu action"), role: .destructive) {
+          showingDeleteConfirmation = true
+        }
       } label: {
         Image(systemName: Icons.Options.ellipsis)
       }
