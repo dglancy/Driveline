@@ -45,47 +45,48 @@ struct DrivesSplitView: View {
   // MARK: - Body
 
   var body: some View {
+    if drives.isEmpty {
+      IPadEmptyStateView()
+    } else {
+      splitView
+    }
+  }
+
+  // MARK: - Private Views
+
+  private var splitView: some View {
     NavigationSplitView {
       ZStack(alignment: .bottom) {
-        DriveListContent(
-          sections: sections,
-          managementState: managementState,
-          mode: .selectionDriven(selectedID: $selectedDriveID),
-          recentDriveCount: recentStats.driveCount,
-          activeStatsPresenter: activeStatsPresenter,
-          statsScopeLabel: HomePresenter.statsScopeLabel(statsScope),
-          isSearchActive: isSearchActive,
-          onStatsToggle: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
-        )
-        .searchable(text: $searchText, prompt: String(localized: "Search", comment: "Search field prompt"))
-        .navigationTitle(String(localized: "Drives", comment: "Navigation title for drives list"))
-        .toolbar { sidebarToolbar }
-        .alert(
-          String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
-          isPresented: $managementState.showingDeleteConfirmation
-        ) {
-          Button.delete {
-            let selected = managementState.selectedDrives(from: sections)
-            if let id = selectedDriveID, selected.contains(where: { $0.id == id }) {
-              selectedDriveID = nil
+        sidebarContent
+          .searchable(text: $searchText, prompt: String(localized: "Search", comment: "Search field prompt"))
+          .navigationTitle(String(localized: "Drives", comment: "Navigation title for drives list"))
+          .toolbar { sidebarToolbar }
+          .alert(
+            String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
+            isPresented: $managementState.showingDeleteConfirmation
+          ) {
+            Button.delete {
+              let selected = managementState.selectedDrives(from: sections)
+              if let id = selectedDriveID, selected.contains(where: { $0.id == id }) {
+                selectedDriveID = nil
+              }
+              managementState.exitSelectMode()
+              managementState.delete(selected, in: modelContext, deindexing: spotlightIndexingService)
             }
-            managementState.exitSelectMode()
-            managementState.delete(selected, in: modelContext, deindexing: spotlightIndexingService)
+            Button.cancel()
+          } message: {
+            Text(HomePresenter.deleteConfirmationMessage(managementState.selectedDriveIDs.count))
           }
-          Button.cancel()
-        } message: {
-          Text(HomePresenter.deleteConfirmationMessage(managementState.selectedDriveIDs.count))
-        }
-        .sheet(isPresented: $managementState.showingMergeSheet) {
-          if managementState.drivesToMerge.count == 2 {
-            MergeDrivesView(
-              drives: managementState.drivesToMerge,
-              modelContainer: modelContext.container,
-              spotlight: spotlightIndexingService,
-              onMerged: { managementState.exitSelectMode() }
-            )
+          .sheet(isPresented: $managementState.showingMergeSheet) {
+            if managementState.drivesToMerge.count == 2 {
+              MergeDrivesView(
+                drives: managementState.drivesToMerge,
+                modelContainer: modelContext.container,
+                spotlight: spotlightIndexingService,
+                onMerged: { managementState.exitSelectMode() }
+              )
+            }
           }
-        }
 
         if managementState.isSelectMode {
           SelectionToolbar(
@@ -111,6 +112,24 @@ struct DrivesSplitView: View {
       guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
             let uuid = UUID(uuidString: identifier) else { return }
       selectedDriveID = uuid
+    }
+  }
+
+  @ViewBuilder
+  private var sidebarContent: some View {
+    if isSearchActive && sections.isEmpty {
+      ContentUnavailableView.search
+    } else {
+      DriveListContent(
+        sections: sections,
+        managementState: managementState,
+        mode: .selectionDriven(selectedID: $selectedDriveID),
+        recentDriveCount: recentStats.driveCount,
+        activeStatsPresenter: activeStatsPresenter,
+        statsScopeLabel: HomePresenter.statsScopeLabel(statsScope),
+        isSearchActive: isSearchActive,
+        onStatsToggle: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
+      )
     }
   }
 
