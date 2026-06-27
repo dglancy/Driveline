@@ -16,7 +16,7 @@ struct DriveViewerView: View {
   @Binding private var columnVisibility: NavigationSplitViewVisibility
 
   @State private var driveState: DriveDetailState
-  @State private var isInspectorPresented: Bool = true
+  @AppStorage("iPadInfoPanelVisible") private var isInspectorPresented: Bool = true
   @State private var showingDeleteConfirmation: Bool = false
   @State private var showingEditDrive: Bool = false
   @State private var showingMoreMenu: Bool = false
@@ -111,10 +111,10 @@ private struct DriveBottomPanel: View {
   let state: DriveDetailState
   @Binding var isPresented: Bool
 
-  @State private var detent: Detent = .medium
+  @AppStorage("iPadInfoPanelDetent") private var detent: Detent = .medium
   @State private var dragOffset: CGFloat = 0
 
-  private enum Detent { case collapsed, medium, expanded }
+  private enum Detent: String { case collapsed, medium, expanded }
 
   // MARK: - Body
 
