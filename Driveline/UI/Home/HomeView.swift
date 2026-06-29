@@ -27,11 +27,7 @@ struct HomeView: View {
   @State private var navigationPath: NavigationPath = NavigationPath()
   @State private var searchText: String = ""
   @State private var statsScope: StatsScope = .last30Days
-  @State private var isSelectMode: Bool = false
-  @State private var selectedDriveIDs: Set<UUID> = []
-  @State private var drivesToMerge: [Drive] = []
-  @State private var showingDeleteConfirmation: Bool = false
-  @State private var showingMergeSheet: Bool = false
+  @State private var managementState = DriveManagementState()
   @State private var showingLocationPrimer: Bool = false
   @State private var showingAutomationSetup: Bool = false
   @State private var hasSeenAutomationSetup: Bool = UserPreferences().hasSeenAutomationSetup
@@ -48,8 +44,6 @@ struct HomeView: View {
   private var activeStatsPresenter: HomeStatsPresenter { HomeStatsPresenter(stats: activeStats) }
 
   private var isSearchActive: Bool { !searchText.isEmpty }
-  private var canMerge: Bool { selectedDriveIDs.count == 2 }
-  private var canDelete: Bool { !selectedDriveIDs.isEmpty }
 
   // MARK: - Body
 
@@ -61,10 +55,10 @@ struct HomeView: View {
         .searchDictationBehavior(.inline(activation: .onSelect))
         .toolbar {
           HomeToolbar(
-            isSelectMode: isSelectMode,
+            isSelectMode: managementState.isSelectMode,
             isSectionsEmpty: sections.isEmpty,
-            onExitSelectMode: exitSelectMode,
-            onEnterSelectMode: enterSelectMode,
+            onExitSelectMode: { managementState.exitSelectMode() },
+            onEnterSelectMode: { managementState.enterSelectMode() },
             onOpenSettings: {
               if let url = URL(string: UIApplication.openSettingsURLString) {
                 openURL(url)
@@ -74,7 +68,7 @@ struct HomeView: View {
           )
         }
         .onChange(of: driveService.isRecording, initial: true) { _, isRecording in
-          if isRecording { exitSelectMode() }
+          if isRecording { managementState.exitSelectMode() }
           StatsPanelTip.isRecording = isRecording
           RecordButtonTip.isRecording = isRecording
         }
@@ -100,24 +94,24 @@ struct HomeView: View {
     ))
     .alert(
       String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
-      isPresented: $showingDeleteConfirmation
+      isPresented: $managementState.showingDeleteConfirmation
     ) {
       Button.delete {
-        let selected = selectedDrives()
-        exitSelectMode()
-        deleteDrives(selected)
+        let selected = managementState.selectedDrives(from: sections)
+        managementState.exitSelectMode()
+        managementState.delete(selected, in: modelContext, deindexing: spotlightIndexingService)
       }
       Button.cancel()
     } message: {
-      Text(HomePresenter.deleteConfirmationMessage(selectedDriveIDs.count))
+      Text(HomePresenter.deleteConfirmationMessage(managementState.selectedDriveIDs.count))
     }
-    .sheet(isPresented: $showingMergeSheet) {
-      if drivesToMerge.count == 2 {
+    .sheet(isPresented: $managementState.showingMergeSheet) {
+      if managementState.drivesToMerge.count == 2 {
         MergeDrivesView(
-          drives: drivesToMerge,
+          drives: managementState.drivesToMerge,
           modelContainer: modelContext.container,
           spotlight: spotlightIndexingService,
-          onMerged: { exitSelectMode() }
+          onMerged: { managementState.exitSelectMode() }
         )
       }
     }
@@ -153,78 +147,31 @@ struct HomeView: View {
 
   private var driveList: some View {
     ZStack(alignment: .bottom) {
-      List {
-        if recentStats.driveCount > 0 && !isSelectMode && !isSearchActive {
-          Section {
-            HomeStatsPanelView(
-              driveCount: activeStatsPresenter.driveCount,
-              distanceValue: activeStatsPresenter.distanceValue,
-              distanceUnit: activeStatsPresenter.distanceUnit,
-              scopeLabel: HomePresenter.statsScopeLabel(statsScope),
-              onTap: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
-            )
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .popoverTip(StatsPanelTip())
-          }
-          .listSectionSpacing(8)
-        }
-
-        if !hasSeenAutomationSetup && !isSelectMode && !isSearchActive
-            && (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) {
-          Section {
-            HomeAutomationSetupPanelView { showingAutomationSetup = true }
-              .listRowInsets(EdgeInsets())
-              .listRowBackground(Color.clear)
-              .listRowSeparator(.hidden)
-          }
-          .listSectionSpacing(8)
-        }
-
-        ForEach(sections) { section in
-          Section(section.title) {
-            ForEach(Array(section.rows.enumerated()), id: \.element.id) { index, row in
-              if isSelectMode {
-                Button {
-                  toggleSelection(for: row.drive.id)
-                } label: {
-                  DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: selectedDriveIDs.contains(row.drive.id)))
-                }
-                .buttonStyle(.plain)
-              } else {
-                NavigationLink(value: row.drive) {
-                  DriveRowView(drive: row.drive, display: row.display)
-                }.accessibilityIdentifier("Drive row \(index)")
-              }
-            }
-            .onDelete(perform: isSelectMode ? nil : { indexSet in
-              deleteDrives(at: indexSet, in: section)
-            })
-          }
-        }
-
-        if isSelectMode {
-          Color.clear
-            .frame(height: 70)
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-        }
-      }
-      .contentMargins(.top, 0, for: .scrollContent)
+      DriveListContent(
+        sections: sections,
+        managementState: managementState,
+        mode: .pushNavigation,
+        recentDriveCount: recentStats.driveCount,
+        activeStatsPresenter: activeStatsPresenter,
+        statsScopeLabel: HomePresenter.statsScopeLabel(statsScope),
+        isSearchActive: isSearchActive,
+        onStatsToggle: { statsScope = statsScope == .last30Days ? .allTime : .last30Days },
+        showAutomationBanner: !hasSeenAutomationSetup && (!Driveline.isUITesting() || Driveline.isOnboardingTesting()),
+        onShowAutomation: { showingAutomationSetup = true }
+      )
       .navigationDestination(for: Drive.self) { drive in
         DriveDetailView(drive: drive, modelContainer: modelContext.container)
       }
 
-      if isSelectMode {
+      if managementState.isSelectMode {
         SelectionToolbar(
-          canMerge: canMerge,
-          canDelete: canDelete,
-          selectionCountText: HomePresenter.selectionCountText(selectedDriveIDs.count)
+          canMerge: managementState.canMerge,
+          canDelete: managementState.canDelete,
+          selectionCountText: HomePresenter.selectionCountText(managementState.selectedDriveIDs.count)
         ) {
-          triggerMerge()
+          managementState.triggerMerge(from: sections)
         } onDelete: {
-          showingDeleteConfirmation = true
+          managementState.showingDeleteConfirmation = true
         }
       }
     }
@@ -246,41 +193,6 @@ struct HomeView: View {
 
   private func startDrive(trigger: Drive.RecordingTrigger = .manual) {
     driveService.startDrive(trigger: trigger)
-  }
-
-  private func enterSelectMode() {
-    isSelectMode = true
-    selectedDriveIDs = []
-  }
-
-  private func exitSelectMode() {
-    isSelectMode = false
-    selectedDriveIDs = []
-  }
-
-  private func triggerMerge() {
-    drivesToMerge = selectedDrives().sorted { $0.startedAt < $1.startedAt }
-    showingMergeSheet = true
-  }
-
-  private func toggleSelection(for id: UUID) {
-    if selectedDriveIDs.contains(id) {
-      selectedDriveIDs.remove(id)
-    } else {
-      selectedDriveIDs.insert(id)
-    }
-  }
-
-  private func selectedDrives() -> [Drive] {
-    sections.flatMap(\.rows).map(\.drive).filter { selectedDriveIDs.contains($0.id) }
-  }
-
-  private func deleteDrives(_ drives: [Drive]) {
-    DriveDeletion.delete(drives, in: modelContext, deindexing: spotlightIndexingService)
-  }
-
-  private func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
-    deleteDrives(indexSet.map { section.rows[$0].drive })
   }
 
   private func openDrive(fromSpotlightIdentifier identifier: String) {

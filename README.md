@@ -5,7 +5,7 @@
 [![Build & Test](https://github.com/dglancy/Driveline/actions/workflows/ios.yml/badge.svg)](https://github.com/dglancy/Driveline/actions/workflows/ios.yml)
 [![CodeQL](https://github.com/dglancy/Driveline/actions/workflows/codeql.yml/badge.svg)](https://github.com/dglancy/Driveline/actions/workflows/codeql.yml)
 
-A lightweight iOS app that records your drives in the background, then produces exportable maps and GPX files from each one. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
+A lightweight iPhone and iPad app that records your drives in the background, then produces exportable maps and GPX files from each one. The idea is simple: connect to your car's Bluetooth and the drive starts recording automatically; disconnect and it stops. No fiddling with the phone.
 
 ## Background
 
@@ -16,6 +16,7 @@ Driveline grew out of a personal need. I run [Targa Trips](https://www.targatrip
 - **Automatic recording** via Apple Shortcuts and App Intents. You wire up start and stop actions to Bluetooth connect/disconnect automations in the Shortcuts app and Driveline handles the rest. CarPlay connection and disconnection events work just as well as a trigger.
 - **Route list** showing all your drives grouped by date, with start and end place names, distance, and duration at a glance.
 - **Route map** that plots the full drive with pinch-to-zoom once a route is finished.
+- **iPad layout** using a split-view sidebar for the drives list alongside a full-screen map viewer with a collapsible info panel. Panel visibility is remembered across sessions.
 - **Merge routes** to join two drives end-to-end into a single route, useful when you forget to start recording and pick it up partway through.
 - **GPX export** in standard format, compatible with Strava, Komoot, or any other mapping tool that accepts GPX files.
 - **PNG export** that renders a clean map snapshot with the route drawn on it, suitable for sharing.
@@ -55,7 +56,8 @@ Driveline/
 │       ├── Common/                  Shared views, buttons, map content, presenters used across screens
 │       ├── DriveDetail/             Drive detail and edit screens
 │       ├── FullScreenMap/           Full-screen map view
-│       ├── Home/                    Home/route list screen
+│       ├── Home/                    Home/route list screen (iPhone)
+│       ├── iPad/                    Split-view layout for iPad (sidebar + map viewer + info panel)
 │       ├── MergeDrives/             Merge drives screen
 │       ├── Onboarding/              First-launch onboarding flow (location permissions, automations setup)
 │       ├── Recording/               In-progress recording screen
@@ -86,7 +88,7 @@ Long-running background work (place name and weather backfill, drive category pr
 
 **Language and frameworks**
 - Swift 6.3 with strict concurrency throughout
-- SwiftUI on iOS 26+
+- SwiftUI on iOS 26+, with an adaptive iPad layout using `NavigationSplitView`
 - SwiftData for persistence (three model types: `Drive`, `Position`, and `Weather`)
 
 **Apple frameworks**
@@ -146,7 +148,7 @@ Run `./build-MLTrainingDataPrepTool.sh` from the repo root to build the tool and
 **Requirements**
 
 - Xcode 26 or later (the project targets iOS 26.0)
-- A physical iPhone for any testing that involves background location or Shortcuts automations. The simulator does not support background location in a meaningful way.
+- A physical iPhone or iPad for any testing that involves background location or Shortcuts automations. The simulator does not support background location in a meaningful way.
 
 **Steps**
 

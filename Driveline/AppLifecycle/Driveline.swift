@@ -49,23 +49,10 @@ struct Driveline: App {
 
   var body: some Scene {
     WindowGroup {
-      HomeView()
+      RootView(isOnboardingPresented: $isOnboardingPresented)
         .environment(locationService)
         .environment(driveService)
         .environment(spotlightIndexingService)
-        .sheet(isPresented: $isOnboardingPresented) {
-          OnboardingWelcomeView {
-            var prefs = UserPreferences()
-            prefs.setHasSeenWelcome(true)
-            isOnboardingPresented = false
-          }
-          .interactiveDismissDisabled()
-        }
-        .onChange(of: isOnboardingPresented, initial: true) { _, isPresented in
-          RecordButtonTip.isOnboardingPresented = isPresented
-          StatsPanelTip.isOnboardingPresented = isPresented
-          EditDriveTip.isOnboardingPresented = isPresented
-        }
         .onChange(of: scenePhase) {
           switch scenePhase {
           case .active:

@@ -16,11 +16,12 @@ struct DriveDetailMapView: View {
   let segments: [[CLLocationCoordinate2D]]
   @Binding var cameraPosition: MapCameraPosition
   let accessibilityLabel: String
+  var interactionModes: MapInteractionModes = []
 
   // MARK: - Body
 
   var body: some View {
-    Map(position: $cameraPosition, interactionModes: []) {
+    Map(position: $cameraPosition, interactionModes: interactionModes) {
       DriveMapContent(segments: segments)
     }
     .mapStyle(.standard(emphasis: .muted))
