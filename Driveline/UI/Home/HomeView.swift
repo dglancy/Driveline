@@ -154,7 +154,7 @@ struct HomeView: View {
   private var driveList: some View {
     ZStack(alignment: .bottom) {
       List {
-        if recentStats.driveCount > 0 && !isSelectMode && !isSearchActive {
+        if !drives.isEmpty && !isSelectMode && !isSearchActive {
           Section {
             HomeStatsPanelView(
               driveCount: activeStatsPresenter.driveCount,
