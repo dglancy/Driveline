@@ -15,17 +15,17 @@ final class MockWeatherFetchService: WeatherFetchServiceProtocol, @unchecked Sen
 
   // MARK: - Properties
 
-  private(set) var fetchedLocations: [CLLocation] = []
-  private(set) var fetchedDates: [Date] = []
-  var conditionDescription = "Sunny"
-  var symbolName = "sun.max.fill"
-  var temperatureCelsius = 18.0
-  var shouldThrow = false
-  var delay: Duration?
+  nonisolated(unsafe) private(set) var fetchedLocations: [CLLocation] = []
+  nonisolated(unsafe) private(set) var fetchedDates: [Date] = []
+  nonisolated(unsafe) var conditionDescription = "Sunny"
+  nonisolated(unsafe) var symbolName = "sun.max.fill"
+  nonisolated(unsafe) var temperatureCelsius = 18.0
+  nonisolated(unsafe) var shouldThrow = false
+  nonisolated(unsafe) var delay: Duration?
 
   // MARK: - WeatherFetchServiceProtocol
 
-  func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather {
+  nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather {
     fetchedLocations.append(location)
     if shouldThrow { throw URLError(.notConnectedToInternet) }
     return Weather(
@@ -36,7 +36,7 @@ final class MockWeatherFetchService: WeatherFetchServiceProtocol, @unchecked Sen
     )
   }
 
-  func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather {
+  nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather {
     fetchedLocations.append(location)
     fetchedDates.append(date)
     if let delay {
