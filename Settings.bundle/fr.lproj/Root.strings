@@ -30,3 +30,4 @@
 
 /* Recording */
 "Continue Drive If Recently Finished" = "Continuer le trajet si récemment terminé";
+"Automatically Merge Same-Day Drives" = "Fusionner automatiquement les trajets du même jour";

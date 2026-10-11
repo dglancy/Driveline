@@ -29,6 +29,7 @@ final class DriveRecordingService {
   @ObservationIgnored private let placeNameSweepService: PlaceNameSweepService
   @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService?
   @ObservationIgnored private let categoryPredictionSweepService: CategoryPredictionSweepService
+  @ObservationIgnored private let automaticMergeCoordinator: AutomaticDriveMergeCoordinator
   @ObservationIgnored private var userPreferences: UserPreferences
   @ObservationIgnored private var liveActivityCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
@@ -48,6 +49,7 @@ final class DriveRecordingService {
        placeNameSweepService: PlaceNameSweepService? = nil,
        spotlightIndexingService: SpotlightIndexingService? = nil,
        categoryPredictionSweepService: CategoryPredictionSweepService? = nil,
+       automaticMergeCoordinator: AutomaticDriveMergeCoordinator? = nil,
        userPreferences: UserPreferences = UserPreferences(),
        initialDrive: Drive? = nil) {
     self.modelContext = modelContext
@@ -57,7 +59,14 @@ final class DriveRecordingService {
     self.weatherService = weatherService
     self.placeNameSweepService = placeNameSweepService ?? PlaceNameSweepService(modelContainer: modelContext.container)
     self.spotlightIndexingService = spotlightIndexingService
-    self.categoryPredictionSweepService = categoryPredictionSweepService ?? CategoryPredictionSweepService(modelContainer: modelContext.container)
+    let categoryPredictionSweepService = categoryPredictionSweepService ?? CategoryPredictionSweepService(modelContainer: modelContext.container)
+    self.categoryPredictionSweepService = categoryPredictionSweepService
+    self.automaticMergeCoordinator = automaticMergeCoordinator ?? AutomaticDriveMergeCoordinator(
+      modelContainer: modelContext.container,
+      spotlightIndexingService: spotlightIndexingService,
+      categoryPredictionSweepService: categoryPredictionSweepService,
+      userPreferences: userPreferences
+    )
     self.userPreferences = userPreferences
     self.drive = initialDrive
   }
@@ -69,6 +78,7 @@ final class DriveRecordingService {
 
     if trigger == .automatic && userPreferences.continueDriveIfRecentlyFinished,
        let recentDrive = findRecentlyFinishedDrive() {
+      automaticMergeCoordinator.cancelPendingMerge(containing: recentDrive.startedAt)
       resumeDrive(recentDrive)
     } else {
       createNewDrive(trigger: trigger)
@@ -81,9 +91,11 @@ final class DriveRecordingService {
     startWeatherCancellable = nil
     locationService.stop()
 
+    var finishedDriveDate: Date?
     if let drive {
       drive.endedAt = Date()
       drive.status = .finished
+      finishedDriveDate = drive.startedAt
       locationDataRecorder.stopRecording()
       modelContext.saveChanges()
       fetchEndWeather(for: drive)
@@ -95,6 +107,12 @@ final class DriveRecordingService {
     self.drive = nil
 
     finishTasks.append(Task { await placeNameSweepService.sweep() })
+    if userPreferences.automaticallyMergeSameDayDrives, let finishedDriveDate {
+      automaticMergeCoordinator.requestMerge(
+        containing: finishedDriveDate,
+        deferred: userPreferences.continueDriveIfRecentlyFinished
+      )
+    }
 
     #if os(iOS)
     finishTasks.append(Task { await activityService.endActivity() })
@@ -158,7 +176,7 @@ final class DriveRecordingService {
   }
 
   private func findRecentlyFinishedDrive() -> Drive? {
-    let cutoff = Date().addingTimeInterval(Constants.Configuration.recentDriveCutoff)
+    let cutoff = Date().addingTimeInterval(-Constants.Configuration.recentDriveInterval)
     var descriptor = FetchDescriptor<Drive>(
       sortBy: [SortDescriptor(\Drive.endedAt, order: .reverse)]
     )

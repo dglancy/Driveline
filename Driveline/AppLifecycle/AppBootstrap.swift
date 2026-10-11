@@ -28,6 +28,12 @@ enum AppBootstrap {
     Task { await placeNameSweepService.configure(spotlightIndexingService: spotlightIndexingService) }
     let weatherSweepService = WeatherSweepService(modelContainer: modelContainer)
     let categoryPredictionSweepService = CategoryPredictionSweepService(modelContainer: modelContainer)
+    let automaticMergeCoordinator = AutomaticDriveMergeCoordinator(
+      modelContainer: modelContainer,
+      spotlightIndexingService: spotlightIndexingService,
+      categoryPredictionSweepService: categoryPredictionSweepService
+    )
+    Task { await automaticMergeCoordinator.restorePendingMerge() }
     let activeDrive = findActiveDrive(in: modelContainer.mainContext)
     let driveService = DriveRecordingService(
       modelContext: modelContainer.mainContext,
@@ -36,6 +42,7 @@ enum AppBootstrap {
       placeNameSweepService: placeNameSweepService,
       spotlightIndexingService: spotlightIndexingService,
       categoryPredictionSweepService: categoryPredictionSweepService,
+      automaticMergeCoordinator: automaticMergeCoordinator,
       initialDrive: activeDrive
     )
     

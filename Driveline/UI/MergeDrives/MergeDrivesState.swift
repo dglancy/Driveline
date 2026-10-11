@@ -42,7 +42,16 @@ final class MergeDrivesState {
     }
 
     let service = DriveMergeService(modelContainer: modelContainer)
-    let result = await service.merge(firstID: firstID, secondID: secondID, mergedName: mergedName) { fraction in
+    let context = ModelContext(modelContainer)
+    guard let first = fetchDrive(firstID, in: context), let second = fetchDrive(secondID, in: context) else {
+      continuation.finish()
+      await consumer.value
+      return
+    }
+    let result = await service.merge(
+      driveIDs: [first.persistentModelID, second.persistentModelID],
+      mergedName: mergedName
+    ) { fraction in
       continuation.yield(fraction)
     }
 
@@ -52,15 +61,14 @@ final class MergeDrivesState {
 
     guard let result else { return }
     await spotlight.deindexDrives(result.deletedIDs)
-    if let merged = fetchDrive(result.mergedID) {
+    if let merged = ModelContext(modelContainer).model(for: result.mergedID) as? Drive {
       await spotlight.indexDrive(merged)
     }
   }
 
   // MARK: - Private
 
-  private func fetchDrive(_ id: UUID) -> Drive? {
-    let context = ModelContext(modelContainer)
+  private func fetchDrive(_ id: UUID, in context: ModelContext) -> Drive? {
     let descriptor = FetchDescriptor<Drive>(predicate: #Predicate { $0.id == id })
     return try? context.fetch(descriptor).first
   }

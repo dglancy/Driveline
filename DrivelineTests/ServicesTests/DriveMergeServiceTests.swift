@@ -18,7 +18,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   @Test
   func mergeCreatesNewDriveWithCorrectName() async throws {
     let (first, second) = try makeDrivePair()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Long Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Long Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.name == "Long Trip")
   }
@@ -29,7 +29,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeUsesFirstDriveStartedAt() async throws {
     let start = Date(timeIntervalSinceReferenceDate: 1000)
     let (first, second) = try makeDrivePair(firstStartedAt: start)
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.startedAt == start)
   }
@@ -38,7 +38,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeUsesSecondDriveEndedAt() async throws {
     let end = Date(timeIntervalSinceReferenceDate: 5000)
     let (first, second) = try makeDrivePair(secondEndedAt: end)
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endedAt == end)
   }
@@ -47,7 +47,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeFallsBackToFirstEndedAtWhenSecondEndedAtIsNil() async throws {
     let end = Date(timeIntervalSinceReferenceDate: 3000)
     let (first, second) = try makeDrivePair(firstEndedAt: end, secondEndedAt: nil)
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endedAt == end)
   }
@@ -57,7 +57,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   @Test
   func mergeSetsStatusToFinished() async throws {
     let (first, second) = try makeDrivePair()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.status == .finished)
   }
@@ -78,7 +78,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     second.trigger = secondTrigger
     try context!.save()
 
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
 
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.trigger == .automatic)
@@ -88,7 +88,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeKeepsTriggerManualWhenBothDrivesAreManual() async throws {
     let (first, second) = try makeDrivePair()
 
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
 
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.trigger == .manual)
@@ -102,7 +102,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.startPlaceName = "Home"
     second.startPlaceName = "Café"
     try context!.save()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.startPlaceName == "Home")
   }
@@ -113,7 +113,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.endPlaceName = "Midpoint"
     second.endPlaceName = "Office"
     try context!.save()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endPlaceName == "Office")
   }
@@ -132,7 +132,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     second.positions = [makePosition(timestamp: t3), makePosition(timestamp: t4)]
     try context!.save()
 
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
 
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.orderedPositions.map(\.timestamp) == [t1, t2, t3, t4])
@@ -144,7 +144,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   func mergeReducesDriveCountByOne() async throws {
     let (first, second) = try makeDrivePair()
     let beforeCount = try freshContext().fetchCount(FetchDescriptor<Drive>())
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let afterCount = try freshContext().fetchCount(FetchDescriptor<Drive>())
     #expect(afterCount == beforeCount - 1)
   }
@@ -154,7 +154,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     let (first, second) = try makeDrivePair()
     let firstID = first.id
     let secondID = second.id
-    _ = await makeService().merge(firstID: firstID, secondID: secondID, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let remaining = try freshContext().fetchCount(
       FetchDescriptor<Drive>(predicate: #Predicate { $0.id == firstID || $0.id == secondID })
     )
@@ -164,9 +164,9 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   @Test
   func mergeReturnsResultWithMergedAndDeletedIDs() async throws {
     let (first, second) = try makeDrivePair()
-    let result = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    let result = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
-    #expect(result?.mergedID == merged?.id)
+    #expect(result?.mergedID == merged?.persistentModelID)
     #expect(Set(result?.deletedIDs ?? []) == Set([first.id, second.id]))
   }
 
@@ -190,7 +190,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     ]
     try context!.save()
 
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
 
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect((merged?.accumulatedDistanceMetres ?? 0) > 0)
@@ -205,7 +205,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
     second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
     try context!.save()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.startWeather?.temperatureCelsius == 10)
   }
@@ -216,7 +216,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
     second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
     try context!.save()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect(merged?.endWeather?.temperatureCelsius == 20)
   }
@@ -227,7 +227,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     first.weatherReadings = [makeWeather(type: .start, temperature: 10)]
     second.weatherReadings = [makeWeather(type: .end, temperature: 20)]
     try context!.save()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip", onProgress: { _ in })
     let merged = try fetchMerged(excluding: [first.id, second.id])
     #expect((merged?.weatherReadings?.count ?? 0) <= 2)
   }
@@ -235,10 +235,14 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
   // MARK: - unresolvable IDs
 
   @Test
-  func mergeReturnsNilAndChangesNothingWhenDriveMissing() async throws {
+  func mergeReturnsNilAndChangesNothingWithFewerThanTwoDrives() async throws {
     let (first, _) = try makeDrivePair()
     let beforeCount = try freshContext().fetchCount(FetchDescriptor<Drive>())
-    let result = await makeService().merge(firstID: first.id, secondID: UUID(), mergedName: "Trip", onProgress: { _ in })
+    let result = await makeService().merge(
+      driveIDs: [first.persistentModelID],
+      mergedName: "Trip",
+      onProgress: { _ in }
+    )
     let afterCount = try freshContext().fetchCount(FetchDescriptor<Drive>())
     #expect(result == nil)
     #expect(afterCount == beforeCount)
@@ -255,7 +259,7 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     try context!.save()
 
     let collector = ProgressCollector()
-    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip") { fraction in
+    _ = await makeService().merge(driveIDs: [first.persistentModelID, second.persistentModelID], mergedName: "Trip") { fraction in
       collector.append(fraction)
     }
 
@@ -263,6 +267,55 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     #expect(!values.isEmpty)
     #expect(values.last == 1)
     #expect(values == values.sorted())
+  }
+
+  // MARK: - merge day
+
+  @Test
+  func mergeDayMergesAllFinishedDrivesInChronologicalOrder() async throws {
+    let (first, second) = try makeDrivePair()
+    let third = Drive(name: "Third")
+    third.startedAt = Date(timeIntervalSinceReferenceDate: 5000)
+    third.endedAt = Date(timeIntervalSinceReferenceDate: 6000)
+    third.status = .finished
+    context!.insert(third)
+    try context!.save()
+
+    let result = await makeService().mergeDay(containing: first.startedAt)
+
+    let merged = result.flatMap { freshContext().model(for: $0.mergedID) as? Drive }
+    #expect(merged?.startedAt == first.startedAt)
+    #expect(merged?.endedAt == third.endedAt)
+    #expect(result?.deletedIDs == [first.id, second.id, third.id])
+  }
+
+  @Test
+  func mergeDayExcludesRecordingAndCrossMidnightDrives() async throws {
+    let calendar = Calendar(identifier: .gregorian)
+    let day = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 11)))
+    let first = Drive(name: "First")
+    first.startedAt = day.addingTimeInterval(100)
+    first.endedAt = day.addingTimeInterval(200)
+    first.status = .finished
+    let second = Drive(name: "Second")
+    second.startedAt = day.addingTimeInterval(300)
+    second.endedAt = day.addingTimeInterval(400)
+    second.status = .finished
+    let recording = Drive(name: "Recording")
+    recording.startedAt = day.addingTimeInterval(500)
+    let crossMidnight = Drive(name: "Cross midnight")
+    crossMidnight.startedAt = day.addingTimeInterval(23 * 60 * 60)
+    crossMidnight.endedAt = day.addingTimeInterval(25 * 60 * 60)
+    crossMidnight.status = .finished
+    [first, second, recording, crossMidnight].forEach(context!.insert)
+    try context!.save()
+
+    let result = await makeService().mergeDay(containing: day, calendar: calendar)
+
+    #expect(Set(result?.deletedIDs ?? []) == Set([first.id, second.id]))
+    let remaining = try freshContext().fetch(FetchDescriptor<Drive>())
+    #expect(remaining.contains { $0.id == recording.id })
+    #expect(remaining.contains { $0.id == crossMidnight.id })
   }
 
   // MARK: - Helpers
