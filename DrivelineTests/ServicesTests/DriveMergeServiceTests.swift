@@ -62,6 +62,38 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
     #expect(merged?.status == .finished)
   }
 
+  // MARK: - merge trigger
+
+  @Test(arguments: [
+    (Drive.RecordingTrigger.automatic, Drive.RecordingTrigger.manual),
+    (Drive.RecordingTrigger.manual, Drive.RecordingTrigger.automatic),
+    (Drive.RecordingTrigger.automatic, Drive.RecordingTrigger.automatic)
+  ])
+  func mergeSetsTriggerToAutomaticWhenEitherDriveIsAutomatic(
+    firstTrigger: Drive.RecordingTrigger,
+    secondTrigger: Drive.RecordingTrigger
+  ) async throws {
+    let (first, second) = try makeDrivePair()
+    first.trigger = firstTrigger
+    second.trigger = secondTrigger
+    try context!.save()
+
+    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect(merged?.trigger == .automatic)
+  }
+
+  @Test
+  func mergeKeepsTriggerManualWhenBothDrivesAreManual() async throws {
+    let (first, second) = try makeDrivePair()
+
+    _ = await makeService().merge(firstID: first.id, secondID: second.id, mergedName: "Trip", onProgress: { _ in })
+
+    let merged = try fetchMerged(excluding: [first.id, second.id])
+    #expect(merged?.trigger == .manual)
+  }
+
   // MARK: - merge place names
 
   @Test
