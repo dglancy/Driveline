@@ -83,9 +83,13 @@ struct Driveline: App {
   // MARK: - Private
 
   private func scheduleSweepTask(for service: any SweepServiceProtocol) {
-    let request = BGProcessingTaskRequest(identifier: service.taskIdentifier)
+    let taskIdentifier = service.taskIdentifier
+    let request = BGProcessingTaskRequest(identifier: taskIdentifier)
     request.requiresNetworkConnectivity = true
-    try? BGTaskScheduler.shared.submit(request)
+    BGTaskScheduler.shared.submitTaskRequest(request) { error in
+      guard let error else { return }
+      Log.lifecycle.error("Failed to schedule sweep task \(taskIdentifier): \(error.localizedDescription)")
+    }
   }
 }
 
