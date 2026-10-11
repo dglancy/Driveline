@@ -38,6 +38,7 @@ actor DriveMergeService {
     let merged = Drive(name: mergedName)
     merged.startedAt = first.startedAt
     merged.endedAt = second.endedAt ?? first.endedAt
+    merged.trigger = first.trigger == .automatic || second.trigger == .automatic ? .automatic : .manual
     merged.status = .finished
     merged.startPlaceName = first.startPlaceName
     merged.endPlaceName = second.endPlaceName
