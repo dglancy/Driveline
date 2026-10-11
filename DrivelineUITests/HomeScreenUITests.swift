@@ -17,6 +17,25 @@ final class HomeScreenUITests: BaseXCTestCase {
   }
   
   @MainActor
+  func testMergeSheetShowsContentOnFirstPresentation() throws {
+    navigateToHomeScreen()
+
+    app.buttons["NewDriveButton"].tap()
+    XCTAssertTrue(app.buttons["FinishDriveButton"].waitForExistence(timeout: 5))
+    app.buttons["FinishDriveButton"].tap()
+
+    app.buttons["More options"].tap()
+    app.buttons["Select Drives"].tap()
+    app.buttons["Drive row 0"].tap()
+    app.buttons["Drive row 1"].tap()
+    app.buttons["Merge"].tap()
+
+    XCTAssertTrue(app.navigationBars["Merge Drives"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Order"].exists)
+    XCTAssertTrue(app.textFields["Drive name"].exists)
+  }
+
+  @MainActor
   func testSearchNoResults() throws {
     navigateToHomeScreen()
     
