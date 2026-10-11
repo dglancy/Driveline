@@ -44,51 +44,9 @@ struct FullScreenMapView: View {
         .padding(.top, 4)
 
         Spacer()
-
-        infoCard
-          .padding(.horizontal, 16)
-          .padding(.bottom, 32)
       }
     }
     .toolbar(.hidden, for: .navigationBar)
-  }
-
-  // MARK: - Private Views
-
-  private var infoCard: some View {
-    let stats = DriveStatsPresenter(drive: mapState.drive)
-    return VStack(spacing: 10) {
-      Text(mapState.drive.displayName)
-        .font(.body.weight(.semibold))
-        .foregroundStyle(Color(.label))
-        .dynamicTypeSize(.xSmall ... .accessibility1)
-        .lineLimit(2)
-        .minimumScaleFactor(0.7)
-        .multilineTextAlignment(.center)
-
-      HStack(spacing: 0) {
-        statChip(value: stats.distanceValue, unit: stats.distanceUnit)
-        Divider().frame(height: 28).padding(.horizontal, 12)
-        statChip(value: stats.durationValue, unit: stats.durationUnit)
-        Divider().frame(height: 28).padding(.horizontal, 12)
-        statChip(value: stats.avgSpeedValue, unit: stats.avgSpeedUnit)
-      }
-    }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 14)
-    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
-  }
-
-  private func statChip(value: String, unit: String) -> some View {
-    VStack(spacing: 1) {
-      Text(value)
-        .font(.body.weight(.semibold))
-        .dynamicTypeSize(.xSmall ... .xxxLarge)
-      Text(unit)
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .dynamicTypeSize(.xSmall ... .xxxLarge)
-    }
   }
 
 }
