@@ -66,6 +66,19 @@ struct MeasurementLocalizedDistanceTests {
     #expect(Measurement(value: 1609.344, unit: UnitLength.meters).localizedDistanceValueString(locale: locale) == "1.0")
   }
 
+  @Test("large metric distances round to the nearest kilometre")
+  func testLargeMetricDistanceValueString() {
+    let locale = Locale(identifier: "en_AU")
+    #expect(Measurement(value: 100_600.0, unit: UnitLength.meters).localizedDistanceValueString(locale: locale) == "101")
+  }
+
+  @Test("large imperial distances round to the nearest mile")
+  func testLargeImperialDistanceValueString() {
+    let locale = Locale(identifier: "en_US")
+    let metres = 100.6 * UnitLength.miles.converter.baseUnitValue(fromValue: 1)
+    #expect(Measurement(value: metres, unit: UnitLength.meters).localizedDistanceValueString(locale: locale) == "101")
+  }
+
   @Test("zero metres formats as 0.0 for metric locale")
   func testZeroDistanceMetric() {
     let locale = Locale(identifier: "fr_FR")

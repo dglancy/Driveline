@@ -33,7 +33,8 @@ extension Measurement where UnitType == UnitLength {
   @MainActor
   func localizedDistanceValueString(locale: Locale = .current) -> String {
     let value = self.converted(to: Self.preferredUnit(for: locale)).value
-    return Self.numberFormatter(for: locale).string(from: NSNumber(value: value)) ?? ""
+    let fractionDigits = value > 100 ? 0 : 1
+    return Self.numberFormatter(for: locale, fractionDigits: fractionDigits).string(from: NSNumber(value: value)) ?? ""
   }
 
   func localizedDistanceUnitSymbol(locale: Locale = .current) -> String {
@@ -64,18 +65,20 @@ extension Measurement where UnitType == UnitLength {
   }
 
   @MainActor
-  private static func numberFormatter(for locale: Locale) -> NumberFormatter {
+  private static func numberFormatter(for locale: Locale, fractionDigits: Int) -> NumberFormatter {
+    let formatter: NumberFormatter
     if DistanceFormatterCache.localeIdentifier == locale.identifier,
-       let cached = DistanceFormatterCache.number { return cached }
-    let formatter = NumberFormatter()
-    formatter.locale = locale
-    formatter.maximumFractionDigits = 1
-    formatter.minimumFractionDigits = 1
-    if DistanceFormatterCache.localeIdentifier != locale.identifier {
+       let cached = DistanceFormatterCache.number {
+      formatter = cached
+    } else {
+      formatter = NumberFormatter()
+      formatter.locale = locale
       DistanceFormatterCache.localeIdentifier = locale.identifier
       DistanceFormatterCache.measurement = nil
+      DistanceFormatterCache.number = formatter
     }
-    DistanceFormatterCache.number = formatter
+    formatter.maximumFractionDigits = fractionDigits
+    formatter.minimumFractionDigits = fractionDigits
     return formatter
   }
 }
