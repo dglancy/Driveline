@@ -9,7 +9,7 @@
 import ActivityKit
 import Foundation
 
-struct DriveActivityAttributes: ActivityAttributes {
+nonisolated struct DriveActivityAttributes: ActivityAttributes {
 
   // MARK: - Properties
 
