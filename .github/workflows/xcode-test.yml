@@ -69,7 +69,13 @@ jobs:
 
       - name: Install xcresultparser
         if: always()
-        run: HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_REQUIRE_TAP_TRUST=1 brew install a7ex/homebrew-formulae/xcresultparser
+        run: |
+          curl --fail --location \
+            https://github.com/a7ex/xcresultparser/releases/download/2.2.0/xcresultparser.zip \
+            --output "$RUNNER_TEMP/xcresultparser.zip"
+          unzip -q "$RUNNER_TEMP/xcresultparser.zip" -d "$RUNNER_TEMP/xcresultparser"
+          chmod +x "$RUNNER_TEMP/xcresultparser/product/xcresultparser"
+          echo "$RUNNER_TEMP/xcresultparser/product" >> "$GITHUB_PATH"
 
       - name: Convert test results to JUnit
         if: always()
