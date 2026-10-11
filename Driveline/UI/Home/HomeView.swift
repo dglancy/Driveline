@@ -29,9 +29,8 @@ struct HomeView: View {
   @State private var statsScope: StatsScope = .last30Days
   @State private var isSelectMode: Bool = false
   @State private var selectedDriveIDs: Set<UUID> = []
-  @State private var drivesToMerge: [Drive] = []
+  @State private var mergeSelection: MergeSelection?
   @State private var showingDeleteConfirmation: Bool = false
-  @State private var showingMergeSheet: Bool = false
   @State private var showingLocationPrimer: Bool = false
   @State private var showingAutomationSetup: Bool = false
   @State private var hasSeenAutomationSetup: Bool = UserPreferences().hasSeenAutomationSetup
@@ -111,15 +110,13 @@ struct HomeView: View {
     } message: {
       Text(HomePresenter.deleteConfirmationMessage(selectedDriveIDs.count))
     }
-    .sheet(isPresented: $showingMergeSheet) {
-      if drivesToMerge.count == 2 {
-        MergeDrivesView(
-          drives: drivesToMerge,
-          modelContainer: modelContext.container,
-          spotlight: spotlightIndexingService,
-          onMerged: { exitSelectMode() }
-        )
-      }
+    .sheet(item: $mergeSelection) { selection in
+      MergeDrivesView(
+        drives: selection.drives,
+        modelContainer: modelContext.container,
+        spotlight: spotlightIndexingService,
+        onMerged: { exitSelectMode() }
+      )
     }
   }
 
@@ -192,6 +189,7 @@ struct HomeView: View {
                   DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: selectedDriveIDs.contains(row.drive.id)))
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("Drive row \(index)")
               } else {
                 NavigationLink(value: row.drive) {
                   DriveRowView(drive: row.drive, display: row.display)
@@ -259,8 +257,9 @@ struct HomeView: View {
   }
 
   private func triggerMerge() {
-    drivesToMerge = selectedDrives().sorted { $0.startedAt < $1.startedAt }
-    showingMergeSheet = true
+    let selectedDrives = selectedDrives().sorted { $0.startedAt < $1.startedAt }
+    guard selectedDrives.count == 2 else { return }
+    mergeSelection = MergeSelection(drives: selectedDrives)
   }
 
   private func toggleSelection(for id: UUID) {
@@ -289,6 +288,13 @@ struct HomeView: View {
     navigationPath = NavigationPath()
     navigationPath.append(drive)
   }
+}
+
+// MARK: - MergeSelection
+
+private struct MergeSelection: Identifiable {
+  let id = UUID()
+  let drives: [Drive]
 }
 
 // MARK: - HomeToolbar
