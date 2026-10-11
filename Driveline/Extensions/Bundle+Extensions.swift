@@ -8,7 +8,7 @@
 import Foundation
 
 extension Bundle {
-  var iconFileName: String? {
+  nonisolated var iconFileName: String? {
     guard
       let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
       let primary = icons["CFBundlePrimaryIcon"] as? [String: Any],

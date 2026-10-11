@@ -2,14 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>INIntentsSupported</key>
-	<array>
-		<string>Intent</string>
-	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.targatrips.Driveline.placename-sweep</string>
 		<string>com.targatrips.Driveline.weather-sweep</string>
+	</array>
+	<key>INIntentsSupported</key>
+	<array>
+		<string>Intent</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -20,14 +20,14 @@
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>com.targatrips.driveline.gpx</string>
-			<key>UTTypeDescription</key>
-			<string>GPS Exchange Format</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
 			</array>
+			<key>UTTypeDescription</key>
+			<string>GPS Exchange Format</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.targatrips.driveline.gpx</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

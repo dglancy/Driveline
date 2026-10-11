@@ -10,7 +10,7 @@ import MapKit
 
 extension MKCoordinateRegion {
 
-  static func boundingBox(of coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion? {
+  nonisolated static func boundingBox(of coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion? {
     guard let first = coordinates.first else { return nil }
 
     var minLat = first.latitude
@@ -32,7 +32,7 @@ extension MKCoordinateRegion {
     return MKCoordinateRegion(center: center, span: span)
   }
 
-  static func fitting(
+  nonisolated static func fitting(
     _ coordinates: [CLLocationCoordinate2D],
     paddingMultiplier: CLLocationDegrees = 1.5,
     minimumSpan: CLLocationDegrees = 0.005,

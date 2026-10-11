@@ -1,8 +1,8 @@
 # Project: Driveline
 
 ## Stack
-- **Platform**: iOS 26+, minimum deployment iOS 26.0
-- **Language**: Swift 6.3
+- **Platform**: iOS 27+, minimum deployment iOS 27.0
+- **Language**: Swift 6.4
 - **UI**: SwiftUI
 - **Persistence**: SwiftData
 - **Architecture**: Apple-native SwiftUI
