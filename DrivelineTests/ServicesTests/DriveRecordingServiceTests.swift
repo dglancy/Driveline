@@ -74,6 +74,80 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(service.drive == nil)
   }
 
+  @Test
+  func finishDriveWithAutomaticMergeEnabledMergesSameDayDrives() async throws {
+    try insertFinishedDrive()
+    let preferences = makePreferences(
+      continueDriveIfRecentlyFinished: false,
+      automaticallyMergeSameDayDrives: true
+    )
+    let (service, _, _) = await makeServices(userPreferences: preferences)
+
+    service.startDrive()
+    service.finishDrive()
+
+    let mergedCount = try await waitForDriveCount(1)
+    #expect(mergedCount == 1)
+  }
+
+  @Test
+  func startingNewDriveDoesNotCancelAutomaticMerge() async throws {
+    try insertFinishedDrive()
+    let preferences = makePreferences(
+      continueDriveIfRecentlyFinished: false,
+      automaticallyMergeSameDayDrives: true
+    )
+    let (service, _, _) = await makeServices(userPreferences: preferences)
+
+    service.startDrive()
+    service.finishDrive()
+    service.startDrive()
+
+    _ = try await waitForDriveCount(2)
+    #expect(service.isRecording)
+  }
+
+  @Test
+  func finishDriveDefersMergeWhenRecentContinuationIsEnabled() async throws {
+    try insertFinishedDrive()
+    let defaults = UserDefaults(suiteName: UUID().uuidString)!
+    defaults.set(true, forKey: "ContinueDriveIfRecentlyFinished")
+    defaults.set(true, forKey: "AutomaticallyMergeSameDayDrives")
+    let preferences = UserPreferences(defaults: defaults)
+    let coordinator = await makeAutomaticMergeCoordinator(preferences: preferences)
+    let (service, _, _) = await makeServices(
+      automaticMergeCoordinator: coordinator,
+      userPreferences: preferences
+    )
+
+    service.startDrive()
+    service.finishDrive()
+    await Task.yield()
+
+    #expect(try count(where: #Predicate<Drive> { _ in true }) == 2)
+    #expect(preferences.pendingAutomaticMerge != nil)
+  }
+
+  @Test
+  func resumingRecentDriveCancelsPendingAutomaticMerge() async throws {
+    let finishedDrive = try insertFinishedDrive()
+    let defaults = UserDefaults(suiteName: UUID().uuidString)!
+    defaults.set(true, forKey: "ContinueDriveIfRecentlyFinished")
+    defaults.set(true, forKey: "AutomaticallyMergeSameDayDrives")
+    let preferences = UserPreferences(defaults: defaults)
+    let coordinator = await makeAutomaticMergeCoordinator(preferences: preferences)
+    coordinator.requestMerge(containing: finishedDrive.startedAt, deferred: true)
+    let (service, _, _) = await makeServices(
+      automaticMergeCoordinator: coordinator,
+      userPreferences: preferences
+    )
+
+    service.startDrive(trigger: .automatic)
+
+    #expect(service.drive?.id == finishedDrive.id)
+    #expect(preferences.pendingAutomaticMerge == nil)
+  }
+
   // MARK: - initialDrive
 
   @Test
@@ -559,6 +633,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     locationDataRecorder: (any LocationDataRecorderServiceProtocol)? = nil,
     spotlightIndexingService: SpotlightIndexingService? = nil,
     classifierService: (any DriveClassifierServiceProtocol)? = nil,
+    automaticMergeCoordinator: AutomaticDriveMergeCoordinator? = nil,
     userPreferences: UserPreferences? = nil
   ) async -> (DriveRecordingService, LocationService, any LocationDataRecorderServiceProtocol) {
     let mockGeo = geocodingService ?? MockGeocodingService()
@@ -579,6 +654,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
       placeNameSweepService: placeNameSweepService,
       spotlightIndexingService: spotlightIndexingService,
       categoryPredictionSweepService: categoryPredictionSweepService,
+      automaticMergeCoordinator: automaticMergeCoordinator,
       userPreferences: userPreferences ?? UserPreferences()
     )
     return (service, locationService, recorder)
@@ -600,9 +676,36 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     return drive
   }
 
-  private func makePreferences(continueDriveIfRecentlyFinished: Bool) -> UserPreferences {
+  private func makePreferences(
+    continueDriveIfRecentlyFinished: Bool,
+    automaticallyMergeSameDayDrives: Bool = false
+  ) -> UserPreferences {
     let defaults = UserDefaults(suiteName: UUID().uuidString)!
     defaults.set(continueDriveIfRecentlyFinished, forKey: "ContinueDriveIfRecentlyFinished")
+    defaults.set(automaticallyMergeSameDayDrives, forKey: "AutomaticallyMergeSameDayDrives")
     return UserPreferences(defaults: defaults)
+  }
+
+  private func makeAutomaticMergeCoordinator(
+    preferences: UserPreferences
+  ) async -> AutomaticDriveMergeCoordinator {
+    let categoryService = CategoryPredictionSweepService(modelContainer: container!)
+    await categoryService.configure(classifierService: MockDriveClassifierService())
+    return AutomaticDriveMergeCoordinator(
+      modelContainer: container!,
+      spotlightIndexingService: nil,
+      categoryPredictionSweepService: categoryService,
+      userPreferences: preferences
+    )
+  }
+
+  private func waitForDriveCount(_ expectedCount: Int) async throws -> Int {
+    for _ in 0..<100 {
+      let freshContext = ModelContext(container!)
+      let count = try freshContext.fetchCount(FetchDescriptor<Drive>())
+      if count == expectedCount { return count }
+      await Task.yield()
+    }
+    return try ModelContext(container!).fetchCount(FetchDescriptor<Drive>())
   }
 }

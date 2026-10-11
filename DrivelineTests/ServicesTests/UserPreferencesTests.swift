@@ -24,6 +24,31 @@ struct UserPreferencesTests {
     #expect(prefs.hasCompletedOnboarding == false)
   }
 
+  @Test func automaticallyMergeSameDayDrivesDefaultsToFalse() {
+    let prefs = makePreferences()
+    #expect(prefs.automaticallyMergeSameDayDrives == false)
+  }
+
+  @Test func automaticallyMergeSameDayDrivesReadsStoredValue() {
+    let suiteName = "com.targatrips.Driveline.test-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defaults.set(true, forKey: "AutomaticallyMergeSameDayDrives")
+    let prefs = UserPreferences(defaults: defaults)
+    #expect(prefs.automaticallyMergeSameDayDrives == true)
+  }
+
+  @Test func pendingAutomaticMergePersistsAndClears() {
+    var prefs = makePreferences()
+    let day = Date(timeIntervalSinceReferenceDate: 1000)
+    let deadline = Date(timeIntervalSinceReferenceDate: 2800)
+
+    prefs.setPendingAutomaticMerge(day: day, deadline: deadline)
+
+    #expect(prefs.pendingAutomaticMerge == .init(day: day, deadline: deadline))
+    prefs.clearPendingAutomaticMerge()
+    #expect(prefs.pendingAutomaticMerge == nil)
+  }
+
   @Test func setHasCompletedOnboardingPersistsTrue() {
     var prefs = makePreferences()
     prefs.setHasCompletedOnboarding(true)
