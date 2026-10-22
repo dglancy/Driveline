@@ -21,6 +21,7 @@ struct DriveDetailView: View {
   @State private var showingEditDrive = false
 
   private let renameDriveTip = EditDriveTip()
+  private let onClose: (() -> Void)?
 
   @Environment(\.dismiss) private var dismiss
   @Environment(\.colorScheme) private var colorScheme
@@ -29,8 +30,9 @@ struct DriveDetailView: View {
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, modelContainer: ModelContainer) {
+  init(drive: Drive, modelContainer: ModelContainer, onClose: (() -> Void)? = nil) {
     _driveState = State(initialValue: DriveDetailState(drive: drive, modelContainer: modelContainer))
+    self.onClose = onClose
   }
 
   // MARK: - Body
@@ -70,15 +72,16 @@ struct DriveDetailView: View {
     .toolbar {
       DriveDetailActionToolbar(
           renameDriveTip: renameDriveTip,
-          onBack: { dismiss() },
+          onBack: close,
           onEdit: {
             renameDriveTip.invalidate(reason: .actionPerformed)
             showingEditDrive = true
           },
           onDelete: { showingDeleteConfirmation = true },
           onShowFullScreenMap: { showingFullScreenMap = true }
-      )
+        )
     }
+    .toolbarVisibility(.visible, for: .bottomBar)
     .navigationDestination(isPresented: $showingFullScreenMap) {
       FullScreenMapView(drive: driveState.drive, modelContainer: driveState.drive.modelContext?.container ?? modelContext.container)
     }
@@ -88,7 +91,7 @@ struct DriveDetailView: View {
     ) {
       Button.delete {
         DriveDeletion.delete([driveState.drive], in: modelContext, deindexing: spotlightIndexingService)
-        dismiss()
+        close()
       }
       Button.cancel()
     } message: {
@@ -109,6 +112,14 @@ struct DriveDetailView: View {
       Button(String(localized: "OK", comment: "Dismiss export error alert"), role: .cancel) { }
     } message: {
       Text(driveState.exportErrorMessage ?? "")
+    }
+  }
+
+  private func close() {
+    if let onClose {
+      onClose()
+    } else {
+      dismiss()
     }
   }
 
