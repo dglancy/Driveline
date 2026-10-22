@@ -23,12 +23,12 @@ struct EditDriveTip: Tip {
   // MARK: - Computed Properties
 
   var title: Text {
-    Text("Edit Your Drive", comment: "TipKit tip title for the drive detail options button")
+    Text("Edit Your Drive", comment: "TipKit tip title for the drive detail edit button")
   }
   var message: Text? {
-    Text("Tap the options button to edit the name and other details.", comment: "TipKit tip message for the drive detail options button")
+    Text("Tap the edit button to change the name and other details.", comment: "TipKit tip message for the drive detail edit button")
   }
   var image: Image? {
-    Image(systemName: "ellipsis.circle")
+    Image(systemName: "pencil.circle")
   }
 }

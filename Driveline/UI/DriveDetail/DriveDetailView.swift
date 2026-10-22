@@ -17,7 +17,6 @@ struct DriveDetailView: View {
 
   @State private var driveState: DriveDetailState
   @State private var showingFullScreenMap = false
-  @State private var showingMoreMenu = false
   @State private var showingDeleteConfirmation = false
   @State private var showingEditDrive = false
 
@@ -47,24 +46,6 @@ struct DriveDetailView: View {
           DriveDetailMapView(segments: driveState.coordinateSegments, cameraPosition: $driveState.cameraPosition, accessibilityLabel: presenter.routeAccessibilityLabel)
             .frame(height: min(280, max(140, geometry.size.height * 0.4)))
             .task { await driveState.loadRoute() }
-            .overlay(alignment: .topLeading) {
-              GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
-                .padding(14)
-            }
-            .overlay(alignment: .topTrailing) {
-              GlassButton(systemImage: Icons.Options.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
-                renameDriveTip.invalidate(reason: .actionPerformed)
-                showingMoreMenu = true
-              }
-              .padding(14)
-              .popoverTip(renameDriveTip)
-            }
-            .overlay(alignment: .bottomTrailing) {
-              GlassButton(systemImage: Icons.Options.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
-                showingFullScreenMap = true
-              }
-              .padding(14)
-            }
 
           ScrollView {
             VStack(alignment: .leading, spacing: 14) {
@@ -85,7 +66,19 @@ struct DriveDetailView: View {
         }
       }
     }
-    .toolbar(.hidden, for: .navigationBar)
+    .navigationBarBackButtonHidden()
+    .toolbar {
+      DriveDetailActionToolbar(
+          renameDriveTip: renameDriveTip,
+          onBack: { dismiss() },
+          onEdit: {
+            renameDriveTip.invalidate(reason: .actionPerformed)
+            showingEditDrive = true
+          },
+          onDelete: { showingDeleteConfirmation = true },
+          onShowFullScreenMap: { showingFullScreenMap = true }
+      )
+    }
     .navigationDestination(isPresented: $showingFullScreenMap) {
       FullScreenMapView(drive: driveState.drive, modelContainer: driveState.drive.modelContext?.container ?? modelContext.container)
     }
@@ -105,18 +98,6 @@ struct DriveDetailView: View {
       EditDriveView(drive: driveState.drive)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-    }
-    .confirmationDialog(
-      String(localized: "Drive Options", comment: "More menu title"),
-      isPresented: $showingMoreMenu
-    ) {
-      Button(String(localized: "Edit Drive Details", comment: "More menu action")) {
-        showingEditDrive = true
-      }
-      Button(String(localized: "Delete Drive", comment: "More menu action"), role: .destructive) {
-        showingDeleteConfirmation = true
-      }
-      Button.cancel()
     }
     .sheet(item: $driveState.shareItem) { item in
       ActivityView(activityItems: [item.url])
@@ -250,6 +231,40 @@ struct DriveDetailView: View {
     }
     .disabled(!driveState.canExport || driveState.isPreparingExport)
     .cardBackground(cornerRadius: 16)
+  }
+}
+
+// MARK: - DriveDetailActionToolbar
+
+private struct DriveDetailActionToolbar: ToolbarContent {
+
+  let renameDriveTip: EditDriveTip
+  let onBack: () -> Void
+  let onEdit: () -> Void
+  let onDelete: () -> Void
+  let onShowFullScreenMap: () -> Void
+
+  var body: some ToolbarContent {
+    ToolbarItem(placement: .navigation) {
+      Button(action: onBack) {
+        Label(String(localized: "Back", comment: "Drive detail toolbar action"), systemImage: Icons.Navigation.chevronLeft)
+      }
+    }
+
+    ToolbarItemGroup(placement: .bottomBar) {
+      Button(action: onEdit) {
+        Label(String(localized: "Edit Drive Details", comment: "Drive detail toolbar action"), systemImage: "pencil")
+      }
+      .popoverTip(renameDriveTip)
+
+      Button(action: onShowFullScreenMap) {
+        Label(String(localized: "Full screen map", comment: "Drive detail toolbar action"), systemImage: Icons.Options.viewfinder)
+      }
+
+      Button(role: .destructive, action: onDelete) {
+        Label(String(localized: "Delete Drive", comment: "Drive detail toolbar action"), systemImage: "trash")
+      }
+    }
   }
 }
 

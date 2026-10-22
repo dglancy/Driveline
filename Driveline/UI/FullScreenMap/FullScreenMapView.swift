@@ -26,27 +26,26 @@ struct FullScreenMapView: View {
   // MARK: - Body
 
   var body: some View {
-    ZStack {
-      Map(position: $mapState.cameraPosition) {
-        DriveMapContent(segments: mapState.coordinateSegments)
-      }
-      .mapStyle(.standard(emphasis: .muted))
-      .ignoresSafeArea()
-      .accessibilityLabel(Text(DriveDetailPresenter(drive: mapState.drive).routeAccessibilityLabel))
-      .task { await mapState.loadRoute() }
-
-      VStack {
-        HStack {
-          GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the full screen map")) { dismiss() }
-          Spacer()
+    Map(position: $mapState.cameraPosition) {
+      DriveMapContent(segments: mapState.coordinateSegments)
+    }
+    .mapStyle(.standard(emphasis: .muted))
+    .ignoresSafeArea()
+    .accessibilityLabel(Text(DriveDetailPresenter(drive: mapState.drive).routeAccessibilityLabel))
+    .task { await mapState.loadRoute() }
+    .navigationBarBackButtonHidden()
+    .toolbar {
+      ToolbarItem(placement: .navigation) {
+        Button {
+          dismiss()
+        } label: {
+          Label(
+            String(localized: "Back", comment: "Full screen map toolbar action"),
+            systemImage: Icons.Navigation.chevronLeft
+          )
         }
-        .padding(.horizontal, 14)
-        .padding(.top, 4)
-
-        Spacer()
       }
     }
-    .toolbar(.hidden, for: .navigationBar)
   }
 
 }
