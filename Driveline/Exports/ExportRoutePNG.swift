@@ -111,6 +111,8 @@ enum MapSize: String {
   case high2
   case highest
 
+  // MARK: - Computed Properties
+
   var size: CGSize {
     switch self {
     case .low: return CGSize(width: 800, height: 600)
@@ -120,6 +122,8 @@ enum MapSize: String {
     case .highest: return CGSize(width: 2400, height: 1800)
     }
   }
+
+  // MARK: - Lifecycle
 
   init?(from string: String) {
     let key = string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
@@ -135,6 +139,8 @@ enum DriveWidth: String {
   case medium
   case thick
 
+  // MARK: - Computed Properties
+
   var width: CGFloat {
     switch self {
     case .thin: return 3.0
@@ -142,6 +148,8 @@ enum DriveWidth: String {
     case .thick: return 9.0
     }
   }
+
+  // MARK: - Lifecycle
 
   init?(from string: String) {
     let key = string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()

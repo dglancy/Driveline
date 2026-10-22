@@ -30,7 +30,13 @@ struct DriveRow: Identifiable {
 }
 
 struct DriveSection: Identifiable {
+
+  // MARK: - Computed Properties
+
   var id: String { title }
+
+  // MARK: - Properties
+
   let title: String
   let rows: [DriveRow]
 }

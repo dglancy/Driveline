@@ -10,10 +10,14 @@ import XCTest
 @MainActor
 final class OnboardingUITests: BaseXCTestCase {
 
+  // MARK: - Lifecycle
+
   override func setUp() async throws {
     enableOnboarding()
     try await super.setUp()
   }
+
+  // MARK: - Tests
 
   func testOnboardingWelcomeScreenIsPresented() {
     XCTAssertTrue(app.staticTexts["Welcome to Driveline"].waitForExistence(timeout: 3))

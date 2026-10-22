@@ -12,6 +12,9 @@ import SwiftData
 // MARK: - RouteData
 
 struct RouteData: Sendable {
+
+  // MARK: - Properties
+
   let segments: [[CLLocationCoordinate2D]]
   let positionCount: Int
   let maxSpeedMetresPerSecond: CLLocationSpeed

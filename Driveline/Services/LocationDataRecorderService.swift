@@ -15,7 +15,13 @@ import SwiftData
 
 @MainActor
 protocol LocationDataRecorderServiceProtocol {
+
+  // MARK: - Computed Properties
+
   var drive: Drive? { get }
+
+  // MARK: - Actions
+
   func startRecording(with drive: Drive)
   func stopRecording()
 }

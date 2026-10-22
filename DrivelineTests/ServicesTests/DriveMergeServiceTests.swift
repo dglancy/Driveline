@@ -366,12 +366,19 @@ final class DriveMergeServiceTests: SwiftDataBaseTestCase {
 // MARK: - ProgressCollector
 
 private final class ProgressCollector: @unchecked Sendable {
+
+  // MARK: - Properties
+
   private let lock = NSLock()
   private var storage: [Double] = []
+
+  // MARK: - Computed Properties
 
   var values: [Double] {
     lock.withLock { storage }
   }
+
+  // MARK: - Actions
 
   func append(_ value: Double) {
     lock.withLock { storage.append(value) }

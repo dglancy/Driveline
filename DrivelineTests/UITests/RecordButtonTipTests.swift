@@ -12,6 +12,8 @@ import Testing
 @MainActor
 struct RecordButtonTipTests {
 
+  // MARK: - Lifecycle
+
   init() {
     RecordButtonTip.isOnboardingPresented = true
     RecordButtonTip.hasDrives = false

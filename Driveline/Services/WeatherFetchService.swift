@@ -18,6 +18,9 @@ enum WeatherFetchError: Error {
 // MARK: - Protocol
 
 protocol WeatherFetchServiceProtocol: Sendable {
+
+  // MARK: - Actions
+
   nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType) async throws -> Weather
   nonisolated func fetchWeather(at location: CLLocation, type: Weather.WeatherType, date: Date) async throws -> Weather
 }

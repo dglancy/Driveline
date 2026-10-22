@@ -10,12 +10,17 @@ import AppIntents
 // MARK: - Intent Dependency Resolver
 
 enum IntentDependencyResolver {
+
+  // MARK: - Properties
+
   static var provider: (() -> DriveRecordingService?)?
 }
 
 // MARK: - App Intent Shortcuts
 
 struct DrivelineShortcuts: AppShortcutsProvider {
+
+  // MARK: - Computed Properties
 
   @AppShortcutsBuilder
   static var appShortcuts: [AppShortcut] {
@@ -91,6 +96,8 @@ struct FinishDriveIntent: LiveActivityIntent {
 
 enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
   case notReady
+
+  // MARK: - Computed Properties
 
   var localizedStringResource: LocalizedStringResource {
     switch self {

@@ -9,6 +9,8 @@ import SwiftUI
 
 extension Button where Label == Text {
 
+  // MARK: - Actions
+
   static func cancel(action: @escaping () -> Void = {}) -> Button<Text> {
     Button(String(localized: "Cancel", comment: "Cancel or dismiss"), role: .cancel, action: action)
   }

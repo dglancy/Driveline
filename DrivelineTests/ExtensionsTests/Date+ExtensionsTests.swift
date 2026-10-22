@@ -14,6 +14,8 @@ import Testing
 struct DateExtensionsTests {
 
   // Wednesday 8 January 2025 14:30 UTC — no DST offset in en_GB
+  // MARK: - Properties
+
   private let referenceDate: Date = {
     var cal = Calendar(identifier: .gregorian)
     cal.timeZone = TimeZone(identifier: "UTC")!

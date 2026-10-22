@@ -9,6 +9,9 @@ import Foundation
 
 @MainActor
 private enum SpeedFormatterCache {
+
+  // MARK: - Properties
+
   static var localeIdentifier: String = ""
   static var measurement: MeasurementFormatter?
   static var number: NumberFormatter?

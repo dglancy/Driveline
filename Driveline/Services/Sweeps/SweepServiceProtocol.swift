@@ -6,6 +6,12 @@
 //
 
 protocol SweepServiceProtocol: Sendable {
+  
+  // MARK: - Properties
+  
   nonisolated var taskIdentifier: String { get }
+  
+  // MARK: - Actions
+  
   func sweep() async
 }

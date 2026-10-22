@@ -8,6 +8,9 @@
 import Foundation
 
 extension Date {
+
+  // MARK: - Actions
+
   nonisolated func clockString(locale: Locale = .current) -> String {
     formatted(.dateTime.hour().minute().locale(locale))
   }

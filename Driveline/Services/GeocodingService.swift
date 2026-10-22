@@ -12,6 +12,9 @@ import MapKit
 // MARK: - Protocol
 
 protocol GeocodingServiceProtocol: Sendable {
+
+  // MARK: - Actions
+
   func reverseGeocode(location: CLLocation) async -> String?
 }
 
@@ -71,6 +74,9 @@ final class GeocodingService: GeocodingServiceProtocol, Sendable {
 // Routing access through this protocol silences the deprecation warning at
 // the call site without resorting to KVC.
 private protocol LegacyMapItemPlacemark {
+
+  // MARK: - Computed Properties
+
   var deprecatedPlacemark: CLPlacemark { get }
 }
 

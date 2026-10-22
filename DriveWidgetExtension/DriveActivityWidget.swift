@@ -14,6 +14,9 @@ import WidgetKit
 // MARK: - Widget
 
 struct DriveActivityWidget: Widget {
+
+  // MARK: - Body
+
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: DriveActivityAttributes.self) { context in
       DriveActivityLockScreenView(context: context)
@@ -45,7 +48,11 @@ struct DriveActivityWidget: Widget {
 
 struct DriveActivityLockScreenView: View {
 
+  // MARK: - Properties
+
   let context: ActivityViewContext<DriveActivityAttributes>
+
+  // MARK: - Body
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -57,6 +64,8 @@ struct DriveActivityLockScreenView: View {
     .padding(.horizontal, 16)
     .padding(.vertical, 12)
   }
+
+  // MARK: - Private Views
 
   private var headerRow: some View {
     HStack(spacing: 8) {
@@ -103,7 +112,11 @@ struct DriveActivityLockScreenView: View {
 
 struct DriveActivityCompactTrailingView: View {
 
+  // MARK: - Properties
+
   let context: ActivityViewContext<DriveActivityAttributes>
+
+  // MARK: - Body
 
   var body: some View {
     Text("\(formattedDistance(context.state.distanceMetres)) \(distanceUnitSymbol())")
@@ -117,7 +130,11 @@ struct DriveActivityCompactTrailingView: View {
 
 struct DriveActivityExpandedLeadingView: View {
 
+  // MARK: - Properties
+
   let context: ActivityViewContext<DriveActivityAttributes>
+
+  // MARK: - Body
 
   var body: some View {
     VStack(alignment: .leading, spacing: 2) {
@@ -135,7 +152,11 @@ struct DriveActivityExpandedLeadingView: View {
 
 struct DriveActivityExpandedTrailingView: View {
 
+  // MARK: - Properties
+
   let context: ActivityViewContext<DriveActivityAttributes>
+
+  // MARK: - Body
 
   var body: some View {
     VStack(alignment: .trailing, spacing: 2) {
@@ -153,7 +174,11 @@ struct DriveActivityExpandedTrailingView: View {
 
 struct DriveActivityExpandedBottomView: View {
 
+  // MARK: - Properties
+
   let context: ActivityViewContext<DriveActivityAttributes>
+
+  // MARK: - Body
 
   var body: some View {
     HStack {
@@ -187,9 +212,13 @@ struct DriveActivityExpandedBottomView: View {
 
 struct LiveActivityStatColumn: View {
 
+  // MARK: - Properties
+
   let value: String
   let label: String
   let sublabel: String
+
+  // MARK: - Body
 
   var body: some View {
     VStack(spacing: 2) {
@@ -208,7 +237,11 @@ struct LiveActivityStatColumn: View {
 
 struct LiveActivityTimerColumn: View {
 
+  // MARK: - Properties
+
   let startedAt: Date
+
+  // MARK: - Body
 
   var body: some View {
     VStack(spacing: 2) {
@@ -229,6 +262,9 @@ struct LiveActivityTimerColumn: View {
 // MARK: - Brand Color
 
 private extension Color {
+
+  // MARK: - Properties
+
   static let brand = Color(red: 60 / 255, green: 134 / 255, blue: 92 / 255)
 }
 

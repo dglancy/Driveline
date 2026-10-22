@@ -64,11 +64,15 @@ struct HomeStatsPanelView: View {
 
 private struct StatCard: View {
 
+  // MARK: - Properties
+
   let icon: String
   let label: String
   let value: String
   let unit: String?
   let scopeLabel: String
+
+  // MARK: - Body
 
   var body: some View {
     ZStack(alignment: .topTrailing) {

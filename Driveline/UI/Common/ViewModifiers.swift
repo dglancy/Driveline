@@ -8,6 +8,9 @@
 import SwiftUI
 
 extension View {
+
+  // MARK: - Actions
+
   func cardBackground(cornerRadius: CGFloat = 14) -> some View {
     background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: cornerRadius))
   }
@@ -18,7 +21,12 @@ extension View {
 }
 
 private struct ClearableTextFieldModifier: ViewModifier {
+
+  // MARK: - Properties
+
   @Binding var text: String
+
+  // MARK: - Body
 
   func body(content: Content) -> some View {
     content

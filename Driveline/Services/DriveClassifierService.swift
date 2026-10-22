@@ -57,6 +57,9 @@ struct DriveClassificationInput: Sendable {
 // MARK: - Protocol
 
 protocol DriveClassifierServiceProtocol: Sendable {
+
+  // MARK: - Actions
+
   func classify(_ input: DriveClassificationInput) -> Drive.Category
 }
 

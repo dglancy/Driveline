@@ -12,9 +12,13 @@ import Testing
 @MainActor
 struct EditDriveTipTests {
 
+  // MARK: - Lifecycle
+
   init() {
     EditDriveTip.isOnboardingPresented = true
   }
+
+  // MARK: - Instantiation
 
   @Test
   func tipCanBeInstantiated() {

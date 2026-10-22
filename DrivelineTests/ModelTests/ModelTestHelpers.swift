@@ -9,6 +9,8 @@
 import Foundation
 import SwiftData
 
+// MARK: - Helpers
+
 func makePosition(latitude: Double, longitude: Double, timestamp: Date = .now) -> Position {
   Position(
     latitude: latitude,

@@ -11,6 +11,9 @@ import CoreLocation
 // MARK: - Background Activity Session
 
 protocol BackgroundActivitySession: AnyObject {
+
+  // MARK: - Actions
+
   func invalidate()
 }
 
@@ -20,6 +23,9 @@ extension CLBackgroundActivitySession: BackgroundActivitySession {}
 
 @MainActor
 protocol BackgroundActivitySessionProviding {
+
+  // MARK: - Actions
+
   func begin() -> any BackgroundActivitySession
 }
 
@@ -36,6 +42,9 @@ struct SystemBackgroundActivitySessionProvider: BackgroundActivitySessionProvidi
 
 @MainActor
 protocol LocationStreaming {
+
+  // MARK: - Actions
+
   func locations() -> AsyncStream<CLLocation>
 }
 
@@ -69,6 +78,8 @@ struct LiveLocationStreamProvider: LocationStreaming {
 // MARK: - CLActivityType + LiveConfiguration
 
 extension CLActivityType {
+
+  // MARK: - Computed Properties
 
   var liveConfiguration: CLLocationUpdate.LiveConfiguration {
     switch self {

@@ -11,7 +11,11 @@ import Foundation
 @MainActor
 final class MockLocationDataRecorderService: LocationDataRecorderServiceProtocol {
 
+  // MARK: - Properties
+
   var drive: Drive?
+
+  // MARK: - Actions
 
   func startRecording(with drive: Drive) {
     self.drive = drive
