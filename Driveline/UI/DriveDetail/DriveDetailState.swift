@@ -14,6 +14,9 @@ import SwiftUI
 import WeatherKit
 
 struct ShareItem: Identifiable {
+
+  // MARK: - Properties
+
   let id = UUID()
   let url: URL
 }

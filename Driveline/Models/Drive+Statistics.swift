@@ -326,6 +326,8 @@ extension Drive {
 
 extension Drive {
   struct RouteStatistics: Sendable {
+    // MARK: - Properties
+
     let distanceMetres: Double
     let meanSpeedMetresPerSecond: CLLocationSpeed
     let speedVarianceMetresPerSecondSquared: Double

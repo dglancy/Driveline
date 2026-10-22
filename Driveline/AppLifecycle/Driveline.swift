@@ -26,6 +26,8 @@ struct Driveline: App {
 
   private let modelContainer: ModelContainer
 
+  // MARK: - Computed Properties
+
   private var sweepServices: [any SweepServiceProtocol] {
     [placeNameSweepService, weatherSweepService, categoryPredictionSweepService]
   }
@@ -96,6 +98,9 @@ struct Driveline: App {
 // MARK: – Testing Extensions
 
 extension Driveline {
+
+  // MARK: - Actions
+
   static func isUITesting() -> Bool {
     ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
   }

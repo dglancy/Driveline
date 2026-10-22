@@ -16,14 +16,20 @@ enum LogPrivacy {
 // MARK: - App Logger
 
 nonisolated struct AppLogger {
+  // MARK: - Properties
+
   private let logger: Logger
   private let category: String
   
+  // MARK: - Lifecycle
+
   init(category: String) {
     self.logger = Logger(subsystem: Constants.App.bundleIdentifier, category: category)
     self.category = category
   }
   
+  // MARK: - Actions
+
   func info(_ message: String, privacy: LogPrivacy = .private) {
     log(level: .info, message: message, privacy: privacy)
   }
@@ -51,6 +57,9 @@ nonisolated struct AppLogger {
 // MARK: - Log Enum
 
 nonisolated enum Log {
+
+  // MARK: - Properties
+
   static let lifecycle = AppLogger(category: "Lifecycle")
   static let ui = AppLogger(category: "UI")
   static let location = AppLogger(category: "Location")

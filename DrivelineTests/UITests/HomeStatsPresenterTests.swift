@@ -13,6 +13,8 @@ import Foundation
 @MainActor
 struct HomeStatsPresenterTests {
 
+  // MARK: - Formatting
+
   @Test
   func driveCountPassesThroughStats() {
     let stats = DriveStats(drives: [makeDrive(daysAgo: 0), makeDrive(daysAgo: 1)])

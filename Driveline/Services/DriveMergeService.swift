@@ -11,6 +11,9 @@ import SwiftData
 // MARK: - DriveMergeResult
 
 struct DriveMergeResult: Sendable {
+
+  // MARK: - Properties
+
   let mergedID: PersistentIdentifier
   let deletedIDs: [UUID]
 }

@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct OnboardingPrimaryButton: View {
+
+  // MARK: - Properties
+
   let title: String
   let action: () -> Void
+
+  // MARK: - Body
 
   var body: some View {
     Button(action: action) {
@@ -24,9 +29,14 @@ struct OnboardingPrimaryButton: View {
 }
 
 struct OnboardingInfoRow: View {
+
+  // MARK: - Properties
+
   let symbol: String
   let title: String
   let detail: String
+
+  // MARK: - Body
 
   var body: some View {
     HStack(alignment: .top, spacing: 15) {
@@ -47,7 +57,12 @@ struct OnboardingInfoRow: View {
 }
 
 struct OnboardingGrantedPill: View {
+
+  // MARK: - Properties
+
   let label: String
+
+  // MARK: - Body
 
   var body: some View {
     HStack(spacing: 10) {

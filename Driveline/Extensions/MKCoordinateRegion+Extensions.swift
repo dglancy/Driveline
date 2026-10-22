@@ -10,6 +10,8 @@ import MapKit
 
 extension MKCoordinateRegion {
 
+  // MARK: - Actions
+
   nonisolated static func boundingBox(of coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion? {
     guard let first = coordinates.first else { return nil }
 

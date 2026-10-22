@@ -134,8 +134,13 @@ struct OnboardingAutomationDetailView: View {
 // MARK: - Step Row
 
 private struct OnboardingStepRow: View {
+
+  // MARK: - Properties
+
   let number: Int
   let text: String
+
+  // MARK: - Body
 
   var body: some View {
     HStack(alignment: .top, spacing: 14) {

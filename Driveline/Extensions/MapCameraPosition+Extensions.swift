@@ -11,6 +11,8 @@ import SwiftUI
 
 extension MapCameraPosition {
 
+  // MARK: - Actions
+
   static func fit(
     to coordinates: [CLLocationCoordinate2D],
     paddingMultiplier: CLLocationDegrees = 1.5

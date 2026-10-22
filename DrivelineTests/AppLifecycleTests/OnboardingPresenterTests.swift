@@ -12,6 +12,8 @@ import Testing
 @MainActor
 struct OnboardingPresenterTests {
 
+  // MARK: - Welcome
+
   @Test func welcomeTitleIsNonEmpty() {
     #expect(!OnboardingPresenter.welcomeTitle.isEmpty)
   }
@@ -33,12 +35,16 @@ struct OnboardingPresenterTests {
     #expect(!OnboardingPresenter.getStarted.isEmpty)
   }
 
+  // MARK: - Location (While Using)
+
   @Test func locationStringsAreNonEmpty() {
     #expect(!OnboardingPresenter.locationTitle.isEmpty)
     #expect(!OnboardingPresenter.locationBody1.isEmpty)
     #expect(!OnboardingPresenter.allowLocationAccess.isEmpty)
     #expect(!OnboardingPresenter.locationGrantedLabel.isEmpty)
   }
+
+  // MARK: - Location (Always)
 
   @Test func alwaysStringsAreNonEmpty() {
     #expect(!OnboardingPresenter.alwaysTitle.isEmpty)
@@ -51,6 +57,8 @@ struct OnboardingPresenterTests {
     #expect(!OnboardingPresenter.alwaysGrantedLabel.isEmpty)
   }
 
+  // MARK: - Shared
+
   @Test func continueActionIsNonEmpty() {
     #expect(!OnboardingPresenter.continueAction.isEmpty)
   }
@@ -59,6 +67,8 @@ struct OnboardingPresenterTests {
     #expect(OnboardingPresenter.alwaysTitle.contains("\u{201C}"))
     #expect(OnboardingPresenter.alwaysTitle.contains("\u{201D}"))
   }
+
+  // MARK: - Automations Intro
 
   @Test func automationsIntroStringsAreNonEmpty() {
     #expect(!OnboardingPresenter.automationsIntroTitle.isEmpty)
@@ -69,6 +79,8 @@ struct OnboardingPresenterTests {
     #expect(!OnboardingPresenter.automationsIntroRow2Body.isEmpty)
     #expect(!OnboardingPresenter.setUpAutomations.isEmpty)
   }
+
+  // MARK: - Automation Detail (Start)
 
   @Test func automationStartStringsAreNonEmpty() {
     #expect(!OnboardingPresenter.automationStartTitle.isEmpty)
@@ -82,6 +94,8 @@ struct OnboardingPresenterTests {
     #expect(!OnboardingPresenter.automationStartStep7.isEmpty)
   }
 
+  // MARK: - Automation Detail (Finish)
+
   @Test func automationFinishStringsAreNonEmpty() {
     #expect(!OnboardingPresenter.automationFinishTitle.isEmpty)
     #expect(!OnboardingPresenter.automationFinishBody.isEmpty)
@@ -93,6 +107,8 @@ struct OnboardingPresenterTests {
     #expect(!OnboardingPresenter.automationFinishStep6.isEmpty)
     #expect(!OnboardingPresenter.automationFinishStep7.isEmpty)
   }
+
+  // MARK: - Shared Automation
 
   @Test func automationSharedStringsAreNonEmpty() {
     #expect(!OnboardingPresenter.openShortcuts.isEmpty)
@@ -112,6 +128,8 @@ struct OnboardingPresenterTests {
     #expect(OnboardingPresenter.automationFinishTitle.contains("\u{201C}"))
     #expect(OnboardingPresenter.automationFinishTitle.contains("\u{201D}"))
   }
+
+  // MARK: - Button Labels
 
   @Test func allowLocationAccessButtonIsNeutral() {
     #expect(OnboardingPresenter.allowLocationAccess == "Continue")

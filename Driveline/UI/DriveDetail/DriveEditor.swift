@@ -9,6 +9,8 @@ import Foundation
 
 enum DriveEditor {
 
+  // MARK: - Actions
+
   static func apply(name: String, startPlace: String, endPlace: String, to drive: Drive) {
     let trimmedName = name.trimmingCharacters(in: .whitespaces)
     drive.name = trimmedName.isEmpty ? nil : trimmedName

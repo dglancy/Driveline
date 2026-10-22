@@ -11,6 +11,8 @@ import SwiftData
 @MainActor
 enum DriveDeletion {
 
+  // MARK: - Actions
+
   static func delete(_ drives: [Drive], in context: ModelContext, deindexing spotlight: SpotlightIndexingService) {
     guard !drives.isEmpty else { return }
     let ids = drives.map(\.id)

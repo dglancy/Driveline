@@ -11,6 +11,8 @@ import SwiftData
 enum PreviewSampleData {
 
   @MainActor
+  // MARK: - Actions
+
   static func previewContainer() -> ModelContainer {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     return try! ModelContainer(for: Drive.self, Weather.self, configurations: config) // swiftlint:disable:this force_try

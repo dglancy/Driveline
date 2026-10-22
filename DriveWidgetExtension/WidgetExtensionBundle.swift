@@ -10,6 +10,9 @@ import SwiftUI
 
 @main
 struct WidgetExtensionBundle: WidgetBundle {
+
+    // MARK: - Body
+
     var body: some Widget {
         DriveActivityWidget()
     }

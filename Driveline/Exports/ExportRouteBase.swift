@@ -11,10 +11,16 @@ import CoreLocation
 // MARK: - Exporting drive protocol
 
 protocol ExportingDrive {
+
+  // MARK: - Actions
+
   func export(drive: Drive) async throws -> URL
 }
 
 extension ExportingDrive {
+
+  // MARK: - Actions
+
   func validatedCoordinates(for drive: Drive) throws -> [CLLocationCoordinate2D] {
     let coords = drive.orderedPositions.map(\.location.coordinate)
     guard !coords.isEmpty else { throw ExportError.emptyDrive }
@@ -42,6 +48,8 @@ enum ExportError: LocalizedError, Equatable {
   case pngDataPreparationFailure
   case fileWriteFailure
 
+  // MARK: - Computed Properties
+
   var errorDescription: String? {
     switch self {
     case .emptyDrive:
@@ -64,6 +72,8 @@ enum ExportFileType {
   case gpx
   case png
 
+  // MARK: - Computed Properties
+
   var fileExtension: String {
     switch self {
     case .gpx:
@@ -77,6 +87,9 @@ enum ExportFileType {
 // MARK: - Export drive file naming service
 
 struct ExportDriveFileNamingService {
+
+  // MARK: - Properties
+
   static let startedAtFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "dd-MMM-yyyy'-'HHmm"
@@ -88,6 +101,8 @@ struct ExportDriveFileNamingService {
   private static let reservedFilenameCharacters = CharacterSet(charactersIn: "/\\:*?\"<>|→")
   private static let maxDisplayNameLength = 80
 
+  // MARK: - Actions
+
   static func fileURL(for drive: Drive, type: ExportFileType) -> URL {
     let datePart = startedAtFormatter.string(from: drive.startedAt)
     let namePart = sanitizedDisplayName(for: drive)
@@ -96,6 +111,8 @@ struct ExportDriveFileNamingService {
       : "\(datePart) - \(namePart).\(type.fileExtension)"
     return FileManager.default.temporaryDirectory.appendingPathComponent(filename)
   }
+
+  // MARK: - Private
 
   private static func sanitizedDisplayName(for drive: Drive) -> String {
     let replaced = drive.displayName.unicodeScalars.map { scalar -> String in

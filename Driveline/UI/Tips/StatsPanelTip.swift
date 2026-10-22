@@ -9,15 +9,22 @@ import SwiftUI
 import TipKit
 
 struct StatsPanelTip: Tip {
+
+  // MARK: - Properties
+
   @Parameter static var driveCount: Int = 0
   @Parameter static var isRecording: Bool = false
   @Parameter static var isOnboardingPresented: Bool = true
+
+  // MARK: - Rules
 
   var rules: [Rule] {
     #Rule(Self.$driveCount) { $0 >= 3 }
     #Rule(Self.$isRecording) { $0 == false }
     #Rule(Self.$isOnboardingPresented) { $0 == false }
   }
+
+  // MARK: - Computed Properties
 
   var title: Text {
     Text("Switch Stats View", comment: "TipKit tip title for the home screen stats panel")

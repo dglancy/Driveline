@@ -293,6 +293,9 @@ struct HomeView: View {
 // MARK: - MergeSelection
 
 private struct MergeSelection: Identifiable {
+
+  // MARK: - Properties
+
   let id = UUID()
   let drives: [Drive]
 }
@@ -301,12 +304,16 @@ private struct MergeSelection: Identifiable {
 
 private struct HomeToolbar: ToolbarContent {
 
+  // MARK: - Properties
+
   let isSelectMode: Bool
   let isSectionsEmpty: Bool
   let onExitSelectMode: () -> Void
   let onEnterSelectMode: () -> Void
   let onOpenSettings: () -> Void
   let onRecord: () -> Void
+
+  // MARK: - Body
 
   var body: some ToolbarContent {
     ToolbarItem(placement: .topBarLeading) {
@@ -366,7 +373,11 @@ private struct HomeToolbar: ToolbarContent {
 
 private struct RecordingScreenModifier: ViewModifier {
 
+  // MARK: - Properties
+
   @Environment(DriveRecordingService.self) private var driveService
+
+  // MARK: - Body
 
   func body(content: Content) -> some View {
     content.fullScreenCover(isPresented: Binding(
@@ -382,9 +393,13 @@ private struct RecordingScreenModifier: ViewModifier {
 
 private struct LocationPrimerModifier: ViewModifier {
 
+  // MARK: - Properties
+
   @Environment(LocationService.self) private var locationService
   @Binding var isPresented: Bool
   let onStartDrive: () -> Void
+
+  // MARK: - Body
 
   func body(content: Content) -> some View {
     content.fullScreenCover(isPresented: $isPresented) {
@@ -405,8 +420,12 @@ private struct LocationPrimerModifier: ViewModifier {
 
 private struct AutomationSetupModifier: ViewModifier {
 
+  // MARK: - Properties
+
   @Binding var isPresented: Bool
   @Binding var hasSeenAutomationSetup: Bool
+
+  // MARK: - Body
 
   func body(content: Content) -> some View {
     content.fullScreenCover(isPresented: $isPresented) {

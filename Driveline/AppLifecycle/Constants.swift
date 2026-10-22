@@ -9,12 +9,16 @@ import Foundation
 import CoreLocation
 
 enum Constants {
+  // MARK: - App
+
   enum App {
     nonisolated static let bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.targatrips.Driveline"
     nonisolated static let GPXCreator = "Driveline for iOS"
     nonisolated static let dashString = "—"
   }
   
+  // MARK: - Configuration
+
   enum Configuration {
     /// Bump this whenever `DriveCategoryClassifier.mlmodel` is retrained and shipped, so the
     /// category prediction sweep reclassifies every finished drive exactly once against the
@@ -33,12 +37,16 @@ enum Constants {
     nonisolated static let categoryPredictionSweepTaskIdentifier = "com.targatrips.Driveline.category-prediction-sweep"
   }
   
+  // MARK: - Statistics
+
   enum Statistics {
     nonisolated static let highSpeedMetresPerSecond: CLLocationSpeed = 80 / 3.6
     nonisolated static let stoppedSpeedMetresPerSecond: CLLocationSpeed = 5 / 3.6
     nonisolated static let sustainedMinimumSeconds: TimeInterval = 10
     nonisolated static let metresPerSecondToKilometresPerHour = 3.6
   }
+
+  // MARK: - Testing
 
   enum Testing {
     nonisolated static let UITestingFlag = "-ui-testing"

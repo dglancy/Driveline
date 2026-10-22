@@ -13,6 +13,9 @@ import Observation
 
 @MainActor
 protocol SpotlightIndexProtocol: AnyObject {
+
+  // MARK: - Actions
+
   func indexSearchableItems(_ items: [CSSearchableItem]) async throws
   func deleteSearchableItems(withIdentifiers identifiers: [String]) async throws
 }

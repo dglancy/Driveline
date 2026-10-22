@@ -8,10 +8,15 @@
 import Foundation
 
 struct DriveRowDisplay {
+
+  // MARK: - Properties
+
   let dateTimeLabel: String
   let formattedDistance: String
   let formattedDuration: String?
   let iconName: String
+
+  // MARK: - Actions
 
   static func iconName(for date: Date) -> String {
     let hour = Calendar.current.component(.hour, from: date)

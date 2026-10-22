@@ -8,6 +8,9 @@
 import Foundation
 
 extension Bundle {
+
+  // MARK: - Computed Properties
+
   nonisolated var iconFileName: String? {
     guard
       let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],

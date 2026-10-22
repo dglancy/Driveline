@@ -9,6 +9,8 @@ import Foundation
 import SwiftData
 
 extension ModelContext {
+  
+  // MARK: - Actions
 
   nonisolated func finishedDrives(since cutoff: TimeInterval, needsProcessing: (Drive) -> Bool) -> [Drive] {
     let cutoffDate = Date().addingTimeInterval(cutoff)

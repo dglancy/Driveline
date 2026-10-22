@@ -13,16 +13,22 @@ import Foundation
 @MainActor
 struct UserPreferencesTests {
 
+  // MARK: - Helpers
+
   private func makePreferences() -> UserPreferences {
     let suiteName = "com.targatrips.Driveline.test-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     return UserPreferences(defaults: defaults)
   }
 
+  // MARK: - Onboarding
+
   @Test func hasCompletedOnboardingDefaultsToFalse() {
     let prefs = makePreferences()
     #expect(prefs.hasCompletedOnboarding == false)
   }
+
+  // MARK: - Automatic Merging
 
   @Test func automaticallyMergeSameDayDrivesDefaultsToFalse() {
     let prefs = makePreferences()
@@ -49,6 +55,8 @@ struct UserPreferencesTests {
     #expect(prefs.pendingAutomaticMerge == nil)
   }
 
+  // MARK: - Onboarding Persistence
+
   @Test func setHasCompletedOnboardingPersistsTrue() {
     var prefs = makePreferences()
     prefs.setHasCompletedOnboarding(true)
@@ -61,6 +69,8 @@ struct UserPreferencesTests {
     prefs.setHasCompletedOnboarding(false)
     #expect(prefs.hasCompletedOnboarding == false)
   }
+
+  // MARK: - Welcome
 
   @Test func hasSeenWelcomeDefaultsToFalse() {
     let prefs = makePreferences()
@@ -79,6 +89,8 @@ struct UserPreferencesTests {
     prefs.setHasSeenWelcome(false)
     #expect(prefs.hasSeenWelcome == false)
   }
+
+  // MARK: - Automation Setup
 
   @Test func hasSeenAutomationSetupDefaultsToFalse() {
     let prefs = makePreferences()

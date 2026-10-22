@@ -257,8 +257,12 @@ struct DriveDetailView: View {
 
 private struct DriveDetailWeatherCard: View {
 
+  // MARK: - Properties
+
   let presenter: DriveDetailPresenter
   let onLoadAttribution: () -> Void
+
+  // MARK: - Body
 
   var body: some View {
     if presenter.hasWeather {
@@ -304,9 +308,13 @@ private struct DriveDetailWeatherCard: View {
 
 private struct DriveDetailMetadataCard: View {
 
+  // MARK: - Properties
+
   let presenter: DriveDetailPresenter
   let maxSpeedMPS: CLLocationSpeed
   let positionCount: Int
+
+  // MARK: - Body
 
   var body: some View {
     VStack(spacing: 0) {

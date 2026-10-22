@@ -18,6 +18,8 @@ nonisolated struct DriveActivityAttributes: ActivityAttributes {
   // MARK: - Content State
 
   struct ContentState: Codable, Hashable {
+    // MARK: - Properties
+
     let startPlaceName: String?
     let distanceMetres: Double
     let avgSpeedMetresPerSecond: Double
