@@ -14,6 +14,10 @@ final class HomeScreenUITests: BaseXCTestCase {
   @MainActor
   func testHomeScreen() throws {
     navigateToHomeScreen()
+
+    XCTAssertTrue(app.buttons["NewDriveButton"].exists)
+    XCTAssertTrue(app.buttons["More options"].exists)
+    XCTAssertTrue(app.searchFields["Search"].exists)
   }
   
   @MainActor
