@@ -24,39 +24,49 @@ struct HomeStatsPanelView: View {
   // MARK: - Body
 
   var body: some View {
-    HStack(spacing: 11) {
-      StatCard(
-        icon: Icons.Panels.drives,
-        label: String(localized: "DRIVES", comment: "Stats panel drives card label"),
-        value: "\(driveCount)",
-        unit: nil,
-        scopeLabel: scopeLabel
-      )
-      .accessibilityLabel(
-        String(localized: "\(driveCount) drives, \(scopeLabel)", comment: "Accessibility label for drives stats card")
-      )
-      .accessibilityAddTraits(.isButton)
-      .accessibilityHint(Self.scopeToggleHint)
-      .accessibilityAction { onTap() }
-
-      StatCard(
-        icon: Icons.Panels.distance,
-        label: String(localized: "DISTANCE", comment: "Stats panel distance card label"),
-        value: distanceValue,
-        unit: distanceUnit,
-        scopeLabel: scopeLabel
-      )
-      .accessibilityLabel(
-        String(localized: "\(distanceValue) \(distanceUnit), \(scopeLabel)", comment: "Accessibility label for distance stats card")
-      )
-      .accessibilityAddTraits(.isButton)
-      .accessibilityHint(Self.scopeToggleHint)
-      .accessibilityAction { onTap() }
+    ViewThatFits(in: .horizontal) {
+      HStack(spacing: 11) {
+        statCards
+      }
+      VStack(spacing: 11) {
+        statCards
+      }
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
     .contentShape(Rectangle())
     .onTapGesture { onTap() }
+  }
+
+  @ViewBuilder
+  private var statCards: some View {
+    StatCard(
+      icon: Icons.Panels.drives,
+      label: String(localized: "DRIVES", comment: "Stats panel drives card label"),
+      value: "\(driveCount)",
+      unit: nil,
+      scopeLabel: scopeLabel
+    )
+    .accessibilityLabel(
+      String(localized: "\(driveCount) drives, \(scopeLabel)", comment: "Accessibility label for drives stats card")
+    )
+    .accessibilityAddTraits(.isButton)
+    .accessibilityHint(Self.scopeToggleHint)
+    .accessibilityAction { onTap() }
+
+    StatCard(
+      icon: Icons.Panels.distance,
+      label: String(localized: "DISTANCE", comment: "Stats panel distance card label"),
+      value: distanceValue,
+      unit: distanceUnit,
+      scopeLabel: scopeLabel
+    )
+    .accessibilityLabel(
+      String(localized: "\(distanceValue) \(distanceUnit), \(scopeLabel)", comment: "Accessibility label for distance stats card")
+    )
+    .accessibilityAddTraits(.isButton)
+    .accessibilityHint(Self.scopeToggleHint)
+    .accessibilityAction { onTap() }
   }
 }
 
@@ -127,6 +137,7 @@ private struct StatCard: View {
       .padding(12)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
+    .frame(minWidth: 140)
     .frame(maxWidth: .infinity)
     .frame(minHeight: 110)
     .fixedSize(horizontal: false, vertical: true)
