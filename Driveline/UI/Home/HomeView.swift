@@ -66,78 +66,74 @@ struct HomeView: View {
             isSectionsEmpty: sections.isEmpty,
             onExitSelectMode: exitSelectMode,
             onEnterSelectMode: enterSelectMode,
-            onOpenSettings: {
-              if let url = URL(string: UIApplication.openSettingsURLString) {
-                openURL(url)
-              }
-            },
-            onRecord: { attemptManualRecord() }
+            onOpenSettings: openSettings,
+            onRecord: attemptManualRecord
           )
         }
-        .onChange(of: driveService.isRecording, initial: true) { _, isRecording in
-          if isRecording { exitSelectMode() }
-          StatsPanelTip.isRecording = isRecording
-          RecordButtonTip.isRecording = isRecording
-        }
-        .onChange(of: recentStats.driveCount, initial: true) { _, count in
-          StatsPanelTip.driveCount = count
-        }
-        .onChange(of: drives.isEmpty, initial: true) { _, isEmpty in
-          RecordButtonTip.hasDrives = !isEmpty
-        }
+        .onChange(of: driveService.isRecording, initial: true, updateRecordingTips)
+        .onChange(of: recentStats.driveCount, initial: true, updateStatsTip)
+        .onChange(of: drives.isEmpty, initial: true, updateRecordButtonTip)
         .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 480)
     } detail: {
-      NavigationStack {
-        if let selectedDrive {
-          DriveDetailView(
-            drive: selectedDrive,
-            modelContainer: modelContext.container,
-            onClose: closeSelectedDrive
-          )
-          .id(selectedDrive.id)
-        } else {
-          HomeDetailPlaceholderView()
-        }
-      }
+      detail
     }
-    .navigationSplitViewStyle(.balanced)
-    .onContinueUserActivity(CSSearchableItemActionType) { activity in
-      guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
-      openDrive(fromSpotlightIdentifier: identifier)
-    }
-    .modifier(RecordingScreenModifier())
-    .modifier(LocationPrimerModifier(
-      isPresented: $showingLocationPrimer,
-      onStartDrive: { startDrive() }
-    ))
-    .modifier(AutomationSetupModifier(
-      isPresented: $showingAutomationSetup,
-      hasSeenAutomationSetup: $hasSeenAutomationSetup
-    ))
-    .alert(
-      String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
-      isPresented: $showingDeleteConfirmation
-    ) {
-      Button.delete {
-        let selected = selectedDrives()
-        exitSelectMode()
-        deleteDrives(selected)
-      }
-      Button.cancel()
-    } message: {
-      Text(HomePresenter.deleteConfirmationMessage(selectedDriveIDs.count))
-    }
-    .sheet(item: $mergeSelection) { selection in
-      MergeDrivesView(
-        drives: selection.drives,
-        modelContainer: modelContext.container,
-        spotlight: spotlightIndexingService,
-        onMerged: { exitSelectMode() }
+      .navigationSplitViewStyle(.balanced)
+      .onContinueUserActivity(CSSearchableItemActionType, perform: handleSpotlightActivity)
+      .modifier(RecordingScreenModifier())
+      .modifier(LocationPrimerModifier(
+        isPresented: $showingLocationPrimer,
+        onStartDrive: { startDrive() }
+      ))
+      .modifier(AutomationSetupModifier(
+        isPresented: $showingAutomationSetup,
+        hasSeenAutomationSetup: $hasSeenAutomationSetup
+      ))
+      .alert(
+        String(localized: "Delete Drives", comment: "Delete confirmation alert title"),
+        isPresented: $showingDeleteConfirmation,
+        actions: deleteConfirmationActions,
+        message: deleteConfirmationMessage
       )
-    }
+      .sheet(item: $mergeSelection, content: mergeSheet)
   }
 
   // MARK: - Private Views
+
+  private var detail: some View {
+    NavigationStack {
+      if let selectedDrive {
+        DriveDetailView(
+          drive: selectedDrive,
+          modelContainer: modelContext.container,
+          onClose: closeSelectedDrive
+        )
+        .id(selectedDrive.id)
+      } else {
+        HomeDetailPlaceholderView()
+      }
+    }
+  }
+
+  @ViewBuilder
+  private func deleteConfirmationActions() -> some View {
+      Button.delete {
+        deleteSelectedDrives()
+      }
+      Button.cancel()
+  }
+
+  private func deleteConfirmationMessage() -> some View {
+    Text(HomePresenter.deleteConfirmationMessage(selectedDriveIDs.count))
+  }
+
+  private func mergeSheet(selection: MergeSelection) -> some View {
+    MergeDrivesView(
+      drives: selection.drives,
+      modelContainer: modelContext.container,
+      spotlight: spotlightIndexingService,
+      onMerged: exitSelectMode
+    )
+  }
 
   @ViewBuilder
   private var content: some View {
@@ -237,6 +233,30 @@ struct HomeView: View {
 
   // MARK: - Actions
 
+  private func updateRecordingTips(_ oldValue: Bool, _ isRecording: Bool) {
+    if isRecording { exitSelectMode() }
+    StatsPanelTip.isRecording = isRecording
+    RecordButtonTip.isRecording = isRecording
+  }
+
+  private func updateStatsTip(_ oldValue: Int, _ driveCount: Int) {
+    StatsPanelTip.driveCount = driveCount
+  }
+
+  private func updateRecordButtonTip(_ oldValue: Bool, _ isEmpty: Bool) {
+    RecordButtonTip.hasDrives = !isEmpty
+  }
+
+  private func handleSpotlightActivity(_ activity: NSUserActivity) {
+    guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
+    openDrive(fromSpotlightIdentifier: identifier)
+  }
+
+  private func openSettings() {
+    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+    openURL(url)
+  }
+
   private func attemptManualRecord() {
     guard !Driveline.isUITesting() else {
       startDrive()
@@ -284,6 +304,12 @@ struct HomeView: View {
 
   private func deleteDrives(_ drives: [Drive]) {
     DriveDeletion.delete(drives, in: modelContext, deindexing: spotlightIndexingService)
+  }
+
+  private func deleteSelectedDrives() {
+    let selected = selectedDrives()
+    exitSelectMode()
+    deleteDrives(selected)
   }
 
   private func deleteDrives(at indexSet: IndexSet, in section: DriveSection) {
