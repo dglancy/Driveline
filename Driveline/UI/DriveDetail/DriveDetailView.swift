@@ -28,8 +28,6 @@ struct DriveDetailView: View {
   @Environment(SpotlightIndexingService.self) private var spotlightIndexingService
   @Environment(\.modelContext) private var modelContext
 
-  private let mapHeight: CGFloat = 280
-
   // MARK: - Lifecycle
 
   init(drive: Drive, modelContainer: ModelContainer) {
@@ -44,45 +42,47 @@ struct DriveDetailView: View {
       Color(.systemGroupedBackground)
         .ignoresSafeArea()
 
-      VStack(spacing: 0) {
-        DriveDetailMapView(segments: driveState.coordinateSegments, cameraPosition: $driveState.cameraPosition, accessibilityLabel: presenter.routeAccessibilityLabel)
-          .frame(height: mapHeight)
-          .task { await driveState.loadRoute() }
-          .overlay(alignment: .topLeading) {
-            GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
+      GeometryReader { geometry in
+        VStack(spacing: 0) {
+          DriveDetailMapView(segments: driveState.coordinateSegments, cameraPosition: $driveState.cameraPosition, accessibilityLabel: presenter.routeAccessibilityLabel)
+            .frame(height: min(280, max(140, geometry.size.height * 0.4)))
+            .task { await driveState.loadRoute() }
+            .overlay(alignment: .topLeading) {
+              GlassButton(systemImage: Icons.Navigation.chevronLeft, accessibilityLabel: LocalizedStringResource("Back", comment: "Accessibility label for the back button on the drive detail screen")) { dismiss() }
+                .padding(14)
+            }
+            .overlay(alignment: .topTrailing) {
+              GlassButton(systemImage: Icons.Options.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
+                renameDriveTip.invalidate(reason: .actionPerformed)
+                showingMoreMenu = true
+              }
               .padding(14)
-          }
-          .overlay(alignment: .topTrailing) {
-            GlassButton(systemImage: Icons.Options.ellipsis, accessibilityLabel: LocalizedStringResource("More options", comment: "Accessibility label for the more options button on the drive detail screen")) {
-              renameDriveTip.invalidate(reason: .actionPerformed)
-              showingMoreMenu = true
+              .popoverTip(renameDriveTip)
             }
-            .padding(14)
-            .popoverTip(renameDriveTip)
-          }
-          .overlay(alignment: .bottomTrailing) {
-            GlassButton(systemImage: Icons.Options.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
-              showingFullScreenMap = true
+            .overlay(alignment: .bottomTrailing) {
+              GlassButton(systemImage: Icons.Options.viewfinder, accessibilityLabel: LocalizedStringResource("Full screen map", comment: "Accessibility label for the button that opens the full screen map on the drive detail screen")) {
+                showingFullScreenMap = true
+              }
+              .padding(14)
             }
-            .padding(14)
-          }
 
-        ScrollView {
-          VStack(alignment: .leading, spacing: 14) {
-            driveHeader(presenter: presenter)
-            statTiles
-            endpointsCard(presenter: presenter)
-            DriveDetailWeatherCard(presenter: presenter) { driveState.loadWeatherAttribution() }
-            DriveDetailMetadataCard(presenter: presenter, maxSpeedMPS: driveState.maxSpeedMetresPerSecond, positionCount: driveState.positionCount)
-            shareDriveButton
-            Spacer()
-            weatherAttributionFooter
+          ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+              driveHeader(presenter: presenter)
+              statTiles
+              endpointsCard(presenter: presenter)
+              DriveDetailWeatherCard(presenter: presenter) { driveState.loadWeatherAttribution() }
+              DriveDetailMetadataCard(presenter: presenter, maxSpeedMPS: driveState.maxSpeedMetresPerSecond, positionCount: driveState.positionCount)
+              shareDriveButton
+              Spacer()
+              weatherAttributionFooter
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 24)
           }
-          .padding(.horizontal, 16)
-          .padding(.bottom, 24)
+          .padding(.top, 20)
+          .contentMargins(.top, 0, for: .scrollContent)
         }
-        .padding(.top, 20)
-        .contentMargins(.top, 0, for: .scrollContent)
       }
     }
     .toolbar(.hidden, for: .navigationBar)

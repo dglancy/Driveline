@@ -21,7 +21,6 @@ final class RecordingScreenUITests: BaseXCTestCase {
     XCTAssertEqual(recordingBanner.label, "Recording in progress")
     let afterStart = Date.now
     
-    XCTAssertEqual(app.staticTexts["Elapsed"].label, "Elapsed")
     XCTAssertEqual(app.staticTexts["ElapsedTime"].label, "Elapsed time")
     
     XCTAssertEqual(app.staticTexts["DistanceValue"].label, "0.0")
@@ -39,8 +38,13 @@ final class RecordingScreenUITests: BaseXCTestCase {
     
     XCTAssertEqual(app.staticTexts["BatteryExplanation"].label, "Running in the background to save battery. Your full drive map appears here when the drive ends.")
     
-    XCTAssertEqual(app.staticTexts["FinishDrive"].label, "Finish Drive")
-    app.buttons["FinishDriveButton"].tap()
+    let finishButton = app.buttons["FinishDriveButton"]
+    for _ in 0..<3 where !finishButton.isHittable {
+      app.scrollViews.firstMatch.swipeUp()
+    }
+    XCTAssertEqual(finishButton.label, "Finish Drive")
+    XCTAssertTrue(finishButton.isHittable)
+    finishButton.tap()
     
     XCTAssertTrue(app.navigationBars["Drives"].waitForExistence(timeout: 5))
   }

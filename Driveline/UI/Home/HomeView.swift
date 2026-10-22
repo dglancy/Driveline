@@ -149,71 +149,65 @@ struct HomeView: View {
   }
 
   private var driveList: some View {
-    ZStack(alignment: .bottom) {
-      List {
-        if !drives.isEmpty && !isSelectMode && !isSearchActive {
-          Section {
-            HomeStatsPanelView(
-              driveCount: activeStatsPresenter.driveCount,
-              distanceValue: activeStatsPresenter.distanceValue,
-              distanceUnit: activeStatsPresenter.distanceUnit,
-              scopeLabel: HomePresenter.statsScopeLabel(statsScope),
-              onTap: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
-            )
+    List {
+      if !drives.isEmpty && !isSelectMode && !isSearchActive {
+        Section {
+          HomeStatsPanelView(
+            driveCount: activeStatsPresenter.driveCount,
+            distanceValue: activeStatsPresenter.distanceValue,
+            distanceUnit: activeStatsPresenter.distanceUnit,
+            scopeLabel: HomePresenter.statsScopeLabel(statsScope),
+            onTap: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
+          )
+          .listRowInsets(EdgeInsets())
+          .listRowBackground(Color.clear)
+          .listRowSeparator(.hidden)
+          .popoverTip(StatsPanelTip())
+        }
+        .listSectionSpacing(8)
+      }
+
+      if !hasSeenAutomationSetup && !isSelectMode && !isSearchActive
+          && (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) {
+        Section {
+          HomeAutomationSetupPanelView { showingAutomationSetup = true }
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
-            .popoverTip(StatsPanelTip())
-          }
-          .listSectionSpacing(8)
         }
+        .listSectionSpacing(8)
+      }
 
-        if !hasSeenAutomationSetup && !isSelectMode && !isSearchActive
-            && (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) {
-          Section {
-            HomeAutomationSetupPanelView { showingAutomationSetup = true }
-              .listRowInsets(EdgeInsets())
-              .listRowBackground(Color.clear)
-              .listRowSeparator(.hidden)
-          }
-          .listSectionSpacing(8)
-        }
-
-        ForEach(sections) { section in
-          Section(section.title) {
-            ForEach(Array(section.rows.enumerated()), id: \.element.id) { index, row in
-              if isSelectMode {
-                Button {
-                  toggleSelection(for: row.drive.id)
-                } label: {
-                  DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: selectedDriveIDs.contains(row.drive.id)))
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("Drive row \(index)")
-              } else {
-                NavigationLink(value: row.drive) {
-                  DriveRowView(drive: row.drive, display: row.display)
-                }.accessibilityIdentifier("Drive row \(index)")
+      ForEach(sections) { section in
+        Section(section.title) {
+          ForEach(Array(section.rows.enumerated()), id: \.element.id) { index, row in
+            if isSelectMode {
+              Button {
+                toggleSelection(for: row.drive.id)
+              } label: {
+                DriveRowView(drive: row.drive, display: row.display, style: .list(isSelected: selectedDriveIDs.contains(row.drive.id)))
               }
+              .buttonStyle(.plain)
+              .accessibilityIdentifier("Drive row \(index)")
+            } else {
+              NavigationLink(value: row.drive) {
+                DriveRowView(drive: row.drive, display: row.display)
+              }.accessibilityIdentifier("Drive row \(index)")
             }
-            .onDelete(perform: isSelectMode ? nil : { indexSet in
-              deleteDrives(at: indexSet, in: section)
-            })
           }
-        }
-
-        if isSelectMode {
-          Color.clear
-            .frame(height: 70)
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
+          .onDelete(perform: isSelectMode ? nil : { indexSet in
+            deleteDrives(at: indexSet, in: section)
+          })
         }
       }
-      .contentMargins(.top, 0, for: .scrollContent)
-      .navigationDestination(for: Drive.self) { drive in
-        DriveDetailView(drive: drive, modelContainer: modelContext.container)
-      }
 
+    }
+    .contentMargins(.top, 0, for: .scrollContent)
+    .navigationDestination(for: Drive.self) { drive in
+      DriveDetailView(drive: drive, modelContainer: modelContext.container)
+    }
+
+    .safeAreaInset(edge: .bottom, spacing: 0) {
       if isSelectMode {
         SelectionToolbar(
           canMerge: canMerge,

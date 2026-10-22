@@ -128,7 +128,8 @@ private struct StatCard: View {
       .frame(maxWidth: .infinity, alignment: .leading)
     }
     .frame(maxWidth: .infinity)
-    .frame(height: 110)
+    .frame(minHeight: 110)
+    .fixedSize(horizontal: false, vertical: true)
     .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 16))
     .clipped()
   }

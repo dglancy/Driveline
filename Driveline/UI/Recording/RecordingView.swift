@@ -19,7 +19,13 @@ struct RecordingView: View {
   var body: some View {
     ZStack {
       Color(.systemBackground).ignoresSafeArea()
-      mainContent
+      GeometryReader { geometry in
+        ScrollView {
+          mainContent
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: geometry.size.height)
+        }
+      }
     }
   }
 
@@ -119,7 +125,7 @@ struct RecordingView: View {
                  valueAccessibilityIdentifier: "DriveStartedAtValue",
                  labelAccessibilityIdentifier: "DriveStartedAtLabel")
     }
-    .frame(width: 280)
+    .frame(maxWidth: 280)
   }
 
   private var batteryNote: some View {

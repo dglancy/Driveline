@@ -16,16 +16,21 @@ struct OnboardingWelcomeView: View {
   // MARK: - Body
   
   var body: some View {
-    VStack(spacing: 0) {
-      Spacer()
-      heroSection
-      Spacer(minLength: 36)
-      featureRows
-      Spacer()
-      footer
+    GeometryReader { geometry in
+      ScrollView {
+        VStack(spacing: 0) {
+          Spacer()
+          heroSection
+          Spacer(minLength: 36)
+          featureRows
+          Spacer(minLength: 24)
+          footer
+        }
+        .padding(.horizontal, 28)
+        .padding(.vertical, 24)
+        .frame(minHeight: geometry.size.height)
+      }
     }
-    .padding(.horizontal, 28)
-    .padding(.bottom, 40)
   }
   
   // MARK: - Private Views

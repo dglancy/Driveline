@@ -43,8 +43,7 @@ struct SelectionToolbar: View {
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
     .padding(.horizontal, 18)
-    .padding(.top, 10)
-    .padding(.bottom, 30)
+    .padding(.vertical, 10)
     .background(.regularMaterial)
     .overlay(alignment: .top) {
       Divider()
