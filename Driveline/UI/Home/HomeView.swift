@@ -317,6 +317,19 @@ private struct HomeToolbar: ToolbarContent {
     }
 
     if !isSelectMode {
+      ToolbarItem(placement: .topBarPinnedTrailing) {
+        Button {
+          onRecord()
+        } label: {
+          Image(systemName: Icons.Selection.record)
+            .foregroundStyle(.red)
+        }
+        .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
+        .accessibilityIdentifier("NewDriveButton")
+        .popoverTip(RecordButtonTip())
+      }
+      .visibilityPriority(.high)
+
       ToolbarItem(placement: .topBarTrailing) {
         Menu {
           Button(
@@ -340,25 +353,6 @@ private struct HomeToolbar: ToolbarContent {
       }
 
       DefaultToolbarItem(kind: .search, placement: .bottomBar)
-      ToolbarSpacer(.fixed, placement: .bottomBar)
-
-      ToolbarItem(placement: .bottomBar) {
-        Button {
-          onRecord()
-        } label: {
-          ZStack {
-            Circle().fill(Color(.systemFill))
-            Image(systemName: Icons.Selection.record)
-              .font(.title2)
-              .foregroundStyle(.red)
-          }
-          .frame(width: 36, height: 36)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
-        .accessibilityIdentifier("NewDriveButton")
-        .popoverTip(RecordButtonTip())
-      }
     }
   }
 }

@@ -56,14 +56,28 @@ final class TipUITests: BaseXCTestCase {
   }
 
   @MainActor
-  func testEditDriveTipAppearsOnDriveDetail() throws {
+  func testDriveDetailToolbarActionsAppear() throws {
     navigateToHomeScreen()
     dismissRecordButtonTipIfPresent()
 
     app.buttons["Drive row 0"].tap()
 
-    XCTAssertTrue(app.staticTexts["Edit Your Drive"].waitForExistence(timeout: 5))
-    XCTAssertTrue(app.staticTexts["Tap the options button to edit the name and other details."].exists)
+    XCTAssertTrue(app.buttons["Back"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Edit Drive Details"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Full screen map"].exists)
+    XCTAssertTrue(app.buttons["Delete Drive"].exists)
+  }
+
+  @MainActor
+  func testFullScreenMapBackButtonReturnsToDriveDetail() throws {
+    navigateToHomeScreen()
+    dismissRecordButtonTipIfPresent()
+
+    app.buttons["Drive row 0"].tap()
+    app.buttons["Full screen map"].tap()
+    app.buttons["Back"].tap()
+
+    XCTAssertTrue(app.buttons["Edit Drive Details"].waitForExistence(timeout: 5))
   }
 
   // MARK: - Private

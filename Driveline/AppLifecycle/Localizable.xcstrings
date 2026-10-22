@@ -878,7 +878,7 @@
       }
     },
     "Back" : {
-      "comment" : "Accessibility label for the back button on the drive detail screen\nAccessibility label for the back button on the full screen map",
+      "comment" : "Drive detail toolbar action\nFull screen map toolbar action",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1255,7 +1255,7 @@
       }
     },
     "Delete Drive" : {
-      "comment" : "Delete confirmation alert title\nMore menu action",
+      "comment" : "Delete confirmation alert title\nDrive detail toolbar action",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1547,6 +1547,7 @@
     },
     "Drive Options" : {
       "comment" : "More menu title",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1867,7 +1868,7 @@
       }
     },
     "Edit Drive Details" : {
-      "comment" : "More menu action",
+      "comment" : "Drive detail toolbar action",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1896,7 +1897,7 @@
       }
     },
     "Edit Your Drive" : {
-      "comment" : "TipKit tip title for the drive detail options button",
+      "comment" : "TipKit tip title for the drive detail edit button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2540,7 +2541,7 @@
       }
     },
     "Full screen map" : {
-      "comment" : "Accessibility label for the button that opens the full screen map on the drive detail screen",
+      "comment" : "Drive detail toolbar action",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2975,7 +2976,7 @@
       }
     },
     "More options" : {
-      "comment" : "Accessibility label for the more options button on the drive detail screen\nEllipsis menu accessibility label",
+      "comment" : "Ellipsis menu accessibility label",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4800,8 +4801,12 @@
         }
       }
     },
+    "Tap the edit button to change the name and other details." : {
+      "comment" : "TipKit tip message for the drive detail edit button"
+    },
     "Tap the options button to edit the name and other details." : {
       "comment" : "TipKit tip message for the drive detail options button",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
