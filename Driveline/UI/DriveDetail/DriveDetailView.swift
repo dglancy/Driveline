@@ -269,7 +269,7 @@ private struct DriveDetailActionToolbar: ToolbarContent {
       .popoverTip(renameDriveTip)
 
       Button(action: onShowFullScreenMap) {
-        Label(String(localized: "Full screen map", comment: "Drive detail toolbar action"), systemImage: Icons.Options.viewfinder)
+        Label(String(localized: "Full screen map", comment: "Drive detail toolbar action"), systemImage: Icons.Options.map)
       }
 
       Button(role: .destructive, action: onDelete) {
