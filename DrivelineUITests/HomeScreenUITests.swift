@@ -17,7 +17,9 @@ final class HomeScreenUITests: BaseXCTestCase {
 
     XCTAssertTrue(app.buttons["NewDriveButton"].exists)
     XCTAssertTrue(app.buttons["More options"].exists)
-    XCTAssertTrue(app.searchFields["Search"].exists)
+    XCTAssertTrue(
+      app.searchFields["Search"].exists || app.buttons["Search"].exists
+    )
   }
 
   @MainActor
@@ -32,11 +34,20 @@ final class HomeScreenUITests: BaseXCTestCase {
   }
 
   @MainActor
-  func testDriveDetailToolbarAppearsAtExpandedWidth() throws {
-    XCUIDevice.shared.orientation = .landscapeLeft
+  func testDriveDetailToolbarSurvivesWindowResize() throws {
+    let originalOrientation = XCUIDevice.shared.orientation
+    defer { XCUIDevice.shared.orientation = originalOrientation }
+
+    XCUIDevice.shared.orientation = .portrait
     navigateToHomeScreen()
 
     app.buttons["Drive row 0"].tap()
+
+    XCTAssertTrue(app.buttons["Edit Drive Details"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Full screen map"].exists)
+    XCTAssertTrue(app.buttons["Delete Drive"].exists)
+
+    XCUIDevice.shared.orientation = .landscapeLeft
 
     XCTAssertTrue(app.buttons["Edit Drive Details"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.buttons["Full screen map"].exists)
@@ -66,8 +77,7 @@ final class HomeScreenUITests: BaseXCTestCase {
   func testSearchNoResults() throws {
     navigateToHomeScreen()
     
-    let searchField = app.searchFields["Search"]
-    XCTAssertTrue(searchField.exists)
+    let searchField = activateSearch()
     searchField.tap()
     searchField.typeText("Nothing will be found")
 
@@ -76,6 +86,20 @@ final class HomeScreenUITests: BaseXCTestCase {
     
     XCTAssertTrue(app.buttons["Clear text"].exists)
     XCTAssertTrue(app.buttons["close"].exists)
+  }
+
+  // MARK: - Helpers
+
+  @MainActor
+  private func activateSearch() -> XCUIElement {
+    let searchField = app.searchFields["Search"]
+    guard !searchField.exists else { return searchField }
+
+    let searchButton = app.buttons["Search"]
+    XCTAssertTrue(searchButton.exists)
+    searchButton.tap()
+    XCTAssertTrue(searchField.waitForExistence(timeout: 5))
+    return searchField
   }
   
 }
