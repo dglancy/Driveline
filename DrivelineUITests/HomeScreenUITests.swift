@@ -19,6 +19,29 @@ final class HomeScreenUITests: BaseXCTestCase {
     XCTAssertTrue(app.buttons["More options"].exists)
     XCTAssertTrue(app.searchFields["Search"].exists)
   }
+
+  @MainActor
+  func testSelectingDriveShowsDetailAndReturnsToList() throws {
+    navigateToHomeScreen()
+
+    app.buttons["Drive row 0"].tap()
+
+    XCTAssertTrue(app.buttons["Edit Drive Details"].waitForExistence(timeout: 5))
+    app.buttons["Back"].tap()
+    XCTAssertTrue(app.navigationBars["Drives"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor
+  func testDriveDetailToolbarAppearsAtExpandedWidth() throws {
+    XCUIDevice.shared.orientation = .landscapeLeft
+    navigateToHomeScreen()
+
+    app.buttons["Drive row 0"].tap()
+
+    XCTAssertTrue(app.buttons["Edit Drive Details"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Full screen map"].exists)
+    XCTAssertTrue(app.buttons["Delete Drive"].exists)
+  }
   
   @MainActor
   func testMergeSheetShowsContentOnFirstPresentation() throws {

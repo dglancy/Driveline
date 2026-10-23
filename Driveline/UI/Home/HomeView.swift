@@ -24,7 +24,8 @@ struct HomeView: View {
   @Query(sort: \Drive.startedAt, order: .reverse)
   private var drives: [Drive]
 
-  @State private var navigationPath: NavigationPath = NavigationPath()
+  @State private var selectedDriveID: UUID?
+  @State private var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
   @State private var searchText: String = ""
   @State private var statsScope: StatsScope = .last30Days
   @State private var isSelectMode: Bool = false
@@ -49,11 +50,12 @@ struct HomeView: View {
   private var isSearchActive: Bool { !searchText.isEmpty }
   private var canMerge: Bool { selectedDriveIDs.count == 2 }
   private var canDelete: Bool { !selectedDriveIDs.isEmpty }
+  private var selectedDrive: Drive? { drives.first { $0.id == selectedDriveID } }
 
   // MARK: - Body
 
   var body: some View {
-    NavigationStack(path: $navigationPath) {
+    NavigationSplitView(preferredCompactColumn: $preferredCompactColumn) {
       content
         .navigationTitle("Drives")
         .searchable(text: $searchText, prompt: "Search")
@@ -83,7 +85,22 @@ struct HomeView: View {
         .onChange(of: drives.isEmpty, initial: true) { _, isEmpty in
           RecordButtonTip.hasDrives = !isEmpty
         }
+        .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 480)
+    } detail: {
+      NavigationStack {
+        if let selectedDrive {
+          DriveDetailView(
+            drive: selectedDrive,
+            modelContainer: modelContext.container,
+            onClose: closeSelectedDrive
+          )
+          .id(selectedDrive.id)
+        } else {
+          HomeDetailPlaceholderView()
+        }
+      }
     }
+    .navigationSplitViewStyle(.balanced)
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
       guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
       openDrive(fromSpotlightIdentifier: identifier)
@@ -149,7 +166,7 @@ struct HomeView: View {
   }
 
   private var driveList: some View {
-    List {
+    List(selection: $selectedDriveID) {
       if !drives.isEmpty && !isSelectMode && !isSearchActive {
         Section {
           HomeStatsPanelView(
@@ -190,7 +207,7 @@ struct HomeView: View {
               .buttonStyle(.plain)
               .accessibilityIdentifier("Drive row \(index)")
             } else {
-              NavigationLink(value: row.drive) {
+              NavigationLink(value: row.drive.id) {
                 DriveRowView(drive: row.drive, display: row.display)
               }.accessibilityIdentifier("Drive row \(index)")
             }
@@ -203,10 +220,6 @@ struct HomeView: View {
 
     }
     .contentMargins(.top, 0, for: .scrollContent)
-    .navigationDestination(for: Drive.self) { drive in
-      DriveDetailView(drive: drive, modelContainer: modelContext.container)
-    }
-
     .safeAreaInset(edge: .bottom, spacing: 0) {
       if isSelectMode {
         SelectionToolbar(
@@ -241,6 +254,7 @@ struct HomeView: View {
   }
 
   private func enterSelectMode() {
+    closeSelectedDrive()
     isSelectMode = true
     selectedDriveIDs = []
   }
@@ -279,8 +293,27 @@ struct HomeView: View {
   private func openDrive(fromSpotlightIdentifier identifier: String) {
     guard let uuid = UUID(uuidString: identifier),
           let drive = drives.first(where: { $0.id == uuid }) else { return }
-    navigationPath = NavigationPath()
-    navigationPath.append(drive)
+    selectedDriveID = drive.id
+    preferredCompactColumn = .detail
+  }
+
+  private func closeSelectedDrive() {
+    selectedDriveID = nil
+    preferredCompactColumn = .sidebar
+  }
+}
+
+// MARK: - HomeDetailPlaceholderView
+
+private struct HomeDetailPlaceholderView: View {
+
+  var body: some View {
+    ContentUnavailableView {
+      Label("Select a Drive", systemImage: Icons.Widgets.car)
+    } description: {
+      Text("Choose a drive to view its route and details.")
+    }
+    .accessibilityIdentifier("HomeDriveDetailPlaceholder")
   }
 }
 
