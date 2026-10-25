@@ -25,6 +25,10 @@ struct HomeView: View {
   private var drives: [Drive]
 
   @State private var selectedDriveID: UUID?
+  @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
+  @State private var isFullScreenMapPresented = false
+  @State private var isSidebarHidden = false
+  @State private var wasSidebarHiddenBeforeFullScreenMap = false
   @State private var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
   @State private var searchText: String = ""
   @State private var statsScope: StatsScope = .last30Days
@@ -55,7 +59,10 @@ struct HomeView: View {
   // MARK: - Body
 
   var body: some View {
-    NavigationSplitView(preferredCompactColumn: $preferredCompactColumn) {
+    NavigationSplitView(
+      columnVisibility: $columnVisibility,
+      preferredCompactColumn: $preferredCompactColumn
+    ) {
       content
         .navigationTitle("Drives")
         .searchable(text: $searchText, prompt: "Search")
@@ -78,6 +85,7 @@ struct HomeView: View {
       detail
     }
       .navigationSplitViewStyle(.balanced)
+      .onChange(of: columnVisibility, initial: false, updateSidebarVisibilityPreference)
       .onContinueUserActivity(CSSearchableItemActionType, perform: handleSpotlightActivity)
       .modifier(RecordingScreenModifier())
       .modifier(LocationPrimerModifier(
@@ -105,7 +113,8 @@ struct HomeView: View {
         DriveDetailView(
           drive: selectedDrive,
           modelContainer: modelContext.container,
-          onClose: closeSelectedDrive
+          onClose: closeSelectedDrive,
+          onFullScreenMapPresentationChanged: updateFullScreenMapPresentation
         )
         .id(selectedDrive.id)
       } else {
@@ -326,6 +335,32 @@ struct HomeView: View {
   private func closeSelectedDrive() {
     selectedDriveID = nil
     preferredCompactColumn = .sidebar
+  }
+
+  private func updateFullScreenMapPresentation(_ isPresented: Bool) {
+    withAnimation {
+      if isPresented {
+        wasSidebarHiddenBeforeFullScreenMap = isSidebarHidden || columnVisibility == .detailOnly
+        isFullScreenMapPresented = true
+        columnVisibility = .detailOnly
+      } else {
+        columnVisibility = wasSidebarHiddenBeforeFullScreenMap ? .detailOnly : .all
+        isFullScreenMapPresented = false
+      }
+    }
+  }
+
+  private func updateSidebarVisibilityPreference(
+    _ oldValue: NavigationSplitViewVisibility,
+    _ newValue: NavigationSplitViewVisibility
+  ) {
+    guard !isFullScreenMapPresented else { return }
+
+    if newValue == .detailOnly {
+      isSidebarHidden = true
+    } else if newValue == .all || newValue == .doubleColumn {
+      isSidebarHidden = false
+    }
   }
 }
 

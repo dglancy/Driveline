@@ -53,6 +53,68 @@ final class HomeScreenUITests: BaseXCTestCase {
     XCTAssertTrue(app.buttons["Full screen map"].exists)
     XCTAssertTrue(app.buttons["Delete Drive"].exists)
   }
+
+  @MainActor
+  func testFullScreenMapCoversSplitViewInLandscape() throws {
+    let originalOrientation = XCUIDevice.shared.orientation
+    defer { XCUIDevice.shared.orientation = originalOrientation }
+
+    XCUIDevice.shared.orientation = .portrait
+    if app.buttons["Show Sidebar"].waitForExistence(timeout: 2) {
+      app.buttons["Show Sidebar"].tap()
+    }
+    navigateToHomeScreen()
+    app.buttons["Drive row 0"].tap()
+
+    let fullScreenMapButton = app.buttons["Full screen map"]
+    XCTAssertTrue(fullScreenMapButton.waitForExistence(timeout: 5))
+    XCUIDevice.shared.orientation = .landscapeLeft
+    XCTAssertTrue(fullScreenMapButton.waitForExistence(timeout: 5))
+    fullScreenMapButton.tap()
+
+    let backButton = app.buttons["Back"]
+    let driveRow = app.buttons["Drive row 0"]
+    XCTAssertTrue(backButton.waitForExistence(timeout: 5))
+    XCTAssertFalse(driveRow.isHittable)
+
+    backButton.tap()
+
+    expectation(for: NSPredicate(format: "hittable == true"), evaluatedWith: driveRow)
+    waitForExpectations(timeout: 5)
+  }
+
+  @MainActor
+  func testFullScreenMapKeepsManuallyHiddenSplitViewHiddenOnReturn() throws {
+    let originalOrientation = XCUIDevice.shared.orientation
+    defer { XCUIDevice.shared.orientation = originalOrientation }
+
+    XCUIDevice.shared.orientation = .portrait
+    if app.buttons["Show Sidebar"].waitForExistence(timeout: 2) {
+      app.buttons["Show Sidebar"].tap()
+    }
+    navigateToHomeScreen()
+    app.buttons["Drive row 0"].tap()
+
+    XCUIDevice.shared.orientation = .landscapeLeft
+    let hideSidebarButton = app.buttons["Hide Sidebar"]
+    XCTAssertTrue(hideSidebarButton.waitForExistence(timeout: 5))
+    hideSidebarButton.tap()
+
+    let driveRow = app.buttons["Drive row 0"]
+    XCTAssertTrue(app.buttons["Show Sidebar"].waitForExistence(timeout: 5))
+    XCTAssertFalse(driveRow.isHittable)
+
+    let fullScreenMapButton = app.buttons["Full screen map"]
+    XCTAssertTrue(fullScreenMapButton.waitForExistence(timeout: 5))
+    fullScreenMapButton.tap()
+
+    let backButton = app.buttons["Back"]
+    XCTAssertTrue(backButton.waitForExistence(timeout: 5))
+    backButton.tap()
+
+    XCTAssertFalse(driveRow.isHittable)
+    XCTAssertTrue(app.buttons["Show Sidebar"].waitForExistence(timeout: 5))
+  }
   
   @MainActor
   func testMergeSheetShowsContentOnFirstPresentation() throws {
