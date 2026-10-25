@@ -23,6 +23,19 @@ final class HomeScreenUITests: BaseXCTestCase {
   }
 
   @MainActor
+  func testFreshLandscapeLaunchShowsBothSplitViewColumns() throws {
+    let originalOrientation = XCUIDevice.shared.orientation
+    defer { XCUIDevice.shared.orientation = originalOrientation }
+
+    app.terminate()
+    XCUIDevice.shared.orientation = .landscapeLeft
+    app.launch()
+
+    XCTAssertTrue(app.buttons["NewDriveButton"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Select a Drive"].waitForExistence(timeout: 5))
+  }
+
+  @MainActor
   func testSelectingDriveShowsDetailAndReturnsToList() throws {
     navigateToHomeScreen()
 

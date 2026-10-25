@@ -25,7 +25,7 @@ struct HomeView: View {
   private var drives: [Drive]
 
   @State private var selectedDriveID: UUID?
-  @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
+  @State private var columnVisibility: NavigationSplitViewVisibility = .all
   @State private var isFullScreenMapPresented = false
   @State private var isSidebarHidden = false
   @State private var wasSidebarHiddenBeforeFullScreenMap = false
