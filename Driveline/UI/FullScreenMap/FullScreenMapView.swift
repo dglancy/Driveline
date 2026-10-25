@@ -15,12 +15,15 @@ struct FullScreenMapView: View {
 
   @State private var mapState: FullScreenMapState
 
+  private let onDismiss: (() -> Void)?
+
   @Environment(\.dismiss) private var dismiss
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, modelContainer: ModelContainer) {
+  init(drive: Drive, modelContainer: ModelContainer, onDismiss: (() -> Void)? = nil) {
     _mapState = State(initialValue: FullScreenMapState(drive: drive, modelContainer: modelContainer))
+    self.onDismiss = onDismiss
   }
 
   // MARK: - Body
@@ -37,7 +40,11 @@ struct FullScreenMapView: View {
     .toolbar {
       ToolbarItem(placement: .navigation) {
         Button {
-          dismiss()
+          if let onDismiss {
+            onDismiss()
+          } else {
+            dismiss()
+          }
         } label: {
           Label(
             String(localized: "Back", comment: "Full screen map toolbar action"),

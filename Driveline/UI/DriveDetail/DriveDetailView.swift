@@ -22,6 +22,7 @@ struct DriveDetailView: View {
 
   private let renameDriveTip = EditDriveTip()
   private let onClose: (() -> Void)?
+  private let onFullScreenMapPresentationChanged: ((Bool) -> Void)?
 
   @Environment(\.dismiss) private var dismiss
   @Environment(\.colorScheme) private var colorScheme
@@ -30,9 +31,15 @@ struct DriveDetailView: View {
 
   // MARK: - Lifecycle
 
-  init(drive: Drive, modelContainer: ModelContainer, onClose: (() -> Void)? = nil) {
+  init(
+    drive: Drive,
+    modelContainer: ModelContainer,
+    onClose: (() -> Void)? = nil,
+    onFullScreenMapPresentationChanged: ((Bool) -> Void)? = nil
+  ) {
     _driveState = State(initialValue: DriveDetailState(drive: drive, modelContainer: modelContainer))
     self.onClose = onClose
+    self.onFullScreenMapPresentationChanged = onFullScreenMapPresentationChanged
   }
 
   // MARK: - Body
@@ -78,12 +85,19 @@ struct DriveDetailView: View {
             showingEditDrive = true
           },
           onDelete: { showingDeleteConfirmation = true },
-          onShowFullScreenMap: { showingFullScreenMap = true }
+          onShowFullScreenMap: showFullScreenMap
         )
     }
     .toolbarVisibility(.visible, for: .bottomBar)
     .navigationDestination(isPresented: $showingFullScreenMap) {
-      FullScreenMapView(drive: driveState.drive, modelContainer: driveState.drive.modelContext?.container ?? modelContext.container)
+      FullScreenMapView(
+        drive: driveState.drive,
+        modelContainer: driveState.drive.modelContext?.container ?? modelContext.container,
+        onDismiss: { showingFullScreenMap = false }
+      )
+    }
+    .onChange(of: showingFullScreenMap, initial: false) { _, isPresented in
+      onFullScreenMapPresentationChanged?(isPresented)
     }
     .alert(
       String(localized: "Delete Drive", comment: "Delete confirmation alert title"),
@@ -121,6 +135,10 @@ struct DriveDetailView: View {
     } else {
       dismiss()
     }
+  }
+
+  private func showFullScreenMap() {
+    showingFullScreenMap = true
   }
 
   // MARK: - Private Views
