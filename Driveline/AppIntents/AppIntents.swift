@@ -6,6 +6,8 @@
 //
 
 import AppIntents
+import SwiftData
+import UniformTypeIdentifiers
 
 // MARK: - Intent Dependency Resolver
 
@@ -14,6 +16,7 @@ enum IntentDependencyResolver {
   // MARK: - Properties
 
   static var provider: (() -> DriveRecordingService?)?
+  static var modelContextProvider: (() -> ModelContext?)?
 }
 
 // MARK: - App Intent Shortcuts
@@ -44,6 +47,16 @@ struct DrivelineShortcuts: AppShortcutsProvider {
       ],
       shortTitle: "Finish Drive",
       systemImageName: "stop.circle"
+    )
+
+    AppShortcut(
+      intent: ExportLatestDriveGPXIntent(),
+      phrases: [
+        "Export my latest drive with \(.applicationName)",
+        "Export my latest drive as GPX with \(.applicationName)"
+      ],
+      shortTitle: "Export Latest Drive",
+      systemImageName: "square.and.arrow.up"
     )
   }
 }
@@ -92,6 +105,66 @@ struct FinishDriveIntent: LiveActivityIntent {
   }
 }
 
+// MARK: - Export Latest Drive GPX Intent
+
+struct ExportLatestDriveGPXIntent: AppIntent {
+
+  // MARK: - Properties
+
+  static var title: LocalizedStringResource { "Export latest drive as GPX" }
+  static let description: IntentDescription = .init(
+    "Exports the most recently finished drive as a GPX file.",
+    categoryName: "Drive"
+  )
+  static var supportedModes: IntentModes { .background }
+  static var allowedExecutionTargets: IntentExecutionTargets { .main }
+
+  // MARK: - Actions
+
+  @MainActor
+  func perform() async throws -> some ReturnsValue<IntentFile> {
+    Log.lifecycle.info("Running perform on ExportLatestDriveGPXIntent intent")
+
+    let modelContext = try resolveModelContext()
+    do {
+      let fileURL = try await LatestDriveGPXExporter(modelContext: modelContext).export()
+      var file = IntentFile(fileURL: fileURL, filename: fileURL.lastPathComponent, type: .xml)
+      file.removedOnCompletion = true
+      return .result(value: file)
+    } catch let error as LatestDriveGPXExportError {
+      throw error
+    } catch ExportError.emptyDrive {
+      throw LatestDriveGPXExportError.noCoordinates
+    } catch {
+      Log.data.error("Failed to export latest drive as GPX: \(error.localizedDescription)")
+      throw LatestDriveGPXExportError.exportFailed
+    }
+  }
+}
+
+// MARK: - Latest Drive GPX Exporter
+
+@MainActor
+struct LatestDriveGPXExporter {
+
+  // MARK: - Properties
+
+  let modelContext: ModelContext
+
+  // MARK: - Actions
+
+  func export() async throws -> URL {
+    let descriptor = FetchDescriptor<Drive>(
+      sortBy: [SortDescriptor(\Drive.endedAt, order: .reverse)]
+    )
+    let drives = try modelContext.fetch(descriptor)
+    guard let drive = drives.first(where: { $0.status == .finished }) else {
+      throw LatestDriveGPXExportError.noFinishedDrive
+    }
+    return try await ExportDriveGPX().export(drive: drive)
+  }
+}
+
 // MARK: - Error enums
 
 enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
@@ -107,6 +180,25 @@ enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
   }
 }
 
+enum LatestDriveGPXExportError: Error, Equatable, CustomLocalizedStringResourceConvertible {
+  case noFinishedDrive
+  case noCoordinates
+  case exportFailed
+
+  // MARK: - Computed Properties
+
+  var localizedStringResource: LocalizedStringResource {
+    switch self {
+    case .noFinishedDrive:
+      return "There isn't a finished drive to export."
+    case .noCoordinates:
+      return "The latest drive doesn't contain any recorded coordinates."
+    case .exportFailed:
+      return "Driveline couldn't prepare the GPX file. Please try again."
+    }
+  }
+}
+
 // MARK: - Private helpers
 
 private func resolveDriveRecordingService() async throws -> DriveRecordingService {
@@ -114,4 +206,12 @@ private func resolveDriveRecordingService() async throws -> DriveRecordingServic
     throw AppIntentDependencyError.notReady
   }
   return driveService
+}
+
+@MainActor
+private func resolveModelContext() throws -> ModelContext {
+  guard let modelContext = IntentDependencyResolver.modelContextProvider?() else {
+    throw AppIntentDependencyError.notReady
+  }
+  return modelContext
 }

@@ -50,7 +50,7 @@ enum AppBootstrap {
     metricKitService.start()
 
     registerBGTasks([placeNameSweepService, weatherSweepService, categoryPredictionSweepService])
-    registerIntentDependencies(driveService: driveService)
+    registerIntentDependencies(driveService: driveService, modelContainer: modelContainer)
 
     if Driveline.isUITesting() { Log.lifecycle.info("Running in UI Testing mode") }
     configureTips(isUITesting: Driveline.isUITesting(), isTipTesting: Driveline.isTipTesting())
@@ -137,9 +137,13 @@ enum AppBootstrap {
     }
   }
 
-  private static func registerIntentDependencies(driveService: DriveRecordingService) {
+  private static func registerIntentDependencies(
+    driveService: DriveRecordingService,
+    modelContainer: ModelContainer
+  ) {
     Log.lifecycle.info("Registering dependencies for App Intents")
     IntentDependencyResolver.provider = { driveService }
+    IntentDependencyResolver.modelContextProvider = { modelContainer.mainContext }
   }
 }
 
