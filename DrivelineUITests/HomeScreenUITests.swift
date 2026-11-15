@@ -31,6 +31,8 @@ final class HomeScreenUITests: BaseXCTestCase {
     XCUIDevice.shared.orientation = .landscapeLeft
     app.launch()
 
+    try requireExpandedWindow()
+
     XCTAssertTrue(app.buttons["NewDriveButton"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Select a Drive"].waitForExistence(timeout: 5))
   }
@@ -83,6 +85,7 @@ final class HomeScreenUITests: BaseXCTestCase {
     XCTAssertTrue(fullScreenMapButton.waitForExistence(timeout: 5))
     XCUIDevice.shared.orientation = .landscapeLeft
     XCTAssertTrue(fullScreenMapButton.waitForExistence(timeout: 5))
+    try requireExpandedWindow()
     fullScreenMapButton.tap()
 
     let backButton = app.buttons["Back"]
@@ -109,6 +112,7 @@ final class HomeScreenUITests: BaseXCTestCase {
     app.buttons["Drive row 0"].tap()
 
     XCUIDevice.shared.orientation = .landscapeLeft
+    try requireExpandedWindow()
     let hideSidebarButton = app.buttons["Hide Sidebar"]
     XCTAssertTrue(hideSidebarButton.waitForExistence(timeout: 5))
     hideSidebarButton.tap()
@@ -164,6 +168,14 @@ final class HomeScreenUITests: BaseXCTestCase {
   }
 
   // MARK: - Helpers
+
+  @MainActor
+  private func requireExpandedWindow() throws {
+    try XCTSkipUnless(
+      app.frame.width > app.frame.height,
+      "Requires an expanded iPhone Duo window"
+    )
+  }
 
   @MainActor
   private func activateSearch() -> XCUIElement {
