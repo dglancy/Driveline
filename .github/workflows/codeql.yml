@@ -1,8 +1,7 @@
 name: CodeQL
 
-on:
-  schedule:
-    - cron: '0 6 * * *'
+# Automatic scans are disabled until CodeQL supports Xcode 27 and Swift 6.4.
+on: workflow_dispatch
 
 permissions:
   contents: read
