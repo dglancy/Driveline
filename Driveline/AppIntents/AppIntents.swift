@@ -53,9 +53,10 @@ struct DrivelineShortcuts: AppShortcutsProvider {
       intent: ExportLatestDriveGPXIntent(),
       phrases: [
         "Export my latest drive with \(.applicationName)",
-        "Export my latest drive as GPX with \(.applicationName)"
+        "Export my latest drive as GPX with \(.applicationName)",
+        "Get my latest drive GPX file with \(.applicationName)"
       ],
-      shortTitle: "Export Latest Drive",
+      shortTitle: "Get Latest GPX File",
       systemImageName: "square.and.arrow.up"
     )
   }
@@ -111,9 +112,9 @@ struct ExportLatestDriveGPXIntent: AppIntent {
 
   // MARK: - Properties
 
-  static var title: LocalizedStringResource { "Export latest drive as GPX" }
+  static var title: LocalizedStringResource { "Get latest drive GPX file" }
   static let description: IntentDescription = .init(
-    "Exports the most recently finished drive as a GPX file.",
+    "Creates a GPX file for the most recently finished drive. Add a Save File, Share, or upload action afterward to use the file.",
     categoryName: "Drive"
   )
   static var supportedModes: IntentModes { .background }
