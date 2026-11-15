@@ -1,7 +1,7 @@
 name: CodeQL
 
-# Disabled until CodeQL supports Xcode 27 and Swift 6.4.
-on: []
+# Automatic scans are disabled until CodeQL supports Xcode 27 and Swift 6.4.
+on: workflow_dispatch
 
 permissions:
   contents: read
