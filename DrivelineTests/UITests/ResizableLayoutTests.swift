@@ -22,6 +22,7 @@ struct ResizableLayoutTests {
       distanceValue: "10,000",
       distanceUnit: "km",
       scopeLabel: "A long reporting period that needs multiple lines in a narrow window",
+      isOnboardingPresented: false,
       onTap: {}
     )
     .environment(\.dynamicTypeSize, .accessibility1)

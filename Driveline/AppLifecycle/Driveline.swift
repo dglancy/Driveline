@@ -36,8 +36,10 @@ struct Driveline: App {
 
   init() {
     let env = AppBootstrap.boot()
+    let isOnboardingPresented = (!Driveline.isUITesting() || Driveline.isOnboardingTesting())
+      && !UserPreferences().hasSeenWelcome
     self.modelContainer = env.modelContainer
-    _isOnboardingPresented = State(initialValue: (!Driveline.isUITesting() || Driveline.isOnboardingTesting()) && !UserPreferences().hasSeenWelcome)
+    _isOnboardingPresented = State(initialValue: isOnboardingPresented)
     _locationService = State(initialValue: env.locationService)
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
@@ -45,13 +47,16 @@ struct Driveline: App {
     _categoryPredictionSweepService = State(initialValue: env.categoryPredictionSweepService)
     _spotlightIndexingService = State(initialValue: env.spotlightIndexingService)
     _metricKitService = State(initialValue: env.metricKitService)
+    RecordButtonTip.isOnboardingPresented = isOnboardingPresented
+    StatsPanelTip.isOnboardingPresented = isOnboardingPresented
+    EditDriveTip.isOnboardingPresented = isOnboardingPresented
   }
 
   // MARK: - Main View Scene
 
   var body: some Scene {
     WindowGroup {
-      HomeView()
+      HomeView(isOnboardingPresented: isOnboardingPresented)
         .environment(locationService)
         .environment(driveService)
         .environment(spotlightIndexingService)

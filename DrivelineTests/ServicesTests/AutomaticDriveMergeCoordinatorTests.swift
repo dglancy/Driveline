@@ -22,7 +22,7 @@ final class AutomaticDriveMergeCoordinatorTests: SwiftDataBaseTestCase {
     let drives = try insertDrivePair()
     let requestedAt = Date.now
 
-    coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
+    await coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
     await Task.yield()
 
     let pending = try #require(preferences.pendingAutomaticMerge)
@@ -36,7 +36,7 @@ final class AutomaticDriveMergeCoordinatorTests: SwiftDataBaseTestCase {
     let (preferences, _) = makePreferences(automaticMerge: true, continueRecent: true)
     let coordinator = await makeCoordinator(preferences: preferences)
     let drives = try insertDrivePair()
-    coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
+    await coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
 
     coordinator.cancelPendingMerge(containing: drives.0.startedAt)
 
@@ -49,7 +49,7 @@ final class AutomaticDriveMergeCoordinatorTests: SwiftDataBaseTestCase {
     let (preferences, _) = makePreferences(automaticMerge: true, continueRecent: true)
     let coordinator = await makeCoordinator(preferences: preferences)
     let drives = try insertDrivePair()
-    coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
+    await coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
 
     await coordinator.processPendingMergeIfDue(
       now: Date.now.addingTimeInterval(Constants.Configuration.recentDriveInterval + 1)
@@ -64,7 +64,7 @@ final class AutomaticDriveMergeCoordinatorTests: SwiftDataBaseTestCase {
     let (preferences, defaults) = makePreferences(automaticMerge: true, continueRecent: true)
     let coordinator = await makeCoordinator(preferences: preferences)
     let drives = try insertDrivePair()
-    coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
+    await coordinator.requestMerge(containing: drives.0.startedAt, deferred: true)
     defaults.set(false, forKey: "AutomaticallyMergeSameDayDrives")
 
     await coordinator.processPendingMergeIfDue(

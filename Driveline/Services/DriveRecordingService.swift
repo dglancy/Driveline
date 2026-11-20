@@ -85,19 +85,21 @@ final class DriveRecordingService {
     }
   }
   
-  func finishDrive() {
+  @discardableResult
+  func finishDrive() async -> Bool {
     liveActivityCancellable = nil
     startGeocodeCancellable = nil
     startWeatherCancellable = nil
     locationService.stop()
 
     var finishedDriveDate: Date?
+    var savedSuccessfully = true
     if let drive {
       drive.endedAt = Date()
       drive.status = .finished
       finishedDriveDate = drive.startedAt
       locationDataRecorder.stopRecording()
-      modelContext.saveChanges()
+      savedSuccessfully = modelContext.saveChanges("finishing drive")
       fetchEndWeather(for: drive)
       finishTasks.append(Task { await spotlightIndexingService?.indexDrive(drive) })
       let driveID = drive.persistentModelID
@@ -107,8 +109,10 @@ final class DriveRecordingService {
     self.drive = nil
 
     finishTasks.append(Task { await placeNameSweepService.sweep() })
-    if userPreferences.automaticallyMergeSameDayDrives, let finishedDriveDate {
-      automaticMergeCoordinator.requestMerge(
+    if savedSuccessfully,
+       userPreferences.automaticallyMergeSameDayDrives,
+       let finishedDriveDate {
+      await automaticMergeCoordinator.requestMerge(
         containing: finishedDriveDate,
         deferred: userPreferences.continueDriveIfRecentlyFinished
       )
@@ -117,6 +121,7 @@ final class DriveRecordingService {
     #if os(iOS)
     finishTasks.append(Task { await activityService.endActivity() })
     #endif
+    return savedSuccessfully
   }
 
   // MARK: - Private functions
