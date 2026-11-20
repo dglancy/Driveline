@@ -45,7 +45,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
 
     service.startDrive()
     let startedDrive = service.drive!
-    service.finishDrive()
+    await service.finishDrive()
 
     #expect(locationService.status == .stopped)
     #expect(startedDrive.endedAt != nil)
@@ -60,7 +60,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = await makeServices()
 
     service.startDrive()
-    service.finishDrive()
+    await service.finishDrive()
 
     #expect(service.isRecording == false)
   }
@@ -69,13 +69,13 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   func finishDriveWithNoActiveDriveDoesNothing() async throws {
     let (service, _, _) = await makeServices()
 
-    service.finishDrive()
+    await service.finishDrive()
 
     #expect(service.drive == nil)
   }
 
   @Test
-  func finishDriveWithAutomaticMergeEnabledMergesSameDayDrives() async throws {
+  func finishDriveWaitsForImmediateAutomaticMerge() async throws {
     try insertFinishedDrive()
     let preferences = makePreferences(
       continueDriveIfRecentlyFinished: false,
@@ -84,10 +84,9 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = await makeServices(userPreferences: preferences)
 
     service.startDrive()
-    service.finishDrive()
+    await service.finishDrive()
 
-    let mergedCount = try await waitForDriveCount(1)
-    #expect(mergedCount == 1)
+    #expect(try count(where: #Predicate<Drive> { _ in true }) == 1)
   }
 
   @Test
@@ -100,7 +99,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = await makeServices(userPreferences: preferences)
 
     service.startDrive()
-    service.finishDrive()
+    await service.finishDrive()
     service.startDrive()
 
     _ = try await waitForDriveCount(2)
@@ -121,7 +120,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     )
 
     service.startDrive()
-    service.finishDrive()
+    await service.finishDrive()
     await Task.yield()
 
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 2)
@@ -136,7 +135,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     defaults.set(true, forKey: "AutomaticallyMergeSameDayDrives")
     let preferences = UserPreferences(defaults: defaults)
     let coordinator = await makeAutomaticMergeCoordinator(preferences: preferences)
-    coordinator.requestMerge(containing: finishedDrive.startedAt, deferred: true)
+    await coordinator.requestMerge(containing: finishedDrive.startedAt, deferred: true)
     let (service, _, _) = await makeServices(
       automaticMergeCoordinator: coordinator,
       userPreferences: preferences
@@ -240,7 +239,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
 
     service.startDrive()
     let drive = service.drive!
-    service.finishDrive()
+    await service.finishDrive()
 
     let reloaded = try await reload(drive, until: { $0.category != .none })
 
@@ -257,7 +256,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = await makeServices(spotlightIndexingService: spotlightService)
 
     service.startDrive()
-    service.finishDrive()
+    await service.finishDrive()
 
     await Task.yield()
     await Task.yield()
@@ -271,7 +270,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let spotlightService = SpotlightIndexingService(index: mockSpotlight)
     let (service, _, _) = await makeServices(spotlightIndexingService: spotlightService)
 
-    service.finishDrive()
+    await service.finishDrive()
 
     await Task.yield()
 
@@ -291,7 +290,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     context!.insert(position)
     drive.positions = [position]
 
-    service.finishDrive()
+    await service.finishDrive()
 
     let reloaded = try await reload(drive, until: { $0.endPlaceName != nil })
 
@@ -576,7 +575,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     finishedDrive.positions = [position]
     try context!.save()
 
-    service.finishDrive()
+    await service.finishDrive()
 
     await Task.yield()
     await Task.yield()
@@ -601,7 +600,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     context!.insert(position)
     drive.positions = [position]
 
-    service.finishDrive()
+    await service.finishDrive()
 
     await Task.yield()
     await Task.yield()
@@ -617,7 +616,7 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let (service, _, _) = await makeServices(weatherService: mockWeather)
 
     service.startDrive()
-    service.finishDrive()
+    await service.finishDrive()
 
     await Task.yield()
     await Task.yield()

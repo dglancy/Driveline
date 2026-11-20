@@ -100,7 +100,9 @@ struct FinishDriveIntent: LiveActivityIntent {
 
     let driveService = try await resolveDriveRecordingService()
     if await driveService.isRecording {
-      await driveService.finishDrive()
+      guard await driveService.finishDrive() else {
+        throw FinishDriveError.saveFailed
+      }
     }
     return .result()
   }
@@ -178,6 +180,16 @@ enum AppIntentDependencyError: Error, CustomLocalizedStringResourceConvertible {
     case .notReady:
       return "Driveline isn't ready to start recording."
     }
+  }
+}
+
+enum FinishDriveError: Error, CustomLocalizedStringResourceConvertible {
+  case saveFailed
+
+  // MARK: - Computed Properties
+
+  var localizedStringResource: LocalizedStringResource {
+    "Driveline couldn't finish saving the drive. Please try again."
   }
 }
 

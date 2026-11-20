@@ -157,7 +157,11 @@ struct RecordingView: View {
       buttonAccessibilityIdentifier: "FinishDriveButton",
       background: .red,
       iconColor: .white,
-      action: driveService.finishDrive
+      action: {
+        Task {
+          await driveService.finishDrive()
+        }
+      }
     )
     .padding(.bottom, 42)
   }

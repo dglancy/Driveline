@@ -37,14 +37,13 @@ final class AutomaticDriveMergeCoordinator {
 
   // MARK: - Actions
 
-  func requestMerge(containing date: Date, deferred: Bool) {
+  func requestMerge(containing date: Date, deferred: Bool) async {
     pendingTask?.cancel()
 
     guard deferred else {
       userPreferences.clearPendingAutomaticMerge()
-      pendingTask = Task { [weak self] in
-        await self?.mergeDay(containing: date)
-      }
+      pendingTask = nil
+      await mergeDay(containing: date)
       return
     }
 
