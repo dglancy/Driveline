@@ -20,6 +20,7 @@ struct HomeView: View {
   @Environment(LocationService.self) private var locationService
   @Environment(\.modelContext) private var modelContext
   @Environment(\.openURL) private var openURL
+  let isOnboardingPresented: Bool
 
   @Query(sort: \Drive.startedAt, order: .reverse)
   private var drives: [Drive]
@@ -78,7 +79,6 @@ struct HomeView: View {
           )
         }
         .onChange(of: driveService.isRecording, initial: true, updateRecordingTips)
-        .onChange(of: recentStats.driveCount, initial: true, updateStatsTip)
         .onChange(of: drives.isEmpty, initial: true, updateRecordButtonTip)
         .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 480)
     } detail: {
@@ -179,6 +179,7 @@ struct HomeView: View {
             distanceValue: activeStatsPresenter.distanceValue,
             distanceUnit: activeStatsPresenter.distanceUnit,
             scopeLabel: HomePresenter.statsScopeLabel(statsScope),
+            isOnboardingPresented: isOnboardingPresented,
             onTap: { statsScope = statsScope == .last30Days ? .allTime : .last30Days }
           )
           .listRowInsets(EdgeInsets())
@@ -246,10 +247,6 @@ struct HomeView: View {
     if isRecording { exitSelectMode() }
     StatsPanelTip.isRecording = isRecording
     RecordButtonTip.isRecording = isRecording
-  }
-
-  private func updateStatsTip(_ oldValue: Int, _ driveCount: Int) {
-    StatsPanelTip.driveCount = driveCount
   }
 
   private func updateRecordButtonTip(_ oldValue: Bool, _ isEmpty: Bool) {
@@ -533,7 +530,7 @@ private struct AutomationSetupModifier: ViewModifier {
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let driveService = DriveRecordingService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
-  return HomeView()
+  return HomeView(isOnboardingPresented: false)
     .modelContainer(container)
     .environment(driveService)
     .environment(locationService)

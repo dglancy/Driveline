@@ -51,6 +51,7 @@ final class TipUITests: BaseXCTestCase {
     XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
     app.buttons["FinishDriveButton"].tap()
 
+    XCTAssertTrue(app.buttons["Drive row 2"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Switch Stats View"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Tap to toggle between the last 30 days and all time."].waitForExistence(timeout: 5))
   }

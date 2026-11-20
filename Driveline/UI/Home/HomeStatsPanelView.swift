@@ -15,6 +15,7 @@ struct HomeStatsPanelView: View {
   let distanceValue: String
   let distanceUnit: String
   let scopeLabel: String
+  let isOnboardingPresented: Bool
   let onTap: () -> Void
 
   // MARK: - Constants
@@ -36,6 +37,13 @@ struct HomeStatsPanelView: View {
     .padding(.vertical, 8)
     .contentShape(Rectangle())
     .onTapGesture { onTap() }
+    .onChange(of: driveCount, initial: true) { _, driveCount in
+      StatsPanelTip.driveCount = driveCount
+      StatsPanelTip.isOnboardingPresented = isOnboardingPresented
+    }
+    .onChange(of: isOnboardingPresented) { _, isOnboardingPresented in
+      StatsPanelTip.isOnboardingPresented = isOnboardingPresented
+    }
   }
 
   @ViewBuilder
@@ -151,7 +159,14 @@ private struct StatCard: View {
 #Preview {
   List {
     Section {
-      HomeStatsPanelView(driveCount: 6, distanceValue: "10,000", distanceUnit: "km", scopeLabel: "last 30 days", onTap: {})
+      HomeStatsPanelView(
+        driveCount: 6,
+        distanceValue: "10,000",
+        distanceUnit: "km",
+        scopeLabel: "last 30 days",
+        isOnboardingPresented: false,
+        onTap: {}
+      )
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)
