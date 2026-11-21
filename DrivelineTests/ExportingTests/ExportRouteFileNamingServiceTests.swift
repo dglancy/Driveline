@@ -27,6 +27,12 @@ final class ExportDriveFileNamingServiceTests: SwiftDataBaseTestCase {
     #expect(url.pathExtension == "png")
   }
 
+  @Test
+  func mp4FileURLHasCorrectExtension() {
+    let url = ExportDriveFileNamingService.fileURL(for: makeDrive(), type: .mp4)
+    #expect(url.pathExtension == "mp4")
+  }
+
   // MARK: - Filename format
 
   @Test

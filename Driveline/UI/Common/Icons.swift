@@ -50,6 +50,7 @@ enum Icons {
     static let sharing = "square.and.arrow.up"
     static let gpxFile = "doc.text"
     static let pngImage = "photo"
+    static let video = "film"
   }
 
   // MARK: - Selection

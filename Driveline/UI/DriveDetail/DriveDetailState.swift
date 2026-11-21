@@ -97,6 +97,7 @@ final class DriveDetailState {
     switch type {
     case .gpx: ExportDriveGPX()
     case .png: ExportDrivePNG()
+    case .mp4: ExportDriveVideo()
     }
   }
 }

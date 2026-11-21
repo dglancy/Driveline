@@ -17,6 +17,12 @@ struct DriveDetailPresenterTests {
   // MARK: - Basic Properties
 
   @Test
+  func shareLabelsUseFriendlyFormatNames() {
+    #expect(DriveDetailPresenter.shareImageLabel == "Share as Image")
+    #expect(DriveDetailPresenter.shareVideoLabel == "Share as Video")
+  }
+
+  @Test
   func nameReturnsDriveDisplayName() {
     let presenter = DriveDetailPresenter(drive: makeDrive(name: "Dublin to Cork"))
     #expect(presenter.name == "Dublin to Cork")
