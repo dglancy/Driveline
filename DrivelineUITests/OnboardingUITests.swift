@@ -26,7 +26,7 @@ final class OnboardingUITests: BaseXCTestCase {
   func testWelcomeGetStartedDismissesOnboarding() {
     XCTAssertTrue(app.buttons["Get Started"].waitForExistence(timeout: 3))
     app.buttons["Get Started"].tap()
-    XCTAssertFalse(app.staticTexts["Welcome to Driveline"].exists)
+    XCTAssertTrue(app.staticTexts["Welcome to Driveline"].waitForNonExistence(timeout: 3))
   }
 
   func testAutomationSetupPanelAppearsAfterFirstDrive() {
