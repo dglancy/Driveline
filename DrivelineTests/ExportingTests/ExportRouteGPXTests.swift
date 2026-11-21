@@ -51,6 +51,17 @@ final class ExportDriveGPXTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func gpxFileRemainsAccessibleWhileDeviceIsLocked() async throws {
+    let drive = driveWithOnePosition()
+
+    let outputURL = try await ExportDriveGPX().export(drive: drive)
+    defer { try? FileManager.default.removeItem(at: outputURL) }
+
+    let values = try outputURL.resourceValues(forKeys: [.fileProtectionKey])
+    #expect(values.fileProtection == .completeUntilFirstUserAuthentication)
+  }
+
+  @Test
   func gpxFileIsNonEmpty() async throws {
     let drive = driveWithOnePosition()
 

@@ -30,7 +30,7 @@ extension ExportingDrive {
   func write(_ data: Data, for drive: Drive, type: ExportFileType) throws -> URL {
     let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: type)
     do {
-      try data.write(to: fileURL, options: [.atomic, .completeFileProtection])
+      try data.write(to: fileURL, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
       return fileURL
     } catch {
       Log.ui.error("Failed to write \(type.fileExtension) export for drive: \(drive.startedAt) — error: \(error.localizedDescription)")
