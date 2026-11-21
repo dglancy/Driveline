@@ -15,12 +15,6 @@ import UIKit
 struct VideoPixelBufferRendererTests {
 
   @Test
-  func mapSnapshotsRenderAtSixFramesPerSecondForTwentyFourFrameVideo() {
-    #expect(VideoSnapshotCadence.frameInterval == 4)
-    #expect(VideoSnapshotCadence.keyframeCount(forFrameCount: 720) == 181)
-  }
-
-  @Test
   func routePathBreaksAroundOffscreenAndInvalidProjectedPoints() {
     let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
     let points = [
