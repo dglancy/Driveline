@@ -10,6 +10,7 @@ import CoreLocation
 
 // MARK: - Exporting drive protocol
 
+@MainActor
 protocol ExportingDrive {
 
   // MARK: - Actions
@@ -46,6 +47,8 @@ enum ExportError: LocalizedError, Equatable {
   case gpxEncodingFailed
   case pngSnapshotFailure
   case pngDataPreparationFailure
+  case videoPreparationFailure
+  case videoEncodingFailure
   case fileWriteFailure
 
   // MARK: - Computed Properties
@@ -60,6 +63,10 @@ enum ExportError: LocalizedError, Equatable {
       return String(localized: "Failed to create PNG. Please try again.", comment: "Export error: map snapshot failed")
     case .pngDataPreparationFailure:
       return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
+    case .videoPreparationFailure:
+      return String(localized: "Failed to prepare the route video. Please try again.", comment: "Export error: video setup or map rendering failed")
+    case .videoEncodingFailure:
+      return String(localized: "Failed to encode the route video. Please try again.", comment: "Export error: MP4 video encoding failed")
     case .fileWriteFailure:
       return String(localized: "Failed to save export. Please try again.", comment: "Export error: writing export file to disk failed")
     }
@@ -71,6 +78,7 @@ enum ExportError: LocalizedError, Equatable {
 enum ExportFileType {
   case gpx
   case png
+  case mp4
 
   // MARK: - Computed Properties
 
@@ -80,6 +88,8 @@ enum ExportFileType {
       return "gpx"
     case .png:
       return "png"
+    case .mp4:
+      return "mp4"
     }
   }
 
@@ -87,7 +97,7 @@ enum ExportFileType {
     switch self {
     case .gpx:
       return .completeFileProtectionUntilFirstUserAuthentication
-    case .png:
+    case .png, .mp4:
       return .completeFileProtection
     }
   }

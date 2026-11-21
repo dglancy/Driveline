@@ -245,7 +245,12 @@ struct DriveDetailView: View {
       Button {
         Task { await driveState.share(.png) }
       } label: {
-        Label(String(localized: "Share as PNG", comment: "Share drive as PNG"), systemImage: Icons.Options.pngImage)
+        Label(DriveDetailPresenter.shareImageLabel, systemImage: Icons.Options.pngImage)
+      }
+      Button {
+        Task { await driveState.share(.mp4) }
+      } label: {
+        Label(DriveDetailPresenter.shareVideoLabel, systemImage: Icons.Options.video)
       }
     } label: {
       Label(String(localized: "Share Drive", comment: "Share button"), systemImage: Icons.Options.sharing)

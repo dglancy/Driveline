@@ -2203,6 +2203,9 @@
         }
       }
     },
+    "Failed to encode the route video. Please try again." : {
+      "comment" : "Export error: MP4 video encoding failed"
+    },
     "Failed to prepare export. Please try again." : {
       "comment" : "Generic export failure message",
       "localizations" : {
@@ -2289,6 +2292,9 @@
           }
         }
       }
+    },
+    "Failed to prepare the route video. Please try again." : {
+      "comment" : "Export error: video setup or map rendering failed"
     },
     "Failed to save export. Please try again." : {
       "comment" : "Export error: writing export file to disk failed",
@@ -4156,8 +4162,12 @@
         }
       }
     },
+    "Share as Image" : {
+      "comment" : "Share drive as an image"
+    },
     "Share as PNG" : {
       "comment" : "Share drive as PNG",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4184,6 +4194,9 @@
           }
         }
       }
+    },
+    "Share as Video" : {
+      "comment" : "Share drive as a cinematic video"
     },
     "Share Drive" : {
       "comment" : "Share button",

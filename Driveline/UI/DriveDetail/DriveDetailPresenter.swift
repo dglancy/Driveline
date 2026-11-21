@@ -28,6 +28,12 @@ struct DriveDetailPresenter {
   var endPlace: String? { drive.endPlaceName }
   var departureTime: String { drive.startedAt.clockString() }
   var arrivalTime: String? { drive.endedAt?.clockString() }
+  static var shareImageLabel: String {
+    String(localized: "Share as Image", comment: "Share drive as an image")
+  }
+  static var shareVideoLabel: String {
+    String(localized: "Share as Video", comment: "Share drive as a cinematic video")
+  }
 
   var hasCategory: Bool { drive.category != .none }
   var categoryDisplayName: String { drive.category.displayName }
