@@ -37,6 +37,11 @@ final class ExportDrivePNGTests: SwiftDataBaseTestCase {
     #expect(error.errorDescription?.isEmpty == false)
   }
 
+  @Test
+  func pngFileRetainsCompleteFileProtection() {
+    #expect(ExportFileType.png.fileProtectionOption == .completeFileProtection)
+  }
+
   // MARK: - MapSize dimensions
 
   @Test
