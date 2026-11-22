@@ -15,6 +15,16 @@ import UIKit
 struct VideoPixelBufferRendererTests {
 
   @Test
+  func snapshotRetryPolicyUsesBoundedBackoff() {
+    let policy = VideoSnapshotRetryPolicy()
+
+    #expect(policy.maximumAttempts == 3)
+    #expect(policy.delay(afterFailedAttempt: 0) == .milliseconds(250))
+    #expect(policy.delay(afterFailedAttempt: 1) == .milliseconds(500))
+    #expect(policy.delay(afterFailedAttempt: 2) == nil)
+  }
+
+  @Test
   func routePathBreaksAroundOffscreenAndInvalidProjectedPoints() {
     let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
     let points = [
@@ -87,6 +97,31 @@ struct VideoPixelBufferRendererTests {
       #expect(bytes[0] < 30)
       #expect(bytes[bottomRowOffset] > 200)
       #expect(bytes[bottomRowOffset + 2] < 30)
+    }
+  }
+
+  @Test
+  func rendererDrawsOverlayDirectlyIntoTopOfPixelBuffer() throws {
+    let buffer = try makeBuffer(width: 4, height: 4)
+    let image = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4)).image { context in
+      UIColor.white.setFill()
+      context.fill(CGRect(x: 0, y: 0, width: 4, height: 4))
+    }
+
+    try VideoPixelBufferRenderer.draw(image, into: buffer) {
+      UIColor.red.setFill()
+      UIBezierPath(rect: CGRect(x: 0, y: 0, width: 4, height: 1)).fill()
+    }
+
+    try buffer.withUnsafeBuffer { pixelBuffer in
+      CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+      defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
+      let bytes = try #require(CVPixelBufferGetBaseAddress(pixelBuffer)?.assumingMemoryBound(to: UInt8.self))
+      let bottomRowOffset = CVPixelBufferGetBytesPerRow(pixelBuffer) * 3
+      #expect(bytes[2] > 200)
+      #expect(bytes[0] < 30)
+      #expect(bytes[bottomRowOffset] > 200)
+      #expect(bytes[bottomRowOffset + 2] > 200)
     }
   }
 

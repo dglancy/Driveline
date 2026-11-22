@@ -16,6 +16,7 @@ final class ExportDriveVideo: ExportingDrive {
   // MARK: - Properties
 
   private let preferences: UserPreferences
+  private let snapshotRetryPolicy = VideoSnapshotRetryPolicy()
 
   // MARK: - Lifecycle
 
@@ -50,14 +51,43 @@ final class ExportDriveVideo: ExportingDrive {
     coordinates: [CLLocationCoordinate2D],
     outputURL: URL
   ) async throws {
-    let size = evenSize(preferences.exportMapSize)
+    let configuration = VideoExportRenderConfiguration(
+      size: evenSize(preferences.exportMapSize),
+      driveWidth: preferences.driveWidth,
+      alwaysUseLightMapAppearance: preferences.alwaysUseLightMapAppearance
+    )
+    let writerContext = try makeWriter(outputURL: outputURL, size: configuration.size)
+    let writer = writerContext.writer
+    let receiver = writerContext.receiver
+    do {
+      try writer.start()
+    } catch {
+      throw ExportError.videoEncodingFailure
+    }
+    writer.startSession(atSourceTime: .zero)
+
+    for (index, frame) in frames.enumerated() {
+      try await append(
+        frame: frame,
+        at: index,
+        coordinates: coordinates,
+        configuration: configuration,
+        writerContext: writerContext
+      )
+    }
+
+    receiver.finish()
+    await writer.finishWriting()
+    guard writer.status == .completed else { throw ExportError.videoEncodingFailure }
+  }
+
+  private func makeWriter(outputURL: URL, size: CGSize) throws -> VideoWriterContext {
     let writer: AVAssetWriter
     do {
       writer = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
     } catch {
       throw ExportError.videoPreparationFailure
     }
-
     let input = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings(for: size))
     let rawAttributes: [String: any Sendable] = [
       kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
@@ -69,35 +99,39 @@ final class ExportDriveVideo: ExportingDrive {
       throw ExportError.videoPreparationFailure
     }
     let receiver = writer.inputPixelBufferReceiver(for: input, pixelBufferAttributes: creationAttributes)
+    return VideoWriterContext(writer: writer, receiver: receiver)
+  }
+
+  private func append(
+    frame: CinematicRouteFrame,
+    at index: Int,
+    coordinates: [CLLocationCoordinate2D],
+    configuration: VideoExportRenderConfiguration,
+    writerContext: VideoWriterContext
+  ) async throws {
+    let snapshot: MKMapSnapshotter.Snapshot
     do {
-      try writer.start()
+      snapshot = try await self.snapshot(for: frame, configuration: configuration)
     } catch {
+      writerContext.writer.cancelWriting()
+      throw error
+    }
+    guard let pool = writerContext.receiver.pixelBufferPool else {
+      writerContext.writer.cancelWriting()
       throw ExportError.videoEncodingFailure
     }
-    writer.startSession(atSourceTime: .zero)
-
-    for (index, frame) in frames.enumerated() {
-      guard let pool = receiver.pixelBufferPool else {
-        writer.cancelWriting()
-        throw ExportError.videoEncodingFailure
+    do {
+      let buffer = try pool.makeMutablePixelBuffer()
+      try VideoPixelBufferRenderer.draw(snapshot.image, into: buffer) {
+        drawRoute(in: snapshot, coordinates: coordinates, frame: frame, driveWidth: configuration.driveWidth)
+        VideoVehicleMarkerRenderer.draw(at: snapshot.point(for: frame.coordinate))
       }
-      do {
-        let mutableBuffer = try pool.makeMutablePixelBuffer()
-        try VideoPixelBufferRenderer.draw(
-          try await image(for: frame, coordinates: coordinates, size: size),
-          into: mutableBuffer
-        )
-        let presentationTime = CMTime(value: CMTimeValue(index), timescale: CMTimeScale(CinematicRoutePlan.framesPerSecond))
-        try await receiver.append(CVReadOnlyPixelBuffer(mutableBuffer), with: presentationTime)
-      } catch {
-        writer.cancelWriting()
-        throw ExportError.videoEncodingFailure
-      }
+      let time = CMTime(value: CMTimeValue(index), timescale: CMTimeScale(CinematicRoutePlan.framesPerSecond))
+      try await writerContext.receiver.append(CVReadOnlyPixelBuffer(buffer), with: time)
+    } catch {
+      writerContext.writer.cancelWriting()
+      throw ExportError.videoEncodingFailure
     }
-
-    receiver.finish()
-    await writer.finishWriting()
-    guard writer.status == .completed else { throw ExportError.videoEncodingFailure }
   }
 
   private func videoSettings(for size: CGSize) -> [String: Any] {
@@ -112,13 +146,12 @@ final class ExportDriveVideo: ExportingDrive {
     ]
   }
 
-  private func image(
+  private func snapshot(
     for frame: CinematicRouteFrame,
-    coordinates: [CLLocationCoordinate2D],
-    size: CGSize
-  ) async throws -> UIImage {
+    configuration: VideoExportRenderConfiguration
+  ) async throws -> MKMapSnapshotter.Snapshot {
     let options = MKMapSnapshotter.Options()
-    options.size = size
+    options.size = configuration.size
     options.scale = 1
     options.camera = MKMapCamera(
       lookingAtCenter: frame.cameraCenter,
@@ -127,31 +160,34 @@ final class ExportDriveVideo: ExportingDrive {
       heading: frame.heading
     )
     options.pointOfInterestFilter = .excludingAll
-    if preferences.alwaysUseLightMapAppearance {
+    if configuration.alwaysUseLightMapAppearance {
       options.traitCollection = UITraitCollection(userInterfaceStyle: .light)
     }
 
-    let snapshot: MKMapSnapshotter.Snapshot
-    do {
-      snapshot = try await MKMapSnapshotter(options: options).start()
-    } catch {
-      throw ExportError.videoPreparationFailure
+    for attempt in 0..<snapshotRetryPolicy.maximumAttempts {
+      try Task.checkCancellation()
+      let snapshotter = MKMapSnapshotter(options: options)
+      defer { snapshotter.cancel() }
+      do {
+        return try await snapshotter.start()
+      } catch is CancellationError {
+        throw CancellationError()
+      } catch {
+        guard let delay = snapshotRetryPolicy.delay(afterFailedAttempt: attempt) else {
+          Log.ui.error("Failed to render video map frame after retries: \(error.localizedDescription)")
+          throw ExportError.videoPreparationFailure
+        }
+        try await Task.sleep(for: delay)
+      }
     }
-
-    let format = UIGraphicsImageRendererFormat()
-    format.scale = 1
-    format.opaque = true
-    return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-      snapshot.image.draw(in: CGRect(origin: .zero, size: size))
-      drawRoute(in: snapshot, coordinates: coordinates, frame: frame)
-      VideoVehicleMarkerRenderer.draw(at: snapshot.point(for: frame.coordinate))
-    }
+    throw ExportError.videoPreparationFailure
   }
 
   private func drawRoute(
     in snapshot: MKMapSnapshotter.Snapshot,
     coordinates: [CLLocationCoordinate2D],
-    frame: CinematicRouteFrame
+    frame: CinematicRouteFrame,
+    driveWidth: CGFloat
   ) {
     guard !coordinates.isEmpty else { return }
     let lastIndex = min(coordinates.count - 1, frame.completedSampleIndex)
@@ -167,7 +203,7 @@ final class ExportDriveVideo: ExportingDrive {
       for point in segment.dropFirst() {
         path.addLine(to: point)
       }
-      path.lineWidth = preferences.driveWidth
+      path.lineWidth = driveWidth
       path.lineCapStyle = .round
       path.lineJoinStyle = .round
       path.stroke()
@@ -176,6 +212,26 @@ final class ExportDriveVideo: ExportingDrive {
 
   private func evenSize(_ size: CGSize) -> CGSize {
     CGSize(width: Int(size.width) / 2 * 2, height: Int(size.height) / 2 * 2)
+  }
+}
+
+struct VideoExportRenderConfiguration {
+  let size: CGSize
+  let driveWidth: CGFloat
+  let alwaysUseLightMapAppearance: Bool
+}
+
+private struct VideoWriterContext {
+  let writer: AVAssetWriter
+  let receiver: AVAssetWriterInput.PixelBufferReceiver
+}
+
+struct VideoSnapshotRetryPolicy {
+  let maximumAttempts = 3
+
+  func delay(afterFailedAttempt attempt: Int) -> Duration? {
+    guard attempt < maximumAttempts - 1 else { return nil }
+    return .milliseconds(250 * (attempt + 1))
   }
 }
 
@@ -228,7 +284,11 @@ enum VideoPixelBufferRenderer {
     CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
   ]
 
-  static func draw(_ image: UIImage, into mutableBuffer: borrowing CVMutablePixelBuffer) throws {
+  static func draw(
+    _ image: UIImage,
+    into mutableBuffer: borrowing CVMutablePixelBuffer,
+    overlay: () -> Void = { }
+  ) throws {
     guard let cgImage = image.cgImage else { throw ExportError.videoEncodingFailure }
     try mutableBuffer.withUnsafeBuffer { buffer in
       CVPixelBufferLockBaseAddress(buffer, [])
@@ -243,6 +303,13 @@ enum VideoPixelBufferRenderer {
         bitmapInfo: bitmapInfo.rawValue
       ) else { throw ExportError.videoEncodingFailure }
       context.draw(cgImage, in: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer)))
+      context.saveGState()
+      context.translateBy(x: 0, y: CGFloat(CVPixelBufferGetHeight(buffer)))
+      context.scaleBy(x: 1, y: -1)
+      UIGraphicsPushContext(context)
+      overlay()
+      UIGraphicsPopContext()
+      context.restoreGState()
     }
   }
 }
