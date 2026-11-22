@@ -175,6 +175,26 @@ struct VideoPixelBufferRendererTests {
     }
   }
 
+  @Test
+  func rendererCanReuseFrameStorageAcrossScopedCompositions() throws {
+    let buffer = try makeBuffer(width: 2, height: 2)
+    let redImage = solidImage(color: .red)
+    let blueImage = solidImage(color: .blue)
+
+    try VideoPixelBufferRenderer.draw(redImage, into: buffer)
+    try VideoPixelBufferRenderer.draw(blueImage, into: buffer)
+
+    try buffer.withUnsafeBuffer { pixelBuffer in
+      CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+      defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
+      let bytes = try #require(CVPixelBufferGetBaseAddress(pixelBuffer)?.assumingMemoryBound(to: UInt8.self))
+      #expect(bytes[0] == 255)
+      #expect(bytes[1] == 0)
+      #expect(bytes[2] == 0)
+      #expect(bytes[3] == 255)
+    }
+  }
+
   private func makeBuffer(width: Int, height: Int) throws -> CVMutablePixelBuffer {
     let attributes = CVPixelBufferAttributes(rawAttributes: [
       kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
@@ -182,5 +202,12 @@ struct VideoPixelBufferRendererTests {
       kCVPixelBufferHeightKey as String: height
     ])
     return try CVMutablePixelBuffer(try #require(CVPixelBufferCreationAttributes(attributes)))
+  }
+
+  private func solidImage(color: UIColor) -> UIImage {
+    UIGraphicsImageRenderer(size: CGSize(width: 2, height: 2)).image { context in
+      color.setFill()
+      context.fill(CGRect(x: 0, y: 0, width: 2, height: 2))
+    }
   }
 }
