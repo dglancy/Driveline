@@ -7,6 +7,7 @@
 
 @testable import Driveline
 import CoreVideo
+import MapKit
 import Testing
 import UIKit
 
@@ -18,10 +19,36 @@ struct VideoPixelBufferRendererTests {
   func snapshotRetryPolicyUsesBoundedBackoff() {
     let policy = VideoSnapshotRetryPolicy()
 
-    #expect(policy.maximumAttempts == 3)
-    #expect(policy.delay(afterFailedAttempt: 0) == .milliseconds(250))
-    #expect(policy.delay(afterFailedAttempt: 1) == .milliseconds(500))
-    #expect(policy.delay(afterFailedAttempt: 2) == nil)
+    #expect(policy.maximumAttempts == 4)
+    #expect(policy.delay(afterFailedAttempt: 0, jitter: 0) == .milliseconds(500))
+    #expect(policy.delay(afterFailedAttempt: 1, jitter: 0) == .milliseconds(1_500))
+    #expect(policy.delay(afterFailedAttempt: 2, jitter: 0) == .milliseconds(4_000))
+    #expect(policy.delay(afterFailedAttempt: 3, jitter: 0) == nil)
+    #expect(policy.delay(afterFailedAttempt: 0, jitter: -10) == .milliseconds(400))
+    #expect(policy.delay(afterFailedAttempt: 0, jitter: 10) == .milliseconds(600))
+  }
+
+  @Test
+  func snapshotRetryPolicyRetriesOnlyTransientFailures() {
+    let policy = VideoSnapshotRetryPolicy()
+    let throttled = NSError(domain: MKErrorDomain, code: Int(MKError.Code.loadingThrottled.rawValue))
+    let failedTiles = NSError(domain: "com.apple.maps.snapshot.failedtiles", code: -5)
+    let timedOut = NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut)
+    let invalidRequest = NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL)
+
+    #expect(policy.shouldRetry(throttled))
+    #expect(policy.shouldRetry(failedTiles))
+    #expect(policy.shouldRetry(timedOut))
+    #expect(!policy.shouldRetry(invalidRequest))
+  }
+
+  @Test
+  func snapshotRetryPolicyFindsTransientUnderlyingFailure() {
+    let policy = VideoSnapshotRetryPolicy()
+    let underlying = NSError(domain: "kCFErrorDomainCFNetwork", code: 303)
+    let wrapper = NSError(domain: "SnapshotWrapper", code: 1, userInfo: [NSUnderlyingErrorKey: underlying])
+
+    #expect(policy.shouldRetry(wrapper))
   }
 
   @Test
