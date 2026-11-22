@@ -12,6 +12,18 @@ import SwiftData
 @Model
 final class Position {
 
+  // MARK: - Types
+
+  enum LocationSource: String, Codable {
+    case phone
+    case carPlay = "carplay"
+    case unknown
+
+    init(isProducedByAccessory: Bool) {
+      self = isProducedByAccessory ? .carPlay : .phone
+    }
+  }
+
   // MARK: - Properties
 
   var timestamp: Date = Date()
@@ -24,6 +36,7 @@ final class Position {
   var courseAccuracy: CLLocationDirectionAccuracy = 0
   var speed: CLLocationSpeed = 0
   var speedAccuracy: CLLocationSpeedAccuracy = 0
+  var locationSource: LocationSource?
 
   var drive: Drive?
 
@@ -47,7 +60,8 @@ final class Position {
     course: CLLocationDirection,
     courseAccuracy: CLLocationDirectionAccuracy,
     speed: CLLocationSpeed,
-    speedAccuracy: CLLocationSpeedAccuracy
+    speedAccuracy: CLLocationSpeedAccuracy,
+    locationSource: LocationSource = .unknown
   ) {
     self.timestamp = timestamp
     self.latitude = latitude
@@ -59,5 +73,6 @@ final class Position {
     self.courseAccuracy = courseAccuracy
     self.speed = speed
     self.speedAccuracy = speedAccuracy
+    self.locationSource = locationSource
   }
 }

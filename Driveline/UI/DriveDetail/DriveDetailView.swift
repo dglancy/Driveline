@@ -394,10 +394,21 @@ private struct DriveDetailMetadataCard: View {
           .dynamicTypeSize(.xSmall ... .accessibility1)
       }
 
+      if let locationSource = presenter.locationSourceDisplayName {
+        Divider().padding(.leading, 52)
+
+        IconRow(title: String(localized: "Location Provided By", comment: "Metadata row"), trailing: locationSource) {
+          Image(systemName: Icons.Stats.gpsSignal)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
+        }
+      }
+
       Divider().padding(.leading, 52)
 
       IconRow(title: String(localized: "Started by", comment: "Metadata row"), trailing: presenter.triggerDisplayName) {
-        Image(systemName: Icons.Stats.gpsSignal)
+        Image(systemName: Icons.Stats.startedBy)
           .font(.callout)
           .foregroundStyle(.secondary)
           .dynamicTypeSize(.xSmall ... .accessibility1)

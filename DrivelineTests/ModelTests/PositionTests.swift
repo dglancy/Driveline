@@ -43,6 +43,7 @@ final class PositionTests: SwiftDataBaseTestCase {
     #expect(position.courseAccuracy == 5.0)
     #expect(position.speed == 13.8)
     #expect(position.speedAccuracy == 1.0)
+    #expect(position.locationSource == .unknown)
     #expect(position.drive == nil)
   }
 
@@ -67,6 +68,11 @@ final class PositionTests: SwiftDataBaseTestCase {
     #expect(position.speedAccuracy < 0)
   }
 
+  @Test(arguments: [(false, Position.LocationSource.phone), (true, Position.LocationSource.carPlay)])
+  func mapsAccessoryStateToLocationSource(isProducedByAccessory: Bool, expectedSource: Position.LocationSource) {
+    #expect(Position.LocationSource(isProducedByAccessory: isProducedByAccessory) == expectedSource)
+  }
+
   // MARK: - Persistence
 
   @Test
@@ -80,7 +86,8 @@ final class PositionTests: SwiftDataBaseTestCase {
       course: 90.0,
       courseAccuracy: 5.0,
       speed: 8.3,
-      speedAccuracy: 1.0
+      speedAccuracy: 1.0,
+      locationSource: .carPlay
     )
     context!.insert(position)
     try context!.save()
@@ -89,6 +96,7 @@ final class PositionTests: SwiftDataBaseTestCase {
     #expect(fetched.count == 1)
     #expect(fetched[0].latitude == 53.3498)
     #expect(fetched[0].longitude == -6.2603)
+    #expect(fetched[0].locationSource == .carPlay)
   }
 
   @Test

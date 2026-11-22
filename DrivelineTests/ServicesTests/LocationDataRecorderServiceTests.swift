@@ -49,6 +49,29 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func recordsPhoneAsLocationSourceWhenLocationIsNotProducedByAccessory() {
+    let drive = Drive(name: "Test drive")
+    let locationService = LocationService()
+    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+    recorder.startRecording(with: drive)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 55, longitude: -4),
+      altitude: 0,
+      horizontalAccuracy: 5,
+      verticalAccuracy: 5,
+      course: 0,
+      courseAccuracy: 1,
+      speed: 10,
+      speedAccuracy: 0.5,
+      timestamp: .now
+    )
+    locationService.locationPublisher.send(location)
+
+    #expect(recorder.drive?.orderedPositions.first?.locationSource == .phone)
+  }
+
+  @Test
   func persistingTwoLocationsAccumulatesDistance() async throws {
     let drive = Drive(name: "Test drive")
     let locationService = LocationService()
