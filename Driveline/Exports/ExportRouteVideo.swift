@@ -190,24 +190,22 @@ final class ExportDriveVideo: ExportingDrive {
     driveWidth: CGFloat
   ) {
     guard !coordinates.isEmpty else { return }
-    let lastIndex = min(coordinates.count - 1, frame.completedSampleIndex)
-    let completedCoordinates = Array(coordinates[0...lastIndex]) + [frame.coordinate]
-    let points = completedCoordinates.map(snapshot.point(for:))
+    let routeCoordinates = VideoRouteCoordinateSequence(
+      coordinates: coordinates,
+      completedSampleIndex: frame.completedSampleIndex,
+      endpoint: frame.coordinate
+    )
     let visibleBounds = CGRect(origin: .zero, size: snapshot.image.size).insetBy(dx: -20, dy: -20)
-    let segments = VideoRoutePathBuilder.visibleSegments(points: points, within: visibleBounds)
+    let path = VideoRoutePathBuilder.visiblePath(
+      points: routeCoordinates.lazy.map(snapshot.point(for:)),
+      within: visibleBounds
+    )
 
     UIColor.systemBlue.setStroke()
-    for segment in segments {
-      let path = UIBezierPath()
-      path.move(to: segment[0])
-      for point in segment.dropFirst() {
-        path.addLine(to: point)
-      }
-      path.lineWidth = driveWidth
-      path.lineCapStyle = .round
-      path.lineJoinStyle = .round
-      path.stroke()
-    }
+    path.lineWidth = driveWidth
+    path.lineCapStyle = .round
+    path.lineJoinStyle = .round
+    path.stroke()
   }
 
   private func evenSize(_ size: CGSize) -> CGSize {
@@ -237,6 +235,26 @@ struct VideoSnapshotRetryPolicy {
 
 enum VideoRoutePathBuilder {
 
+  static func visiblePath<Points: Sequence>(points: Points, within bounds: CGRect) -> UIBezierPath
+  where Points.Element == CGPoint {
+    let path = UIBezierPath()
+    var hasVisiblePoint = false
+
+    for point in points {
+      guard point.x.isFinite, point.y.isFinite, bounds.contains(point) else {
+        hasVisiblePoint = false
+        continue
+      }
+      if hasVisiblePoint {
+        path.addLine(to: point)
+      } else {
+        path.move(to: point)
+        hasVisiblePoint = true
+      }
+    }
+    return path
+  }
+
   static func visibleSegments(points: [CGPoint], within bounds: CGRect) -> [[CGPoint]] {
     var segments: [[CGPoint]] = []
     var currentSegment: [CGPoint] = []
@@ -256,6 +274,41 @@ enum VideoRoutePathBuilder {
       segments.append(currentSegment)
     }
     return segments
+  }
+}
+
+struct VideoRouteCoordinateSequence: Sequence {
+  let coordinates: [CLLocationCoordinate2D]
+  let completedSampleIndex: Int
+  let endpoint: CLLocationCoordinate2D
+
+  func makeIterator() -> Iterator {
+    let lastCompletedIndex = coordinates.isEmpty
+      ? -1
+      : Swift.min(Swift.max(completedSampleIndex, 0), coordinates.count - 1)
+    return Iterator(
+      coordinates: coordinates,
+      lastCompletedIndex: lastCompletedIndex,
+      endpoint: endpoint
+    )
+  }
+
+  struct Iterator: IteratorProtocol {
+    let coordinates: [CLLocationCoordinate2D]
+    let lastCompletedIndex: Int
+    let endpoint: CLLocationCoordinate2D
+    var index = 0
+    var emittedEndpoint = false
+
+    mutating func next() -> CLLocationCoordinate2D? {
+      if index <= lastCompletedIndex {
+        defer { index += 1 }
+        return coordinates[index]
+      }
+      guard !emittedEndpoint else { return nil }
+      emittedEndpoint = true
+      return endpoint
+    }
   }
 }
 

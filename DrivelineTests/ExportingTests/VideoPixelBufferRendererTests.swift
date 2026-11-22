@@ -46,6 +46,42 @@ struct VideoPixelBufferRendererTests {
   }
 
   @Test
+  func routeCoordinateSequenceStreamsCompletedPrefixAndCurrentEndpoint() {
+    let coordinates = [
+      CLLocationCoordinate2D(latitude: 53.0, longitude: -6.0),
+      CLLocationCoordinate2D(latitude: 53.1, longitude: -6.1),
+      CLLocationCoordinate2D(latitude: 53.2, longitude: -6.2)
+    ]
+    let endpoint = CLLocationCoordinate2D(latitude: 53.15, longitude: -6.15)
+
+    let result = Array(VideoRouteCoordinateSequence(
+      coordinates: coordinates,
+      completedSampleIndex: 1,
+      endpoint: endpoint
+    ))
+
+    #expect(result.map(\.latitude) == [53.0, 53.1, 53.15])
+    #expect(result.map(\.longitude) == [-6.0, -6.1, -6.15])
+  }
+
+  @Test
+  func visiblePathPreservesBreaksBetweenOffscreenPoints() {
+    let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
+    let points = [
+      CGPoint(x: 10, y: 10),
+      CGPoint(x: 20, y: 20),
+      CGPoint(x: -1_000, y: 50),
+      CGPoint(x: 40, y: 40),
+      CGPoint(x: 50, y: 50)
+    ]
+
+    let path = VideoRoutePathBuilder.visiblePath(points: points, within: bounds)
+
+    #expect(path.cgPath.boundingBoxOfPath == CGRect(x: 10, y: 10, width: 40, height: 40))
+    #expect(path.currentPoint == CGPoint(x: 50, y: 50))
+  }
+
+  @Test
   func vehicleMarkerIsDirectionNeutralDotCenteredOnCoordinate() {
     let center = CGPoint(x: 42, y: 24)
     let rect = VideoVehicleMarkerRenderer.markerRect(centeredAt: center)
