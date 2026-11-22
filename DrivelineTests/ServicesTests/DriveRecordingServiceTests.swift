@@ -171,6 +171,24 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func initialRecordingDriveResumesLocationRecording() async throws {
+    let locationService = LocationService()
+    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
+    let drive = Drive(name: "Test")
+    drive.status = .recording
+
+    _ = DriveRecordingService(
+      modelContext: context!,
+      locationService: locationService,
+      locationDataRecorder: recorder,
+      initialDrive: drive
+    )
+
+    #expect(locationService.status == .started)
+    #expect(recorder.drive?.id == drive.id)
+  }
+
+  @Test
   func initialDriveWithIsRecordingFalseSetsIsRecordingToFalse() async throws {
     let locationService = LocationService()
     let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
@@ -179,6 +197,8 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     let service = DriveRecordingService(modelContext: context!, locationService: locationService, locationDataRecorder: recorder, initialDrive: drive)
 
     #expect(service.isRecording == false)
+    #expect(locationService.status == .stopped)
+    #expect(recorder.drive == nil)
   }
 
   // MARK: - startDrive geocoding accuracy
