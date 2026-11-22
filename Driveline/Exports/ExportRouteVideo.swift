@@ -67,6 +67,7 @@ final class ExportDriveVideo: ExportingDrive {
     writer.startSession(atSourceTime: .zero)
 
     for range in VideoSnapshotBatchPlanner.ranges(frameCount: frames.count) {
+      try await waitForForeground()
       do {
         try await renderAndAppendBatch(
           frames: frames,
@@ -84,6 +85,22 @@ final class ExportDriveVideo: ExportingDrive {
     receiver.finish()
     await writer.finishWriting()
     guard writer.status == .completed else { throw ExportError.videoEncodingFailure }
+  }
+
+  private func waitForForeground() async throws {
+    guard !VideoExportForegroundPolicy.canRender(applicationState: UIApplication.shared.applicationState) else {
+      return
+    }
+    Log.ui.info("MP4 export paused while the app is not active")
+    for await _ in NotificationCenter.default.notifications(named: UIApplication.didBecomeActiveNotification) {
+      try Task.checkCancellation()
+      guard VideoExportForegroundPolicy.canRender(applicationState: UIApplication.shared.applicationState) else {
+        continue
+      }
+      Log.ui.info("MP4 export resumed in the foreground")
+      return
+    }
+    throw CancellationError()
   }
 
   private func makeWriter(outputURL: URL, size: CGSize) throws -> VideoWriterContext {
@@ -265,6 +282,12 @@ struct VideoExportRenderConfiguration {
   let size: CGSize
   let driveWidth: CGFloat
   let alwaysUseLightMapAppearance: Bool
+}
+
+enum VideoExportForegroundPolicy {
+  static func canRender(applicationState: UIApplication.State) -> Bool {
+    applicationState == .active
+  }
 }
 
 private struct VideoWriterContext {

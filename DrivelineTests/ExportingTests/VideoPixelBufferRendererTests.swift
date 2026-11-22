@@ -66,6 +66,13 @@ struct VideoPixelBufferRendererTests {
   }
 
   @Test
+  func videoRenderingRequiresAnActiveApplication() {
+    #expect(VideoExportForegroundPolicy.canRender(applicationState: .active))
+    #expect(!VideoExportForegroundPolicy.canRender(applicationState: .inactive))
+    #expect(!VideoExportForegroundPolicy.canRender(applicationState: .background))
+  }
+
+  @Test
   func routePathBreaksAroundOffscreenAndInvalidProjectedPoints() {
     let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
     let points = [
