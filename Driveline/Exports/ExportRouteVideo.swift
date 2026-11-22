@@ -66,14 +66,19 @@ final class ExportDriveVideo: ExportingDrive {
     }
     writer.startSession(atSourceTime: .zero)
 
-    for (index, frame) in frames.enumerated() {
-      try await append(
-        frame: frame,
-        at: index,
-        coordinates: coordinates,
-        configuration: configuration,
-        writerContext: writerContext
-      )
+    for range in VideoSnapshotBatchPlanner.ranges(frameCount: frames.count) {
+      do {
+        try await renderAndAppendBatch(
+          frames: frames,
+          range: range,
+          coordinates: coordinates,
+          configuration: configuration,
+          writerContext: writerContext
+        )
+      } catch {
+        writer.cancelWriting()
+        throw error
+      }
     }
 
     receiver.finish()
@@ -102,20 +107,57 @@ final class ExportDriveVideo: ExportingDrive {
     return VideoWriterContext(writer: writer, receiver: receiver)
   }
 
+  private func renderAndAppendBatch(
+    frames: [CinematicRouteFrame],
+    range: Range<Int>,
+    coordinates: [CLLocationCoordinate2D],
+    configuration: VideoExportRenderConfiguration,
+    writerContext: VideoWriterContext
+  ) async throws {
+    let firstIndex = range.lowerBound
+    guard range.count == VideoSnapshotBatchPlanner.maximumConcurrentSnapshots else {
+      let snapshot = try await snapshot(for: frames[firstIndex], configuration: configuration)
+      try await append(
+        snapshot: snapshot.value,
+        frame: frames[firstIndex],
+        at: firstIndex,
+        coordinates: coordinates,
+        configuration: configuration,
+        writerContext: writerContext
+      )
+      return
+    }
+
+    let secondIndex = firstIndex + 1
+    async let firstSnapshot = snapshot(for: frames[firstIndex], configuration: configuration)
+    async let secondSnapshot = snapshot(for: frames[secondIndex], configuration: configuration)
+
+    try await append(
+      snapshot: firstSnapshot.value,
+      frame: frames[firstIndex],
+      at: firstIndex,
+      coordinates: coordinates,
+      configuration: configuration,
+      writerContext: writerContext
+    )
+    try await append(
+      snapshot: secondSnapshot.value,
+      frame: frames[secondIndex],
+      at: secondIndex,
+      coordinates: coordinates,
+      configuration: configuration,
+      writerContext: writerContext
+    )
+  }
+
   private func append(
+    snapshot: MKMapSnapshotter.Snapshot,
     frame: CinematicRouteFrame,
     at index: Int,
     coordinates: [CLLocationCoordinate2D],
     configuration: VideoExportRenderConfiguration,
     writerContext: VideoWriterContext
   ) async throws {
-    let snapshot: MKMapSnapshotter.Snapshot
-    do {
-      snapshot = try await self.snapshot(for: frame, configuration: configuration)
-    } catch {
-      writerContext.writer.cancelWriting()
-      throw error
-    }
     guard let pool = writerContext.receiver.pixelBufferPool else {
       writerContext.writer.cancelWriting()
       throw ExportError.videoEncodingFailure
@@ -149,7 +191,7 @@ final class ExportDriveVideo: ExportingDrive {
   private func snapshot(
     for frame: CinematicRouteFrame,
     configuration: VideoExportRenderConfiguration
-  ) async throws -> MKMapSnapshotter.Snapshot {
+  ) async throws -> VideoMapSnapshot {
     let options = MKMapSnapshotter.Options()
     options.size = configuration.size
     options.scale = 1
@@ -169,7 +211,7 @@ final class ExportDriveVideo: ExportingDrive {
       let snapshotter = MKMapSnapshotter(options: options)
       defer { snapshotter.cancel() }
       do {
-        return try await snapshotter.start()
+        return VideoMapSnapshot(value: try await snapshotter.start())
       } catch is CancellationError {
         throw CancellationError()
       } catch {
@@ -224,12 +266,27 @@ private struct VideoWriterContext {
   let receiver: AVAssetWriterInput.PixelBufferReceiver
 }
 
+private struct VideoMapSnapshot: @unchecked Sendable {
+  let value: MKMapSnapshotter.Snapshot
+}
+
 struct VideoSnapshotRetryPolicy {
   let maximumAttempts = 3
 
   func delay(afterFailedAttempt attempt: Int) -> Duration? {
     guard attempt < maximumAttempts - 1 else { return nil }
     return .milliseconds(250 * (attempt + 1))
+  }
+}
+
+enum VideoSnapshotBatchPlanner {
+  static let maximumConcurrentSnapshots = 2
+
+  static func ranges(frameCount: Int) -> [Range<Int>] {
+    guard frameCount > 0 else { return [] }
+    return stride(from: 0, to: frameCount, by: maximumConcurrentSnapshots).map { start in
+      start..<Swift.min(start + maximumConcurrentSnapshots, frameCount)
+    }
   }
 }
 
