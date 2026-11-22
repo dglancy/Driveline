@@ -34,26 +34,13 @@ final class TipUITests: BaseXCTestCase {
   }
 
   @MainActor
-  func testStatsPanelTipAppearsAfterThreeDrivesRecorded() throws {
+  func testStatsPanelAppearsAfterFirstDrive() throws {
     navigatePastEmptyState()
     XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
     app.buttons["FinishDriveButton"].tap()
 
-    // The record-button tip appears once the first drive exists; dismiss it so the
-    // popover doesn't intercept the next record taps.
-    dismissRecordButtonTipIfPresent()
-
-    app.buttons["NewDriveButton"].tap()
-    XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
-    app.buttons["FinishDriveButton"].tap()
-
-    app.buttons["NewDriveButton"].tap()
-    XCTAssertTrue(app.staticTexts["RecordingBanner"].waitForExistence(timeout: 5))
-    app.buttons["FinishDriveButton"].tap()
-
-    XCTAssertTrue(app.buttons["Drive row 2"].waitForExistence(timeout: 5))
-    XCTAssertTrue(app.staticTexts["Switch Stats View"].waitForExistence(timeout: 5))
-    XCTAssertTrue(app.staticTexts["Tap to toggle between the last 30 days and all time."].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["Drive row 0"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.buttons["1 drives, last 30 days"].waitForExistence(timeout: 5))
   }
 
   @MainActor

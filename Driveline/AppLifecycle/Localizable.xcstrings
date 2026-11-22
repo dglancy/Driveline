@@ -993,6 +993,9 @@
         }
       }
     },
+    "CarPlay" : {
+      "comment" : "Location source: an external CarPlay accessory"
+    },
     "Category" : {
       "comment" : "Metadata row",
       "localizations" : {
@@ -2773,6 +2776,17 @@
         }
       }
     },
+    "Location Provided By" : {
+      "comment" : "Metadata row",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Standort bereitgestellt von"
+          }
+        }
+      }
+    },
     "logged" : {
       "comment" : "Label for the count of GPS positions logged during a drive",
       "localizations" : {
@@ -3442,6 +3456,9 @@
           }
         }
       }
+    },
+    "Phone" : {
+      "comment" : "Location source: the user's phone"
     },
     "Private by design" : {
       "comment" : "Onboarding welcome feature row 3 title",
@@ -5611,5 +5628,5 @@
       }
     }
   },
-  "version" : "1.2"
+  "version" : "1.3"
 }

@@ -106,7 +106,10 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
       course: location.course,
       courseAccuracy: location.courseAccuracy,
       speed: location.speed,
-      speedAccuracy: location.speedAccuracy
+      speedAccuracy: location.speedAccuracy,
+      locationSource: Position.LocationSource(
+        isProducedByAccessory: location.sourceInformation?.isProducedByAccessory == true
+      )
     )
 
     if let previous = lastPosition {

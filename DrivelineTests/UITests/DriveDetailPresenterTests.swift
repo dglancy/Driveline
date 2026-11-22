@@ -115,6 +115,29 @@ struct DriveDetailPresenterTests {
     #expect(presenter.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
   }
 
+  @Test
+  func locationSourceIsNilWhenAllPositionsAreUnknown() {
+    let drive = makeDrive()
+    let legacyPosition = makePosition(locationSource: .unknown)
+    legacyPosition.locationSource = nil
+    drive.positions = [legacyPosition]
+    #expect(DriveDetailPresenter(drive: drive).locationSourceDisplayName == nil)
+  }
+
+  @Test
+  func locationSourceIsPhoneWhenAtLeastOnePositionIsFromPhone() {
+    let drive = makeDrive()
+    drive.positions = [makePosition(locationSource: .unknown), makePosition(locationSource: .phone)]
+    #expect(DriveDetailPresenter(drive: drive).locationSourceDisplayName == "Phone")
+  }
+
+  @Test
+  func locationSourceIsCarPlayWhenAnyPositionIsFromCarPlay() {
+    let drive = makeDrive()
+    drive.positions = [makePosition(locationSource: .phone), makePosition(locationSource: .carPlay)]
+    #expect(DriveDetailPresenter(drive: drive).locationSourceDisplayName == "CarPlay")
+  }
+
   // MARK: - Route-Derived Formatting
 
   @Test
@@ -266,5 +289,20 @@ struct DriveDetailPresenterTests {
     drive.startedAt = Date(timeIntervalSinceReferenceDate: 0)
     drive.endedAt = Date(timeIntervalSinceReferenceDate: 3600)
     return drive
+  }
+
+  private func makePosition(locationSource: Position.LocationSource) -> Position {
+    Position(
+      latitude: 0,
+      longitude: 0,
+      altitude: 0,
+      horizontalAccuracy: 1,
+      verticalAccuracy: 1,
+      course: 0,
+      courseAccuracy: 1,
+      speed: 0,
+      speedAccuracy: 1,
+      locationSource: locationSource
+    )
   }
 }

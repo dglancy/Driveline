@@ -38,6 +38,16 @@ struct DriveDetailPresenter {
   var hasCategory: Bool { drive.category != .none }
   var categoryDisplayName: String { drive.category.displayName }
   var triggerDisplayName: String { drive.trigger.displayName }
+  var locationSourceDisplayName: String? {
+    let sources = drive.positions?.map { $0.locationSource ?? .unknown } ?? []
+    if sources.contains(.carPlay) {
+      return String(localized: "CarPlay", comment: "Location source: an external CarPlay accessory")
+    }
+    if sources.contains(.phone) {
+      return String(localized: "Phone", comment: "Location source: the user's phone")
+    }
+    return nil
+  }
 
   var hasWeather: Bool { drive.startWeather != nil }
   var startWeatherSymbol: String? { drive.startWeather?.symbolName }

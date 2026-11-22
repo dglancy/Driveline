@@ -32,7 +32,8 @@ enum Icons {
   enum Stats {
     static let speed = "gauge"
     static let location = "location"
-    static let gpsSignal = "dot.radiowaves.left.and.right"
+    static let gpsSignal = "antenna.radiowaves.left.and.right"
+    static let startedBy = "timer"
     static let category = "tag"
   }
 
@@ -73,7 +74,7 @@ enum Icons {
     static let timer = "timer"
     static let car = "car.fill"
   }
-  
+
   // MARK: - Panels
 
   enum Panels {
