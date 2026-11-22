@@ -215,10 +215,16 @@ final class ExportDriveVideo: ExportingDrive {
       } catch is CancellationError {
         throw CancellationError()
       } catch {
-        guard let delay = snapshotRetryPolicy.delay(afterFailedAttempt: attempt) else {
-          Log.ui.error("Failed to render video map frame after retries: \(error.localizedDescription)")
+        try Task.checkCancellation()
+        guard snapshotRetryPolicy.shouldRetry(error),
+              let delay = snapshotRetryPolicy.delay(
+                afterFailedAttempt: attempt,
+                jitter: Double.random(in: -1...1)
+              ) else {
+          Log.ui.error("Failed to render video map frame: \(error.localizedDescription)")
           throw ExportError.videoPreparationFailure
         }
+        Log.ui.info("Retrying a transient video map frame failure: \(error.localizedDescription)")
         try await Task.sleep(for: delay)
       }
     }
@@ -271,11 +277,50 @@ private struct VideoMapSnapshot: @unchecked Sendable {
 }
 
 struct VideoSnapshotRetryPolicy {
-  let maximumAttempts = 3
+  let maximumAttempts = 4
+  private let baseDelayMilliseconds = [500, 1_500, 4_000]
+  private let maximumJitterFraction = 0.2
 
-  func delay(afterFailedAttempt attempt: Int) -> Duration? {
-    guard attempt < maximumAttempts - 1 else { return nil }
-    return .milliseconds(250 * (attempt + 1))
+  func delay(afterFailedAttempt attempt: Int, jitter: Double) -> Duration? {
+    guard baseDelayMilliseconds.indices.contains(attempt) else { return nil }
+    let boundedJitter = Swift.min(Swift.max(jitter, -1), 1)
+    let multiplier = 1 + boundedJitter * maximumJitterFraction
+    return .milliseconds(Int(Double(baseDelayMilliseconds[attempt]) * multiplier))
+  }
+
+  func shouldRetry(_ error: any Error) -> Bool {
+    let error = error as NSError
+    if isTransient(error) { return true }
+    guard let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError else { return false }
+    return isTransient(underlyingError)
+  }
+
+  private func isTransient(_ error: NSError) -> Bool {
+    if error.domain == MKErrorDomain {
+      return [
+        Int(MKError.Code.loadingThrottled.rawValue),
+        Int(MKError.Code.serverFailure.rawValue),
+        Int(MKError.Code.unknown.rawValue)
+      ].contains(error.code)
+    }
+    if error.domain == NSURLErrorDomain {
+      return [
+        NSURLErrorTimedOut,
+        NSURLErrorCannotFindHost,
+        NSURLErrorCannotConnectToHost,
+        NSURLErrorNetworkConnectionLost,
+        NSURLErrorDNSLookupFailed,
+        NSURLErrorNotConnectedToInternet,
+        NSURLErrorResourceUnavailable,
+        NSURLErrorCannotLoadFromNetwork,
+        NSURLErrorBadServerResponse,
+        NSURLErrorDataNotAllowed,
+        NSURLErrorInternationalRoamingOff,
+        NSURLErrorCallIsActive
+      ].contains(error.code)
+    }
+    return error.domain == "kCFErrorDomainCFNetwork"
+      || error.domain.hasPrefix("com.apple.maps.snapshot")
   }
 }
 
