@@ -399,27 +399,37 @@ enum VideoPixelBufferRenderer {
     into mutableBuffer: borrowing CVMutablePixelBuffer,
     overlay: () -> Void = { }
   ) throws {
-    guard let cgImage = image.cgImage else { throw ExportError.videoEncodingFailure }
-    try mutableBuffer.withUnsafeBuffer { buffer in
-      CVPixelBufferLockBaseAddress(buffer, [])
-      defer { CVPixelBufferUnlockBaseAddress(buffer, []) }
-      guard let context = CGContext(
-        data: CVPixelBufferGetBaseAddress(buffer),
-        width: CVPixelBufferGetWidth(buffer),
-        height: CVPixelBufferGetHeight(buffer),
-        bitsPerComponent: 8,
-        bytesPerRow: CVPixelBufferGetBytesPerRow(buffer),
-        space: CGColorSpaceCreateDeviceRGB(),
-        bitmapInfo: bitmapInfo.rawValue
-      ) else { throw ExportError.videoEncodingFailure }
-      context.draw(cgImage, in: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer)))
-      context.saveGState()
-      context.translateBy(x: 0, y: CGFloat(CVPixelBufferGetHeight(buffer)))
-      context.scaleBy(x: 1, y: -1)
-      UIGraphicsPushContext(context)
-      overlay()
-      UIGraphicsPopContext()
-      context.restoreGState()
+    try autoreleasepool {
+      guard let cgImage = image.cgImage else { throw ExportError.videoEncodingFailure }
+      try mutableBuffer.withUnsafeBuffer { buffer in
+        CVPixelBufferLockBaseAddress(buffer, [])
+        defer { CVPixelBufferUnlockBaseAddress(buffer, []) }
+        guard let context = CGContext(
+          data: CVPixelBufferGetBaseAddress(buffer),
+          width: CVPixelBufferGetWidth(buffer),
+          height: CVPixelBufferGetHeight(buffer),
+          bitsPerComponent: 8,
+          bytesPerRow: CVPixelBufferGetBytesPerRow(buffer),
+          space: CGColorSpaceCreateDeviceRGB(),
+          bitmapInfo: bitmapInfo.rawValue
+        ) else { throw ExportError.videoEncodingFailure }
+        context.draw(
+          cgImage,
+          in: CGRect(
+            x: 0,
+            y: 0,
+            width: CVPixelBufferGetWidth(buffer),
+            height: CVPixelBufferGetHeight(buffer)
+          )
+        )
+        context.saveGState()
+        context.translateBy(x: 0, y: CGFloat(CVPixelBufferGetHeight(buffer)))
+        context.scaleBy(x: 1, y: -1)
+        UIGraphicsPushContext(context)
+        overlay()
+        UIGraphicsPopContext()
+        context.restoreGState()
+      }
     }
   }
 }
