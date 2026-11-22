@@ -69,6 +69,11 @@ final class DriveRecordingService {
     )
     self.userPreferences = userPreferences
     self.drive = initialDrive
+
+    if let initialDrive, initialDrive.status == .recording {
+      locationDataRecorder.startRecording(with: initialDrive)
+      beginTracking(initialDrive)
+    }
   }
 
   // MARK: - Actions
