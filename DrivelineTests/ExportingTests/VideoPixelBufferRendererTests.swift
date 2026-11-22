@@ -25,6 +25,20 @@ struct VideoPixelBufferRendererTests {
   }
 
   @Test
+  func snapshotBatchPlannerLimitsConcurrencyAndPreservesFrameOrder() {
+    let ranges = VideoSnapshotBatchPlanner.ranges(frameCount: 5)
+
+    #expect(VideoSnapshotBatchPlanner.maximumConcurrentSnapshots == 2)
+    #expect(ranges == [0..<2, 2..<4, 4..<5])
+    #expect(ranges.flatMap(Array.init) == Array(0..<5))
+  }
+
+  @Test
+  func snapshotBatchPlannerHandlesEmptyExport() {
+    #expect(VideoSnapshotBatchPlanner.ranges(frameCount: 0).isEmpty)
+  }
+
+  @Test
   func routePathBreaksAroundOffscreenAndInvalidProjectedPoints() {
     let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
     let points = [

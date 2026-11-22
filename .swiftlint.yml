@@ -22,3 +22,4 @@ disabled_rules:
   - trailing_whitespace
   - line_length
   - type_body_length
+  - function_parameter_count
